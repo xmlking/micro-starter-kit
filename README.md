@@ -64,6 +64,10 @@ MICRO_BROKER=kafka \
 MICRO_REGISTRY=kubernetes \
 MICRO_TRANSPORT=nats \
 ./echo
+
+# test config with CMD
+go run cmd/test.go --help
+o run cmd/test.go --database_host=1.1.1.1 --database_port=7777
 ```
 
 ## Test
