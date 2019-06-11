@@ -48,5 +48,5 @@ _test
 
 # Binaries
 bin/
-./great1
-./great2
+./echo
+./account

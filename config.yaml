@@ -1,0 +1,19 @@
+
+Env: development
+environment: local
+log:
+  level: debug
+  format: text
+database:
+  dialect: mysql
+  host: 11.11.11.11,
+  port: 9999
+  Username: sumo
+  Password: demo
+observability:
+  metrics:
+    address: localhost:8125
+    flushInterval: 1000000000
+  tracing:
+    address: jaeger:6831
+    flushInterval: 5000000000
