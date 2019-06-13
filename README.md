@@ -4,16 +4,22 @@
 
 ## What you get
 
-- [x] monorepo
-- [x] services
-- [x] config
-- [ ] logging
-- [ ] ORM
+- [x] Monorepo
+- [x] gRPC microservices with REST Gateway
+- [ ] gRPC validation
+- [x] config fallback
+- [ ] custom logging
+- [x] CRUD via ORM
+- [x] Observability
+
+## TODO
+
+- [ ] [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
+- [ ] [envoyproxy/protoc-gen-validate](https://github.com/envoyproxy/protoc-gen-validate)
 
 ## Prerequisite
 
 > micro, go-micro versions are at `v.1.6.0`
-
 > Global tools:
 
 ```bash
@@ -49,11 +55,18 @@ mv  /Users/schintha/go/src/github.com/xmlking/micro-starter-kit/srv/account srv
 ```bash
 make proto
 
-# prod build
+# prod build. Build with plugins.go
 go build -o echo srv/echo/main.go srv/echo/plugin.go
 ```
 
 ## Run
+
+> Optionally start postgres and set it in `config.yaml`
+
+```bash
+postgres
+docker-compose up postgres
+```
 
 ```bash
 # dev mode
@@ -66,16 +79,27 @@ MICRO_TRANSPORT=nats \
 ./echo
 
 # test config with CMD
-go run cmd/test.go --help
-o run cmd/test.go --database_host=1.1.1.1 --database_port=7777
+go run cmd/demo/main.go --help
+go run cmd/demo/main.go --database_host=1.1.1.1 --database_port=7777
+APP_ENV=production go run cmd/demo/main.go
+
+
+# test account srv
+go run srv/account/main.go
 ```
 
-## Test
+### Run Micro
 
 ```bash
 micro list services
 micro get service go.micro.srv.echo
+
+# run API Gateway
+micro api --namespace=go.micro.srv
+micro web --namespace=go.micro.srv
 ```
+
+## Test
 
 ## Reference
 

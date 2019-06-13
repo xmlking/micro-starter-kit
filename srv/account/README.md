@@ -2,6 +2,8 @@
 
 This is the Account service
 
+Implements basic CRUD API
+
 Generated with
 
 ```
@@ -52,4 +54,126 @@ Run the service
 Build a docker image
 ```
 make docker
+```
+
+## Test
+
+> start web tool to test:  `micro web --namespace=go.micro.srv`
+
+### User Test
+
+#### Create
+
+```json
+{
+"username": "sumo",
+"firstName": "sumoto",
+"lastName": "demo",
+"email": "sumo@demo.com"
+}
+```
+
+#### List
+
+```json
+{
+"limit": 10,
+"page": 1
+}
+```
+
+```json
+{
+"limit": 10,
+"page": 1,
+"sort" : "username",
+"lastName": "demo"
+}
+```
+
+#### Get
+
+```json
+{
+    "id": 1
+}
+```
+
+#### Exist
+
+>with any combination
+
+```json
+{
+"username": "sumo",
+"firstName": "sumoto",
+"lastName": "demo",
+"email": "sumo@demo.com"
+}
+```
+
+#### Update
+
+```json
+{
+"id": 1,
+"username": "sumo222",
+"firstName": "sumoto222",
+"lastName": "demo222",
+"email": "sumo222@demo.com"
+}
+```
+
+#### Delete
+
+```json
+{
+    "id": 1
+}
+```
+
+### Profile Test
+
+#### Create
+
+```json
+ {
+"user_id": 2,
+"tx" : "PST",
+"avatar": "sumo2.jpg",
+"gender": "F"
+}
+```
+
+#### List
+
+```json
+{
+"limit": 10,
+"page": 1,
+"sort" : "gender",
+"user_id": 1,
+"gender": "M"
+}
+```
+```json
+{
+"limit": 10,
+"page": 1
+}
+```
+```json
+{
+"limit": 10,
+"page": 1,
+"gender": "F"
+}
+```
+
+#### Get
+
+```json
+{
+"id": 2
+}
 ```

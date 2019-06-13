@@ -6,6 +6,7 @@ package go_micro_srv_account
 import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	_ "github.com/golang/protobuf/ptypes/timestamp"
 	math "math"
 )
 
@@ -31,35 +32,38 @@ var _ context.Context
 var _ client.Option
 var _ server.Option
 
-// Client API for Account service
+// Client API for UserService service
 
-type AccountService interface {
-	Call(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
-	Stream(ctx context.Context, in *StreamingRequest, opts ...client.CallOption) (Account_StreamService, error)
-	PingPong(ctx context.Context, opts ...client.CallOption) (Account_PingPongService, error)
+type UserService interface {
+	Exist(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserExistResponse, error)
+	List(ctx context.Context, in *UserListQuery, opts ...client.CallOption) (*UserListResponse, error)
+	Get(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error)
+	Create(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error)
+	Update(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error)
+	Delete(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error)
 }
 
-type accountService struct {
+type userService struct {
 	c    client.Client
 	name string
 }
 
-func NewAccountService(name string, c client.Client) AccountService {
+func NewUserService(name string, c client.Client) UserService {
 	if c == nil {
 		c = client.NewClient()
 	}
 	if len(name) == 0 {
 		name = "go.micro.srv.account"
 	}
-	return &accountService{
+	return &userService{
 		c:    c,
 		name: name,
 	}
 }
 
-func (c *accountService) Call(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.name, "Account.Call", in)
-	out := new(Response)
+func (c *userService) Exist(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserExistResponse, error) {
+	req := c.c.NewRequest(c.name, "UserService.Exist", in)
+	out := new(UserExistResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -67,196 +71,200 @@ func (c *accountService) Call(ctx context.Context, in *Request, opts ...client.C
 	return out, nil
 }
 
-func (c *accountService) Stream(ctx context.Context, in *StreamingRequest, opts ...client.CallOption) (Account_StreamService, error) {
-	req := c.c.NewRequest(c.name, "Account.Stream", &StreamingRequest{})
-	stream, err := c.c.Stream(ctx, req, opts...)
+func (c *userService) List(ctx context.Context, in *UserListQuery, opts ...client.CallOption) (*UserListResponse, error) {
+	req := c.c.NewRequest(c.name, "UserService.List", in)
+	out := new(UserListResponse)
+	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	if err := stream.Send(in); err != nil {
-		return nil, err
-	}
-	return &accountServiceStream{stream}, nil
+	return out, nil
 }
 
-type Account_StreamService interface {
-	SendMsg(interface{}) error
-	RecvMsg(interface{}) error
-	Close() error
-	Recv() (*StreamingResponse, error)
-}
-
-type accountServiceStream struct {
-	stream client.Stream
-}
-
-func (x *accountServiceStream) Close() error {
-	return x.stream.Close()
-}
-
-func (x *accountServiceStream) SendMsg(m interface{}) error {
-	return x.stream.Send(m)
-}
-
-func (x *accountServiceStream) RecvMsg(m interface{}) error {
-	return x.stream.Recv(m)
-}
-
-func (x *accountServiceStream) Recv() (*StreamingResponse, error) {
-	m := new(StreamingResponse)
-	err := x.stream.Recv(m)
+func (c *userService) Get(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error) {
+	req := c.c.NewRequest(c.name, "UserService.Get", in)
+	out := new(UserResponse)
+	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return m, nil
+	return out, nil
 }
 
-func (c *accountService) PingPong(ctx context.Context, opts ...client.CallOption) (Account_PingPongService, error) {
-	req := c.c.NewRequest(c.name, "Account.PingPong", &Ping{})
-	stream, err := c.c.Stream(ctx, req, opts...)
+func (c *userService) Create(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error) {
+	req := c.c.NewRequest(c.name, "UserService.Create", in)
+	out := new(UserResponse)
+	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return &accountServicePingPong{stream}, nil
+	return out, nil
 }
 
-type Account_PingPongService interface {
-	SendMsg(interface{}) error
-	RecvMsg(interface{}) error
-	Close() error
-	Send(*Ping) error
-	Recv() (*Pong, error)
-}
-
-type accountServicePingPong struct {
-	stream client.Stream
-}
-
-func (x *accountServicePingPong) Close() error {
-	return x.stream.Close()
-}
-
-func (x *accountServicePingPong) SendMsg(m interface{}) error {
-	return x.stream.Send(m)
-}
-
-func (x *accountServicePingPong) RecvMsg(m interface{}) error {
-	return x.stream.Recv(m)
-}
-
-func (x *accountServicePingPong) Send(m *Ping) error {
-	return x.stream.Send(m)
-}
-
-func (x *accountServicePingPong) Recv() (*Pong, error) {
-	m := new(Pong)
-	err := x.stream.Recv(m)
+func (c *userService) Update(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error) {
+	req := c.c.NewRequest(c.name, "UserService.Update", in)
+	out := new(UserResponse)
+	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
 	}
-	return m, nil
+	return out, nil
 }
 
-// Server API for Account service
-
-type AccountHandler interface {
-	Call(context.Context, *Request, *Response) error
-	Stream(context.Context, *StreamingRequest, Account_StreamStream) error
-	PingPong(context.Context, Account_PingPongStream) error
-}
-
-func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
-	type account interface {
-		Call(ctx context.Context, in *Request, out *Response) error
-		Stream(ctx context.Context, stream server.Stream) error
-		PingPong(ctx context.Context, stream server.Stream) error
-	}
-	type Account struct {
-		account
-	}
-	h := &accountHandler{hdlr}
-	return s.Handle(s.NewHandler(&Account{h}, opts...))
-}
-
-type accountHandler struct {
-	AccountHandler
-}
-
-func (h *accountHandler) Call(ctx context.Context, in *Request, out *Response) error {
-	return h.AccountHandler.Call(ctx, in, out)
-}
-
-func (h *accountHandler) Stream(ctx context.Context, stream server.Stream) error {
-	m := new(StreamingRequest)
-	if err := stream.Recv(m); err != nil {
-		return err
-	}
-	return h.AccountHandler.Stream(ctx, m, &accountStreamStream{stream})
-}
-
-type Account_StreamStream interface {
-	SendMsg(interface{}) error
-	RecvMsg(interface{}) error
-	Close() error
-	Send(*StreamingResponse) error
-}
-
-type accountStreamStream struct {
-	stream server.Stream
-}
-
-func (x *accountStreamStream) Close() error {
-	return x.stream.Close()
-}
-
-func (x *accountStreamStream) SendMsg(m interface{}) error {
-	return x.stream.Send(m)
-}
-
-func (x *accountStreamStream) RecvMsg(m interface{}) error {
-	return x.stream.Recv(m)
-}
-
-func (x *accountStreamStream) Send(m *StreamingResponse) error {
-	return x.stream.Send(m)
-}
-
-func (h *accountHandler) PingPong(ctx context.Context, stream server.Stream) error {
-	return h.AccountHandler.PingPong(ctx, &accountPingPongStream{stream})
-}
-
-type Account_PingPongStream interface {
-	SendMsg(interface{}) error
-	RecvMsg(interface{}) error
-	Close() error
-	Send(*Pong) error
-	Recv() (*Ping, error)
-}
-
-type accountPingPongStream struct {
-	stream server.Stream
-}
-
-func (x *accountPingPongStream) Close() error {
-	return x.stream.Close()
-}
-
-func (x *accountPingPongStream) SendMsg(m interface{}) error {
-	return x.stream.Send(m)
-}
-
-func (x *accountPingPongStream) RecvMsg(m interface{}) error {
-	return x.stream.Recv(m)
-}
-
-func (x *accountPingPongStream) Send(m *Pong) error {
-	return x.stream.Send(m)
-}
-
-func (x *accountPingPongStream) Recv() (*Ping, error) {
-	m := new(Ping)
-	if err := x.stream.Recv(m); err != nil {
+func (c *userService) Delete(ctx context.Context, in *UserRequest, opts ...client.CallOption) (*UserResponse, error) {
+	req := c.c.NewRequest(c.name, "UserService.Delete", in)
+	out := new(UserResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
 		return nil, err
 	}
-	return m, nil
+	return out, nil
+}
+
+// Server API for UserService service
+
+type UserServiceHandler interface {
+	Exist(context.Context, *UserRequest, *UserExistResponse) error
+	List(context.Context, *UserListQuery, *UserListResponse) error
+	Get(context.Context, *UserRequest, *UserResponse) error
+	Create(context.Context, *UserRequest, *UserResponse) error
+	Update(context.Context, *UserRequest, *UserResponse) error
+	Delete(context.Context, *UserRequest, *UserResponse) error
+}
+
+func RegisterUserServiceHandler(s server.Server, hdlr UserServiceHandler, opts ...server.HandlerOption) error {
+	type userService interface {
+		Exist(ctx context.Context, in *UserRequest, out *UserExistResponse) error
+		List(ctx context.Context, in *UserListQuery, out *UserListResponse) error
+		Get(ctx context.Context, in *UserRequest, out *UserResponse) error
+		Create(ctx context.Context, in *UserRequest, out *UserResponse) error
+		Update(ctx context.Context, in *UserRequest, out *UserResponse) error
+		Delete(ctx context.Context, in *UserRequest, out *UserResponse) error
+	}
+	type UserService struct {
+		userService
+	}
+	h := &userServiceHandler{hdlr}
+	return s.Handle(s.NewHandler(&UserService{h}, opts...))
+}
+
+type userServiceHandler struct {
+	UserServiceHandler
+}
+
+func (h *userServiceHandler) Exist(ctx context.Context, in *UserRequest, out *UserExistResponse) error {
+	return h.UserServiceHandler.Exist(ctx, in, out)
+}
+
+func (h *userServiceHandler) List(ctx context.Context, in *UserListQuery, out *UserListResponse) error {
+	return h.UserServiceHandler.List(ctx, in, out)
+}
+
+func (h *userServiceHandler) Get(ctx context.Context, in *UserRequest, out *UserResponse) error {
+	return h.UserServiceHandler.Get(ctx, in, out)
+}
+
+func (h *userServiceHandler) Create(ctx context.Context, in *UserRequest, out *UserResponse) error {
+	return h.UserServiceHandler.Create(ctx, in, out)
+}
+
+func (h *userServiceHandler) Update(ctx context.Context, in *UserRequest, out *UserResponse) error {
+	return h.UserServiceHandler.Update(ctx, in, out)
+}
+
+func (h *userServiceHandler) Delete(ctx context.Context, in *UserRequest, out *UserResponse) error {
+	return h.UserServiceHandler.Delete(ctx, in, out)
+}
+
+// Client API for ProfileService service
+
+type ProfileService interface {
+	List(ctx context.Context, in *ProfileListQuery, opts ...client.CallOption) (*ProfileListResponse, error)
+	Get(ctx context.Context, in *ProfileRequest, opts ...client.CallOption) (*ProfileResponse, error)
+	Create(ctx context.Context, in *ProfileRequest, opts ...client.CallOption) (*ProfileResponse, error)
+}
+
+type profileService struct {
+	c    client.Client
+	name string
+}
+
+func NewProfileService(name string, c client.Client) ProfileService {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(name) == 0 {
+		name = "go.micro.srv.account"
+	}
+	return &profileService{
+		c:    c,
+		name: name,
+	}
+}
+
+func (c *profileService) List(ctx context.Context, in *ProfileListQuery, opts ...client.CallOption) (*ProfileListResponse, error) {
+	req := c.c.NewRequest(c.name, "ProfileService.List", in)
+	out := new(ProfileListResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *profileService) Get(ctx context.Context, in *ProfileRequest, opts ...client.CallOption) (*ProfileResponse, error) {
+	req := c.c.NewRequest(c.name, "ProfileService.Get", in)
+	out := new(ProfileResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *profileService) Create(ctx context.Context, in *ProfileRequest, opts ...client.CallOption) (*ProfileResponse, error) {
+	req := c.c.NewRequest(c.name, "ProfileService.Create", in)
+	out := new(ProfileResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for ProfileService service
+
+type ProfileServiceHandler interface {
+	List(context.Context, *ProfileListQuery, *ProfileListResponse) error
+	Get(context.Context, *ProfileRequest, *ProfileResponse) error
+	Create(context.Context, *ProfileRequest, *ProfileResponse) error
+}
+
+func RegisterProfileServiceHandler(s server.Server, hdlr ProfileServiceHandler, opts ...server.HandlerOption) error {
+	type profileService interface {
+		List(ctx context.Context, in *ProfileListQuery, out *ProfileListResponse) error
+		Get(ctx context.Context, in *ProfileRequest, out *ProfileResponse) error
+		Create(ctx context.Context, in *ProfileRequest, out *ProfileResponse) error
+	}
+	type ProfileService struct {
+		profileService
+	}
+	h := &profileServiceHandler{hdlr}
+	return s.Handle(s.NewHandler(&ProfileService{h}, opts...))
+}
+
+type profileServiceHandler struct {
+	ProfileServiceHandler
+}
+
+func (h *profileServiceHandler) List(ctx context.Context, in *ProfileListQuery, out *ProfileListResponse) error {
+	return h.ProfileServiceHandler.List(ctx, in, out)
+}
+
+func (h *profileServiceHandler) Get(ctx context.Context, in *ProfileRequest, out *ProfileResponse) error {
+	return h.ProfileServiceHandler.Get(ctx, in, out)
+}
+
+func (h *profileServiceHandler) Create(ctx context.Context, in *ProfileRequest, out *ProfileResponse) error {
+	return h.ProfileServiceHandler.Create(ctx, in, out)
 }

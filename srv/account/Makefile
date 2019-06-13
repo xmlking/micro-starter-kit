@@ -13,7 +13,7 @@ build: proto
 
 .PHONY: test
 test:
-	go test -v ./... -cover
+	APP_ENV=test go test -v ./... -cover
 
 .PHONY: docker
 docker:

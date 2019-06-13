@@ -1,51 +1,86 @@
-consul:
-  command: -server -bootstrap -rejoin 
-  image: progrium/consul:latest
-  ports:
-    - "8300:8300"
-    - "8400:8400"
-    - "8500:8500"
-    - "8600:53/udp"
+version: '3'
+services:
+  consul:
+    command: -server -bootstrap -rejoin 
+    image: progrium/consul:latest
+    ports:
+      - "8300:8300"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
 
-micro:
-  command: --registry_address=consul:8500 api --handler=rpc
-  image: microhq/micro:latest
-  links:
-    - consul
-    - api
-  ports:
-    - "8080:8080"
+  nats:
+    image: nats:latest
+    hostname: nats
+    ports:
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
 
-api:
-  build: ./api/hotel
-  command: --registry_address=consul:8500
-  links:
-    - consul
-    - auth
-    - geo
-    - profile
-    - rate
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres321
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-auth:
-  build: ./srv/auth
-  command: --registry_address=consul:8500
-  links:
-    - consul
+  micro:
+    command: --registry_address=consul:8500 api --handler=rpc
+    image: microhq/micro:latest
+    depends_on:
+      - consul
+    ports:
+      - "8080:8080"
 
-geo:
-  build: ./srv/geo
-  command: --registry_address=consul:8500
-  links:
-    - consul
+  # api:
+  #   build: ./api/hotel
+  #   command: --registry_address=consul:8500
+  #   depends_on:
+  #     - consul
+  #     - auth
+  #     - geo
+  #     - profile
+  #     - rate
 
-profile:
-  build: ./srv/profile
-  command: --registry_address=consul:8500
-  links:
-    - consul
+  # auth:
+  #   build: ./srv/auth
+  #   command: --registry_address=consul:8500
+  #   depends_on:
+  #     - consul
 
-rate:
-  build: ./srv/rate
-  command: --registry_address=consul:8500
-  links:
-    - consul
+  # geo:
+  #   build: ./srv/geo
+  #   command: --registry_address=consul:8500
+  #   depends_on:
+  #     - consul
+
+  # profile:
+  #   build: ./srv/profile
+  #   command: --registry_address=consul:8500
+  #   depends_on:
+  #     - consul
+
+  # rate:
+  #   build: ./srv/rate
+  #   command: --registry_address=consul:8500
+  #   depends_on:
+  #     - consul
+
+  # account:
+  #   build: ./srv/account
+  #   environment:
+  #     MICRO_TRANSPORT: nats
+  #     MICRO_TRANSPORT_ADDRESS: "nats:4222"
+  #     MICRO_BROKER: nats
+  #     MICRO_BROKER_ADDRESS: "nats:4222"
+  #     MICRO_REGISTRY: nats
+  #     MICRO_REGISTRY_ADDRESS: "nats:4222"
+  #   depends_on:
+  #     - nats
+
+volumes:
+  postgres_data:

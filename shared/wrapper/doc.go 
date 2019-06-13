@@ -1,0 +1,4 @@
+package wrapper
+
+// see link for more go-micro wrappers
+// https://github.com/micro/go-plugins/tree/master/wrapper

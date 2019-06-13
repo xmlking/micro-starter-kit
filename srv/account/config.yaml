@@ -1,7 +1,0 @@
-
-Env: development
-ServiceName: go.micro.srv.favorite
-MetricsAddr: localhost:8125
-MetricsFlushInterval: 1000000000
-TracingAgentAddr: jaeger:6831
-TracingFlushInterval: 5000000000
