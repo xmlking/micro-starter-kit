@@ -8,7 +8,6 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.8
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-log v0.1.0
 	github.com/micro/go-micro v1.6.0
 	github.com/nats-io/nats-server/v2 v2.0.0 // indirect
 	github.com/sirupsen/logrus v1.4.2

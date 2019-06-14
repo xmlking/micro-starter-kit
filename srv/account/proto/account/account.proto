@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package go.micro.srv.account;
-import "google/protobuf/timestamp.proto";
+// import "google/protobuf/timestamp.proto";
 
 service UserService {
 	rpc Exist(UserRequest) returns (UserExistResponse) {}
