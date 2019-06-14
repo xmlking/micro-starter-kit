@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "googlecloudtools.cloudcode",
+        "DavidAnson.vscode-markdownlint",
+        "ms-vscode.Go",
+        "PeterJausovec.vscode-docker",
+        "zxh404.vscode-proto3"
+    ] 
+}
