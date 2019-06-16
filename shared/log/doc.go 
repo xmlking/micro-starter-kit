@@ -1,1 +1,4 @@
+// logging package from micro-strter-kit
+// add 	_ "github.com/xmlking/micro-starter-kit/shared/log" to plugin.go
+// set log leval and format in congig.yaml
 package log

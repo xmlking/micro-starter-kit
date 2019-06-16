@@ -1,4 +1,4 @@
-package wrapper
-
+// shared  custom client/server wrappers for micro-strter-kit
 // see link for more go-micro wrappers
 // https://github.com/micro/go-plugins/tree/master/wrapper
+package wrapper

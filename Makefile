@@ -1,3 +1,5 @@
+VERSION:=$(shell cat ./VERSION)
+
 .PHONY: proto data build
 
 proto:
@@ -20,3 +22,16 @@ data:
 run:
 	docker-compose build
 	docker-compose up
+
+release:
+	git tag -a $(VERSION) -m "Release" || true
+	git push origin $(VERSION)
+	# goreleaser --rm-dist
+
+clean:
+	for d in api srv; do \
+		for sd in $$d/*; do \
+			$(MAKE) -C $$sd $(MAKECMDGOALS); \
+			echo cleaned: $$sd; \
+		done \
+	done

@@ -13,13 +13,13 @@ func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, e
 
 	switch dbConf.Dialect {
 	case config.SQLiteDialect:
-		db, err = sqliteConnection(dbConf)
+		db, err = connection(dbConf)
 	case config.PostgreSQLDialect:
 		timezoneCommand = "SET timezone = 'UTC'"
-		db, err = postgresConnection(dbConf)
+		db, err = connection(dbConf)
 	case config.MySQLDialect:
 		timezoneCommand = "SET time_zone = '+00:00'"
-		db, err = mysqlConnection(dbConf)
+		db, err = connection(dbConf)
 	default:
 		return nil, fmt.Errorf("database dialect %s not supported", dbConf.Dialect)
 	}
@@ -44,5 +44,14 @@ func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, e
 		}
 	}
 
+	return
+}
+
+func connection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, err error) {
+	url, err := dbConf.URL()
+	if err != nil {
+		return nil, err
+	}
+	db, err = gorm.Open(string(dbConf.Dialect), url)
 	return
 }

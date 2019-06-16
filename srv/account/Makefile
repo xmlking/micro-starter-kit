@@ -1,6 +1,5 @@
-
+VERSION:=$(shell cat ../../VERSION)
 GOPATH:=$(shell go env GOPATH)
-
 
 .PHONY: proto
 proto:
@@ -15,6 +14,14 @@ build: proto
 test:
 	APP_ENV=test go test -v ./... -cover
 
+.PHONY: fmt
+fmt:
+	go fmt -v ./...
+
 .PHONY: docker
 docker:
-	docker build . -t account-srv:latest
+	docker build . -t account-srv:$(VERSION)
+
+.PHONY: clean
+clean:
+	rm -f  ./account-srv

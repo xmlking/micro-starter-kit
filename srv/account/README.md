@@ -60,7 +60,40 @@ make docker
 
 > start web tool to test:  `micro web --namespace=go.micro.srv`
 
-### User Test
+### User Test (Postman)
+
+```
+$http://localhost:8080/rpc
+```
+
+#### Create
+
+```json
+{
+    "service": "go.micro.srv.account",
+    "method": "DcMgr.Create",
+    "request": {
+        "username": "sumo",
+        "firstName": "sumo",
+        "lastName": "demo",
+        "email": "sumo@demo.com"
+    }
+}
+```
+
+### User Test (Curl)
+
+#### Create
+
+```bash
+curl -d 'service=go.micro.srv.account' \
+     -d 'method=DcMgr.Create' \
+     -d 'request={"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}' \
+     http://localhost:8080/rpc
+     ```
+```
+
+### User Test (Micro Web)
 
 #### Create
 

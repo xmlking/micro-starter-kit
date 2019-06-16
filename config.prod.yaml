@@ -1,8 +1,8 @@
-environment: development
+environment: production
 name: go.micro.srv.account
 version: 0.1.0
 log:
-  level: debug
+  level: info
   format: text
 database:
   dialect: postgres

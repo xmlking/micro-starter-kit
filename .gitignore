@@ -51,5 +51,10 @@ bin/
 ./echo
 ./account
 
+./srv/echo/echo-srv
+./srv/emailer/emailer-srv
+./srv/account/account-srv
+./api/account/account-api
+
 # Project
 TODO.md

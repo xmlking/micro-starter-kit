@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package basic;
+
+message Error {
+    string code = 1 [json_name = "code"];
+    string msg = 2 [json_name = "msg"];
+}

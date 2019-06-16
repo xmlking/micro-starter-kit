@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package go.micro.api.account;
+
+import "github.com/micro/go-micro/api/proto/api.proto";
+
+service AccountService {
+	rpc List(go.api.Request) returns (go.api.Response) {}
+}

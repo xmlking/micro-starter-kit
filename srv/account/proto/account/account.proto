@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package go.micro.srv.account;
 // import "google/protobuf/timestamp.proto";
+// import "shared/proto/basic/error.proto";
 
 service UserService {
 	rpc Exist(UserRequest) returns (UserExistResponse) {}
@@ -37,6 +38,7 @@ message UserRequest {
   }
 
 message UserResponse {
+    // basic.Error error = 1;
 	string code = 1;
     string msg = 2;
     User user = 3;

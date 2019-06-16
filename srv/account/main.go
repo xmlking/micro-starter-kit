@@ -13,7 +13,7 @@ import (
 	"github.com/xmlking/micro-starter-kit/srv/account/subscriber"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	_ "github.com/xmlking/micro-starter-kit/shared/log"
+	// _ "github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/xmlking/micro-starter-kit/shared/wrapper"
 )
 

@@ -8,9 +8,9 @@
 - [x] gRPC microservices with REST Gateway
 - [ ] gRPC validation
 - [x] config fallback
-- [ ] custom logging
+- [x] custom logging
 - [x] CRUD via ORM
-- [x] Observability
+- [ ] Observability
 
 ## TODO
 
@@ -25,35 +25,38 @@
 ```bash
 brew install protobuf
 go get -u github.com/micro/micro
+go get -u github.com/micro/go-micro
 
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 go get -u github.com/micro/protoc-gen-micro
 ```
 
-## Setup
+## Initial Setup
+
+> (optional) setup your workspace from scratch
 
 ```bash
 go mod init github.com/xmlking/micro-starter-kit
 go get -u github.com/micro/go-micro
-mkdir srv api client
+mkdir srv api fnc
 
-# scaffold demo module
-micro new --namespace="go.micro" --type="srv" \
---alias="echo" github.com/xmlking/micro-starter-kit/srv/echo
+# scaffold modules
+micro new --namespace="go.micro" --type="srv" --gopath=false --alias="echo" srv/echo
 
-mv  /Users/schintha/go/src/github.com/xmlking/micro-starter-kit/srv/echo srv
+micro new --namespace="go.micro" --type="srv" --gopath=false --alias="account" srv/account
 
+micro new --namespace="go.micro" --type="srv" --gopath=false \
+--alias="emailer"  --plugin=registry=mdns:broker=nats srv/emailer
 
-micro new --namespace="go.micro" --type="srv" \
---alias="account" github.com/xmlking/micro-starter-kit/srv/account
-
-mv  /Users/schintha/go/src/github.com/xmlking/micro-starter-kit/srv/account srv
+micro new --namespace="go.micro" --type="api" --gopath=false --alias="account" api/account
 ```
 
 ## Build
 
 ```bash
 make proto
+# silence
+make -s proto
 
 # prod build. Build with plugins.go
 go build -o echo srv/echo/main.go srv/echo/plugin.go
@@ -70,7 +73,8 @@ docker-compose up postgres
 
 ```bash
 # dev mode
-go run srv/echo/main.go
+go run srv/echo/main.go srv/echo/plugin.go
+
 
 # prod mode
 MICRO_BROKER=kafka \
@@ -84,8 +88,10 @@ go run cmd/demo/main.go --database_host=1.1.1.1 --database_port=7777
 APP_ENV=production go run cmd/demo/main.go
 
 
-# test account srv
-go run srv/account/main.go
+# test account srv (plugin adds custom logger )
+go run srv/account/main.go srv/account/plugin.go
+
+go run srv/emailer/main.go srv/emailer/plugin.go
 ```
 
 ### Run Micro

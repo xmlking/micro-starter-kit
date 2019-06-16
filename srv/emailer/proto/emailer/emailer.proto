@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package go.micro.srv.emailer;
+
+message Message {
+	string to = 1;
+	string from = 2;
+	string subject = 3;
+	string body = 4;
+}

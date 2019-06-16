@@ -1,5 +1,8 @@
 version: '3'
 services:
+##############################
+# consul
+##############################
   consul:
     command: -server -bootstrap -rejoin 
     image: progrium/consul:latest
@@ -8,7 +11,9 @@ services:
       - "8400:8400"
       - "8500:8500"
       - "8600:53/udp"
-
+##############################
+# nats
+##############################
   nats:
     image: nats:latest
     hostname: nats
@@ -16,7 +21,9 @@ services:
       - "4222:4222"
       - "6222:6222"
       - "8222:8222"
-
+##############################
+# postgres
+##############################
   postgres:
     image: postgres:alpine
     environment:
@@ -24,10 +31,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres321
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+##############################
+# micro
+##############################
   micro:
     command: --registry_address=consul:8500 api --handler=rpc
     image: microhq/micro:latest
@@ -35,7 +44,25 @@ services:
       - consul
     ports:
       - "8080:8080"
+##############################
+# swagger
+##############################
+  swagger:
+    image: swaggerapi/swagger-ui
+    environment:
+      SWAGGER_JSON: /swagger.yaml
+    ports:
+      - "8881:8080"
+    volumes:
+      - "./swagger.yaml:/swagger.yaml"
 
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    ports:
+      - "8882:8080"
+##############################
+# srv, api, web
+##############################
   # api:
   #   build: ./api/hotel
   #   command: --registry_address=consul:8500
