@@ -69,14 +69,18 @@ postgres
 docker-compose up postgres
 ```
 
+> Node: `--server_address=<myVpnIp>:5500x` required only when you are behind VPN
+
 ```bash
 # dev mode
 # test account srv (plugin adds custom logger )
+# go run srv/account/main.go srv/account/plugin.go --server_address=172.11.11.80:55001
 go run srv/account/main.go srv/account/plugin.go
+# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=172.11.11.80:55002
 go run srv/emailer/main.go srv/emailer/plugin.go
 
 # prod mode
-MICRO_BROKER=kafka \
+MICRO_BROKER=nats \
 MICRO_REGISTRY=kubernetes \
 MICRO_TRANSPORT=nats \
 ./account-srv
@@ -93,11 +97,11 @@ APP_ENV=production go run cmd/demo/main.go
 
 ```bash
 micro list services
-micro get service go.micro.srv.echo
+micro get service go.micro.srv.account
 
 # run API Gateway
 micro api --namespace=go.micro.srv
-# run Web UX for testing
+# (or) run Web UX for testing
 micro web --namespace=go.micro.srv
 ```
 
@@ -108,7 +112,7 @@ micro web --namespace=go.micro.srv
 ```json
 {
 "username": "sumo",
-"firstName": "sumoto",
+"firstName": "sumo",
 "lastName": "demo",
 "email": "sumo@demo.com"
 }
