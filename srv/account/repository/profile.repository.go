@@ -6,14 +6,14 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/util/log"
 
-	"github.com/xmlking/micro-starter-kit/srv/account/model"
+	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 )
 
 // ProfileRepository interface
 type ProfileRepository interface {
-	List(req *pb.ProfileListQuery) (total uint32, users []*model.Profile, err error)
-	Get(req *pb.ProfileRequest) (*model.Profile, error)
+	List(req *pb.ProfileListQuery) (total uint32, users []*entity.Profile, err error)
+	Get(req *pb.ProfileRequest) (*entity.Profile, error)
 	Create(req *pb.ProfileRequest) error
 }
 
@@ -33,7 +33,7 @@ func NewProfileRepository(db *gorm.DB) ProfileRepository {
 func (repo *profileRepository) Exist(req *pb.ProfileRequest) bool {
 	var count int
 	if req.UserId != 0 {
-		repo.db.Model(&model.Profile{}).Where("user_id = ?", req.UserId).Count(&count)
+		repo.db.Model(&entity.Profile{}).Where("user_id = ?", req.UserId).Count(&count)
 		if count > 0 {
 			return true
 		}
@@ -42,7 +42,7 @@ func (repo *profileRepository) Exist(req *pb.ProfileRequest) bool {
 }
 
 // List
-func (repo *profileRepository) List(req *pb.ProfileListQuery) (total uint32, profiles []*model.Profile, err error) {
+func (repo *profileRepository) List(req *pb.ProfileListQuery) (total uint32, profiles []*entity.Profile, err error) {
 	db := repo.db
 
 	var limit, offset uint32
@@ -79,9 +79,9 @@ func (repo *profileRepository) List(req *pb.ProfileListQuery) (total uint32, pro
 }
 
 // Find by ID
-func (repo *profileRepository) Get(req *pb.ProfileRequest) (profile *model.Profile, err error) {
-	// profile = &model.Profile{Model: gorm.Model{ID: uint(req.Id)}}
-	profile = &model.Profile{}
+func (repo *profileRepository) Get(req *pb.ProfileRequest) (profile *entity.Profile, err error) {
+	// profile = &entity.Profile{Model: gorm.Model{ID: uint(req.Id)}}
+	profile = &entity.Profile{}
 	if err = repo.db.First(&profile, req.Id).Error; err != nil && err != gorm.ErrRecordNotFound {
 		log.Logf("Error in ProfileRepository: %v", err)
 	}
@@ -94,7 +94,7 @@ func (repo *profileRepository) Create(req *pb.ProfileRequest) error {
 		return fmt.Errorf("Profile already exist")
 	}
 
-	profile := &model.Profile{
+	profile := &entity.Profile{
 		UserID: req.UserId,
 		TZ:     req.Tz,
 		Gender: req.Gender,

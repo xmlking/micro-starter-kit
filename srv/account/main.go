@@ -6,8 +6,8 @@ import (
 	"github.com/micro/go-micro/util/log"
 
 	"github.com/xmlking/micro-starter-kit/shared/database"
+	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
-	"github.com/xmlking/micro-starter-kit/srv/account/model"
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	"github.com/xmlking/micro-starter-kit/srv/account/subscriber"
@@ -28,6 +28,14 @@ func init() {
 
 func main() {
 
+	// New Service
+	service := micro.NewService(
+		micro.Name(cfg.ServiceName),
+		micro.Version(cfg.Version),
+		micro.WrapHandler(wrapper.LogWrapper),
+	)
+
+	// Lets do DI manually
 	//db
 	db, err := database.GetDatabaseConnection(&cfg.Database)
 	if err != nil {
@@ -35,22 +43,18 @@ func main() {
 	}
 	defer db.Close()
 
-	db.AutoMigrate(&model.User{}, &model.Profile{})
+	db.AutoMigrate(&entity.User{}, &entity.Profile{})
 
 	// Repositories
 	userRepository := repository.NewUserRepository(db)
 	profileRepository := repository.NewProfileRepository(db)
 
-	// Handlers
-	userHandler := handler.NewUserHandler(userRepository)
-	profileHandler := handler.NewProfileHandler(profileRepository)
+	// Publisher publish to "go.micro.srv.emailer"
+	publisher := micro.NewPublisher("go.micro.srv.emailer", service.Client())
 
-	// New Service
-	service := micro.NewService(
-		micro.Name(cfg.ServiceName),
-		micro.Version(cfg.Version),
-		micro.WrapHandler(wrapper.LogWrapper),
-	)
+	// Handlers
+	userHandler := handler.NewUserHandler(userRepository, publisher)
+	profileHandler := handler.NewProfileHandler(profileRepository)
 
 	// Initialise service
 	service.Init()

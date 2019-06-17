@@ -3,13 +3,11 @@ package handler
 import (
 	"context"
 	"fmt"
-	"time"
 
 	// "github.com/golang/protobuf/ptypes"
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/util/log"
 
-	"github.com/xmlking/micro-starter-kit/srv/account/model"
 	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 )
@@ -35,7 +33,7 @@ func (h *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rsp
 	rsp.Total = total
 	newProfiles := make([]*pb.Profile, len(profiles))
 	for index, profile := range profiles {
-		newProfiles[index] = profileModelToProto(profile)
+		newProfiles[index] = profile.ToPB()
 	}
 	rsp.Profiles = newProfiles
 	rsp.Msg = fmt.Sprintf("%v Total Profiles Found", total) // "Profiles Found"
@@ -60,7 +58,7 @@ func (h *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *p
 		return err
 	}
 
-	rsp.Profile = profileModelToProto(profile)
+	rsp.Profile = profile.ToPB()
 	rsp.Msg = "Profile Found"
 	rsp.Code = "200"
 	return nil
@@ -74,18 +72,4 @@ func (h *profileHandler) Create(ctx context.Context, req *pb.ProfileRequest, rsp
 	rsp.Msg = "Profile Created"
 	rsp.Code = "200"
 	return nil
-}
-
-func profileModelToProto(profile *model.Profile) (proto *pb.Profile) {
-	// birthday, err := ptypes.TimestampProto(profile.Birthday)
-	return &pb.Profile{
-		Id:     uint32(profile.Model.ID),
-		Tz:     profile.TZ,
-		Avatar: profile.Avatar,
-		Gender: profile.Gender,
-		// Birthday:  birthday,
-		UserId:    profile.UserID,
-		CreatedAt: profile.Model.CreatedAt.Format(time.RFC3339),
-		UpdatedAt: profile.Model.UpdatedAt.Format(time.RFC3339),
-	}
 }

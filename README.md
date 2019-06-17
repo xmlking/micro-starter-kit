@@ -41,8 +41,6 @@ go get -u github.com/micro/go-micro
 mkdir srv api fnc
 
 # scaffold modules
-micro new --namespace="go.micro" --type="srv" --gopath=false --alias="echo" srv/echo
-
 micro new --namespace="go.micro" --type="srv" --gopath=false --alias="account" srv/account
 
 micro new --namespace="go.micro" --type="srv" --gopath=false \
@@ -73,25 +71,22 @@ docker-compose up postgres
 
 ```bash
 # dev mode
-go run srv/echo/main.go srv/echo/plugin.go
-
+# test account srv (plugin adds custom logger )
+go run srv/account/main.go srv/account/plugin.go
+go run srv/emailer/main.go srv/emailer/plugin.go
 
 # prod mode
 MICRO_BROKER=kafka \
 MICRO_REGISTRY=kubernetes \
 MICRO_TRANSPORT=nats \
-./echo
+./account-srv
+
+
 
 # test config with CMD
 go run cmd/demo/main.go --help
 go run cmd/demo/main.go --database_host=1.1.1.1 --database_port=7777
 APP_ENV=production go run cmd/demo/main.go
-
-
-# test account srv (plugin adds custom logger )
-go run srv/account/main.go srv/account/plugin.go
-
-go run srv/emailer/main.go srv/emailer/plugin.go
 ```
 
 ### Run Micro
@@ -102,10 +97,22 @@ micro get service go.micro.srv.echo
 
 # run API Gateway
 micro api --namespace=go.micro.srv
+# run Web UX for testing
 micro web --namespace=go.micro.srv
 ```
 
 ## Test
+
+> create new user from `Micro Web UI` and see if an email is send
+
+```json
+{
+"username": "sumo",
+"firstName": "sumoto",
+"lastName": "demo",
+"email": "sumo@demo.com"
+}
+```
 
 ## Reference
 

@@ -6,15 +6,15 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/util/log"
 
-	"github.com/xmlking/micro-starter-kit/srv/account/model"
+	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 )
 
 // UserRepository interface
 type UserRepository interface {
 	Exist(req *pb.UserRequest) bool
-	List(req *pb.UserListQuery) (total uint32, users []*model.User, err error)
-	Get(req *pb.UserRequest) (*model.User, error)
+	List(req *pb.UserListQuery) (total uint32, users []*entity.User, err error)
+	Get(req *pb.UserRequest) (*entity.User, error)
 	Create(req *pb.UserRequest) error
 	Update(req *pb.UserRequest) error
 	Delete(req *pb.UserRequest) error
@@ -36,19 +36,19 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 func (repo *userRepository) Exist(req *pb.UserRequest) bool {
 	var count int
 	if req.Username != "" {
-		repo.db.Model(&model.User{}).Where("username = ?", req.Username).Count(&count)
+		repo.db.Model(&entity.User{}).Where("username = ?", req.Username).Count(&count)
 		if count > 0 {
 			return true
 		}
 	}
 	if req.Id != 0 {
-		repo.db.Model(&model.User{}).Where("id = ?", req.Id).Count(&count)
+		repo.db.Model(&entity.User{}).Where("id = ?", req.Id).Count(&count)
 		if count > 0 {
 			return true
 		}
 	}
 	if req.Email != "" {
-		repo.db.Model(&model.User{}).Where("email = ?", req.Email).Count(&count)
+		repo.db.Model(&entity.User{}).Where("email = ?", req.Email).Count(&count)
 		if count > 0 {
 			return true
 		}
@@ -57,7 +57,7 @@ func (repo *userRepository) Exist(req *pb.UserRequest) bool {
 }
 
 // List
-func (repo *userRepository) List(req *pb.UserListQuery) (total uint32, users []*model.User, err error) {
+func (repo *userRepository) List(req *pb.UserListQuery) (total uint32, users []*entity.User, err error) {
 	db := repo.db
 
 	var limit, offset uint32
@@ -96,9 +96,9 @@ func (repo *userRepository) List(req *pb.UserListQuery) (total uint32, users []*
 }
 
 // Find by ID
-func (repo *userRepository) Get(req *pb.UserRequest) (user *model.User, err error) {
-	// user = &model.User{Model: gorm.Model{ID: uint(req.Id)}}
-	user = &model.User{}
+func (repo *userRepository) Get(req *pb.UserRequest) (user *entity.User, err error) {
+	// user = &entity.User{Model: gorm.Model{ID: uint(req.Id)}}
+	user = &entity.User{}
 	if err = repo.db.First(&user, req.Id).Error; err != nil && err != gorm.ErrRecordNotFound {
 		log.Logf("Error in UserRepository: %v", err)
 	}
@@ -110,7 +110,7 @@ func (repo *userRepository) Create(req *pb.UserRequest) error {
 	if exist := repo.Exist(req); exist == true {
 		return fmt.Errorf("User already exist")
 	}
-	user := &model.User{
+	user := &entity.User{
 		Username:  req.Username,
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
@@ -126,7 +126,7 @@ func (repo *userRepository) Create(req *pb.UserRequest) error {
 
 // Update TODO: Translation
 func (repo *userRepository) Update(req *pb.UserRequest) error {
-	user := &model.User{
+	user := &entity.User{
 		Model: gorm.Model{ID: uint(req.Id)},
 	}
 	result := repo.db.Model(user).Updates(req)
@@ -143,7 +143,7 @@ func (repo *userRepository) Update(req *pb.UserRequest) error {
 
 // Delete
 func (repo *userRepository) Delete(req *pb.UserRequest) error {
-	user := &model.User{
+	user := &entity.User{
 		Model: gorm.Model{ID: uint(req.Id)},
 	}
 	result := repo.db.Delete(user)
