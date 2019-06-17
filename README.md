@@ -69,14 +69,14 @@ postgres
 docker-compose up postgres
 ```
 
-> Node: `--server_address=<myVpnIp>:5500x` required only when you are behind VPN
+> Node: `--server_address=<myVpnIp>:5501x --broker_address=<myVpnIp>:5502x` required only when you are behind VPN
 
 ```bash
 # dev mode
 # test account srv (plugin adds custom logger )
-# go run srv/account/main.go srv/account/plugin.go --server_address=172.11.11.80:55001
+# go run srv/account/main.go srv/account/plugin.go --server_address=172.11.11.80:55011 --broker_address=172.11.11.80:55021
 go run srv/account/main.go srv/account/plugin.go
-# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=172.11.11.80:55002
+# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=172.11.11.80:55012 --broker_address=172.11.11.80:55022
 go run srv/emailer/main.go srv/emailer/plugin.go
 
 # prod mode

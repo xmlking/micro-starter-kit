@@ -56,17 +56,17 @@ make docker
 
 # Start the API
 
+> make sure `account-srv` and `emailer-srv` services are running before you start `account-api`
+
 ```bash
 # Run the go.micro.api.account API Service
-go run api/account/main.go
+go run api/account/main.go api/account/plugin.go
 
 # Run the micro API
-micro api --handler=api --namespace=go.micro.api
+micro api --namespace=go.micro.api --handler=api
 micro web --namespace=go.micro.api
 
 micro get service go.micro.api.account
 # Call go.micro.api.account via API
 curl "http://localhost:8080/account/AccountService/list?limit=10"
-
-curl "http://localhost:63926/account/AccountService/list?limit=10"
 ```
