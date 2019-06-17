@@ -1,11 +1,17 @@
 # Account Service
 
-This is the Account service
+This is the Account API service
+
+Showcase:
+
+1. use of `*api.Request` `*api.Response` from `github.com/micro/go-micro/api/proto/api.proto`
+2. calling external microservices
+3. Error Handling with `micro/go-micro/errors`
 
 Generated with
 
 ```
-micro new github.com/xmlking/micro-starter-kit/api/account --namespace=go.micro --alias=account --type=api
+micro new --namespace=go.micro --type=srv --gopath=false --alias=account srv/account
 ```
 
 ## Getting Started
@@ -54,7 +60,7 @@ Build a docker image
 make docker
 ```
 
-# Start the API
+## Start the API
 
 > make sure `account-srv` and `emailer-srv` services are running before you start `account-api`
 
@@ -64,9 +70,12 @@ go run api/account/main.go api/account/plugin.go
 
 # Run the micro API
 micro api --namespace=go.micro.api --handler=api
+# (or) Run Micro Web to trst via Web UI
 micro web --namespace=go.micro.api
 
+# see service definitions
 micro get service go.micro.api.account
+
 # Call go.micro.api.account via API
 curl "http://localhost:8080/account/AccountService/list?limit=10"
 ```

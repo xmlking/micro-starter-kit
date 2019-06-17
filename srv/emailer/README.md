@@ -2,10 +2,14 @@
 
 This is the Emailer service
 
+Showcase
+
+1. Async service
+
 Generated with
 
 ```
-micro new srv/emailer --namespace=go.micro --alias=emailer --type=srv --plugin=registry=mdns:broker=nats
+micro new srv/emailer --namespace=go.micro --alias=emailer --type=srv --gopath=false --plugin=registry=mdns:broker=nats
 ```
 
 ## Getting Started

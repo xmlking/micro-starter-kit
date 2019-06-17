@@ -2,12 +2,19 @@
 
 This is the Account service
 
-Implements basic CRUD API
+showcase
+
+1. Implements basic CRUD API
+2. Multiple handlers, repositories, subscribers  
+3. Publishing events
+4. GORM data access
+5. Config Managment
+6. Custom Logging
 
 Generated with
 
 ```
-micro new github.com/xmlking/micro-starter-kit/srv/account --namespace=go.micro --alias=account --type=srv
+micro new --namespace=go.micro --type=srv --gopath=false --alias=account srv/account
 ```
 
 ## Getting Started
