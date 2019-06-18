@@ -74,10 +74,12 @@ docker-compose up postgres
 ```bash
 # dev mode
 # test account srv (plugin adds custom logger )
-# go run srv/account/main.go srv/account/plugin.go --server_address=172.11.11.80:55011 --broker_address=172.11.11.80:55021
+# myVpnIp=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 |  grep -Fv '192.168' | awk '{print $2}')
+# go run srv/account/main.go srv/account/plugin.go --server_address=${myVpnIp}:55011 --broker_address=${myVpnIp}:55021
 go run srv/account/main.go srv/account/plugin.go
-# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=172.11.11.80:55012 --broker_address=172.11.11.80:55022
+# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${myVpnIp}:55012 --broker_address=${myVpnIp}:55022
 go run srv/emailer/main.go srv/emailer/plugin.go
+# go run srv/dfkl/main.go srv/dfkl/plugin.go --server_address=${myVpnIp}:55013  --broker_address=${myVpnIp}:55023
 
 # prod mode
 MICRO_BROKER=nats \
