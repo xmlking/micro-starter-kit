@@ -26,7 +26,7 @@ func main() {
 	service := micro.NewService(
 		micro.Name("go.micro.cli.account"), // cfg.ServiceName
 		micro.Version("latest"),            // cfg.Version
-		// optional cli flag overrides. commit out if you don't need to override
+		// optional cli flag to override config. comment out if you don't need to override
 		micro.Flags(
 			cli.StringFlag{
 				Name:        "config, c",
@@ -53,6 +53,7 @@ func main() {
 	// Initialise service
 	service.Init(
 		micro.Action(func(c *cli.Context) {
+			// this time, includes flag config overrides
 			myConfig.InitConfig()
 			config.Scan(&cfg)
 		}),
