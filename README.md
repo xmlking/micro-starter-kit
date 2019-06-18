@@ -79,7 +79,6 @@ docker-compose up postgres
 go run srv/account/main.go srv/account/plugin.go
 # go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${myVpnIp}:55012 --broker_address=${myVpnIp}:55022
 go run srv/emailer/main.go srv/emailer/plugin.go
-# go run srv/dfkl/main.go srv/dfkl/plugin.go --server_address=${myVpnIp}:55013  --broker_address=${myVpnIp}:55023
 
 # prod mode
 MICRO_BROKER=nats \
