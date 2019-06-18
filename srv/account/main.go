@@ -5,15 +5,13 @@ import (
 	"github.com/micro/go-micro/config"
 	"github.com/micro/go-micro/util/log"
 
-	"github.com/xmlking/micro-starter-kit/shared/database"
-	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	"github.com/xmlking/micro-starter-kit/srv/account/registry"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	"github.com/xmlking/micro-starter-kit/srv/account/subscriber"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	// _ "github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/xmlking/micro-starter-kit/shared/wrapper"
 )
 
@@ -35,29 +33,22 @@ func main() {
 		micro.WrapHandler(wrapper.LogWrapper),
 	)
 
-	// Lets do DI manually
-	//db
-	db, err := database.GetDatabaseConnection(&cfg.Database)
+	// Initialise service
+	service.Init()
+
+	// Initialise DI Container
+	ctn, err := registry.NewContainer(cfg)
+	defer ctn.Clean()
 	if err != nil {
-		log.Fatalf("error getting database connection: %v", err)
+		log.Fatalf("failed to build container: %v", err)
 	}
-	defer db.Close()
-
-	db.AutoMigrate(&entity.User{}, &entity.Profile{})
-
-	// Repositories
-	userRepository := repository.NewUserRepository(db)
-	profileRepository := repository.NewProfileRepository(db)
 
 	// Publisher publish to "go.micro.srv.emailer"
 	publisher := micro.NewPublisher("go.micro.srv.emailer", service.Client())
 
-	// Handlers
-	userHandler := handler.NewUserHandler(userRepository, publisher)
-	profileHandler := handler.NewProfileHandler(profileRepository)
-
-	// Initialise service
-	service.Init()
+	// // Handlers
+	userHandler := handler.NewUserHandler(ctn.Resolve("user-repository").(repository.UserRepository), publisher)
+	profileHandler := ctn.Resolve("profile-handler").(accountPB.ProfileServiceHandler)
 
 	// Register Handlers
 	accountPB.RegisterUserServiceHandler(service.Server(), userHandler)

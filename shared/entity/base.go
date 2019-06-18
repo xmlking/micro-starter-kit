@@ -3,14 +3,15 @@ package entity
 import (
 	"time"
 
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
+	"github.com/infobloxopen/atlas-app-toolkit/rpc/resource"
 )
 
-// GormModel Gorm Base Model
+// Base contains common columns for all tables.
 // CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public; ?
-type GormModel struct {
-	ID        uuid.UUID `gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time `sql:"index"`
+type Base struct {
+	ID        *resource.Identifier `gorm:"type:uuid;primary_key;"` // `gorm:"primary_key;type:uuid;default:uuid_generate_v4()"`
+	CreatedAt time.Time            `json:"created_at"`
+	UpdatedAt time.Time            `json:"update_at"`
+	DeletedAt *time.Time           `sql:"index" json:"deleted_at"`
 }
