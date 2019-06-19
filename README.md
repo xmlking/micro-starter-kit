@@ -23,12 +23,18 @@
 > Global tools:
 
 ```bash
-brew install protobuf
+# fetche micro into $GOPATH
 go get -u github.com/micro/micro
 go get -u github.com/micro/go-micro
 
+# for mac, use brew to install protobuf
+brew install protobuf
+
+# fetch protoc plugins into $GOPATH
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 go get -u github.com/micro/protoc-gen-micro
+# fetch PGV protoc plugin
+go get -d github.com/envoyproxy/protoc-gen-validate
 ```
 
 ## Initial Setup
