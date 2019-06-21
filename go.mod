@@ -8,7 +8,7 @@ require (
 	github.com/infobloxopen/atlas-app-toolkit v0.18.2
 	github.com/jinzhu/gorm v1.9.9
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.6.0
+	github.com/micro/go-micro v1.7.0
 	github.com/sarulabs/di v2.0.0+incompatible
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.3.0

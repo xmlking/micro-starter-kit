@@ -74,15 +74,15 @@ postgres
 docker-compose up postgres
 ```
 
-> Node: `--server_address=<myVpnIp>:5501x --broker_address=<myVpnIp>:5502x` required only when you are behind VPN
+> Node: `--server_address=<MY_VPM_IP>:5501x --broker_address=<MY_VPM_IP>:5502x` required only when you are behind VPN
 
 ```bash
 # dev mode
 # test account srv (plugin adds custom logger )
-# myVpnIp=$(ifconfig | grep "inet " | grep -Fv 127.0.0.1 |  grep -Fv '192.168' | awk '{print $2}')
-# go run srv/account/main.go srv/account/plugin.go --server_address=${myVpnIp}:55011 --broker_address=${myVpnIp}:55021
+# MY_VPM_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
+# go run srv/account/main.go srv/account/plugin.go --server_address=${MY_VPM_IP}:55011 --broker_address=${MY_VPM_IP}:55021
 go run srv/account/main.go srv/account/plugin.go
-# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${myVpnIp}:55012 --broker_address=${myVpnIp}:55022
+# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${MY_VPM_IP}:55012 --broker_address=${MY_VPM_IP}:55022
 go run srv/emailer/main.go srv/emailer/plugin.go
 
 # prod mode
@@ -99,19 +99,33 @@ go run cmd/demo/main.go --database_host=1.1.1.1 --database_port=7777
 APP_ENV=production go run cmd/demo/main.go
 ```
 
-### Run Micro
+## Test
+
+> using `micro` CLI
 
 ```bash
 micro list services
 micro get service go.micro.srv.account
 
-# run API Gateway
+# Start API Gateway
 micro api --namespace=go.micro.srv
-# (or) run Web UX for testing
+# (or) Start Web UX for testing
 micro web --namespace=go.micro.srv
 ```
 
-## Test
+### Test gRPC Directly
+
+```bash
+micro call go.micro.srv.account UserService.Create '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+micro call go.micro.srv.account UserService.List '{}'
+micro call go.micro.srv.account UserService.Get '{"id": 1}'
+```
+
+### Test via Micro Web UI
+
+```
+open http://localhost:8082
+```
 
 > create new user from `Micro Web UI` and see if an email is send
 
@@ -123,6 +137,10 @@ micro web --namespace=go.micro.srv
 "email": "sumo@demo.com"
 }
 ```
+
+### Test via Micro API Gateway
+
+> Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
 
 ## Reference
 

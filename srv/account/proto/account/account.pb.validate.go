@@ -100,107 +100,75 @@ func (m *UserRequest) Validate() error {
 		return nil
 	}
 
-	if m.GetId() < 0 {
-		return UserRequestValidationError{
-			field:  "Id",
-			reason: "value must be greater than or equal to 0",
+	if wrapper := m.GetId(); wrapper != nil {
+
+		if wrapper.GetValue() < 1 {
+			return UserRequestValidationError{
+				field:  "Id",
+				reason: "value must be greater than or equal to 1",
+			}
 		}
+
 	}
 
-	if l := utf8.RuneCountInString(m.GetUsername()); l < 4 || l > 16 {
-		return UserRequestValidationError{
-			field:  "Username",
-			reason: "value length must be between 4 and 16 runes, inclusive",
+	if wrapper := m.GetUsername(); wrapper != nil {
+
+		if l := utf8.RuneCountInString(wrapper.GetValue()); l < 4 || l > 16 {
+			return UserRequestValidationError{
+				field:  "Username",
+				reason: "value length must be between 4 and 16 runes, inclusive",
+			}
 		}
+
+		if len(wrapper.GetValue()) > 256 {
+			return UserRequestValidationError{
+				field:  "Username",
+				reason: "value length must be at most 256 bytes",
+			}
+		}
+
+		if !_UserRequest_Username_Pattern.MatchString(wrapper.GetValue()) {
+			return UserRequestValidationError{
+				field:  "Username",
+				reason: "value does not match regex pattern \"^[a-z0-9_-]{3,15}$\"",
+			}
+		}
+
 	}
 
-	if len(m.GetUsername()) > 256 {
-		return UserRequestValidationError{
-			field:  "Username",
-			reason: "value length must be at most 256 bytes",
+	if wrapper := m.GetFirstName(); wrapper != nil {
+
+		if utf8.RuneCountInString(wrapper.GetValue()) < 3 {
+			return UserRequestValidationError{
+				field:  "FirstName",
+				reason: "value length must be at least 3 runes",
+			}
 		}
+
 	}
 
-	if !_UserRequest_Username_Pattern.MatchString(m.GetUsername()) {
-		return UserRequestValidationError{
-			field:  "Username",
-			reason: "value does not match regex pattern \"^[a-z0-9_-]{3,15}$\"",
+	if wrapper := m.GetLastName(); wrapper != nil {
+
+		if utf8.RuneCountInString(wrapper.GetValue()) < 3 {
+			return UserRequestValidationError{
+				field:  "LastName",
+				reason: "value length must be at least 3 runes",
+			}
 		}
+
 	}
 
-	if utf8.RuneCountInString(m.GetFirstName()) < 3 {
-		return UserRequestValidationError{
-			field:  "FirstName",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	if utf8.RuneCountInString(m.GetLastName()) < 3 {
-		return UserRequestValidationError{
-			field:  "LastName",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	if err := m._validateEmail(m.GetEmail()); err != nil {
-		return UserRequestValidationError{
-			field:  "Email",
-			reason: "value must be a valid email address",
-			cause:  err,
-		}
-	}
-
-	return nil
-}
-
-func (m *UserRequest) _validateHostname(host string) error {
-	s := strings.ToLower(strings.TrimSuffix(host, "."))
-
-	if len(host) > 253 {
-		return errors.New("hostname cannot exceed 253 characters")
-	}
-
-	for _, part := range strings.Split(s, ".") {
-		if l := len(part); l == 0 || l > 63 {
-			return errors.New("hostname part must be non-empty and cannot exceed 63 characters")
-		}
-
-		if part[0] == '-' {
-			return errors.New("hostname parts cannot begin with hyphens")
-		}
-
-		if part[len(part)-1] == '-' {
-			return errors.New("hostname parts cannot end with hyphens")
-		}
-
-		for _, r := range part {
-			if (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '-' {
-				return fmt.Errorf("hostname parts can only contain alphanumeric characters or hyphens, got %q", string(r))
+	if v, ok := interface{}(m.GetEmail()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UserRequestValidationError{
+				field:  "Email",
+				reason: "embedded message failed validation",
+				cause:  err,
 			}
 		}
 	}
 
 	return nil
-}
-
-func (m *UserRequest) _validateEmail(addr string) error {
-	a, err := mail.ParseAddress(addr)
-	if err != nil {
-		return err
-	}
-	addr = a.Address
-
-	if len(addr) > 254 {
-		return errors.New("email addresses cannot exceed 254 characters")
-	}
-
-	parts := strings.SplitN(addr, "@", 2)
-
-	if len(parts[0]) > 64 {
-		return errors.New("email address local phrase cannot exceed 64 characters")
-	}
-
-	return m._validateHostname(parts[1])
 }
 
 // UserRequestValidationError is the validation error returned by
@@ -387,116 +355,96 @@ func (m *UserListQuery) Validate() error {
 		return nil
 	}
 
-	if m.GetLimit() <= 1 {
-		return UserListQueryValidationError{
-			field:  "Limit",
-			reason: "value must be greater than 1",
+	if wrapper := m.GetLimit(); wrapper != nil {
+
+		if val := wrapper.GetValue(); val < 1 || val > 100 {
+			return UserListQueryValidationError{
+				field:  "Limit",
+				reason: "value must be inside range [1, 100]",
+			}
+		}
+
+	}
+
+	if wrapper := m.GetPage(); wrapper != nil {
+
+		if wrapper.GetValue() < 1 {
+			return UserListQueryValidationError{
+				field:  "Page",
+				reason: "value must be greater than or equal to 1",
+			}
+		}
+
+	}
+
+	if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UserListQueryValidationError{
+				field:  "Sort",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
 		}
 	}
 
-	if m.GetPage() < 0 {
-		return UserListQueryValidationError{
-			field:  "Page",
-			reason: "value must be greater than or equal to 0",
+	if wrapper := m.GetUsername(); wrapper != nil {
+
+		if l := utf8.RuneCountInString(wrapper.GetValue()); l < 4 || l > 16 {
+			return UserListQueryValidationError{
+				field:  "Username",
+				reason: "value length must be between 4 and 16 runes, inclusive",
+			}
 		}
+
+		if len(wrapper.GetValue()) > 256 {
+			return UserListQueryValidationError{
+				field:  "Username",
+				reason: "value length must be at most 256 bytes",
+			}
+		}
+
+		if !_UserListQuery_Username_Pattern.MatchString(wrapper.GetValue()) {
+			return UserListQueryValidationError{
+				field:  "Username",
+				reason: "value does not match regex pattern \"^[a-z0-9_-]{3,15}$\"",
+			}
+		}
+
 	}
 
-	// no validation rules for Sort
+	if wrapper := m.GetFirstName(); wrapper != nil {
 
-	if l := utf8.RuneCountInString(m.GetUsername()); l < 4 || l > 16 {
-		return UserListQueryValidationError{
-			field:  "Username",
-			reason: "value length must be between 4 and 16 runes, inclusive",
+		if utf8.RuneCountInString(wrapper.GetValue()) < 3 {
+			return UserListQueryValidationError{
+				field:  "FirstName",
+				reason: "value length must be at least 3 runes",
+			}
 		}
+
 	}
 
-	if len(m.GetUsername()) > 256 {
-		return UserListQueryValidationError{
-			field:  "Username",
-			reason: "value length must be at most 256 bytes",
+	if wrapper := m.GetLastName(); wrapper != nil {
+
+		if utf8.RuneCountInString(wrapper.GetValue()) < 3 {
+			return UserListQueryValidationError{
+				field:  "LastName",
+				reason: "value length must be at least 3 runes",
+			}
 		}
+
 	}
 
-	if !_UserListQuery_Username_Pattern.MatchString(m.GetUsername()) {
-		return UserListQueryValidationError{
-			field:  "Username",
-			reason: "value does not match regex pattern \"^[a-z0-9_-]{3,15}$\"",
-		}
-	}
-
-	if utf8.RuneCountInString(m.GetFirstName()) < 3 {
-		return UserListQueryValidationError{
-			field:  "FirstName",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	if utf8.RuneCountInString(m.GetLastName()) < 3 {
-		return UserListQueryValidationError{
-			field:  "LastName",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	if err := m._validateEmail(m.GetEmail()); err != nil {
-		return UserListQueryValidationError{
-			field:  "Email",
-			reason: "value must be a valid email address",
-			cause:  err,
-		}
-	}
-
-	return nil
-}
-
-func (m *UserListQuery) _validateHostname(host string) error {
-	s := strings.ToLower(strings.TrimSuffix(host, "."))
-
-	if len(host) > 253 {
-		return errors.New("hostname cannot exceed 253 characters")
-	}
-
-	for _, part := range strings.Split(s, ".") {
-		if l := len(part); l == 0 || l > 63 {
-			return errors.New("hostname part must be non-empty and cannot exceed 63 characters")
-		}
-
-		if part[0] == '-' {
-			return errors.New("hostname parts cannot begin with hyphens")
-		}
-
-		if part[len(part)-1] == '-' {
-			return errors.New("hostname parts cannot end with hyphens")
-		}
-
-		for _, r := range part {
-			if (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '-' {
-				return fmt.Errorf("hostname parts can only contain alphanumeric characters or hyphens, got %q", string(r))
+	if v, ok := interface{}(m.GetEmail()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UserListQueryValidationError{
+				field:  "Email",
+				reason: "embedded message failed validation",
+				cause:  err,
 			}
 		}
 	}
 
 	return nil
-}
-
-func (m *UserListQuery) _validateEmail(addr string) error {
-	a, err := mail.ParseAddress(addr)
-	if err != nil {
-		return err
-	}
-	addr = a.Address
-
-	if len(addr) > 254 {
-		return errors.New("email addresses cannot exceed 254 characters")
-	}
-
-	parts := strings.SplitN(addr, "@", 2)
-
-	if len(parts[0]) > 64 {
-		return errors.New("email address local phrase cannot exceed 64 characters")
-	}
-
-	return m._validateHostname(parts[1])
 }
 
 // UserListQueryValidationError is the validation error returned by
@@ -728,7 +676,7 @@ func (m *ProfileRequest) Validate() error {
 		if _, ok := _ProfileRequest_Gender_InLookup[wrapper.GetValue()]; !ok {
 			return ProfileRequestValidationError{
 				field:  "Gender",
-				reason: "value must be in list [male female]",
+				reason: "value must be in list [M F]",
 			}
 		}
 
@@ -792,8 +740,8 @@ var _ interface {
 } = ProfileRequestValidationError{}
 
 var _ProfileRequest_Gender_InLookup = map[string]struct{}{
-	"male":   {},
-	"female": {},
+	"M": {},
+	"F": {},
 }
 
 // Validate is disabled for ProfileResponse. This method will always return nil.
@@ -863,24 +811,26 @@ func (m *ProfileListQuery) Validate() error {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetLimit()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if wrapper := m.GetLimit(); wrapper != nil {
+
+		if val := wrapper.GetValue(); val < 1 || val > 100 {
 			return ProfileListQueryValidationError{
 				field:  "Limit",
-				reason: "embedded message failed validation",
-				cause:  err,
+				reason: "value must be inside range [1, 100]",
 			}
 		}
+
 	}
 
-	if v, ok := interface{}(m.GetPage()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if wrapper := m.GetPage(); wrapper != nil {
+
+		if wrapper.GetValue() < 1 {
 			return ProfileListQueryValidationError{
 				field:  "Page",
-				reason: "embedded message failed validation",
-				cause:  err,
+				reason: "value must be greater than or equal to 1",
 			}
 		}
+
 	}
 
 	if v, ok := interface{}(m.GetSort()).(interface{ Validate() error }); ok {
@@ -908,7 +858,7 @@ func (m *ProfileListQuery) Validate() error {
 		if _, ok := _ProfileListQuery_Gender_InLookup[wrapper.GetValue()]; !ok {
 			return ProfileListQueryValidationError{
 				field:  "Gender",
-				reason: "value must be in list [male female]",
+				reason: "value must be in list [M F]",
 			}
 		}
 
@@ -972,8 +922,8 @@ var _ interface {
 } = ProfileListQueryValidationError{}
 
 var _ProfileListQuery_Gender_InLookup = map[string]struct{}{
-	"male":   {},
-	"female": {},
+	"M": {},
+	"F": {},
 }
 
 // Validate is disabled for ProfileListResponse. This method will always return nil.

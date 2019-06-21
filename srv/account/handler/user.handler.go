@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro"
@@ -10,6 +9,7 @@ import (
 	"github.com/micro/go-micro/util/log"
 
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
+	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
@@ -34,10 +34,14 @@ func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.Us
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.exist", "validation error: %v", err)
 	}
-	// if len(strings.TrimSpace(req.Email)) == 0 {
-	// 	return fmt.Errorf("invalid email address")
-	// }
-	exists := h.userRepository.Exist(req)
+
+	model := &entity.User{
+		Model:    gorm.Model{ID: uint(req.Id.GetValue())},
+		Username: req.Username.GetValue(),
+		Email:    req.Email.GetValue(),
+	}
+
+	exists := h.userRepository.Exist(model)
 	log.Logf("user exists? %t", exists)
 	rsp.Result = exists
 	return nil
@@ -48,7 +52,14 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.list", "validation error: %v", err)
 	}
-	total, users, err := h.userRepository.List(req)
+
+	model := &entity.User{
+		Username: req.Username.GetValue(),
+		LastName: req.LastName.GetValue(),
+		Email:    req.Email.GetValue(),
+	}
+
+	total, users, err := h.userRepository.List(req.Limit.GetValue(), req.Page.GetValue(), req.Sort.GetValue(), model)
 	if err != nil {
 		return errors.NotFound("go.micro.srv.account.user.list", "Error %v", err.Error())
 	}
@@ -66,11 +77,10 @@ func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.User
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.get", "validation error: %v", err)
 	}
-	if req.Id == 0 {
-		return fmt.Errorf("missing Id")
+	if req.Id.GetValue() == 0 {
+		return myErrors.ValidationError("go.micro.srv.account.user.get", "validation error: Missing Id")
 	}
-
-	user, err := h.userRepository.Get(req)
+	user, err := h.userRepository.Get(req.Id.GetValue())
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			rsp.Result = nil
@@ -88,12 +98,20 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.create", "validation error: %v", err)
 	}
-	if err := h.userRepository.Create(req); err != nil {
-		return err
+
+	model := &entity.User{
+		Username:  req.Username.GetValue(),
+		FirstName: req.FirstName.GetValue(),
+		LastName:  req.LastName.GetValue(),
+		Email:     req.Email.GetValue(),
+	}
+
+	if err := h.userRepository.Create(model); err != nil {
+		return myErrors.ValidationError("go.micro.srv.account.user.create", "Create Failed: %v", err)
 	}
 
 	// send email
-	if err := h.Publisher.Publish(ctx, &emailerPB.Message{To: req.Email, From: req.Email, Subject: "this is email subject", Body: "this is email body"}); err != nil {
+	if err := h.Publisher.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue(), From: req.Email.GetValue(), Subject: "this is email subject", Body: "this is email body"}); err != nil {
 		return err
 	}
 
@@ -105,11 +123,19 @@ func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: %v", err)
 	}
-	if req.Id == 0 {
-		return fmt.Errorf("missing Id")
+	if req.Id.GetValue() == 0 {
+		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: Missing Id")
 	}
-	if err := h.userRepository.Update(req); err != nil {
-		return err
+
+	model := &entity.User{
+		Username:  req.Username.GetValue(),
+		FirstName: req.FirstName.GetValue(),
+		LastName:  req.LastName.GetValue(),
+		Email:     req.Email.GetValue(),
+	}
+
+	if err := h.userRepository.Update(req.Id.GetValue(), model); err != nil {
+		return myErrors.ValidationError("go.micro.srv.account.user.update", "Update Failed: %v", err)
 	}
 
 	return nil
@@ -120,11 +146,17 @@ func (h *userHandler) Delete(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.delete", "validation error: %v", err)
 	}
-	if req.Id == 0 {
-		return fmt.Errorf("missing Id")
+
+	if req.Id.GetValue() == 0 {
+		return myErrors.ValidationError("go.micro.srv.account.user.delete", "validation error: Missing Id")
 	}
-	if err := h.userRepository.Delete(req); err != nil {
-		return err
+
+	model := &entity.User{
+		Model: gorm.Model{ID: uint(req.Id.GetValue())},
+	}
+
+	if err := h.userRepository.Delete(model); err != nil {
+		return myErrors.ValidationError("go.micro.srv.account.user.delete", "Delete Failed: %v", err)
 	}
 
 	return nil

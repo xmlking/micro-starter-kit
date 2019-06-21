@@ -34,28 +34,18 @@ message User {
 }
 
 message UserRequest {
-	// google.protobuf.UInt32Value id = 1 [(validate.rules).uint32.gte = 0];
-    // google.protobuf.StringValue username = 2 [(validate.rules).string = {
-    //                         min_len: 6
-    //                         max_len: 16
-    //                         pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
-    //                         max_bytes: 256,
-    //                     }];
-    // google.protobuf.StringValue firstName = 3 [(validate.rules).string.min_len = 3];
-    // google.protobuf.StringValue lastName = 4 [(validate.rules).string.min_len = 3];
-    // google.protobuf.StringValue email = 5 [(validate.rules).string.email = true];
-
-    uint32 id = 1 [(validate.rules).uint32.gte = 0];
-    string username = 2 [(validate.rules).string = {
+	google.protobuf.UInt32Value id = 1 [(validate.rules).uint32.gte = 1];
+    google.protobuf.StringValue username = 2 [(validate.rules).string = {
                             min_len: 4
                             max_len: 16
-                            // pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
                             pattern:  "^[a-z0-9_-]{3,15}$",
                             max_bytes: 256,
                         }];
-    string firstName = 3 [(validate.rules).string.min_len = 3];
-    string lastName = 4 [(validate.rules).string.min_len = 3];
-    string email = 7 [(validate.rules).string.email = true];
+    google.protobuf.StringValue firstName = 3 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue lastName = 4 [(validate.rules).string.min_len = 3];
+    // string email = 5 [(validate.rules).string.email = true]; // Works
+    // google.protobuf.StringValue email = 5 [(validate.rules).string.email = true]; // Not Working
+    google.protobuf.StringValue email = 5 [(validate.rules).message.required = false]; // Workaround
   }
 
 message UserResponse {
@@ -69,32 +59,20 @@ message UserExistResponse {
 }
 
 message UserListQuery {
-    // google.protobuf.UInt32Value limit = 1 [(validate.rules).uint32.gt = 1];
-    // google.protobuf.UInt32Value page=2 [(validate.rules).uint32.gte = 1];
-    // google.protobuf.StringValue sort=3;
-	// google.protobuf.StringValue username = 4 [(validate.rules).string = {
-    //                                             min_len: 6
-    //                                             max_len: 16
-    //                                             pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
-    //                                             max_bytes: 256,
-    //                                         }];
-    // google.protobuf.StringValue firstName = 5 [(validate.rules).string.min_len = 3];
-    // google.protobuf.StringValue lastName = 6 [(validate.rules).string.min_len = 3];
-    // google.protobuf.StringValue email = 7 [(validate.rules).string.email = true];
-
-    uint32 limit = 1 [(validate.rules).uint32.gt = 1];
-    uint32 page=2 [(validate.rules).uint32.gte = 1];
-    string sort=3;
-    string username = 4 [(validate.rules).string = {
+    google.protobuf.UInt32Value limit = 1 [(validate.rules).uint32 = {gte:1, lte: 100}];
+    google.protobuf.UInt32Value page= 2 [(validate.rules).uint32.gte = 1];
+    google.protobuf.StringValue sort= 3;
+	google.protobuf.StringValue username = 4 [(validate.rules).string = {
                                                 min_len: 4
                                                 max_len: 16
-                                                // pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
                                                 pattern:   "^[a-z0-9_-]{3,15}$",
                                                 max_bytes: 256,
                                             }];
-    string firstName = 5 [(validate.rules).string.min_len = 3];
-    string lastName = 6 [(validate.rules).string.min_len = 3];
-    string email = 7 [(validate.rules).string.email = true];
+    google.protobuf.StringValue firstName = 5 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue lastName = 6 [(validate.rules).string.min_len = 3];
+    // string email = 7 [(validate.rules).string.email = true]; // Works
+    // google.protobuf.StringValue email = 7 [(validate.rules).string.email = true]; // Not Working
+    google.protobuf.StringValue email = 7 [(validate.rules).message.required = false]; // // Workaround
 }
 message UserListResponse {
     option (validate.disabled) = true;
@@ -127,7 +105,7 @@ message ProfileRequest {
     google.protobuf.UInt32Value user_id = 2;
     google.protobuf.StringValue tz = 3;
     google.protobuf.StringValue avatar = 4 [(validate.rules).string.uri_ref = true];
-    google.protobuf.StringValue gender = 5 [(validate.rules).string = {in: ["male", "female"]}];
+    google.protobuf.StringValue gender = 5 [(validate.rules).string = {in: ["M", "F"]}];
     // GenderType gender = 4; // enum // [(validate.rules).enum.defined_only = true];
 	// google.protobuf.Timestamp birthday = 5 [(validate.rules).timestamp.gt_now = true];
 }
@@ -139,11 +117,11 @@ message ProfileResponse {
 }
 
 message ProfileListQuery {
-    google.protobuf.UInt32Value limit=1;
-    google.protobuf.UInt32Value page=2;
-    google.protobuf.StringValue sort=3;
+    google.protobuf.UInt32Value limit = 1 [(validate.rules).uint32 = {gte:1, lte: 100}];
+    google.protobuf.UInt32Value page= 2 [(validate.rules).uint32.gte = 1];
+    google.protobuf.StringValue sort= 3;
 	google.protobuf.UInt32Value user_id = 4;
-    google.protobuf.StringValue gender = 5 [(validate.rules).string = {in: ["male", "female"]}];
+    google.protobuf.StringValue gender = 5 [(validate.rules).string = {in: ["M", "F"]}];
     // GenderType gender = 5;
 }
 
