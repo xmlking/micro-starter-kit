@@ -131,11 +131,30 @@ curl -d 'service=go.micro.srv.account' \
 }
 ```
 
+```json
+{
+"limit": 10,
+"username": "sumo",
+"firstName": "sumo",
+"lastName": "demo",
+"email": "sumo@demo.com"
+}
+```
 #### Get
 
 ```json
 {
     "id": 1
+}
+```
+
+```json
+{
+"id": 1,
+"username": "sumo",
+"firstName": "sumo",
+"lastName": "demo",
+"email": "sumo@demo.com"
 }
 ```
 
@@ -177,7 +196,7 @@ curl -d 'service=go.micro.srv.account' \
 #### Create
 
 ```json
- {
+{
 "user_id": 2,
 "tx" : "PST",
 "avatar": "sumo2.jpg",

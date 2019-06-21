@@ -1,8 +1,10 @@
 syntax = "proto3";
 
 package go.micro.srv.account;
-// import "google/protobuf/timestamp.proto";
+
 // import "shared/proto/basic/error.proto";
+import "google/protobuf/wrappers.proto";
+import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
 
 service UserService {
 	rpc Exist(UserRequest) returns (UserExistResponse) {}
@@ -18,8 +20,10 @@ service ProfileService {
     rpc Get(ProfileRequest) returns (ProfileResponse) {}
     rpc Create(ProfileRequest) returns (ProfileResponse) {}
 }
- 
+
 message User {
+    option (validate.disabled) = true;
+
 	uint32 id = 1;
 	string username = 2;
     string firstName = 3;
@@ -30,40 +34,73 @@ message User {
 }
 
 message UserRequest {
-	uint32 id = 1;
-	string username = 2;
-    string firstName = 3;
-    string lastName = 4;
-    string email = 5;
+	// google.protobuf.UInt32Value id = 1 [(validate.rules).uint32.gte = 0];
+    // google.protobuf.StringValue username = 2 [(validate.rules).string = {
+    //                         min_len: 6
+    //                         max_len: 16
+    //                         pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
+    //                         max_bytes: 256,
+    //                     }];
+    // google.protobuf.StringValue firstName = 3 [(validate.rules).string.min_len = 3];
+    // google.protobuf.StringValue lastName = 4 [(validate.rules).string.min_len = 3];
+    // google.protobuf.StringValue email = 5 [(validate.rules).string.email = true];
+
+    uint32 id = 1 [(validate.rules).uint32.gte = 0];
+    string username = 2 [(validate.rules).string = {
+                            min_len: 4
+                            max_len: 16
+                            // pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
+                            pattern:  "^[a-z0-9_-]{3,15}$",
+                            max_bytes: 256,
+                        }];
+    string firstName = 3 [(validate.rules).string.min_len = 3];
+    string lastName = 4 [(validate.rules).string.min_len = 3];
+    string email = 7 [(validate.rules).string.email = true];
   }
 
 message UserResponse {
-    // basic.Error error = 1;
-	string code = 1;
-    string msg = 2;
-    User user = 3;
+    option (validate.disabled) = true;
+    User result = 1;
 }
 
 message UserExistResponse {
-	string code = 1;
-    string msg = 2;
-	bool exists = 3;
+    option (validate.disabled) = true;
+	bool result = 1;
 }
 
 message UserListQuery {
-    uint32 limit=1;
-    uint32 page=2;
+    // google.protobuf.UInt32Value limit = 1 [(validate.rules).uint32.gt = 1];
+    // google.protobuf.UInt32Value page=2 [(validate.rules).uint32.gte = 1];
+    // google.protobuf.StringValue sort=3;
+	// google.protobuf.StringValue username = 4 [(validate.rules).string = {
+    //                                             min_len: 6
+    //                                             max_len: 16
+    //                                             pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
+    //                                             max_bytes: 256,
+    //                                         }];
+    // google.protobuf.StringValue firstName = 5 [(validate.rules).string.min_len = 3];
+    // google.protobuf.StringValue lastName = 6 [(validate.rules).string.min_len = 3];
+    // google.protobuf.StringValue email = 7 [(validate.rules).string.email = true];
+
+    uint32 limit = 1 [(validate.rules).uint32.gt = 1];
+    uint32 page=2 [(validate.rules).uint32.gte = 1];
     string sort=3;
-	string username = 4;
-    string firstName = 5;
-    string lastName = 6;
-    string email = 7;
+    string username = 4 [(validate.rules).string = {
+                                                min_len: 4
+                                                max_len: 16
+                                                // pattern:   "^[^[0-9]A-Za-z]+( [^[0-9]A-Za-z]+)*$",
+                                                pattern:   "^[a-z0-9_-]{3,15}$",
+                                                max_bytes: 256,
+                                            }];
+    string firstName = 5 [(validate.rules).string.min_len = 3];
+    string lastName = 6 [(validate.rules).string.min_len = 3];
+    string email = 7 [(validate.rules).string.email = true];
 }
 message UserListResponse {
-	string code = 1;
-	string msg = 2;
-	uint32 total = 3;
-    repeated User users = 4;
+    option (validate.disabled) = true;
+
+    repeated User results = 1;
+    uint32 total = 2;
 }
 
 // enum GenderType {
@@ -72,6 +109,8 @@ message UserListResponse {
 // }
 
 message Profile {
+    option (validate.disabled) = true;
+
 	uint32 id = 1;
 	string tz = 2; // *time.Location
     string avatar = 3;
@@ -84,31 +123,33 @@ message Profile {
 }
 
 message ProfileRequest {
-    uint32 id = 1;
-    uint32 user_id = 2;
-    string tz = 3; 
-    string avatar = 4;
-    string gender = 5;
+    google.protobuf.UInt32Value id = 1;
+    google.protobuf.UInt32Value user_id = 2;
+    google.protobuf.StringValue tz = 3;
+    google.protobuf.StringValue avatar = 4 [(validate.rules).string.uri_ref = true];
+    google.protobuf.StringValue gender = 5 [(validate.rules).string = {in: ["male", "female"]}];
+    // GenderType gender = 4; // enum // [(validate.rules).enum.defined_only = true];
+	// google.protobuf.Timestamp birthday = 5 [(validate.rules).timestamp.gt_now = true];
 }
 
 message ProfileResponse {
-	string code = 1;
-    string msg = 2;
-    Profile profile = 3;
+    option (validate.disabled) = true;
+
+    Profile result = 1;
 }
 
 message ProfileListQuery {
-    uint32 limit=1;
-    uint32 page=2;
-    string sort=3;
-	uint32 user_id = 4;
-    string gender = 5; 
-    // GenderType gender = 5; 
+    google.protobuf.UInt32Value limit=1;
+    google.protobuf.UInt32Value page=2;
+    google.protobuf.StringValue sort=3;
+	google.protobuf.UInt32Value user_id = 4;
+    google.protobuf.StringValue gender = 5 [(validate.rules).string = {in: ["male", "female"]}];
+    // GenderType gender = 5;
 }
 
 message ProfileListResponse {
-	string code = 1;
-	string msg = 2;
-	uint32 total = 3;
-    repeated Profile profiles = 4;
+    option (validate.disabled) = true;
+
+    repeated Profile results = 1;
+    uint32 total = 2;
 }

@@ -35,32 +35,26 @@ func (h *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rsp
 	for index, profile := range profiles {
 		newProfiles[index] = profile.ToPB()
 	}
-	rsp.Profiles = newProfiles
-	rsp.Msg = fmt.Sprintf("%v Total Profiles Found", total) // "Profiles Found"
-	rsp.Code = "200"
+	rsp.Results = newProfiles
 	return nil
 }
 
 func (h *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *pb.ProfileResponse) error {
 	log.Log("Received ProfileHandler.Get request")
-	if req.Id == 0 {
+	if req.Id.GetValue() == 0 {
 		return fmt.Errorf("missing Id")
 	}
 
 	profile, err := h.profileRepository.Get(req)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
-			rsp.Profile = nil
-			rsp.Msg = "Profile Not Found"
-			rsp.Code = "404"
+			rsp.Result = nil
 			return nil
 		}
 		return err
 	}
 
-	rsp.Profile = profile.ToPB()
-	rsp.Msg = "Profile Found"
-	rsp.Code = "200"
+	rsp.Result = profile.ToPB()
 	return nil
 }
 
@@ -69,7 +63,5 @@ func (h *profileHandler) Create(ctx context.Context, req *pb.ProfileRequest, rsp
 	if err := h.profileRepository.Create(req); err != nil {
 		return err
 	}
-	rsp.Msg = "Profile Created"
-	rsp.Code = "200"
 	return nil
 }

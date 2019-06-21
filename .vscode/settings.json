@@ -1,4 +1,5 @@
 {
     "editor.fontFamily": "FiraCode-Retina",
-    "editor.fontLigatures": true
+    "editor.fontLigatures": true,
+    "editor.fontSize": 14
 }

@@ -32,7 +32,7 @@ func NewProfileRepository(db *gorm.DB) ProfileRepository {
 // Exist
 func (repo *profileRepository) Exist(req *pb.ProfileRequest) bool {
 	var count int
-	if req.UserId != 0 {
+	if req.UserId.GetValue() != 0 {
 		repo.db.Model(&entity.Profile{}).Where("user_id = ?", req.UserId).Count(&count)
 		if count > 0 {
 			return true
@@ -46,28 +46,28 @@ func (repo *profileRepository) List(req *pb.ProfileListQuery) (total uint32, pro
 	db := repo.db
 
 	var limit, offset uint32
-	if req.Limit > 0 {
-		limit = req.Limit
+	if req.Limit.GetValue() > 0 {
+		limit = req.Limit.GetValue()
 	} else {
 		limit = 10
 	}
-	if req.Page > 1 {
-		offset = (req.Page - 1) * limit
+	if req.Page.GetValue() > 1 {
+		offset = (req.Page.GetValue() - 1) * limit
 	} else {
 		offset = 0
 	}
 
 	var sort string
-	if req.Sort != "" {
-		sort = req.Sort
+	if req.Sort.GetValue() != "" {
+		sort = req.Sort.GetValue()
 	} else {
 		sort = "created_at desc"
 	}
 
-	if req.UserId != 0 {
+	if req.UserId.GetValue() != 0 {
 		db = db.Where("user_id = ?", req.UserId)
 	}
-	if req.Gender != "" {
+	if req.Gender.GetValue() != "" {
 		db = db.Where("gender = ?", req.Gender)
 	}
 
@@ -95,10 +95,10 @@ func (repo *profileRepository) Create(req *pb.ProfileRequest) error {
 	}
 
 	profile := &entity.Profile{
-		UserID: req.UserId,
-		TZ:     req.Tz,
-		Gender: req.Gender,
-		Avatar: req.Avatar,
+		UserID: req.UserId.GetValue(),
+		TZ:     req.Tz.GetValue(),
+		Gender: req.Gender.GetValue(),
+		Avatar: req.Avatar.GetValue(),
 	}
 
 	if err := repo.db.Create(profile).Error; err != nil {

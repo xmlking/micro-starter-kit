@@ -6,7 +6,7 @@
 
 - [x] Monorepo
 - [x] gRPC microservices with REST Gateway
-- [ ] gRPC validation
+- [x] gRPC validation
 - [x] config fallback
 - [x] custom logging
 - [x] CRUD via ORM
@@ -15,7 +15,6 @@
 ## TODO
 
 - [ ] [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
-- [ ] [envoyproxy/protoc-gen-validate](https://github.com/envoyproxy/protoc-gen-validate)
 
 ## Prerequisite
 
@@ -34,7 +33,7 @@ brew install protobuf
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 go get -u github.com/micro/protoc-gen-micro
 # fetch PGV protoc plugin
-go get -d github.com/envoyproxy/protoc-gen-validate
+go get -u github.com/envoyproxy/protoc-gen-validate
 ```
 
 ## Initial Setup

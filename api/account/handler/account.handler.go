@@ -43,6 +43,8 @@ func (h *accountHandler) List(ctx context.Context, req *api.Request, rsp *api.Re
 	limit, _ := strconv.Atoi(limitStr.Values[0])
 	// make request
 	response, err := h.userSrvClient.List(ctx, &userPB.UserListQuery{
+		// Limit: &wrappers.UInt32Value{Value: uint32(limit)},
+		// Page:  &wrappers.UInt32Value{Value: 1},
 		Limit: uint32(limit),
 		Page:  1,
 	})

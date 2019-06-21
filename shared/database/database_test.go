@@ -16,6 +16,6 @@ func TestDatabase(t *testing.T) {
 		Database: ":memory:",
 	})
 	if err != nil {
-		t.Errorf("Database connection failed, %v!", err)
+		t.Fatalf("Database connection failed, %v!", err)
 	}
 }
