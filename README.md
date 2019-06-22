@@ -43,7 +43,6 @@ go get -u github.com/envoyproxy/protoc-gen-validate
 
 ```bash
 go mod init github.com/xmlking/micro-starter-kit
-go get -u github.com/micro/go-micro
 mkdir srv api fnc
 
 # scaffold modules
