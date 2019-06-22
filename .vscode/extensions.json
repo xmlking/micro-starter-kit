@@ -8,6 +8,7 @@
         "EditorConfig.EditorConfig",
         "donjayamanne.githistory",
         "eamodio.gitlens",
-        "humao.rest-client"
+        "humao.rest-client",
+        "vscode-icons-team.vscode-icons"
     ]
 }
