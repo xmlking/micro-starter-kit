@@ -1,29 +1,146 @@
 {
-    "editor.fontFamily": "FiraCode-Retina",
-    "editor.fontLigatures": true,
-    "editor.fontSize": 14,
-
-    // REST CLIENT
-    "rest-client.environmentVariables": {
-      "$shared": {
-          "client-id": "ngxapi",
-          "username": "sumo3",
-          "password": "demo",
-          "api-gateway-url": "http://localhost:8080"
-      },
-      "local": {
-        "oidc-issuer-url": "https://keycloak.kashmora.com/auth/realms/ngx",
-        "api-url": "http://localhost:3000"
-      },
-      "local-admin": {
-        "oidc-issuer-url": "https://keycloak.kashmora.com/auth/realms/ngx",
-        "api-url": "http://localhost:3000",
-        "username": "ngxadmin",
-        "password": "ngxadmin"
-      },
-      "production": {
-        "oidc-issuer-url": "https://keycloak.kashmora.com/auth/realms/ngx",
-        "api-url": "https://api.kashmora.com"
-      }
+  "window.zoomLevel": 1,
+  "workbench.editor.highlightModifiedTabs": true,
+  "files.autoSave": "afterDelay",
+  "explorer.sortOrder": "type",
+  // editor
+  "editor.fontFamily": "FiraCode-Retina",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  // rest client
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "client-id": "ngxapi",
+      "username": "sumo3",
+      "password": "demo",
+      "api-gateway-url": "http://localhost:8080"
+    },
+    "local": {
+      "oidc-issuer-url": "https://keycloak.kashmora.com/auth/realms/ngx",
+      "api-url": "http://localhost:3000"
+    },
+    "local-admin": {
+      "oidc-issuer-url": "https://keycloak.kashmora.com/auth/realms/ngx",
+      "api-url": "http://localhost:3000",
+      "username": "ngxadmin",
+      "password": "ngxadmin"
+    },
+    "production": {
+      "oidc-issuer-url": "https://keycloak.kashmora.com/auth/realms/ngx",
+      "api-url": "https://api.kashmora.com"
     }
+  },
+  // icon associations
+  "vsicons.associations.folders": [
+    {
+      "icon": "private",
+      "extensions": [
+        "todo"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "cli",
+      "extensions": [
+        "cmd"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "www",
+      "extensions": [
+        "web"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "route",
+      "extensions": [
+        "srv"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "api",
+      "extensions": [
+        "api"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "library",
+      "extensions": [
+        "shared"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "module",
+      "extensions": [
+        "account",
+        "emailer",
+        "consumerkeying",
+        "demo"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "model",
+      "extensions": [
+        "entity"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "controller",
+      "extensions": [
+        "handler"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "gcp",
+      "extensions": [
+        "proto"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "services",
+      "extensions": [
+        "service"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "notification",
+      "extensions": [
+        "subscriber"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "composer",
+      "extensions": [
+        "registry"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "certificate",
+      "extensions": [
+        "crypto"
+      ],
+      "format": "svg"
+    },
+    {
+      "icon": "flow",
+      "extensions": [
+        "wrapper"
+      ],
+      "format": "svg"
+    }
+  ]
 }
