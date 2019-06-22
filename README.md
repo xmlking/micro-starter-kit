@@ -19,7 +19,7 @@
 
 ## Prerequisite
 
-> micro, go-micro versions are at `v.1.6.0`
+> micro, go-micro versions are at `v.1.7.0`
 > Global tools:
 
 ```bash
