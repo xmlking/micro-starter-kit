@@ -6,9 +6,9 @@
 
 - [x] Monorepo
 - [x] gRPC microservices with REST Gateway
-- [x] gRPC validation
-- [x] config fallback
-- [x] custom logging
+- [x] Proto Validation
+- [x] Config fallback
+- [x] Custom logging
 - [x] CRUD via ORM
 - [x] DI Container
 - [ ] Observability
