@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-    "github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/server"
+	"github.com/xmlking/micro-starter-kit/shared/log"
 )
 
 // LogWrapper is a handler wrapper to log Requests
