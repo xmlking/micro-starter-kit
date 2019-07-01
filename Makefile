@@ -35,3 +35,7 @@ clean:
 			echo cleaned: $$sd; \
 		done \
 	done
+
+update_deps:
+	go mod verify
+	go mod tidy
