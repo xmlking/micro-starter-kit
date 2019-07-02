@@ -4,7 +4,7 @@ import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/sirupsen/logrus"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	_ "github.com/xmlking/micro-starter-kit/shared/log"
@@ -59,15 +59,15 @@ func main() {
 		}),
 	)
 
-	log.Logf("IsProduction? %v", myConfig.IsProduction)
-	log.Logf("environment: %v", cfg.Environment)
-	log.Log(config.Get("database", "dialect").String("postgres"))
-	log.Log(config.Get("database", "host").String("no-address"))
-	log.Log(config.Get("database", "port").Int(0000))
-	log.Log(config.Get("observability", "tracing", "flushInterval").Int(2000000000))
-	log.Log(cfg)
-	log.Logf("cfg is %v", cfg)
-	log.Log(configurationFile)
+	log.Debugf("IsProduction? %v", myConfig.IsProduction)
+	log.Debugf("environment: %v", cfg.Environment)
+	log.Debug(config.Get("database", "dialect").String("postgres"))
+	log.Debug(config.Get("database", "host").String("no-address"))
+	log.Debug(config.Get("database", "port").Int(0000))
+	log.Debug(config.Get("observability", "tracing", "flushInterval").Int(2000000000))
+	log.Debug(cfg)
+	log.Debugf("cfg is %v", cfg)
+	log.Debug(configurationFile)
 
 	// Run service
 	if err := service.Run(); err != nil {

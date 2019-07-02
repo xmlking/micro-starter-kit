@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/jinzhu/gorm"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 )
@@ -82,7 +82,7 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *entity.
 		db = db.Where("email like ?", "%"+model.Email+"%")
 	}
 	if err = db.Order(sort).Limit(limit).Offset(offset).Find(&users).Count(&total).Error; err != nil {
-		log.Logf("Error in UserRepository: %v", err)
+		log.WithError(err).Error("Error in UserRepository.List")
 		return
 	}
 	return
@@ -93,7 +93,7 @@ func (repo *userRepository) Get(id uint32) (user *entity.User, err error) {
 	// user = &entity.User{Model: gorm.Model{ID: uint(req.Id)}}
 	user = &entity.User{}
 	if err = repo.db.First(&user, id).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.Logf("Error in UserRepository: %v", err)
+		log.WithError(err).Error("Error in UserRepository.Get")
 	}
 	return
 }
@@ -104,7 +104,7 @@ func (repo *userRepository) Create(model *entity.User) error {
 		return errors.New("User already exist")
 	}
 	if err := repo.db.Create(model).Error; err != nil {
-		log.Logf("Error in UserRepository: %v", err)
+		log.WithError(err).Error("Error in UserRepository.Create")
 		return err
 	}
 	return nil
@@ -117,11 +117,11 @@ func (repo *userRepository) Update(id uint32, model *entity.User) error {
 	}
 	result := repo.db.Model(user).Updates(model)
 	if err := result.Error; err != nil {
-		log.Logf("Error in UserRepository: %v", err)
+		log.WithError(err).Error("Error in UserRepository.Update")
 		return err
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {
-		log.Logf("Error in UserRepository, rowsAffected: %v", rowsAffected)
+		log.Errorf("Error in UserRepository.Update, rowsAffected: %v", rowsAffected)
 		return errors.New("No Records Updated, No match was found")
 	}
 	return nil
@@ -131,11 +131,11 @@ func (repo *userRepository) Update(id uint32, model *entity.User) error {
 func (repo *userRepository) Delete(model *entity.User) error {
 	result := repo.db.Delete(model)
 	if err := result.Error; err != nil {
-		log.Logf("Error in UserRepository: %v", err)
+		log.WithError(err).Error("Error in UserRepository.Delete")
 		return err
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {
-		log.Logf("Error in UserRepository, rowsAffected: %v", rowsAffected)
+		log.Errorf("Error in UserRepository.Delete, rowsAffected: %v", rowsAffected)
 		return errors.New("No Records Deleted, No match was found")
 	}
 	return nil

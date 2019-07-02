@@ -6,8 +6,8 @@ import (
 	// "github.com/golang/protobuf/ptypes"
 	"github.com/jinzhu/gorm"
 
+	log "github.com/sirupsen/logrus"
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
-	"github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
@@ -16,20 +16,19 @@ import (
 // ProfileHandler struct
 type profileHandler struct {
 	profileRepository repository.ProfileRepository
-	logger            log.Logger
+	contextLogger     log.FieldLogger
 }
 
 // NewProfileHandler returns an instance of `ProfileServiceHandler`.
-func NewProfileHandler(repo repository.ProfileRepository, logger log.Logger) pb.ProfileServiceHandler {
+func NewProfileHandler(repo repository.ProfileRepository, logger log.FieldLogger) pb.ProfileServiceHandler {
 	return &profileHandler{
 		profileRepository: repo,
-		logger:            logger,
+		contextLogger:     logger,
 	}
 }
 
 func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rsp *pb.ProfileListResponse) error {
-	ph.logger.WithFields(map[string]interface{}{"compoent": "ProfileHandler"}).Info("Received ProfileHandler.List request")
-	ph.logger.Info("Received ProfileHandler.List request")
+	ph.contextLogger.Info("Received ProfileHandler.List request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.profile.list", "validation error: %v", err)
 	}
@@ -51,7 +50,7 @@ func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rs
 }
 
 func (ph *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *pb.ProfileResponse) error {
-	ph.logger.Info("Received ProfileHandler.Get request")
+	ph.contextLogger.Info("Received ProfileHandler.Get request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.profile.get", "validation error: %v", err)
 	}
@@ -72,7 +71,7 @@ func (ph *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *
 }
 
 func (ph *profileHandler) Create(ctx context.Context, req *pb.ProfileRequest, rsp *pb.ProfileResponse) error {
-	ph.logger.Debug("Received ProfileHandler.Create request")
+	ph.contextLogger.Debug("Received ProfileHandler.Create request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.profile.rceate", "validation error: %v", err)
 	}

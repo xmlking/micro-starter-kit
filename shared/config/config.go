@@ -8,7 +8,7 @@ import (
 	"github.com/micro/go-micro/config/source/cli"
 	"github.com/micro/go-micro/config/source/env"
 	"github.com/micro/go-micro/config/source/file"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/sirupsen/logrus"
 	// "github.com/micro/go-plugins/config/source/configmap"
 )
 
@@ -40,7 +40,7 @@ func InitConfig() {
 		cli.NewSource(),
 	); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Log("missing config.yaml, use environment variables")
+			log.Error("missing config.yaml, use environment variables")
 		} else {
 			log.Fatal(err.Error())
 		}

@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/sirupsen/logrus"
 
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 	"github.com/xmlking/micro-starter-kit/srv/account/entity"
@@ -30,7 +30,7 @@ func NewUserHandler(repo repository.UserRepository, pub micro.Publisher) pb.User
 }
 
 func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.UserExistResponse) error {
-	log.Log("Received UserHandler.Exist request")
+	log.Info("Received UserHandler.Exist request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.exist", "validation error: %v", err)
 	}
@@ -42,13 +42,13 @@ func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.Us
 	}
 
 	exists := h.userRepository.Exist(model)
-	log.Logf("user exists? %t", exists)
+	log.Info("user exists? %t", exists)
 	rsp.Result = exists
 	return nil
 }
 
 func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.UserListResponse) error {
-	log.Log("Received UserHandler.List request")
+	log.Info("Received UserHandler.List request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.list", "validation error: %v", err)
 	}
@@ -73,7 +73,7 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 }
 
 func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
-	log.Log("Received UserHandler.Get request")
+	log.Info("Received UserHandler.Get request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.get", "validation error: %v", err)
 	}
@@ -94,7 +94,7 @@ func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.User
 }
 
 func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
-	log.Log("Received UserHandler.Create request")
+	log.Info("Received UserHandler.Create request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.create", "validation error: %v", err)
 	}
@@ -119,7 +119,7 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 }
 
 func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
-	log.Log("Received UserHandler.Update request")
+	log.Info("Received UserHandler.Update request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: %v", err)
 	}
@@ -142,7 +142,7 @@ func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 }
 
 func (h *userHandler) Delete(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
-	log.Log("Received UserHandler.Delete request")
+	log.Info("Received UserHandler.Delete request")
 	if err := req.Validate(); err != nil {
 		return myErrors.ValidationError("go.micro.srv.account.user.delete", "validation error: %v", err)
 	}

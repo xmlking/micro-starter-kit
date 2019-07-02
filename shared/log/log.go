@@ -54,4 +54,3 @@ func newLogger() *logrus.Logger {
 func NewLogger() logrus.FieldLogger {
 	return newLogger()
 }
-

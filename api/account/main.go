@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/api/account/handler"
 
 	accountPB "github.com/xmlking/micro-starter-kit/api/account/proto/account"
@@ -30,7 +30,7 @@ func main() {
 
 	// Run service
 	if err := service.Run(); err != nil {
-		log.Log(err)
+		log.Fatal(err)
 	}
 
 }

@@ -2,28 +2,26 @@ package wrapper
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/server"
-	"github.com/xmlking/micro-starter-kit/shared/log"
+	log "github.com/sirupsen/logrus"
 )
 
 // LogWrapper is a handler wrapper to log Requests
 func LogWrapper(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
-		log.Log.Infof("Request: %s", req.Method())
+		log.Infof("Request: %s", req.Method())
 		return fn(ctx, req, rsp)
 	}
 }
 
 // LogHandlerWrapper is a handler wrapper to log Requests with Context
 func LogHandlerWrapper(fn server.HandlerFunc) server.HandlerFunc {
-	//logger := log.NewLogger()
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
 		md, _ := metadata.FromContext(ctx)
-		log.Log.WithFields(map[string]interface{}{
+		log.WithFields(map[string]interface{}{
 			"ctx":    md,
 			"method": req.Method(),
 		}).Infof("Serving request")
@@ -40,7 +38,7 @@ type clientLogWrapper struct {
 
 func (l *clientLogWrapper) Call(ctx context.Context, req client.Request, rsp interface{}, opts ...client.CallOption) error {
 	md, _ := metadata.FromContext(ctx)
-	fmt.Printf("[Log Wrapper] ctx: %v service: %s method: %s\n", md, req.Service(), req.Endpoint())
+	log.Infof("[Log Wrapper] ctx: %v service: %s method: %s\n", md, req.Service(), req.Endpoint())
 	return l.Client.Call(ctx, req, rsp)
 }
 

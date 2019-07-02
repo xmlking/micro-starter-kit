@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"

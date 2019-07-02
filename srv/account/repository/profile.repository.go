@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
-	"github.com/micro/go-micro/util/log"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 )
@@ -66,7 +66,7 @@ func (repo *profileRepository) List(limit, page uint32, sort string, model *enti
 	}
 
 	if err = db.Order(sort).Limit(limit).Offset(offset).Find(&profiles).Count(&total).Error; err != nil {
-		log.Logf("Error in ProfileRepository: %v", err)
+		log.WithError(err).Error("Error in ProfileRepository.List")
 		return
 	}
 	return
@@ -77,7 +77,7 @@ func (repo *profileRepository) Get(id uint32) (profile *entity.Profile, err erro
 	// profile = &entity.Profile{Model: gorm.Model{ID: uint(req.Id)}}
 	profile = &entity.Profile{}
 	if err = repo.db.First(&profile, id).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.Logf("Error in ProfileRepository: %v", err)
+		log.WithError(err).Error("Error in ProfileRepository.Get")
 	}
 	return
 }
@@ -89,7 +89,7 @@ func (repo *profileRepository) Create(model *entity.Profile) error {
 	}
 
 	if err := repo.db.Create(model).Error; err != nil {
-		log.Logf("Error in ProfileRepository: %v", err)
+		log.WithError(err).Error("Error in ProfileRepository.Create")
 		return err
 	}
 	return nil

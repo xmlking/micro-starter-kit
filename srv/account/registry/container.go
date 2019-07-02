@@ -4,11 +4,10 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/sarulabs/di"
 
-	// "github.com/micro/go-micro/util/log"
-
+	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/database"
-	"github.com/xmlking/micro-starter-kit/shared/log"
+	myLog "github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/xmlking/micro-starter-kit/srv/account/entity"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
@@ -23,7 +22,7 @@ type Container struct {
 func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 	builder, err := di.NewBuilder()
 	if err != nil {
-		log.Log.Fatal(err)
+		log.Fatal(err)
 		return nil, err
 	}
 
@@ -97,10 +96,7 @@ func buildProfileRepository(ctn di.Container) (interface{}, error) {
 
 func buildProfileHandler(ctn di.Container) (interface{}, error) {
 	repo := ctn.Get("profile-repository").(repository.ProfileRepository)
-	logger := log.NewLogger()
-	// .WithFields(map[string]interface{}{
-	// 	"component": "ProfileHandler",
-	// })
+	logger := myLog.NewLogger().WithFields(map[string]interface{}{"component": "ProfileHandler"})
 	return handler.NewProfileHandler(repo, logger), nil
 }
 
