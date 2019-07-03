@@ -2,6 +2,8 @@
 
 > go-micro starter kit
 
+![Image of Yaktocat](docs/deployment.png)
+
 ## What you get
 
 - [x] Monorepo
@@ -131,10 +133,10 @@ open http://localhost:8082
 
 ```json
 {
-"username": "sumo",
-"firstName": "sumo",
-"lastName": "demo",
-"email": "sumo@demo.com"
+  "username": "sumo",
+  "firstName": "sumo",
+  "lastName": "demo",
+  "email": "sumo@demo.com"
 }
 ```
 
