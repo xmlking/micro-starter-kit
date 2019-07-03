@@ -9,7 +9,6 @@ import (
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/registry"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
-	"github.com/xmlking/micro-starter-kit/srv/account/subscriber"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/wrapper"
@@ -53,12 +52,6 @@ func main() {
 	// Register Handlers
 	accountPB.RegisterUserServiceHandler(service.Server(), userHandler)
 	accountPB.RegisterProfileServiceHandler(service.Server(), profileHandler)
-
-	// Register Struct as Subscriber
-	micro.RegisterSubscriber("go.micro.srv.account", service.Server(), new(subscriber.AccountSubscriber))
-
-	// Register Function as Subscriber
-	micro.RegisterSubscriber("go.micro.srv.account", service.Server(), subscriber.Handler)
 
 	// Run service
 	if err := service.Run(); err != nil {
