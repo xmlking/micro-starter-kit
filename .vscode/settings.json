@@ -3,13 +3,38 @@
   "workbench.editor.highlightModifiedTabs": true,
   "files.autoSave": "afterDelay",
   "explorer.sortOrder": "type",
-  // editor
-  "editor.fontFamily": "FiraCode-Retina",
+  // Editor
+  "editor.fontFamily": "Source Code Variable, FiraCode-Retina",
   "editor.fontLigatures": true,
   "editor.fontSize": 14,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  // rest client
+  // Terminal: Override Terminal Colors with Solarized Dark regardless of Theme
+  "terminal.integrated.fontFamily": "Source Code Variable, monospace",
+  "terminal.integrated.fontSize": 12,
+  "workbench.colorCustomizations": {
+    "terminal.foreground": "#839496",
+    "terminal.background": "#002833",
+    "terminal.ansiBlack": "#003541",
+    "terminal.ansiBlue": "#268bd2",
+    "terminal.ansiCyan": "#2aa198",
+    "terminal.ansiGreen": "#859901",
+    "terminal.ansiMagenta": "#d33682",
+    "terminal.ansiRed": "#dc322f",
+    "terminal.ansiWhite": "#eee8d5",
+    "terminal.ansiYellow": "#b58901",
+    "terminal.ansiBrightBlack": "#586e75",
+    "terminal.ansiBrightBlue": "#839496",
+    "terminal.ansiBrightCyan": "#93a1a1",
+    "terminal.ansiBrightGreen": "#586e75",
+    "terminal.ansiBrightMagenta": "#6c6ec6",
+    "terminal.ansiBrightRed": "#cb4b16",
+    "terminal.ansiBrightWhite": "#fdf6e3",
+    "terminal.ansiBrightYellow": "#657b83",
+    "terminalCursor.foreground": "#839496",
+    "terminalCursor.background": "#003541"
+  },
+  // REST client
   "rest-client.environmentVariables": {
     "$shared": {
       "client-id": "ngxapi",
@@ -31,116 +56,5 @@
       "oidc-issuer-url": "https://keycloak.kashmora.com/auth/realms/ngx",
       "api-url": "https://api.kashmora.com"
     }
-  },
-  // icon associations
-  "vsicons.associations.folders": [
-    {
-      "icon": "private",
-      "extensions": [
-        "todo"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "cli",
-      "extensions": [
-        "cmd"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "www",
-      "extensions": [
-        "web"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "route",
-      "extensions": [
-        "srv"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "api",
-      "extensions": [
-        "api"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "library",
-      "extensions": [
-        "shared"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "module",
-      "extensions": [
-        "account",
-        "emailer",
-        "consumerkeying",
-        "demo"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "model",
-      "extensions": [
-        "entity"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "controller",
-      "extensions": [
-        "handler"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "gcp",
-      "extensions": [
-        "proto"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "services",
-      "extensions": [
-        "service"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "notification",
-      "extensions": [
-        "subscriber"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "composer",
-      "extensions": [
-        "registry"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "certificate",
-      "extensions": [
-        "crypto"
-      ],
-      "format": "svg"
-    },
-    {
-      "icon": "flow",
-      "extensions": [
-        "wrapper"
-      ],
-      "format": "svg"
-    }
-  ]
+  }
 }
