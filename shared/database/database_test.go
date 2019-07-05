@@ -4,6 +4,9 @@ import (
 	"testing"
 
 	"github.com/xmlking/micro-starter-kit/shared/config"
+
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/xmlking/micro-starter-kit/shared/log"
 )
 
 func TestDatabase(t *testing.T) {

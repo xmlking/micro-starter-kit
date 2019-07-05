@@ -1,14 +1,25 @@
 package errors
 
+// TODO: https://gochronicles.dev/posts/datastructures/list/singlylinkedlist/part-ii/
+
 import (
 	errs "errors"
 	"net/http"
+	"reflect"
 	"testing"
 
 	"github.com/micro/go-micro/errors"
 )
 
 func TestErrors(t *testing.T) {
+	testCases := []struct {
+		name   string
+		values string
+		want   *errors.Error
+	}{
+		{"EC1", "not good", AppError(EC1)},
+	}
+
 	testData := []*errors.Error{
 		&errors.Error{
 			Id:     "go.micro.srv.account",
@@ -25,6 +36,16 @@ func TestErrors(t *testing.T) {
 			Detail: "not good",
 			Status: http.StatusText(500),
 		},
+	}
+
+	// test AppError
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			got := AppError(EC1)
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("Got %v, want %v", got, tc.want)
+			}
+		})
 	}
 
 	// test ValidationError

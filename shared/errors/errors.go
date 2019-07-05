@@ -36,7 +36,7 @@ var appErrors = map[ErrorCode]ErrorDetail{
 }
 
 // AppError - App specific Error
-func AppError(errorCode ErrorCode, a ...interface{}) error {
+func AppError(errorCode ErrorCode, a ...interface{}) *errors.Error {
 	return &errors.Error{
 		Id:     appErrors[errorCode].ID,
 		Code:   appErrors[errorCode].Code,
@@ -46,7 +46,7 @@ func AppError(errorCode ErrorCode, a ...interface{}) error {
 }
 
 // ValidationError - Unprocessable Entity
-func ValidationError(id, format string, a ...interface{}) error {
+func ValidationError(id, format string, a ...interface{}) *errors.Error {
 	return &errors.Error{
 		Id:     id,
 		Code:   422,
