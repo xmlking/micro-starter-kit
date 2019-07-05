@@ -3,25 +3,25 @@ package errors
 // TODO: https://gochronicles.dev/posts/datastructures/list/singlylinkedlist/part-ii/
 
 import (
-	errs "errors"
+	"errors"
 	"net/http"
 	"reflect"
 	"testing"
 
-	"github.com/micro/go-micro/errors"
+	myErrors "github.com/micro/go-micro/errors"
 )
 
 func TestErrors(t *testing.T) {
 	testCases := []struct {
 		name   string
 		values string
-		want   *errors.Error
+		want   error
 	}{
 		{"EC1", "not good", AppError(EC1)},
 	}
 
-	testData := []*errors.Error{
-		&errors.Error{
+	testData := []*myErrors.Error{
+		&myErrors.Error{
 			Id:     "go.micro.srv.account",
 			Code:   422,
 			Detail: "proto validation: sumo-val-error",
@@ -29,8 +29,8 @@ func TestErrors(t *testing.T) {
 		},
 	}
 
-	appErrTestData := []*errors.Error{
-		&errors.Error{
+	appErrTestData := []*myErrors.Error{
+		&myErrors.Error{
 			Id:     "EC1",
 			Code:   500,
 			Detail: "not good",
@@ -55,13 +55,13 @@ func TestErrors(t *testing.T) {
 			t.Fatalf("Expected %s got %s", e.Error(), ne.Error())
 		}
 
-		ne2 := ValidationError("go.micro.srv.account", "proto validation: %v", errs.New("sumo-val-error"))
+		ne2 := ValidationError("go.micro.srv.account", "proto validation: %v", errors.New("sumo-val-error"))
 
 		if e.Error() != ne2.Error() {
 			t.Fatalf("Expected %s got %s", e.Error(), ne2.Error())
 		}
 
-		pe := errors.Parse(ne.Error())
+		pe := myErrors.Parse(ne.Error())
 
 		if pe == nil {
 			t.Fatalf("Expected error got nil %v", pe)
