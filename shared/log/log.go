@@ -43,7 +43,7 @@ func newLogger() *logrus.Logger {
 	lslog.WithFields(logrus.Fields{
 		"logLevel": logLevel,
 		"format":   format,
-	}).Debug("Logger set to Logrus with:")
+	}).Info("Logger set to Logrus with:")
 
 	return lslog
 }

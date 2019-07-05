@@ -24,14 +24,18 @@ func init() {
 		IsProduction = true
 	}
 
-	InitConfig()
+	InitConfig("")
 }
 
 // InitConfig loads the configuration from file then from environment variables and then from cli flags
-func InitConfig() {
+func InitConfig(configPath string) {
+	if configPath == "" {
+		configPath = "config.yaml"
+	}
+
 	if err := config.Load(
-		// base config from file. Default: config.json
-		file.NewSource(file.WithPath("config.yaml")),
+		// base config from file. Default: config.yaml
+		file.NewSource(file.WithPath(configPath)),
 		// override file from configmap
 		// configmap.NewSource(),
 		// override configmap from env
@@ -40,7 +44,7 @@ func InitConfig() {
 		cli.NewSource(),
 	); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Error("missing config.yaml, use environment variables")
+			log.Errorf("missing config file at %s, fallback to default config path\n\tset config path via: --config=path/to/my/config.yaml", configPath)
 		} else {
 			log.Fatal(err.Error())
 		}

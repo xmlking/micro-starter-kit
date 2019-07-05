@@ -6,7 +6,7 @@
   // Editor
   "editor.fontFamily": "Source Code Variable, FiraCode-Retina",
   "editor.fontLigatures": true,
-  "editor.fontSize": 14,
+  "editor.fontSize": 12,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   // Terminal: Override Terminal Colors with Solarized Dark regardless of Theme

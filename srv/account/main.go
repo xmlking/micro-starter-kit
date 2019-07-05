@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
 	log "github.com/sirupsen/logrus"
@@ -15,7 +16,8 @@ import (
 )
 
 var (
-	cfg myConfig.ServiceConfiguration
+	configFile string
+	cfg        myConfig.ServiceConfiguration
 )
 
 // init is called on package initialization and can therefore be used to initialize global stuff like logging, config, ..
@@ -27,13 +29,28 @@ func main() {
 
 	// New Service
 	service := micro.NewService(
+		// optional cli flag to override config. comment out if you don't need to override
+		micro.Flags(
+			cli.StringFlag{
+				Name:        "config, c",
+				Value:       "config.yaml",
+				Usage:       "Path to the configuration file to use. Defaults to config.yaml",
+				EnvVar:      "CONFIG_FILE",
+				Destination: &configFile,
+			}),
 		micro.Name(cfg.ServiceName),
 		micro.Version(cfg.Version),
 		micro.WrapHandler(wrapper.LogWrapper),
 	)
 
 	// Initialise service
-	service.Init()
+	service.Init(
+		micro.Action(func(c *cli.Context) {
+			// this time, includes flag config overrides
+			myConfig.InitConfig(configFile)
+			config.Scan(&cfg)
+		}),
+	)
 
 	// Initialise DI Container
 	ctn, err := registry.NewContainer(cfg)
