@@ -126,7 +126,7 @@ micro call go.micro.srv.account UserService.Get '{"id": 1}'
 
 ### Test via Micro Web UI
 
-```
+```bash
 open http://localhost:8082
 ```
 
@@ -166,6 +166,25 @@ To deploy in a different namespace:
 
 ```bash
 ko -n nondefault apply -f deploy/
+```
+
+## Release
+
+> This will publish all of the binary components as container images and create a release.yaml
+
+```bash
+ko resolve -P -f deploy/ > release.yaml
+```
+
+### Workaround
+
+ko does not work with `Go Modules` yet. [WIP](https://github.com/google/ko/issues/7)
+
+As a workaround I symlinked my source code into the default GOPATH (~/go/src/...)
+
+```bash
+cd ~/go/src/github.com/xmlking
+ln -s /Developer/Work/go/micro-starter-kit .
 ```
 
 ## Reference

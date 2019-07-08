@@ -40,6 +40,10 @@ spec:
           env:
             - name: MICRO_REGISTRY
               vlue: kubernetes
+            - name: APP_ENV
+              vlue: production
+            - name: CONFIG_FILE
+              vlue: /var/run/ko/config.yaml
             # - name: DATABASE_PASSWORD
             #   valueFrom:
             #     secretKeyRef:
