@@ -33,8 +33,8 @@ func main() {
 		micro.Flags(
 			cli.StringFlag{
 				Name:        "config, c",
-				Value:       "config.yaml",
-				Usage:       "Path to the configuration file to use. Defaults to config.yaml",
+				Value:       "config/config.yaml",
+				Usage:       "Path to the configuration file to use. Defaults to 'config/config.yaml'",
 				EnvVar:      "CONFIG_FILE",
 				Destination: &configFile,
 			}),

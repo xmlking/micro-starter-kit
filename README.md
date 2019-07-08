@@ -28,6 +28,7 @@
 # fetch micro into $GOPATH
 go get -u github.com/micro/micro
 go get -u github.com/micro/go-micro
+go get -u github.com/google/ko/cmd/ko
 
 # for mac, use brew to install protobuf
 brew install protobuf
@@ -143,6 +144,29 @@ open http://localhost:8082
 ### Test via Micro API Gateway
 
 > Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
+
+## Deploy
+
+Use `ko`. If you are new to `ko` check out the [ko-demo](https://github.com/xmlking/ko-demo)
+
+Set a registry and make sure you can push to it:
+
+```bash
+export PROJECT_ID=ngx-starter-kit
+export KO_DOCKER_REPO=gcr.io/${PROJECT_ID}
+```
+
+Then `apply` like this:
+
+```bash
+ko apply -f deploy/
+```
+
+To deploy in a different namespace:
+
+```bash
+ko -n nondefault apply -f deploy/
+```
 
 ## Reference
 

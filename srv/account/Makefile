@@ -1,4 +1,4 @@
-VERSION:=$(shell cat ../../VERSION)
+VERSION:=$(shell git describe --tags || echo "HEAD")
 GOPATH:=$(shell go env GOPATH)
 
 .PHONY: proto

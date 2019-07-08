@@ -30,11 +30,11 @@ func init() {
 // InitConfig loads the configuration from file then from environment variables and then from cli flags
 func InitConfig(configPath string) {
 	if configPath == "" {
-		configPath = "config.yaml"
+		configPath = "config/config.yaml"
 	}
 
 	if err := config.Load(
-		// base config from file. Default: config.yaml
+		// base config from file. Default: config/config.yaml
 		file.NewSource(file.WithPath(configPath)),
 		// override file from configmap
 		// configmap.NewSource(),

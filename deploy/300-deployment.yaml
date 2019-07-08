@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-srv
+  labels:
+    app: account-srv
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: account-srv
+  template:
+    metadata:
+      name: account-srv
+      labels:
+        app: account-srv
+    spec:
+      serviceAccountName: micro
+      containers:
+        - name: account-srv
+          # This is the import path for the Go binary to build and run.
+          image: github.com/xmlking/micro-starter-kit/srv/account
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 2G
+            requests:
+              memory: 1G
+          ports:
+            - name: grpc
+              containerPort: 8080
+              protocol: TCP
+          # envFrom:
+          #   - secretRef:
+          #       name: account-srv
+          #   - configMapRef:
+          #       name: account-srv
+          env:
+            - name: MICRO_REGISTRY
+              vlue: kubernetes
+            # - name: DATABASE_PASSWORD
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: account-postgresql
+            #       key: postgresql-password

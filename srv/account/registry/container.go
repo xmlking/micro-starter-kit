@@ -27,7 +27,13 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 	}
 
 	if err := builder.Add([]di.Def{
-
+		{
+			Name:  "config",
+			Scope: di.App,
+			Build: func(ctn di.Container) (interface{}, error) {
+				return cfg, nil
+			},
+		},
 		{
 			Name:  "user-repository",
 			Scope: di.App,

@@ -1,4 +1,4 @@
-VERSION:=$(shell cat ./VERSION)
+VERSION:=$(shell git describe --tags || echo "HEAD")
 
 .PHONY: proto data build
 
