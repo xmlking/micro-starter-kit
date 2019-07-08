@@ -40,6 +40,10 @@ spec:
           env:
             - name: MICRO_REGISTRY
               vlue: kubernetes
+            - name: MICRO_SERVER_ADDRESS
+              vlue: 0.0.0.0:8080
+            - name: MICRO_BROKER_ADDRESS
+              vlue: 0.0.0.0:10001
             - name: APP_ENV
               vlue: production
             - name: CONFIG_FILE
@@ -49,3 +53,17 @@ spec:
             #     secretKeyRef:
             #       name: account-postgresql
             #       key: postgresql-password
+        # - name: health
+        #   command: [
+        #         "/health",
+        #         "--health_address=0.0.0.0:8081",
+        #         "--server_name=account-srv",
+        #         "--server_address=0.0.0.0:8080"
+        #   ]
+        #   image: microhq/health:kubernetes
+        #   livenessProbe:
+        #     httpGet:
+        #       path: /health
+        #       port: 8081
+        #     initialDelaySeconds: 3
+        #     periodSeconds: 3
