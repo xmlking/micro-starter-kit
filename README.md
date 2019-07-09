@@ -65,7 +65,7 @@ make proto
 make -s proto
 
 # prod build. Build with plugins.go
-go build -o echo srv/echo/main.go srv/echo/plugin.go
+go build -o bin/account-srv srv/account/main.go srv/account/plugin.go
 ```
 
 ## Run
