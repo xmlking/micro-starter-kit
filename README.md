@@ -193,6 +193,39 @@ cd ~/go/src/github.com/xmlking
 ln -s /Developer/Work/go/micro-starter-kit .
 ```
 
+## Docker
+
+### Docker Build
+
+```bash
+# build
+VERSION=0.0.1-SNAPSHOT
+BUILD_PKG=./srv/account
+IMANGE_NAME=xmlking/account-srv
+docker build \
+--build-arg VERSION=$VERSION \
+--build-arg BUILD_PKG=$BUILD_PKG \
+--build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+-t $IMANGE_NAME .
+
+# tag
+docker tag $IMANGE_NAME $IMANGE_NAME:$VERSION
+
+# push
+docker push $IMANGE_NAME:$VERSION
+docker push $IMANGE_NAME:latest
+
+# check
+docker inspect  $IMANGE_NAME:$VERSION
+docker image prune -f
+```
+
+### Run Docker
+
+```bash
+docker run -it -p 8080:8080  $IMANGE_NAME
+```
+
 ## Reference
 
 1. [examples](https://github.com/micro/examples) - example usage code for micro

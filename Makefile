@@ -43,7 +43,7 @@ lint:
 
 build:
 ifndef HAS_GOVVV
-	$(error "No govvv in PATH". Please install via 'go get github.com/ahmetb/govvv'")
+	$(error "No govvv in PATH". Please install via 'go install github.com/ahmetb/govvv'")
 endif
 ifndef TARGET
 	# @for i in $(shell ls -1  srv); do echo  $${i}; done
