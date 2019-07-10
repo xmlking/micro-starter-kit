@@ -24,4 +24,4 @@ docker:
 
 .PHONY: clean
 clean:
-	rm -f  ./account-srv
+	rm -f  ./build/account-srv

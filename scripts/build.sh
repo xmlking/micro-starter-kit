@@ -1,4 +1,5 @@
 #!/bin/bash
+VERSION:=$(shell git describe --tags || echo "HEAD")
 
 dir=`pwd`
 

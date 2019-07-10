@@ -1,6 +1,8 @@
 package main
 
 import (
+	"path/filepath"
+
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
@@ -15,39 +17,47 @@ import (
 	"github.com/xmlking/micro-starter-kit/shared/wrapper"
 )
 
+const (
+	serviceName = "go.micro.srv.account"
+)
+
 var (
+	configDir  string
 	configFile string
 	cfg        myConfig.ServiceConfiguration
 )
-
-// init is called on package initialization and can therefore be used to initialize global stuff like logging, config, ..
-func init() {
-	config.Scan(&cfg)
-}
 
 func main() {
 
 	// New Service
 	service := micro.NewService(
-		// optional cli flag to override config. comment out if you don't need to override
+		// optional cli flag to override config.
+		// comment out if you don't need to override any base config via CLI
 		micro.Flags(
 			cli.StringFlag{
-				Name:        "config, c",
-				Value:       "config/config.yaml",
-				Usage:       "Path to the configuration file to use. Defaults to 'config/config.yaml'",
+				Name:        "configDir, d",
+				Value:       "config",
+				Usage:       "Path to the config directory. Defaults to 'config'",
+				EnvVar:      "CONFIG_DIR",
+				Destination: &configDir,
+			},
+			cli.StringFlag{
+				Name:        "configFile, c",
+				Value:       "config.yaml",
+				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
 				EnvVar:      "CONFIG_FILE",
 				Destination: &configFile,
 			}),
-		micro.Name(cfg.ServiceName),
-		micro.Version(cfg.Version),
+		micro.Name(serviceName),
+		micro.Version(myConfig.Version),
 		micro.WrapHandler(wrapper.LogWrapper),
 	)
 
 	// Initialise service
 	service.Init(
 		micro.Action(func(c *cli.Context) {
-			// this time, includes flag config overrides
-			myConfig.InitConfig(configFile)
+			// load config
+			myConfig.InitConfig(filepath.Join(configDir, configFile))
 			config.Scan(&cfg)
 		}),
 	)
@@ -70,6 +80,7 @@ func main() {
 	accountPB.RegisterUserServiceHandler(service.Server(), userHandler)
 	accountPB.RegisterProfileServiceHandler(service.Server(), profileHandler)
 
+	myConfig.PrintBuildInfo()
 	// Run service
 	if err := service.Run(); err != nil {
 		log.Fatal(err)

@@ -2,18 +2,22 @@
 
 > go-micro starter kit
 
-![Image of Yaktocat](docs/deployment.png)
+![Image of Deployment](docs/deployment.png)
 
 ## What you get
 
-- [x] Monorepo
+- [x] Monorepo - Sharing Code Between Microservices
 - [x] gRPC microservices with REST Gateway
-- [x] Proto Validation
-- [x] Config fallback
-- [x] Custom logging
+- [x] Input Validation
+- [x] Config Fallback
+- [x] Custom Logging
 - [x] CRUD via ORM
 - [x] DI Container
+- [x] One Step _build/publish/deploy_ with `ko`
+- [x] BuildInfo with `govvv`
 - [ ] Observability
+- [ ] Service Mesh
+- [ ] GraphQL Gateway with `gqlgen`
 
 ## TODO
 
@@ -28,8 +32,10 @@
 # fetch micro into $GOPATH
 go get -u github.com/micro/micro
 go get -u github.com/micro/go-micro
+# go lang  build/publish/deploy tool
 go get -u github.com/google/ko/cmd/ko
-
+# go better build tool
+go install github.com/ahmetb/govvv
 # for mac, use brew to install protobuf
 brew install protobuf
 
@@ -65,7 +71,7 @@ make proto
 make -s proto
 
 # prod build. Build with plugins.go
-go build -o bin/account-srv srv/account/main.go srv/account/plugin.go
+go build -o build/account-srv ./srv/account
 ```
 
 ## Run
@@ -193,3 +199,22 @@ ln -s /Developer/Work/go/micro-starter-kit .
 2. [microhq](https://github.com/microhq) - a place for prebuilt microservices
 3. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
 4. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins
+
+### Make
+
+> use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing
+
+```bash
+make proto
+make proto TARGET=account
+make proto TARGET=account TYPE=api
+
+make build VERSION=v0.1.1
+make build TARGET=account VERSION=v0.1.1
+make build TARGET=account TYPE=srv VERSION=v0.1.1
+make build TARGET=emailer TYPE=srv VERSION=v0.1.1
+make build TARGET=account TYPE=api VERSION=v0.1.1
+
+
+make release VERSION=v0.1.1
+```

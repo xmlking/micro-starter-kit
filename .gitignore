@@ -47,8 +47,8 @@ _test
 *.prof
 
 # Binaries
-bin/*
-!bin/.gitkeep
+build/*
+!build/.gitkeep
 release.yaml
 
 ./srv/emailer/emailer-srv

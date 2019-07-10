@@ -12,6 +12,10 @@ import (
 	"github.com/xmlking/micro-starter-kit/srv/emailer/subscriber"
 )
 
+const (
+	serviceName = "go.micro.srv.emailer"
+)
+
 var (
 	configFile string
 	cfg        myConfig.ServiceConfiguration
@@ -34,8 +38,8 @@ func main() {
 				EnvVar:      "CONFIG_FILE",
 				Destination: &configFile,
 			}),
-		micro.Name("go.micro.srv.emailer"),
-		micro.Version("latest"),
+		micro.Name(serviceName),
+		micro.Version(myConfig.Version),
 	)
 
 	// Initialise service
@@ -50,6 +54,7 @@ func main() {
 	// register subscriber with queue, each message is delivered to a unique subscriber
 	// micro.RegisterSubscriber("go.micro.srv.emailer.2", service.Server(), subscriber.Handler, server.SubscriberQueue("queue.pubsub"))
 
+	myConfig.PrintBuildInfo()
 	// Run service
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
