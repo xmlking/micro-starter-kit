@@ -35,7 +35,7 @@ go get -u github.com/micro/go-micro
 # go lang  build/publish/deploy tool
 go get -u github.com/google/ko/cmd/ko
 # go better build tool
-go install github.com/ahmetb/govvv
+go get github.com/ahmetb/govvv
 # for mac, use brew to install protobuf
 brew install protobuf
 
@@ -223,7 +223,11 @@ docker image prune -f
 ### Run Docker
 
 ```bash
-docker run -it -p 8080:8080  $IMANGE_NAME
+docker run -it \
+-e MICRO_SERVER_ADDRESS=0.0.0.0:8080 \
+-e MICRO_BROKER_ADDRESS=0.0.0.0:10001 \
+-e MICRO_REGISTRY=mdns \
+-p 8080:8080 -p 10001:10001 $IMANGE_NAME
 ```
 
 ## Reference

@@ -5,8 +5,6 @@ ARG GO_VERSION=1.12
 # First stage: build the executable.
 FROM golang:${GO_VERSION}-alpine AS builder
 
-RUN apk add --no-cache gcc musl-dev
-
 # Create the user and group files that will be used in the running container to
 # run the process as an unprivileged user.
 RUN mkdir /user && \
@@ -22,7 +20,7 @@ RUN apk add --no-cache ca-certificates git
 # * CGO_ENABLED=0 to build a statically-linked executable
 # * GOFLAGS=-mod=vendor to force `go build` to look into the `/vendor` folder.
 #ENV CGO_ENABLED=0 GOFLAGS=-mod=vendor
-ENV CGO_ENABLED=1
+ENV CGO_ENABLED=0
 
 # Set the working directory outside $GOPATH to enable the support for modules.
 WORKDIR /src
@@ -42,7 +40,7 @@ ARG VERSION=0.0.1
 ARG BUILD_PKG="./srv/account"
 
 RUN go build -a \
-    -ldflags="-w -s -linkmode external -extldflags '-static' $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
+    -ldflags="-w -s $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
     -o /app $BUILD_PKG
 
 # Final stage: the running container.
