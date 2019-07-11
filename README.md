@@ -104,7 +104,9 @@ MICRO_TRANSPORT=nats \
 # test config with CMD
 go run cmd/demo/main.go --help
 go run cmd/demo/main.go --database_host=1.1.1.1 --database_port=7777
-APP_ENV=production go run cmd/demo/main.go
+
+export APP_ENV=production
+go run cmd/demo/main.go
 ```
 
 ## Test

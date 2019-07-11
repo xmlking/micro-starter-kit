@@ -1,6 +1,8 @@
 package main
 
 import (
+	"path/filepath"
+
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
@@ -11,9 +13,14 @@ import (
 	"github.com/xmlking/micro-starter-kit/shared/wrapper"
 )
 
+const (
+	serviceName = "go.micro.cli.account"
+)
+
 var (
-	configurationFile string
-	cfg               myConfig.ServiceConfiguration
+	configDir  string
+	configFile string
+	cfg        myConfig.ServiceConfiguration
 )
 
 // init is called on package initialization and can therefore be used to initialize global stuff like logging, config, ..
@@ -24,16 +31,22 @@ func init() {
 func main() {
 	// New Service
 	service := micro.NewService(
-		micro.Name("go.micro.cli.account"), // cfg.ServiceName
-		micro.Version("latest"),            // cfg.Version
-		// optional cli flag to override config. comment out if you don't need to override
+		// optional cli flag to override config.
+		// comment out if you don't need to override any base config via CLI
 		micro.Flags(
 			cli.StringFlag{
-				Name:        "config, c",
-				Value:       "config.yml",
-				Usage:       "Path to the configuration file to use. Defaults to config.yml",
+				Name:        "configDir, d",
+				Value:       "config",
+				Usage:       "Path to the config directory. Defaults to 'config'",
+				EnvVar:      "CONFIG_DIR",
+				Destination: &configDir,
+			},
+			cli.StringFlag{
+				Name:        "configFile, c",
+				Value:       "config.yaml",
+				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
 				EnvVar:      "CONFIG_FILE",
-				Destination: &configurationFile,
+				Destination: &configFile,
 			},
 			cli.StringFlag{
 				Name:   "database_host, dh",
@@ -46,15 +59,18 @@ func main() {
 				Value:  5432,
 				Usage:  "Database port. Defaults to 5432",
 				EnvVar: "DATABASE_PORT",
-			}),
+			},
+		),
+		micro.Name(serviceName),
+		micro.Version(myConfig.Version),
 		micro.WrapHandler(wrapper.LogWrapper),
 	)
 
 	// Initialise service
 	service.Init(
 		micro.Action(func(c *cli.Context) {
-			// this time, includes flag config overrides
-			myConfig.InitConfig()
+			// load config
+			myConfig.InitConfig(filepath.Join(configDir, configFile))
 			config.Scan(&cfg)
 		}),
 	)
@@ -67,7 +83,7 @@ func main() {
 	log.Debug(config.Get("observability", "tracing", "flushInterval").Int(2000000000))
 	log.Debug(cfg)
 	log.Debugf("cfg is %v", cfg)
-	log.Debug(configurationFile)
+	log.Debug(configDir)
 
 	// Run service
 	if err := service.Run(); err != nil {
