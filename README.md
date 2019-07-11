@@ -25,8 +25,9 @@
 
 ## Prerequisite
 
-> micro, go-micro versions are at `v.1.7.0`
-> Global tools:
+### Global tools
+
+> run then outside **project home** and `$GOPATH`
 
 ```bash
 # fetch micro into $GOPATH
@@ -99,8 +100,6 @@ MICRO_BROKER=nats \
 MICRO_REGISTRY=kubernetes \
 MICRO_TRANSPORT=nats \
 ./account-srv
-
-
 
 # test config with CMD
 go run cmd/demo/main.go --help
@@ -232,13 +231,6 @@ docker run -it \
 -p 8080:8080 -p 10001:10001 $IMANGE_NAME
 ```
 
-## Reference
-
-1. [examples](https://github.com/micro/examples) - example usage code for micro
-2. [microhq](https://github.com/microhq) - a place for prebuilt microservices
-3. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
-4. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins
-
 ### Make
 
 > use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing
@@ -261,4 +253,12 @@ make release VERSION=v0.1.1
 
 # build docker image
 make docker TARGET=account VERSION=v0.1.1
+make docker TARGET=account TYPE=srv VERSION=v0.1.1
 ```
+
+## Reference
+
+1. [examples](https://github.com/micro/examples) - example usage code for micro
+2. [microhq](https://github.com/microhq) - a place for prebuilt microservices
+3. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
+4. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins

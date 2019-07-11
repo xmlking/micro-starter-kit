@@ -10,7 +10,7 @@ Showcase:
 
 Generated with
 
-```
+```bash
 micro new --namespace=go.micro --type=srv --gopath=false --alias=account srv/account
 ```
 
@@ -32,7 +32,7 @@ Micro services depend on service discovery. The default is multicast DNS, a zero
 
 In the event you need a resilient multi-host setup we recommend consul.
 
-```
+```bash
 # install consul
 brew install consul
 
@@ -46,21 +46,11 @@ A Makefile is included for convenience
 
 Build the binary
 
-```
-make build
+```bash
+make build TARGET=account TYPE=api VERSION=v0.1.1
 ```
 
 Run the service
-```
-./account-api
-```
-
-Build a docker image
-```
-make docker
-```
-
-## Start the API
 
 > make sure `account-srv` and `emailer-srv` services are running before you start `account-api`
 
@@ -78,4 +68,10 @@ micro get service go.micro.api.account
 
 # Call go.micro.api.account via API
 curl "http://localhost:8080/account/AccountService/list?limit=10"
+```
+
+Build a docker image
+
+```bash
+make docker TARGET=account TYPE=api VERSION=v0.1.1
 ```

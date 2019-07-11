@@ -5,7 +5,7 @@ This is the Account service
 showcase
 
 1. Implements basic CRUD API
-2. Multiple handlers, repositories, subscribers  
+2. Multiple handlers, repositories, subscribers
 3. Publishing events
 4. GORM data access
 5. Config Managment
@@ -13,7 +13,7 @@ showcase
 
 Generated with
 
-```
+```bash
 micro new --namespace=go.micro --type=srv --gopath=false --alias=account srv/account
 ```
 
@@ -35,7 +35,7 @@ Micro services depend on service discovery. The default is multicast DNS, a zero
 
 In the event you need a resilient multi-host setup we recommend consul.
 
-```
+```bash
 # install consul
 brew install consul
 
@@ -49,16 +49,18 @@ A Makefile is included for convenience
 
 Build the binary
 
-```
-make build
+```bash
+make build TARGET=account TYPE=srv VERSION=v0.1.1
 ```
 
 Run the service
-```
-./account-srv
+
+```bash
+go run srv/account/main.go srv/account/plugin.go
 ```
 
 Build a docker image
-```
-make docker
+
+```bash
+make docker TARGET=account TYPE=srv VERSION=v0.1.1
 ```

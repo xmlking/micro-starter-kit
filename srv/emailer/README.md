@@ -8,7 +8,7 @@ Showcase
 
 Generated with
 
-```
+```bash
 micro new srv/emailer --namespace=go.micro --alias=emailer --type=srv --gopath=false --plugin=registry=mdns:broker=nats
 ```
 
@@ -30,7 +30,7 @@ Micro services depend on service discovery. The default is multicast DNS, a zero
 
 In the event you need a resilient multi-host setup we recommend consul.
 
-```
+```bash
 # install consul
 brew install consul
 
@@ -44,17 +44,18 @@ A Makefile is included for convenience
 
 Build the binary
 
-```
-make build
+```bash
+make build TARGET=emailer TYPE=srv VERSION=v0.1.1
 ```
 
 Run the service
-```
+
+```bash
 go run srv/emailer/main.go srv/emailer/plugin.go
-./emailer-srv
 ```
 
 Build a docker image
-```
-make docker
+
+```bash
+make docker TARGET=emailer TYPE=srv VERSION=v0.1.1
 ```
