@@ -43,7 +43,9 @@ func main() {
 	)
 
 	// Initialise service
-	service.Init()
+	service.Init(
+	// TODO : implement graceful shutdown
+	)
 
 	// Register Struct as Subscriber
 	micro.RegisterSubscriber("go.micro.srv.emailer", service.Server(), new(subscriber.Emailer))

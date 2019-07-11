@@ -202,7 +202,7 @@ ln -s /Developer/Work/go/micro-starter-kit .
 VERSION=0.0.1-SNAPSHOT
 BUILD_PKG=./srv/account
 IMANGE_NAME=xmlking/account-srv
-docker build \
+docker build --rm \
 --build-arg VERSION=$VERSION \
 --build-arg BUILD_PKG=$BUILD_PKG \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
@@ -217,7 +217,9 @@ docker push $IMANGE_NAME:latest
 
 # check
 docker inspect  $IMANGE_NAME:$VERSION
+# remove temp images after build
 docker image prune -f
+docker rmi $(comm -3 <(docker images -q | sort) <(docker images -q -a | sort)  | sed 's/\t//')
 ```
 
 ### Run Docker
@@ -242,16 +244,21 @@ docker run -it \
 > use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing
 
 ```bash
+# codegen from proto
 make proto
 make proto TARGET=account
 make proto TARGET=account TYPE=api
 
+# build
 make build VERSION=v0.1.1
 make build TARGET=account VERSION=v0.1.1
 make build TARGET=account TYPE=srv VERSION=v0.1.1
 make build TARGET=emailer TYPE=srv VERSION=v0.1.1
 make build TARGET=account TYPE=api VERSION=v0.1.1
 
-
+# push tag to git
 make release VERSION=v0.1.1
+
+# build docker image
+make docker TARGET=account VERSION=v0.1.1
 ```

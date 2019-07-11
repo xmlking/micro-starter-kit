@@ -12,12 +12,6 @@ BUILD_FLAGS=$(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 
 .PHONY: proto data build
 
-sumo:
-ifndef HAS_GOVVV
-	$(error "No govvv in PATH". Please install via 'go install github.com/ahmetb/govvv'")
-endif
-	@echo ---BUILD_FLAGS:${BUILD_FLAGS}---TYPE:${TYPE}---VERSION:${VERSION}---TARGET:${TARGET}---
-
 tools:
 	@echo "==> Installing dev tools"
 	# go install github.com/ahmetb/govvv
@@ -61,7 +55,8 @@ else
 	# CGO_ENABLED=0 GOOS=linux go build -o  build/${TARGET}-${TYPE} -a -ldflags "-w -s ${BUILD_FLAGS}" ./${TYPE}/${TARGET};
 endif
 
-#
+test:
+	go test -v ./... -cover
 
 data:
 	go-bindata -o data/bindata.go -pkg data data/*.json
@@ -87,3 +82,14 @@ clean:
 update_deps:
 	go mod verify
 	go mod tidy
+
+
+docker:
+ifndef TARGET
+	$(error "no  TARGET. example usage: make docker TARGET=account")
+endif
+	@docker build --rm \
+	--build-arg VERSION=$(VERSION) \
+	--build-arg BUILD_PKG=./${TYPE}/${TARGET} \
+	--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
+	-t xmlking/${TARGET}-${TYPE} .
