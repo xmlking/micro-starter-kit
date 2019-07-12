@@ -102,3 +102,21 @@ func InitConfig(configDir, configFile string) {
 		}
 	}
 }
+
+// LoadExtraConfig loads the extra configuration from file
+func LoadExtraConfig(configDir, configFile string) {
+	if configDir == "" {
+		configDir = DefaultConfigDir
+	}
+	configPath := filepath.Join(configDir, configFile)
+	log.Infof("loading extra configuration from file: %s", configPath)
+
+	if err := microConfig.LoadFile(configPath); err != nil {
+		if strings.Contains(err.Error(), "no such file") {
+			log.Errorf(`missing config file at %s, fallback to default config path.
+            you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath)
+		} else {
+			log.Fatal(err.Error())
+		}
+	}
+}
