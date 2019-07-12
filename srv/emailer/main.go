@@ -17,6 +17,7 @@ const (
 )
 
 var (
+	configDir  string
 	configFile string
 	cfg        myConfig.ServiceConfiguration
 )
@@ -29,12 +30,20 @@ func init() {
 func main() {
 	// New Service
 	service := micro.NewService(
-		// optional cli flag to override config. comment out if you don't need to override
+		// optional cli flag to override config.
+		// comment out if you don't need to override any base config via CLI
 		micro.Flags(
 			cli.StringFlag{
-				Name:        "config, c",
-				Value:       "config/config.yaml",
-				Usage:       "Path to the configuration file to use. Defaults to 'config/config.yaml'",
+				Name:        "configDir, d",
+				Value:       "config",
+				Usage:       "Path to the config directory. Defaults to 'config'",
+				EnvVar:      "CONFIG_DIR",
+				Destination: &configDir,
+			},
+			cli.StringFlag{
+				Name:        "configFile, f",
+				Value:       "config.yaml",
+				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
 				EnvVar:      "CONFIG_FILE",
 				Destination: &configFile,
 			}),
@@ -44,7 +53,12 @@ func main() {
 
 	// Initialise service
 	service.Init(
-	// TODO : implement graceful shutdown
+		// TODO : implement graceful shutdown
+		micro.Action(func(c *cli.Context) {
+			// load config
+			myConfig.InitConfig(configDir, configFile)
+			config.Scan(&cfg)
+		}),
 	)
 
 	// Register Struct as Subscriber

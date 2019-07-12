@@ -3,10 +3,11 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 
-	"github.com/micro/go-micro/config"
+	microConfig "github.com/micro/go-micro/config"
 	"github.com/micro/go-micro/config/source/cli"
 	"github.com/micro/go-micro/config/source/env"
 	"github.com/micro/go-micro/config/source/file"
@@ -44,6 +45,13 @@ git state   : %s
 git summary : %s
 `
 
+const (
+	// DefaultConfigDir if o ConfigDir supplied
+	DefaultConfigDir = "config"
+	// DefaultConfigFile if o ConfigFile supplied
+	DefaultConfigFile = "config.yaml"
+)
+
 // PrintBuildInfo print build info
 func PrintBuildInfo() {
 	log.Info(GetBuildInfo())
@@ -62,16 +70,21 @@ func init() {
 		IsProduction = true
 	}
 
-	InitConfig("")
+	InitConfig("", "")
 }
 
 // InitConfig loads the configuration from file then from environment variables and then from cli flags
-func InitConfig(configPath string) {
-	if configPath == "" {
-		configPath = "config/config.yaml"
+func InitConfig(configDir, configFile string) {
+	if configDir == "" {
+		configDir = DefaultConfigDir
 	}
+	if configFile == "" {
+		configFile = DefaultConfigFile
+	}
+	configPath := filepath.Join(configDir, configFile)
+	log.Infof("loading configuration from file: %s", configPath)
 
-	if err := config.Load(
+	if err := microConfig.Load(
 		// base config from file. Default: config/config.yaml
 		file.NewSource(file.WithPath(configPath)),
 		// override file from configmap
@@ -82,7 +95,8 @@ func InitConfig(configPath string) {
 		cli.NewSource(),
 	); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Errorf("missing config file at %s, fallback to default config path\n\tset config path via: --config=path/to/my/config.yaml", configPath)
+			log.Errorf(`missing config file at %s, fallback to default config path.
+            you can set config path via: --configDir=path/to/my/configDir --configFile=config.yaml`, configPath)
 		} else {
 			log.Fatal(err.Error())
 		}

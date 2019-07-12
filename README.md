@@ -99,7 +99,7 @@ go run srv/emailer/main.go srv/emailer/plugin.go
 MICRO_BROKER=nats \
 MICRO_REGISTRY=kubernetes \
 MICRO_TRANSPORT=nats \
-./account-srv
+./build/account-srv
 
 # test config with CMD
 go run cmd/demo/main.go --help
@@ -126,7 +126,8 @@ micro web --namespace=go.micro.srv
 ### Test gRPC Directly
 
 ```bash
-micro call go.micro.srv.account UserService.Create '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+micro call go.micro.srv.account UserService.Create \
+'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call go.micro.srv.account UserService.List '{}'
 micro call go.micro.srv.account UserService.Get '{"id": 1}'
 ```

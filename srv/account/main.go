@@ -1,8 +1,6 @@
 package main
 
 import (
-	"path/filepath"
-
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
@@ -42,7 +40,7 @@ func main() {
 				Destination: &configDir,
 			},
 			cli.StringFlag{
-				Name:        "configFile, c",
+				Name:        "configFile, f",
 				Value:       "config.yaml",
 				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
 				EnvVar:      "CONFIG_FILE",
@@ -57,7 +55,7 @@ func main() {
 	service.Init(
 		micro.Action(func(c *cli.Context) {
 			// load config
-			myConfig.InitConfig(filepath.Join(configDir, configFile))
+			myConfig.InitConfig(configDir, configFile)
 			config.Scan(&cfg)
 		}),
 	)
