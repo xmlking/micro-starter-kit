@@ -27,7 +27,7 @@
 
 ### Global tools
 
-> run then outside **project home** and `$GOPATH`
+> run then outside **this project root** and `$GOPATH`
 
 ```bash
 # fetch micro into $GOPATH
@@ -164,6 +164,8 @@ export PROJECT_ID=ngx-starter-kit
 export KO_DOCKER_REPO=gcr.io/${PROJECT_ID}
 ```
 
+> to publish locally set: `export KO_DOCKER_REPO=ko.local`
+
 Then `apply` like this:
 
 ```bash
@@ -181,18 +183,22 @@ ko -n nondefault apply -f deploy/
 > This will publish all of the binary components as container images and create a release.yaml
 
 ```bash
+# publish to  docker repo ar KO_DOCKER_REPO
 ko resolve -P -f deploy/ > release.yaml
+# publish to local docker repo
+ko resolve -P -L -f deploy/ > release.yaml
 ```
 
-### Workaround
-
-ko does not work with `Go Modules` yet. [WIP](https://github.com/google/ko/issues/7)
-
-As a workaround I symlinked my source code into the default GOPATH (~/go/src/...)
+> run local image
 
 ```bash
-cd ~/go/src/github.com/xmlking
-ln -s /Developer/Work/go/micro-starter-kit .
+docker run -it \
+-e MICRO_SERVER_ADDRESS=0.0.0.0:8080 \
+-e MICRO_BROKER_ADDRESS=0.0.0.0:10001 \
+-e MICRO_REGISTRY=mdns \
+-e CONFIG_DIR=/var/run/ko \
+-e CONFIG_FILE=config.yaml \
+-p 8080:8080 -p 10001:10001 ko.local/github.com/xmlking/micro-starter-kit/srv/account
 ```
 
 ## Docker
