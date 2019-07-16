@@ -1,17 +1,17 @@
 {
-  "window.zoomLevel": 0,
+  "window.zoomLevel": 1,
   "workbench.editor.highlightModifiedTabs": true,
   "files.autoSave": "afterDelay",
   "explorer.sortOrder": "type",
   // Editor
-  "editor.fontFamily": "SourceCodePro-ExtraLight, FiraCode-Retina",
+  "editor.fontFamily": "SourceCodePro-Regular, FiraCode-Retina",
   "editor.fontLigatures": true,
-  "editor.fontSize": 14,
+  "editor.fontSize": 12,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   // Terminal: Override Terminal Colors with Solarized Dark regardless of Theme
   "terminal.integrated.fontFamily": "'SourceCodePro+Powerline+Awesome Regular', Meslo LG M for Powerline, Source Code Pro for Powerline, SourceCodePro-ExtraLight, monospace",
-  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontSize": 12,
   "workbench.colorCustomizations": {
     "terminal.foreground": "#839496",
     // "terminal.foreground": "#e6e1cf",
