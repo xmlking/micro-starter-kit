@@ -10,7 +10,7 @@
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   // Terminal: Override Terminal Colors with Solarized Dark regardless of Theme
-  "terminal.integrated.fontFamily": "'SourceCodePro+Powerline+Awesome Regular', Meslo LG M for Powerline, Source Code Pro for Powerline, SourceCodePro-ExtraLight, monospace",
+  "terminal.integrated.fontFamily": "'SourceCodePro+Powerline+Awesome Regular', Source Code Pro for Powerline, monospace, Meslo LG M for Powerline",
   "terminal.integrated.fontSize": 12,
   "workbench.colorCustomizations": {
     "terminal.foreground": "#839496",

@@ -213,6 +213,7 @@ IMANGE_NAME=xmlking/account-srv
 docker build --rm \
 --build-arg VERSION=$VERSION \
 --build-arg BUILD_PKG=$BUILD_PKG \
+--build-arg IMANGE_NAME=$IMANGE_NAME \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
 -t $IMANGE_NAME .
 
@@ -249,6 +250,8 @@ docker run -it \
 make proto
 make proto TARGET=account
 make proto TARGET=account TYPE=api
+make proto-account
+make proto-account-api
 
 # build
 make build VERSION=v0.1.1
@@ -256,6 +259,8 @@ make build TARGET=account VERSION=v0.1.1
 make build TARGET=account TYPE=srv VERSION=v0.1.1
 make build TARGET=emailer TYPE=srv VERSION=v0.1.1
 make build TARGET=account TYPE=api VERSION=v0.1.1
+make build-account VERSION=v0.1.1
+make build-account-api VERSION=v0.1.1
 
 # push tag to git
 make release VERSION=v0.1.1
@@ -263,6 +268,8 @@ make release VERSION=v0.1.1
 # build docker image
 make docker TARGET=account VERSION=v0.1.1
 make docker TARGET=account TYPE=srv VERSION=v0.1.1
+make docker-account VERSION=v0.1.1
+make docker-account-api VERSION=v0.1.1
 ```
 
 ## Reference
