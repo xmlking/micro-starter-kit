@@ -51,6 +51,7 @@ message UserRequest {
 message UserResponse {
     option (validate.disabled) = true;
     User result = 1;
+    // basic.Error error =2;
 }
 
 message UserExistResponse {

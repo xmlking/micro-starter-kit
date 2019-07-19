@@ -38,8 +38,12 @@ services:
   # micro
   ##############################
   micro:
-    command: --registry_address=consul:8500 api --handler=rpc
+    # command: api --handler=web --namespace=go.micro.srv
+    command: api --handler=rpc --namespace=go.micro.srv
     image: microhq/micro:latest
+    environment:
+      MICRO_REGISTRY: consul
+      MICRO_REGISTRY_ADDRESS: "consul:8500"
     depends_on:
       - consul
     ports:

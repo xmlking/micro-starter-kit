@@ -26,13 +26,19 @@ proto proto-%:
 	@if [ -z $(TARGET) ]; then \
 		for d in $(TYPES); do \
 			for f in $$d/**/proto/**/*.proto; do \
-				protoc --proto_path=.:${GOPATH}/src --micro_out=. --go_out=. --validate_out=lang=go:. $$f; \
+				protoc --proto_path=.:${GOPATH}/src \
+				--go_out=paths=source_relative:. \
+				--micro_out=paths=source_relative:. \
+				--validate_out=lang=go,paths=source_relative:. $$f; \
 				echo compiled: $$f; \
 			done \
 		done \
 	else \
 		for f in ${TYPE}/${TARGET}/proto/**/*.proto; do \
-			protoc --proto_path=.:${GOPATH}/src --micro_out=. --go_out=. --validate_out=lang=go:. $$f; \
+			protoc --proto_path=.:${GOPATH}/src \
+			--go_out=paths=source_relative:. \
+			--micro_out=paths=source_relative:. \
+			--validate_out=lang=go,paths=source_relative:. $$f; \
 			echo compiled: $$f; \
 		done \
 	fi

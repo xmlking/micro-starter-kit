@@ -252,6 +252,8 @@ make proto TARGET=account
 make proto TARGET=account TYPE=api
 make proto-account
 make proto-account-api
+## generate for protos in shared package
+make proto TARGET=shared TYPE=.
 
 # build
 make build VERSION=v0.1.1
