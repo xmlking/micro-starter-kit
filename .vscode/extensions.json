@@ -1,14 +1,15 @@
 {
-    "recommendations": [
-        "googlecloudtools.cloudcode",
-        "DavidAnson.vscode-markdownlint",
-        "ms-vscode.Go",
-        "ms-azuretools.vscode-docker",
-        "zxh404.vscode-proto3",
-        "EditorConfig.EditorConfig",
-        "donjayamanne.githistory",
-        "eamodio.gitlens",
-        "humao.rest-client",
-        "vscode-icons-team.vscode-icons"
-    ]
+  "recommendations": [
+    "googlecloudtools.cloudcode",
+    "DavidAnson.vscode-markdownlint",
+    "ms-vscode.Go",
+    "ms-azuretools.vscode-docker",
+    "zxh404.vscode-proto3",
+    "EditorConfig.EditorConfig",
+    "donjayamanne.githistory",
+    "eamodio.gitlens",
+    "humao.rest-client",
+    "PKief.material-icon-theme",
+    "johnpapa.vscode-peacock"
+  ]
 }
