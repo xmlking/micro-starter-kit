@@ -9,6 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/srv/emailer/registry"
 	"github.com/xmlking/micro-starter-kit/srv/emailer/subscriber"
 )
 
@@ -61,7 +62,16 @@ func main() {
 		}),
 	)
 
+	// Initialise DI Container
+	ctn, err := registry.NewContainer(cfg)
+	defer ctn.Clean()
+	if err != nil {
+		log.Fatalf("failed to build container: %v", err)
+	}
+
+	//emailer := ctn.Resolve("emailer-subscriber").(subscriber.Emailer)
 	// Register Struct as Subscriber
+	//micro.RegisterSubscriber("go.micro.srv.emailer", service.Server(), emailer)
 	micro.RegisterSubscriber("go.micro.srv.emailer", service.Server(), new(subscriber.Emailer))
 
 	// Register Function as Subscriber

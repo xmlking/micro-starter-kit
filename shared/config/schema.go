@@ -21,6 +21,7 @@ type ServiceConfiguration struct {
 	Environment Environment `json:"environment"`
 	Log         LogConfiguration
 	Database    DatabaseConfiguration
+	Email       EmailConfiguration
 }
 
 // LogConfiguration holds log config
@@ -78,4 +79,12 @@ func (d *DatabaseConfiguration) URL() (url string, err error) {
 
 	// TODO https://github.com/coderosoio/cortito/blob/master/common/config/database.go
 
+}
+
+type EmailConfiguration struct {
+	Username    string
+	Password    string
+	EmailServer string
+	Port        int
+	From        string
 }

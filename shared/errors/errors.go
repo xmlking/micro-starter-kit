@@ -26,6 +26,8 @@ const (
 	EC3
 	// EC4 represents there is an error4
 	EC4
+	// SME SendMailError
+	SME
 )
 
 var appErrors = map[ErrorCode]ErrorDetail{
@@ -33,6 +35,7 @@ var appErrors = map[ErrorCode]ErrorDetail{
 	EC2: {"EC2", "not valid", 500},
 	EC3: {"EC3", "not valid", 500},
 	EC4: {"EC4", "not valid", 500},
+	SME: {"SME", "unable to send email", 500},
 }
 
 // AppError - App specific Error
