@@ -16,7 +16,7 @@ func init() {
 // EmailSender provides an interface so we can swap out the
 // implementation of SendEmail under tests.
 type EmailSender interface {
-	Send(to, subject, body string) error
+	Send(subject, body string, to []string) error
 }
 
 // EmailService struct
@@ -39,5 +39,5 @@ func (welcomer *EmailService) Welcome(name, email string) error {
 	}
 	subject := "Welcome"
 
-	return welcomer.Emailer.Send(email, subject, body.String())
+	return welcomer.Emailer.Send(subject, body.String(), []string{email})
 }

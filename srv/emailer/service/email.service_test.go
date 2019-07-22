@@ -12,8 +12,8 @@ type FakeEmailSender struct {
 	mock.Mock
 }
 
-func (mock *FakeEmailSender) Send(to, subject, body string) error {
-	args := mock.Called(to, subject, body)
+func (mock *FakeEmailSender) Send(subject, body string, to []string) error {
+	args := mock.Called(subject, body, to)
 	return args.Error(0)
 }
 func TestEmailService_Welcome(t *testing.T) {
@@ -21,7 +21,7 @@ func TestEmailService_Welcome(t *testing.T) {
 
 	emailer := &FakeEmailSender{}
 	emailer.On("Send",
-		"bob@smith.com", "Welcome", "Hi Bob!").Return(nil)
+		"Welcome", "Hi Bob!", []string{"bob@smith.com"}).Return(nil)
 
 	welcomer := CreateEmailService(emailer)
 
