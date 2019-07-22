@@ -42,7 +42,7 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
 				emailer := ctn.Get("send-email").(email.SendEmail)
-				return emailerService.CreateEmailService(emailer), nil
+				return emailerService.CreateEmailService(&emailer), nil
 			},
 		},
 		{ // TODO
@@ -50,7 +50,7 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
 				emailer := ctn.Get("send-email").(email.SendEmail)
-				return emailerService.CreateEmailService(emailer), nil
+				return emailerService.CreateEmailService(&emailer), nil
 			},
 		},
 	}...); err != nil {
