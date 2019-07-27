@@ -6,7 +6,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/email"
-	emailerService "github.com/xmlking/micro-starter-kit/srv/emailer/service"
+	"github.com/xmlking/micro-starter-kit/srv/emailer/service"
+	"github.com/xmlking/micro-starter-kit/srv/emailer/subscriber"
 )
 
 // Container - provide di Container
@@ -34,7 +35,7 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Name:  "send-email",
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
-				return email.CreateSendEmail(&cfg.Email), nil
+				return email.NewSendEmail(&cfg.Email), nil
 			},
 		},
 		{
@@ -42,15 +43,15 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
 				emailer := ctn.Get("send-email").(email.SendEmail)
-				return emailerService.CreateEmailService(&emailer), nil
+				return service.NewEmailService(&emailer), nil
 			},
 		},
-		{ // TODO
+		{
 			Name:  "emailer-subscriber",
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
-				emailer := ctn.Get("send-email").(email.SendEmail)
-				return emailerService.CreateEmailService(&emailer), nil
+				emailService := ctn.Get("email-service").(service.EmailService)
+				return subscriber.NewEmailSubscriber(emailService), nil
 			},
 		},
 	}...); err != nil {

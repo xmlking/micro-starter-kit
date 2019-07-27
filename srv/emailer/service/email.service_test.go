@@ -23,7 +23,7 @@ func TestEmailService_Welcome(t *testing.T) {
 	emailer.On("Send",
 		"Welcome", "Hi Bob!", []string{"bob@smith.com"}).Return(nil)
 
-	welcomer := CreateEmailService(emailer)
+	welcomer := NewEmailService(emailer)
 
 	err := welcomer.Welcome("Bob", "bob@smith.com")
 	assert.NoError(t, err)

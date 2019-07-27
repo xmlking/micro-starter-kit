@@ -24,8 +24,8 @@ type EmailService struct {
 	Emailer EmailSender
 }
 
-// CreateEmailService method
-func CreateEmailService(Emailer EmailSender) *EmailService {
+// NewEmailService method
+func NewEmailService(Emailer EmailSender) *EmailService {
 	return &EmailService{
 		Emailer: Emailer,
 	}

@@ -56,9 +56,6 @@
   // "files.hotExit": "onExit",
   "files.defaultLanguage": "typescript",
   "files.trimTrailingWhitespace": true,
-  // Prettier settings
-  "prettier.singleQuote": true,
-  "prettier.printWidth": 100,
   // Peacock Settings
   "peacock.affectActivityBar": true,
   "peacock.affectStatusBar": true,

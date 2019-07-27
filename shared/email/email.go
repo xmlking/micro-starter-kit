@@ -61,8 +61,8 @@ func (sender *SendEmail) Send(subject, body string, to []string) error {
 	return nil
 }
 
-// CreateSendEmail is constructor
-func CreateSendEmail(emailConf *config.EmailConfiguration) *SendEmail {
+// NewSendEmail is constructor
+func NewSendEmail(emailConf *config.EmailConfiguration) *SendEmail {
 	return &SendEmail{
 		from:    emailConf.From,
 		address: emailConf.EmailServer + ":" + strconv.Itoa(emailConf.Port),
