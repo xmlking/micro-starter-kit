@@ -49,7 +49,7 @@ RUN go build -a \
 FROM scratch AS final
 
 # copy 1 MiB busybox executable
-COPY --from=busybox:1.30.1 /bin/busybox /bin/busybox
+COPY --from=busybox:1.31.0 /bin/busybox /bin/busybox
 
 # Import the user and group files from the first stage.
 COPY --from=builder /user/group /user/passwd /etc/
