@@ -23,8 +23,7 @@ func NewEmailSubscriber(emailService service.EmailService) *EmailSubscriber {
 // Handle is a method to send emails
 func (s *EmailSubscriber) Handle(ctx context.Context, msg *emailerPB.Message) error {
 	log.Infof("Sending email to: %s from: %s subject: %s body: %s", msg.To, msg.From, msg.Subject, msg.Body)
-	s.emailService.Welcome(msg.Subject, msg.To)
-	return nil
+    return s.emailService.Welcome(msg.Subject, msg.To)
 }
 
 // Handler is a function to send emails

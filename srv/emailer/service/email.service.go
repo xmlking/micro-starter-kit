@@ -20,19 +20,24 @@ type EmailSender interface {
 }
 
 // EmailService struct
-type EmailService struct {
+type emailService struct {
 	Emailer EmailSender
 }
 
+// EmailService interface
+type EmailService interface {
+	Welcome(name, email string) error
+}
+
 // NewEmailService method
-func NewEmailService(Emailer EmailSender) *EmailService {
-	return &EmailService{
+func NewEmailService(Emailer EmailSender) EmailService {
+	return &emailService{
 		Emailer: Emailer,
 	}
 }
 
 // Welcome method
-func (welcomer *EmailService) Welcome(name, email string) error {
+func (welcomer *emailService) Welcome(name, email string) error {
 	var body bytes.Buffer
 	if err := welcomeEmailTmpl.Execute(&body, struct{ Name string }{name}); err != nil {
 		return err

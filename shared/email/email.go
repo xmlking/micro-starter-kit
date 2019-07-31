@@ -32,6 +32,7 @@ type SendEmail struct {
 	from    string
 	address string
 	auth    smtp.Auth
+	send    func(addr string, a smtp.Auth, from string, to []string, msg []byte) error
 }
 
 // Send sends an email here, and perhaps returns an error.
@@ -54,7 +55,7 @@ func (sender *SendEmail) Send(subject, body string, to []string) error {
 		return err1
 	}
 	log.Debugf("sending email to: %s from: %s, subject: %s, body: %s", to, sender.from, subject, body)
-	err := smtp.SendMail(sender.address, sender.auth, sender.from, to, doc.Bytes())
+	err := sender.send(sender.address, sender.auth, sender.from, to, doc.Bytes())
 	if err != nil {
 		return myErrors.AppError(myErrors.SME, err.Error())
 	}
@@ -67,5 +68,6 @@ func NewSendEmail(emailConf *config.EmailConfiguration) *SendEmail {
 		from:    emailConf.From,
 		address: emailConf.EmailServer + ":" + strconv.Itoa(emailConf.Port),
 		auth:    smtp.PlainAuth("", emailConf.Username, emailConf.Password, emailConf.EmailServer),
+		send:    smtp.SendMail,
 	}
 }

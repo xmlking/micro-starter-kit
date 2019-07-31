@@ -18,7 +18,6 @@ func (mock *FakeEmailSender) Send(subject, body string, to []string) error {
 }
 func TestEmailService_Welcome(t *testing.T) {
 	myConfig.InitConfig("../../../config", "config.yaml")
-
 	emailer := &FakeEmailSender{}
 	emailer.On("Send",
 		"Welcome", "Hi Bob!", []string{"bob@smith.com"}).Return(nil)

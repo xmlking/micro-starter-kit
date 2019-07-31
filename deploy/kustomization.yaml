@@ -1,0 +1,7 @@
+commonLabels:
+  app: micro
+# imageTags:
+#   - name: nginx
+#     newTag: 1.8.0
+resources:
+  - 300-deployment.yaml

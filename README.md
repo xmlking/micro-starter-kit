@@ -35,6 +35,7 @@ go get -u github.com/micro/micro
 go get -u github.com/micro/go-micro
 # go lang  build/publish/deploy tool
 go get -u github.com/google/ko/cmd/ko
+go get sigs.k8s.io/kustomize
 # go better build tool
 go get github.com/ahmetb/govvv
 # for mac, use brew to install protobuf
@@ -110,6 +111,15 @@ go run cmd/demo/main.go
 ```
 
 ## Test
+
+```bash
+go test
+# integration tests / slow running tests
+go test -tags=integration
+go test -v -short
+```
+
+## UAT Test
 
 > using `micro` CLI
 
