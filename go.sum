@@ -290,8 +290,6 @@ github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqn
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/ryanuber/columnize v0.0.0-20160712163229-9b3edd62028f/go.mod h1:sm1tb6uqfes/u+d4ooFouqFdy9/2g9QGwK3SQygK0Ts=
 github.com/ryanuber/columnize v2.1.0+incompatible/go.mod h1:sm1tb6uqfes/u+d4ooFouqFdy9/2g9QGwK3SQygK0Ts=
-github.com/sarulabs/di v2.0.0+incompatible h1:gsiKbengnJvdA+XkdV7SqlH3kFQMaIqKD+rgefIRwS0=
-github.com/sarulabs/di v2.0.0+incompatible/go.mod h1:w5YAFs2sBoVzwDsWaBqJ2NzOmUHo/EZKdB3DOJ+BmHI=
 github.com/sarulabs/di/v2 v2.1.2 h1:n7HWnjD5Pizgs4y62WOFqO1GJw3cHaKEJwIw+TAlV/U=
 github.com/sarulabs/di/v2 v2.1.2/go.mod h1:9mRdg8AtTjdbiirq97MvLriE+jf6q/ZCLpO/nRyR/R0=
 github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529 h1:nn5Wsu0esKSJiIVhscUtVbo7ada43DJhG55ua/hjS5I=

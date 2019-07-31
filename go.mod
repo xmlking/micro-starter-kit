@@ -11,7 +11,6 @@ require (
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.8.1
 	github.com/nats-io/nats-server/v2 v2.0.2 // indirect
-	github.com/sarulabs/di v2.0.0+incompatible // indirect
 	github.com/sarulabs/di/v2 v2.1.2
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.3.0
