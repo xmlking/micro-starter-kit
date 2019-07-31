@@ -1,7 +1,7 @@
 package registry
 
 import (
-	"github.com/sarulabs/di"
+	"github.com/sarulabs/di/v2"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
