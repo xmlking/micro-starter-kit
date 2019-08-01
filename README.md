@@ -137,7 +137,7 @@ micro web --namespace=go.micro.srv
 
 ```bash
 micro call go.micro.srv.account UserService.Create \
-'{"username": "sumo1", "firstName": "sumo1", "lastName": "demo1", "email": "sumo1@demo.com"}'
+'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call go.micro.srv.account UserService.List '{}'
 micro call go.micro.srv.account UserService.Get '{"id": 1}'
 ```
