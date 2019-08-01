@@ -85,12 +85,12 @@ postgres
 docker-compose up postgres
 ```
 
-> Node: `--server_address=<MY_VPM_IP>:5501x --broker_address=<MY_VPN_IP>:5502x` required only when you are behind VPN
+> Node: `--server_address=<MY_VPN_IP>:5501x --broker_address=<MY_VPN_IP>:5502x` required only when you are behind VPN
 
 ```bash
 # dev mode
 # test account srv (plugin adds custom logger )
-# MY_VPM_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
+# MY_VPN_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
 # go run srv/account/main.go srv/account/plugin.go --server_address=${MY_VPN_IP}:55011 --broker_address=${MY_VPN_IP}:55021
 go run srv/account/main.go srv/account/plugin.go
 # go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${MY_VPN_IP}:55012 --broker_address=${MY_VPN_IP}:55022
@@ -137,7 +137,7 @@ micro web --namespace=go.micro.srv
 
 ```bash
 micro call go.micro.srv.account UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+'{"username": "sumo1", "firstName": "sumo1", "lastName": "demo1", "email": "sumo1@demo.com"}'
 micro call go.micro.srv.account UserService.List '{}'
 micro call go.micro.srv.account UserService.Get '{"id": 1}'
 ```

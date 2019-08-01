@@ -54,7 +54,7 @@ func (sender *SendEmail) Send(subject, body string, to []string) error {
 		log.Print("error trying to execute mail template")
 		return err1
 	}
-	log.Debugf("sending email to: %s from: %s, subject: %s, body: %s", to, sender.from, subject, body)
+	log.Debugf("sending email to: %s from: %s, subject: %s, body: %s", to, sender.from, subject, doc.Bytes())
 	err := sender.send(sender.address, sender.auth, sender.from, to, doc.Bytes())
 	if err != nil {
 		return myErrors.AppError(myErrors.SME, err.Error())

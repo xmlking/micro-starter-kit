@@ -42,7 +42,7 @@ func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.Us
 	}
 
 	exists := h.userRepository.Exist(model)
-	log.Info("user exists? %t", exists)
+	log.Infof("user exists? %t", exists)
 	rsp.Result = exists
 	return nil
 }
@@ -111,7 +111,8 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	}
 
 	// send email
-	if err := h.Publisher.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue(), From: req.Email.GetValue(), Subject: "this is email subject", Body: "this is email body"}); err != nil {
+	if err := h.Publisher.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue()}); err != nil {
+		log.WithError(err).Error("Received Publisher.Publish request error")
 		return err
 	}
 

@@ -3,6 +3,7 @@ package subscriber
 import (
 	"context"
 
+	"github.com/micro/go-micro/metadata"
 	log "github.com/sirupsen/logrus"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
 	"github.com/xmlking/micro-starter-kit/srv/emailer/service"
@@ -20,15 +21,17 @@ func NewEmailSubscriber(emailService service.EmailService) *EmailSubscriber {
 	}
 }
 
-// Handle is a method to send emails
+// Handle is a method to send emails, Method can be of any name
 func (s *EmailSubscriber) Handle(ctx context.Context, msg *emailerPB.Message) error {
-	log.Infof("Sending email to: %s from: %s subject: %s body: %s", msg.To, msg.From, msg.Subject, msg.Body)
-    return s.emailService.Welcome(msg.Subject, msg.To)
+	md, _ := metadata.FromContext(ctx)
+	log.Infof("EmailSubscriber: Received msg %+v with metadata %+v\n", msg, md)
+	return s.emailService.Welcome(msg.Subject, msg.To)
 }
 
 // Handler is a function to send emails
 func Handler(ctx context.Context, msg *emailerPB.Message) error {
-	log.Infof("Sending email to: %s from: %s subject: %s body: %s", msg.To, msg.From, msg.Subject, msg.Body)
+	md, _ := metadata.FromContext(ctx)
+	log.Infof("Function: Received msg %+v with metadata %+v\n", msg, md)
 	// TODO delegate to emailService.Welcome
 	return nil
 }

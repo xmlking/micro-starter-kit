@@ -64,6 +64,7 @@ func TestSendEmail_Send(t *testing.T) {
 				},
 			}
 			if err := sender.Send(tt.args.subject, tt.args.body, tt.args.to); (err != nil) != tt.wantErr {
+                // expect myErrors.AppError(myErrors.SME, err)
 				t.Errorf("SendEmail.Send() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

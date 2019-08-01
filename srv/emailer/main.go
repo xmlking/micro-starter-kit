@@ -69,7 +69,7 @@ func main() {
 		log.Fatalf("failed to build container: %v", err)
 	}
 
-	emailSubscriber := ctn.Resolve("emailer-subscriber").(subscriber.EmailSubscriber)
+	emailSubscriber := ctn.Resolve("emailer-subscriber") //.(subscriber.EmailSubscriber)
 	// Register Struct as Subscriber
 	micro.RegisterSubscriber("go.micro.srv.emailer", service.Server(), emailSubscriber)
 

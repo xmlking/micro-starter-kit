@@ -24,18 +24,6 @@ type emailService struct {
 	Emailer EmailSender
 }
 
-// EmailService interface
-type EmailService interface {
-	Welcome(name, email string) error
-}
-
-// NewEmailService method
-func NewEmailService(Emailer EmailSender) EmailService {
-	return &emailService{
-		Emailer: Emailer,
-	}
-}
-
 // Welcome method
 func (welcomer *emailService) Welcome(name, email string) error {
 	var body bytes.Buffer
@@ -45,4 +33,16 @@ func (welcomer *emailService) Welcome(name, email string) error {
 	subject := "Welcome"
 
 	return welcomer.Emailer.Send(subject, body.String(), []string{email})
+}
+
+// EmailService interface
+type EmailService interface {
+	Welcome(name, email string) error
+}
+
+// NewEmailService is constructor
+func NewEmailService(Emailer EmailSender) EmailService {
+	return &emailService{
+		Emailer: Emailer,
+	}
 }

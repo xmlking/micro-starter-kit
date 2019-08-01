@@ -42,8 +42,8 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Name:  "email-service",
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
-				emailer := ctn.Get("send-email").(email.SendEmail)
-				return service.NewEmailService(&emailer), nil
+				emailer := ctn.Get("send-email").(service.EmailSender)
+				return service.NewEmailService(emailer), nil
 			},
 		},
 		{
