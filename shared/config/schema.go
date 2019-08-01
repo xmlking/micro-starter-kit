@@ -81,6 +81,7 @@ func (d *DatabaseConfiguration) URL() (url string, err error) {
 
 }
 
+// EmailConfiguration holds email config
 type EmailConfiguration struct {
 	Username    string
 	Password    string

@@ -60,6 +60,7 @@
   "files.defaultLanguage": "typescript",
   "files.trimTrailingWhitespace": true,
   // Peacock Settings
+  "peacock.color": "#5dc9e2",
   // GoLang
   "go.testFlags": ["-v"],
   "go.useLanguageServer": true,
