@@ -3,6 +3,8 @@ package service
 import (
 	"bytes"
 	"html/template"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var welcomeEmailTmpl *template.Template
@@ -26,6 +28,7 @@ type emailService struct {
 
 // Welcome method
 func (welcomer *emailService) Welcome(name, email string) error {
+	log.Info("in Welcome")
 	var body bytes.Buffer
 	if err := welcomeEmailTmpl.Execute(&body, struct{ Name string }{name}); err != nil {
 		return err

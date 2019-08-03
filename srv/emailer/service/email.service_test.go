@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/shared/email"
 )
 
 type FakeEmailSender struct {
@@ -27,4 +28,24 @@ func TestEmailService_Welcome(t *testing.T) {
 	err := welcomer.Welcome("Bob", "bob@smith.com")
 	assert.NoError(t, err)
 	emailer.AssertExpectations(t)
+}
+
+func TestEmailService_Welcome_Integration(t *testing.T) {
+	var (
+		cfg myConfig.ServiceConfiguration
+	)
+
+	if testing.Short() {
+		t.Skip("skipping long integration test")
+	}
+	myConfig.InitConfig("../../../config", "config.test.yaml")
+
+	emailer := email.NewSendEmail(&cfg.Email)
+	emailService := NewEmailService(emailer)
+	t.Logf("emailer: %v", emailer)
+
+	err2 := emailService.Welcome("Welcome", "sumo")
+	if err2 != nil {
+		t.Errorf("Send Welcome Email Failed: %v", err2)
+	}
 }

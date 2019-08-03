@@ -6,7 +6,7 @@ log:
   format: text
 database:
   dialect: postgres
-  host: postgres
+  host: localhost
   port: 5432
   Username: postgres
   Password: postgres321
@@ -14,14 +14,14 @@ database:
   logging: true
 observability:
   metrics:
-    address: prometheus:8125
+    address: localhost:8125
     flushInterval: 1000000000
   tracing:
-    address: jaeger:6831
+    address: localhost:6831
     flushInterval: 5000000000
 email:
-  username: yourGmailUsername
+  username: xmlking
   password: password
   emailServer: smtp.gmail.com
   port: 587
-  from: sumo@demo.com
+  from: xmlking@gmail.com

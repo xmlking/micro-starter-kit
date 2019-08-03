@@ -65,7 +65,7 @@ endif
 	fi
 
 test:
-	go test -v ./... -cover
+	go test -v -short ./... -cover
 
 run:
 	docker-compose build

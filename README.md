@@ -113,10 +113,12 @@ go run cmd/demo/main.go
 ## Test
 
 ```bash
-go test
-# integration tests / slow running tests
-go test -tags=integration
+# Run only Unit tests:
 go test -v -short
+go test -v -short ./srv/emailer/service
+# Run only Integration Tests: Useful for smoke testing canaries in production.
+go test -v -run Integration
+go test -v -run Integration ./srv/emailer/service
 ```
 
 ## UAT Test

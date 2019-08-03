@@ -4,7 +4,7 @@
   // Editor
   "editor.autoIndent": true,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": false
+    "source.organizeImports": true
   },
   "editor.cursorBlinking": "solid",
   "editor.cursorSmoothCaretAnimation": true,
