@@ -41,7 +41,9 @@ go test all
   - using `Integration` in the test name.
   - checking if running under `-short` flag directive.
 
-  Basically, the spec goes: "write all tests normally. if it is a long-running tests, or an integration test, follow this naming convention and check for `-short`"
+  Basically, the spec goes:
+
+  > "write all tests normally. if it is a long-running tests, or an integration test, follow this naming convention and check for `-short`"
 
   When we want to run our unit tests, we would use the -short flag, and omit it for running our integration tests or long running tests.
 
