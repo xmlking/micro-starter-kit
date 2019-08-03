@@ -3,6 +3,7 @@ package service
 import (
 	"testing"
 
+	"github.com/micro/go-micro/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
@@ -39,12 +40,11 @@ func TestEmailService_Welcome_Integration(t *testing.T) {
 		t.Skip("skipping long integration test")
 	}
 	myConfig.InitConfig("../../../config", "config.test.yaml")
-
+	config.Scan(&cfg)
 	emailer := email.NewSendEmail(&cfg.Email)
 	emailService := NewEmailService(emailer)
-	t.Logf("emailer: %v", emailer)
 
-	err2 := emailService.Welcome("Welcome", "sumo")
+	err2 := emailService.Welcome("Welcome", "demo@gmail.com")
 	if err2 != nil {
 		t.Errorf("Send Welcome Email Failed: %v", err2)
 	}

@@ -2,7 +2,7 @@ environment: production
 name: go.micro.srv.account
 version: 0.1.0
 log:
-  level: info
+  level: debug
   format: text
 database:
   dialect: postgres
@@ -20,8 +20,8 @@ observability:
     address: localhost:6831
     flushInterval: 5000000000
 email:
-  username: xmlking
-  password: password
+  username: yourGmailUsername
+  password: yourGmailAppPassword
   emailServer: smtp.gmail.com
   port: 587
   from: xmlking@gmail.com

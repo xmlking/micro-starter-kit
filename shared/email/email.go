@@ -37,6 +37,7 @@ type SendEmail struct {
 
 // Send sends an email here, and perhaps returns an error.
 func (sender *SendEmail) Send(subject, body string, to []string) error {
+	log.Info("in SendEmail.Send")
 	var doc bytes.Buffer
 	context := struct {
 		From    string
