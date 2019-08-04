@@ -1,10 +1,17 @@
 # micro-starter-kit
 
-> go-micro starter kit
+Microservice starter kit for Golang, aims to be developer friendly.
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
+[![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
+[![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![GoDoc](https://godoc.org/github.com/xmlking/micro-starter-kit?status.svg)](https://godoc.org/github.com/xmlking/micro-starter-kit)
+
+## Overview
 
 ![Image of Deployment](docs/deployment.png)
 
-## What you get
+### What you get
 
 - [x] Monorepo - Sharing Code Between Microservices
 - [x] gRPC microservices with REST Gateway
@@ -12,6 +19,7 @@
 - [x] Config Fallback
 - [x] Custom Logging
 - [x] CRUD via ORM
+- [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
 - [x] DI Container
 - [x] One Step _build/publish/deploy_ with `ko`
 - [x] BuildInfo with `govvv`
@@ -19,15 +27,12 @@
 - [ ] Service Mesh
 - [ ] GraphQL Gateway with `gqlgen`
 
-## TODO
+## Getting Started
 
-- [ ] [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
+### Prerequisite
 
-## Prerequisite
-
-### Global tools
-
-> run then outside **this project root** and `$GOPATH`
+> run following `go get ...` commands outside **this project root** and `$GOPATH`
+> if you get error, try setting `export GO111MODULE=on` befor running `go get ...`
 
 ```bash
 # fetch micro into $GOPATH
@@ -44,11 +49,11 @@ brew install protobuf
 # fetch protoc plugins into $GOPATH
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 go get -u github.com/micro/protoc-gen-micro
-# fetch PGV protoc plugin
 go get -u github.com/envoyproxy/protoc-gen-validate
+go get -u github.com/infobloxopen/protoc-gen-gorm
 ```
 
-## Initial Setup
+### Initial Setup
 
 > (optional) setup your workspace from scratch
 
@@ -65,23 +70,23 @@ micro new --namespace="go.micro" --type="srv" --gopath=false \
 micro new --namespace="go.micro" --type="api" --gopath=false --alias="account" api/account
 ```
 
-## Build
+### Build
 
 ```bash
 make proto
 # silence
 make -s proto
 
-# prod build. Build with plugins.go
+# Prod build. This build command includes plugins.go
 go build -o build/account-srv ./srv/account
 ```
 
-## Run
+### Run
 
-> Optionally start postgres and set it in `config.yaml`
+> Optionally start **postgres** database and set it as database in `config.yaml`
 
 ```bash
-postgres
+# postgres
 docker-compose up postgres
 ```
 
@@ -102,7 +107,7 @@ MICRO_REGISTRY=kubernetes \
 MICRO_TRANSPORT=nats \
 ./build/account-srv
 
-# test config with CMD
+# integration tests for config module via CMD
 go run cmd/demo/main.go --help
 go run cmd/demo/main.go --database_host=1.1.1.1 --database_port=7777
 
@@ -110,7 +115,7 @@ export APP_ENV=production
 go run cmd/demo/main.go
 ```
 
-## Test
+### Test
 
 ```bash
 # Run only Unit tests:
@@ -121,7 +126,7 @@ go test -v -run Integration
 go test -v -run Integration ./srv/emailer/service
 ```
 
-## UAT Test
+### UAT Test
 
 > using `micro` CLI
 
@@ -135,7 +140,7 @@ micro api --namespace=go.micro.srv
 micro web --namespace=go.micro.srv
 ```
 
-### Test gRPC Directly
+#### Test gRPC Directly
 
 ```bash
 micro call go.micro.srv.account UserService.Create \
@@ -144,7 +149,7 @@ micro call go.micro.srv.account UserService.List '{}'
 micro call go.micro.srv.account UserService.Get '{"id": 1}'
 ```
 
-### Test via Micro Web UI
+#### Test via Micro Web UI
 
 ```bash
 open http://localhost:8082
@@ -161,11 +166,13 @@ open http://localhost:8082
 }
 ```
 
-### Test via Micro API Gateway
+#### Test via Micro API Gateway
 
 > Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
 
-## Deploy
+## GitOps
+
+### Deploy
 
 Use `ko`. If you are new to `ko` check out the [ko-demo](https://github.com/xmlking/ko-demo)
 
@@ -190,7 +197,7 @@ To deploy in a different namespace:
 ko -n nondefault apply -f deploy/
 ```
 
-## Release
+### Release
 
 > This will publish all of the binary components as container images and create a release.yaml
 
@@ -213,9 +220,9 @@ docker run -it \
 -p 8080:8080 -p 10001:10001 ko.local/github.com/xmlking/micro-starter-kit/srv/account
 ```
 
-## Docker
+### Docker
 
-### Docker Build
+#### Docker Build
 
 ```bash
 # build
@@ -243,7 +250,7 @@ docker image prune -f
 docker rmi $(comm -3 <(docker images -q | sort) <(docker images -q -a | sort)  | sed 's/\t//')
 ```
 
-### Run Docker
+#### Docker Run
 
 ```bash
 docker run -it \
@@ -254,6 +261,8 @@ docker run -it \
 ```
 
 ### Make
+
+using Makefile
 
 > use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing
 
