@@ -1,6 +1,6 @@
 # micro-starter-kit
 
-Microservice starter kit for Golang, aims to be developer friendly.
+Microservices starter kit for Golang, aims to be developer friendly.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
 [![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
@@ -31,7 +31,7 @@ Microservice starter kit for Golang, aims to be developer friendly.
 
 ### Prerequisite
 
-> run following `go get ...` commands outside **this project root** and `$GOPATH`
+> run following `go get ...` commands outside **this project root** and `$GOPATH`&nbsp;
 > if you get error, try setting `export GO111MODULE=on` befor running `go get ...`
 
 ```bash
