@@ -94,7 +94,21 @@ Accept: {{jsonType}}
     "service": "go.micro.srv.account",
     "method": "UserService.Get",
     "request": {
-        "id":  {{firstUserId}}
+        "id":  "{{firstUserId}}"
+    }
+}
+
+### Exist User
+# @name ExistUser
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "go.micro.srv.account",
+    "method": "UserService.Exist",
+    "request": {
+        "id": "{{firstUserId}}"
     }
 }
 
@@ -109,9 +123,8 @@ Accept: {{jsonType}}
     "method": "UserService.Exist",
     "request": {
         "username": "sumo",
-        "firstName": "sumo",
-        "lastName": "demo",
-        "email": "sumo@demo.com"
+        "id": "{{firstUserId}}",
+        "email": "sumo1@demo.com"
     }
 }
 
@@ -125,7 +138,7 @@ Accept: {{jsonType}}
     "service": "go.micro.srv.account",
     "method": "UserService.Update",
     "request": {
-        "id": {{firstUserId}},
+        "id":  "{{firstUserId}}",
         "username": "sumo222",
         "firstName": "sumoto222",
         "lastName": "demo222",
@@ -144,7 +157,7 @@ Accept: {{jsonType}}
     "service": "go.micro.srv.account",
     "method": "UserService.Delete",
     "request": {
-        "id": {{firstUserId}}
+        "id":  "{{firstUserId}}"
     }
 }
 
@@ -160,10 +173,11 @@ Accept: {{jsonType}}
     "service": "go.micro.srv.account",
     "method": "ProfileService.Create",
     "request": {
-        "user_id": {{firstUserId}},
+        "userId": "{{firstUserId}}",
         "tz" : "PST",
         "avatar": "sumo1.jpg",
-        "gender": "F"
+        "gender": "F",
+        "birthday": "2017-01-15T01:30:15.01Z"
     }
 }
 
@@ -180,8 +194,6 @@ Accept: {{jsonType}}
     }
 }
 
-@firstProfileId = {{ListProfile.response.body.results[1].id}}
-
 ### List Profiles 2
 # @name ListProfile2
 POST {{api-gateway-url}}/rpc
@@ -195,11 +207,12 @@ Accept: {{jsonType}}
         "limit": 10,
         "page": 1,
         "sort" : "gender",
-        "user_id": {{firstUserId}},
+        "userId": "{{firstUserId}}",
         "gender": "F"
     }
 }
 
+@firstProfileId = {{ListProfile.response.body.results[0].id}}
 
 ### Get Profile
 # @name GetProfile
@@ -211,6 +224,6 @@ Accept: {{jsonType}}
     "service": "go.micro.srv.account",
     "method": "ProfileService.Get",
     "request": {
-       "id": 1
+       "id": "{{firstProfileId}}"
     }
 }

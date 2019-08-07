@@ -29,6 +29,7 @@ proto proto-%:
 				protoc --proto_path=.:${GOPATH}/src \
 				--go_out=paths=source_relative:. \
 				--micro_out=paths=source_relative:. \
+				--gorm_out=paths=source_relative:. \
 				--validate_out=lang=go,paths=source_relative:. $$f; \
 				echo compiled: $$f; \
 			done \
@@ -38,6 +39,7 @@ proto proto-%:
 			protoc --proto_path=.:${GOPATH}/src \
 			--go_out=paths=source_relative:. \
 			--micro_out=paths=source_relative:. \
+			--gorm_out=paths=source_relative:. \
 			--validate_out=lang=go,paths=source_relative:. $$f; \
 			echo compiled: $$f; \
 		done \

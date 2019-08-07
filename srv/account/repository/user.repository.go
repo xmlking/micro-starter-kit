@@ -5,18 +5,17 @@ import (
 
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
-
-	"github.com/xmlking/micro-starter-kit/srv/account/entity"
+	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 )
 
 // UserRepository interface
 type UserRepository interface {
-	Exist(model *entity.User) bool
-	List(limit, page uint32, sort string, model *entity.User) (total uint32, users []*entity.User, err error)
-	Get(id uint32) (*entity.User, error)
-	Create(model *entity.User) error
-	Update(id uint32, model *entity.User) error
-	Delete(model *entity.User) error
+	Exist(model *pb.UserORM) bool
+	List(limit, page uint32, sort string, model *pb.UserORM) (total uint32, users []*pb.UserORM, err error)
+	Get(id string) (*pb.UserORM, error)
+	Create(model *pb.UserORM) error
+	Update(id string, model *pb.UserORM) error
+	Delete(model *pb.UserORM) error
 }
 
 // userRepository struct
@@ -32,22 +31,23 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 }
 
 // Exist
-func (repo *userRepository) Exist(model *entity.User) bool {
+func (repo *userRepository) Exist(model *pb.UserORM) bool {
+	log.Info("Received userRepository.Exist request %v", *model)
 	var count int
 	if model.Username != "" {
-		repo.db.Model(&entity.User{}).Where("username = ?", model.Username).Count(&count)
+		repo.db.Model(&pb.UserORM{}).Where("username = ?", model.Username).Count(&count)
 		if count > 0 {
 			return true
 		}
 	}
-	if model.ID != 0 {
-		repo.db.Model(&entity.User{}).Where("id = ?", model.ID).Count(&count)
+	if model.Id != "" {
+		repo.db.Model(&pb.UserORM{}).Where("id = ?", model.Id).Count(&count)
 		if count > 0 {
 			return true
 		}
 	}
 	if model.Email != "" {
-		repo.db.Model(&entity.User{}).Where("email = ?", model.Email).Count(&count)
+		repo.db.Model(&pb.UserORM{}).Where("email = ?", model.Email).Count(&count)
 		if count > 0 {
 			return true
 		}
@@ -56,7 +56,7 @@ func (repo *userRepository) Exist(model *entity.User) bool {
 }
 
 // List
-func (repo *userRepository) List(limit, page uint32, sort string, model *entity.User) (total uint32, users []*entity.User, err error) {
+func (repo *userRepository) List(limit, page uint32, sort string, model *pb.UserORM) (total uint32, users []*pb.UserORM, err error) {
 	db := repo.db
 
 	if limit == 0 {
@@ -89,20 +89,20 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *entity.
 }
 
 // Find by ID
-func (repo *userRepository) Get(id uint32) (user *entity.User, err error) {
-	// user = &entity.User{Model: gorm.Model{ID: uint(req.Id)}}
-	user = &entity.User{}
-	if err = repo.db.First(&user, id).Error; err != nil && err != gorm.ErrRecordNotFound {
+func (repo *userRepository) Get(id string) (user *pb.UserORM, err error) {
+	user = &pb.UserORM{Id: id}
+	if err = repo.db.First(user).Error; err != nil && err != gorm.ErrRecordNotFound {
 		log.WithError(err).Error("Error in UserRepository.Get")
 	}
 	return
 }
 
 // Create
-func (repo *userRepository) Create(model *entity.User) error {
+func (repo *userRepository) Create(model *pb.UserORM) error {
 	if exist := repo.Exist(model); exist == true {
 		return errors.New("User already exist")
 	}
+	// if err := repo.db.Set("gorm:association_autoupdate", false).Create(model).Error; err != nil {
 	if err := repo.db.Create(model).Error; err != nil {
 		log.WithError(err).Error("Error in UserRepository.Create")
 		return err
@@ -111,10 +111,11 @@ func (repo *userRepository) Create(model *entity.User) error {
 }
 
 // Update TODO: Translation
-func (repo *userRepository) Update(id uint32, model *entity.User) error {
-	user := &entity.User{
-		Model: gorm.Model{ID: uint(id)},
+func (repo *userRepository) Update(id string, model *pb.UserORM) error {
+	user := &pb.UserORM{
+		Id: id,
 	}
+	// result := repo.db.Set("gorm:association_autoupdate", false).Save(model)
 	result := repo.db.Model(user).Updates(model)
 	if err := result.Error; err != nil {
 		log.WithError(err).Error("Error in UserRepository.Update")
@@ -128,7 +129,7 @@ func (repo *userRepository) Update(id uint32, model *entity.User) error {
 }
 
 // Delete
-func (repo *userRepository) Delete(model *entity.User) error {
+func (repo *userRepository) Delete(model *pb.UserORM) error {
 	result := repo.db.Delete(model)
 	if err := result.Error; err != nil {
 		log.WithError(err).Error("Error in UserRepository.Delete")

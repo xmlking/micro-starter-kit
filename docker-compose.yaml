@@ -32,8 +32,16 @@ services:
       POSTGRES_PASSWORD: postgres321
     ports:
       - "5432:5432"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "psql postgres://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@localhost:5432/$${POSTGRES_DB} || exit 1",
+        ]
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./deploy/postgres/scripts/create_extensions.sh:/docker-entrypoint-initdb.d/10-create_extensions.sh:ro
+
   ##############################
   # micro
   ##############################

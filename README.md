@@ -83,12 +83,25 @@ go build -o build/account-srv ./srv/account
 
 ### Run
 
-> Optionally start **postgres** database and set it as database in `config.yaml`
+#### Database
+
+By default this project use embedded `sqlite3` database. if you want to use **postgreSQL**,
+
+- start **postgres** via `docker-compose` command provided below
+- uncommend `postgres` import statement and comment `sqlite` in `plugin.go`
+- start micro server with `--configFile=config.dev.yaml` flag <br/>
+  i.e., `go run srv/account/main.go srv/account/plugin.go --configFile=config.dev.postgres.yaml`
 
 ```bash
-# postgres
+# to start postgres in foreground
 docker-compose up postgres
+# to stop postgres
+docker-compose down
+# if needed, remove `postgres_data` volume to recreate database next time, when you start.
+docker system prune --volumes
 ```
+
+#### Services
 
 > Node: `--server_address=<MY_VPN_IP>:5501x --broker_address=<MY_VPN_IP>:5502x` required only when you are behind VPN
 
@@ -146,7 +159,11 @@ micro web --namespace=go.micro.srv
 micro call go.micro.srv.account UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call go.micro.srv.account UserService.List '{}'
-micro call go.micro.srv.account UserService.Get '{"id": 1}'
+micro call go.micro.srv.account UserService.Get '{"id": "UserIdFromList"}'
+micro call go.micro.srv.account UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
+micro call go.micro.srv.account UserService.Update \
+'{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
+micro call go.micro.srv.account UserService.Delete '{ "id": "UserIdFromGet" }'
 ```
 
 #### Test via Micro Web UI

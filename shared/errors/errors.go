@@ -28,6 +28,10 @@ const (
 	EC4
 	// SME SendMailError
 	SME
+	// DBE DatabaseError
+	DBE
+	// PSE PubSubError
+	PSE
 )
 
 var appErrors = map[ErrorCode]ErrorDetail{
@@ -35,7 +39,9 @@ var appErrors = map[ErrorCode]ErrorDetail{
 	EC2: {"EC2", "not valid", 500},
 	EC3: {"EC3", "not valid", 500},
 	EC4: {"EC4", "not valid", 500},
-	SME: {"SME", "unable to send email", 500},
+	SME: {"SME", "unable to send email: %v", 500},
+	DBE: {"DBE", "database error: %v", 500},
+	PSE: {"PSE", "broker publish error: %v", 500},
 }
 
 // AppError - App specific Error

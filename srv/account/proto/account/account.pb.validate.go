@@ -105,10 +105,11 @@ func (m *UserRequest) Validate() error {
 
 	if wrapper := m.GetId(); wrapper != nil {
 
-		if wrapper.GetValue() < 1 {
+		if err := m._validateUuid(wrapper.GetValue()); err != nil {
 			return UserRequestValidationError{
 				field:  "Id",
-				reason: "value must be greater than or equal to 1",
+				reason: "value must be a valid UUID",
+				cause:  err,
 			}
 		}
 
@@ -161,14 +162,16 @@ func (m *UserRequest) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetEmail()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if wrapper := m.GetEmail(); wrapper != nil {
+
+		if err := m._validateEmail(wrapper.GetValue()); err != nil {
 			return UserRequestValidationError{
 				field:  "Email",
-				reason: "embedded message failed validation",
+				reason: "value must be a valid email address",
 				cause:  err,
 			}
 		}
+
 	}
 
 	return nil
@@ -437,14 +440,16 @@ func (m *UserListQuery) Validate() error {
 
 	}
 
-	if v, ok := interface{}(m.GetEmail()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if wrapper := m.GetEmail(); wrapper != nil {
+
+		if err := m._validateEmail(wrapper.GetValue()); err != nil {
 			return UserListQueryValidationError{
 				field:  "Email",
-				reason: "embedded message failed validation",
+				reason: "value must be a valid email address",
 				cause:  err,
 			}
 		}
+
 	}
 
 	return nil
@@ -632,24 +637,28 @@ func (m *ProfileRequest) Validate() error {
 		return nil
 	}
 
-	if v, ok := interface{}(m.GetId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if wrapper := m.GetId(); wrapper != nil {
+
+		if err := m._validateUuid(wrapper.GetValue()); err != nil {
 			return ProfileRequestValidationError{
 				field:  "Id",
-				reason: "embedded message failed validation",
+				reason: "value must be a valid UUID",
 				cause:  err,
 			}
 		}
+
 	}
 
-	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if wrapper := m.GetUserId(); wrapper != nil {
+
+		if err := m._validateUuid(wrapper.GetValue()); err != nil {
 			return ProfileRequestValidationError{
 				field:  "UserId",
-				reason: "embedded message failed validation",
+				reason: "value must be a valid UUID",
 				cause:  err,
 			}
 		}
+
 	}
 
 	if v, ok := interface{}(m.GetTz()).(interface{ Validate() error }); ok {
@@ -680,6 +689,27 @@ func (m *ProfileRequest) Validate() error {
 			return ProfileRequestValidationError{
 				field:  "Gender",
 				reason: "value must be in list [M F]",
+			}
+		}
+
+	}
+
+	if t := m.GetBirthday(); t != nil {
+		ts, err := ptypes.Timestamp(t)
+		if err != nil {
+			return ProfileRequestValidationError{
+				field:  "Birthday",
+				reason: "value is not a valid timestamp",
+				cause:  err,
+			}
+		}
+
+		now := time.Now()
+
+		if ts.Sub(now) >= 0 {
+			return ProfileRequestValidationError{
+				field:  "Birthday",
+				reason: "value must be less than now",
 			}
 		}
 
@@ -846,14 +876,16 @@ func (m *ProfileListQuery) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetUserId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
+	if wrapper := m.GetUserId(); wrapper != nil {
+
+		if err := m._validateUuid(wrapper.GetValue()); err != nil {
 			return ProfileListQueryValidationError{
 				field:  "UserId",
-				reason: "embedded message failed validation",
+				reason: "value must be a valid UUID",
 				cause:  err,
 			}
 		}
+
 	}
 
 	if wrapper := m.GetGender(); wrapper != nil {
