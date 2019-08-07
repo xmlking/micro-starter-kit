@@ -89,7 +89,7 @@ By default this project use embedded `sqlite3` database. if you want to use **po
 
 - start **postgres** via `docker-compose` command provided below
 - uncommend `postgres` import statement and comment `sqlite` in `plugin.go`
-- start micro server with `--configFile=config.dev.yaml` flag <br/>
+- start micro server with `--configFile=config.dev.postgres.yaml` flag <br/>
   i.e., `go run srv/account/main.go srv/account/plugin.go --configFile=config.dev.postgres.yaml`
 
 ```bash
