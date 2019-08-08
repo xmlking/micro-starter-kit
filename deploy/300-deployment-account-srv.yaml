@@ -40,17 +40,17 @@ spec:
           # https://github.com/inigofu/temac-user-service/blob/master/deployments/deployment.yml
           env:
             - name: MICRO_REGISTRY
-              vlue: kubernetes
+              value: kubernetes
             - name: MICRO_SERVER_ADDRESS
-              vlue: 0.0.0.0:8080
+              value: 0.0.0.0:8080
             - name: MICRO_BROKER_ADDRESS
-              vlue: 0.0.0.0:10001
+              value: 0.0.0.0:10001
             - name: APP_ENV
-              vlue: production
+              value: production
             - name: CONFIG_DIR
-              vlue: /var/run/ko
+              value: /var/run/ko
             - name: CONFIG_FILE
-              vlue: config.yaml
+              value: config.yaml
             # - name: DATABASE_PASSWORD
             #   valueFrom:
             #     secretKeyRef:

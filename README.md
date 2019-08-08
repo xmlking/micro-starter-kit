@@ -277,6 +277,20 @@ docker run -it \
 -p 8080:8080 -p 10001:10001 $IMANGE_NAME
 ```
 
+#### Docker Compose Run
+
+Run complete app suite with `docker-compose`
+
+```bash
+docker-compose up consul
+docker-compose up account-srv
+docker-compose up emailer-srv
+docker-compose up gateway
+docker-compose up account-api
+docker-compose up gateway-api
+curl "http://localhost:8081/account/AccountService/list?limit=10"
+```
+
 ### Make
 
 using Makefile
@@ -309,6 +323,8 @@ make release VERSION=v0.1.1
 make docker TARGET=account VERSION=v0.1.1
 make docker TARGET=account TYPE=srv VERSION=v0.1.1
 make docker-account VERSION=v0.1.1
+make docker-account-srv VERSION=v0.1.1
+make docker-emailer-srv VERSION=v0.1.1
 make docker-account-api VERSION=v0.1.1
 ```
 

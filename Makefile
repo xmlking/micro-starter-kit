@@ -95,7 +95,6 @@ docker docker-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "no  TARGET. example usage: make docker TARGET=account"; \
 	else \
-		echo "in else"; \
 		docker build --rm \
 		--build-arg VERSION=$(VERSION) \
 		--build-arg BUILD_PKG=./${TYPE}/${TARGET} \
