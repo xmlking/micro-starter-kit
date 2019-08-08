@@ -37,7 +37,7 @@ message User {
     string id                               = 1  [(gorm.field).tag = { type: "uuid", primary_key: true }]; // primary key
     google.protobuf.Timestamp createdAt     = 2  [(gorm.field).tag = { not_null:true }];
     google.protobuf.Timestamp updatedAt     = 3  [(gorm.field).tag = { not_null:true }];
-    google.protobuf.Timestamp deletedAt     = 4;
+    google.protobuf.Timestamp deletedAt     = 4  [(gorm.field).tag = { index: "idx_users_deleted_at" }];
     string username                         = 7  [(gorm.field).tag = { size: 100, not_null:true }];
 	string firstName                        = 8  [(gorm.field).tag = { size: 255, not_null:true }];
 	string lastName                         = 9  [(gorm.field).tag = { not_null:true }];
@@ -112,7 +112,7 @@ message Profile {
     string id                               = 1  [(gorm.field).tag = {type: "uuid", primary_key: true}]; // primary key
     google.protobuf.Timestamp createdAt     = 2  [(gorm.field).tag = { not_null:true }];
     google.protobuf.Timestamp updatedAt     = 3  [(gorm.field).tag = { not_null:true }];
-    google.protobuf.Timestamp deletedAt     = 4; // `sql:"index"`
+    google.protobuf.Timestamp deletedAt     = 4  [(gorm.field).tag = { index: "idx_profiles_deleted_at" }];
 	string tz                               = 5; // *time.Location?
     string avatar                           = 6;
     // FIXME: https://github.com/jinzhu/gorm/issues/1978

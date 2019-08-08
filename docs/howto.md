@@ -62,3 +62,28 @@ go test all
 
   - [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
   - [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
+
+- Why some ORM model fields are pointers?
+
+  all fields having a zero value, like 0, '', false or other [zero values](https://tour.golang.org/basics/12), <br/>
+  won’t be saved into the database but will use its default value.<br/>
+  If you want to avoid this, consider using a pointer type or scanner/valuer, e.g:
+
+  ```go
+  // Use pointer value
+  type User struct {
+  gorm.Model
+  Name string
+  Age  *int `gorm:"default:18"`
+  }
+
+  // Use scanner/valuer
+  type User struct {
+  gorm.Model
+  Name string
+  Age  sql.NullInt64 `gorm:"default:18"`
+  }
+  ```
+
+  **Note:** google wrapper types google.protobuf.StringValue, .BoolValue, .UInt32Value, .FloatValue, etc. map to <br/>
+  pointers of the internal type at the ORM level, e.g. *string, *bool, *uint32, *float <br/>

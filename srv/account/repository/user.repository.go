@@ -81,7 +81,8 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *pb.User
 	if model.Email != "" {
 		db = db.Where("email like ?", "%"+model.Email+"%")
 	}
-	if err = db.Order(sort).Limit(limit).Offset(offset).Find(&users).Count(&total).Error; err != nil {
+	// enable auto preloading for `Profile`
+	if err = db.Set("gorm:auto_preload", true).Order(sort).Limit(limit).Offset(offset).Find(&users).Count(&total).Error; err != nil {
 		log.WithError(err).Error("Error in UserRepository.List")
 		return
 	}
@@ -91,7 +92,8 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *pb.User
 // Find by ID
 func (repo *userRepository) Get(id string) (user *pb.UserORM, err error) {
 	user = &pb.UserORM{Id: id}
-	if err = repo.db.First(user).Error; err != nil && err != gorm.ErrRecordNotFound {
+	// enable auto preloading for `Profile`
+	if err = repo.db.Set("gorm:auto_preload", true).First(user).Error; err != nil && err != gorm.ErrRecordNotFound {
 		log.WithError(err).Error("Error in UserRepository.Get")
 	}
 	return

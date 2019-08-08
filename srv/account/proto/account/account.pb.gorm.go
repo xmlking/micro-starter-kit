@@ -43,8 +43,8 @@ var _ = fmt.Errorf
 var _ = math.Inf
 
 type UserORM struct {
-	CreatedAt *time.Time `gorm:"not null"`
-	DeletedAt *time.Time
+	CreatedAt *time.Time  `gorm:"not null"`
+	DeletedAt *time.Time  `gorm:"index:idx_users_deleted_at"`
 	Email     string      `gorm:"not null"`
 	FirstName string      `gorm:"size:255;not null"`
 	Id        string      `gorm:"type:uuid;primary_key"`
@@ -178,7 +178,7 @@ type ProfileORM struct {
 	Avatar    string
 	Birthday  *time.Time `gorm:"not null"`
 	CreatedAt *time.Time `gorm:"not null"`
-	DeletedAt *time.Time
+	DeletedAt *time.Time `gorm:"index:idx_profiles_deleted_at"`
 	Gender    string
 	Id        string `gorm:"type:uuid;primary_key"`
 	Tz        string
