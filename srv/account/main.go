@@ -5,6 +5,8 @@ import (
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
 	log "github.com/sirupsen/logrus"
+	_ "github.com/xmlking/micro-starter-kit/shared/config"
+	_ "github.com/xmlking/micro-starter-kit/shared/log"
 
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"

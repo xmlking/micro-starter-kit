@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
+	_ "github.com/xmlking/micro-starter-kit/shared/config"
+	_ "github.com/xmlking/micro-starter-kit/shared/log"
 
 	// "github.com/micro/go-micro/server"
 	"github.com/micro/go-micro/config"
