@@ -264,7 +264,8 @@ docker push $IMANGE_NAME:latest
 docker inspect  $IMANGE_NAME:$VERSION
 # remove temp images after build
 docker image prune -f
-docker rmi $(comm -3 <(docker images -q | sort) <(docker images -q -a | sort)  | sed 's/\t//')
+# Remove all untagged images
+docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
 ```
 
 #### Docker Run
