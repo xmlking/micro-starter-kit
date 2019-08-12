@@ -33,4 +33,4 @@ images:
   - name: xmlking/account-srv
     newTag: v1.0.1
   - name: docker.io/bitnami/postgresql
-    newTag: 10.7.0
+    newTag: "10.7.0"

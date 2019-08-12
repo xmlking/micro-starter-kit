@@ -10,12 +10,3 @@ resources:
 images:
   - name: microhq/micro
     newTag: kubernetes
-
-vars:
-  - name: GATEWAY_SERVICE_NAME
-    objref:
-      kind: Service
-      name: gateway
-      apiVersion: v1
-    fieldref:
-      fieldpath: metadata.name

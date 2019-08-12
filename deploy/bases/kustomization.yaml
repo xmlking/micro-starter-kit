@@ -39,3 +39,19 @@ configMapGenerator:
 #   files:
 #     - secret/tls.cert
 #     - secret/tls.key
+
+vars:
+  - name: GATEWAY_SERVICE_NAME
+    objref:
+      kind: Service
+      name: gateway
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name
+  - name: ACCOUNT_SERVICE_NAME
+    objref:
+      kind: Service
+      name: account-srv
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name
