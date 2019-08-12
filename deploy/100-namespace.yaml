@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: default
-  # name: micro-starter-kit
-  # labels:
-  #   istio-injection: enabled
-  #   serving.knative.dev/release: devel

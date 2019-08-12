@@ -1,0 +1,21 @@
+commonLabels:
+  app.kubernetes.io/name: gateway
+  app.kubernetes.io/instance: gateway-abcxzy
+  app.kubernetes.io/component: microservice
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: microhq/micro
+    newTag: kubernetes
+
+vars:
+  - name: GATEWAY_SERVICE_NAME
+    objref:
+      kind: Service
+      name: gateway
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

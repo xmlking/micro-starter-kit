@@ -1,0 +1,36 @@
+namespace: default
+namePrefix: prod-
+
+commonLabels:
+  environment: production
+commonAnnotations:
+  note: Hello, I am production!
+
+bases:
+  - ../../bases
+
+# resources:
+#   - resources/namespace.yaml
+#   - resources/hpa.yaml
+
+patchesStrategicMerge:
+  - patches/replica_count.yaml
+  - patches/resource_limit.yaml
+
+configMapGenerator:
+  - behavior: merge
+    files:
+      - config/config.yaml
+    name: configs
+
+secretGenerator:
+  - behavior: replace
+    literals:
+      - postgres-password=postgres123
+    name: postgres-secrets
+
+images:
+  - name: xmlking/account-srv
+    newTag: v1.0.1
+  - name: docker.io/bitnami/postgresql
+    newTag: 10.7.0

@@ -1,7 +1,15 @@
+bases:
+  - overlays/production
+
+namespace: default
+nameSuffix: -v1
 commonLabels:
-  app: micro
-# imageTags:
-#   - name: nginx
-#     newTag: 1.8.0
-resources:
-  - 300-deployment.yaml
+  app.kubernetes.io/version: v1
+
+images:
+  - name: xmlking/account-srv
+    newTag: latest
+  - name: xmlking/emailer-srv
+    newTag: latest
+  - name: xmlking/account-api
+    newTag: latest

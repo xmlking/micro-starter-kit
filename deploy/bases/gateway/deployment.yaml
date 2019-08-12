@@ -43,6 +43,7 @@ spec:
               "--server_address=0.0.0.0:8989",
             ]
           image: microhq/health:kubernetes
+          imagePullPolicy: Always
           livenessProbe:
             httpGet:
               path: /health

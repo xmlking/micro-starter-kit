@@ -1,0 +1,12 @@
+commonLabels:
+  app.kubernetes.io/name: account-srv
+  app.kubernetes.io/instance: account-srv-abcxzy
+  app.kubernetes.io/component: microservice
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: xmlking/account-srv
+    newTag: latest

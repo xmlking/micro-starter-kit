@@ -1,0 +1,9 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-srv
+  labels:
+    app: account-srv
+spec:
+  replicas: 2

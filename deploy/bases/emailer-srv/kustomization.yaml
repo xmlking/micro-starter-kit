@@ -1,0 +1,12 @@
+commonLabels:
+  app.kubernetes.io/name: emailer-srv
+  app.kubernetes.io/instance: emailer-srv-abcxzy
+  app.kubernetes.io/component: microservice
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+images:
+  - name: xmlking/emailer-srv
+    newTag: latest

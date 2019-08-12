@@ -1,0 +1,24 @@
+commonLabels:
+  app.kubernetes.io/name: postgres
+  app.kubernetes.io/instance: postgres-abcxzy
+  app.kubernetes.io/component: database
+
+resources:
+  - postgres.yaml
+  - service.yaml
+
+images:
+  - name: postgres
+    newTag: 11.5-alpine
+
+secretGenerator:
+  - name: postgres-secrets
+    literals:
+      - postgres-password=postgres123
+
+# labels for generated secrets at this level
+generatorOptions:
+  labels:
+    app.kubernetes.io/name: postgres-secrets
+    app.kubernetes.io/instance: postgres-secrets-abcxzy
+    app.kubernetes.io/component: secrets
