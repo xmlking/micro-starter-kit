@@ -13,7 +13,7 @@ require (
 	github.com/micro/go-micro v1.8.3
 	github.com/micro/go-plugins v1.2.0
 	github.com/onrik/logrus v0.4.1
-	github.com/sarulabs/di/v2 v2.1.2
+	github.com/sarulabs/di/v2 v2.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.3.0
