@@ -34,7 +34,7 @@ and apply consistence labels, environment specific overlays
 
 ### Legend
 
-| symbol | field2        |
+| symbol | description   |
 | ------ | ------------- |
 | r      | Resources     |
 | sr     | Service       |
@@ -129,11 +129,8 @@ kubectl kustomize ./deploy/overlays/production
 
 kustomize edit set image busybox=alpine:3.6
 
- kustomize build someapp/overlays/staging |\
-     kubectl apply -f -
-
- kustomize build someapp/overlays/production |\
-     kubectl apply -f -
+kustomize build someapp/overlays/staging | kubectl apply -f -
+kustomize build someapp/overlays/production | kubectl apply -f -
 
 # Fix the missing and deprecated fields in kustomization file
 kustomize edit fix

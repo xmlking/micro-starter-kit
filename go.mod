@@ -12,6 +12,7 @@ require (
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.8.3
 	github.com/micro/go-plugins v1.2.0
+	github.com/onrik/logrus v0.4.1
 	github.com/sarulabs/di/v2 v2.1.2
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2

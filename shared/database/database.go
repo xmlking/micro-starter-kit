@@ -1,12 +1,15 @@
- package database
+package database
 
 import (
 	"fmt"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
-	gormLogger "github.com/xmlking/micro-starter-kit/shared/log/gorm"
 	"github.com/jinzhu/gorm"
-	log "github.com/sirupsen/logrus"
+
+	"github.com/sirupsen/logrus"
+	"github.com/xmlking/micro-starter-kit/shared/config"
+
+	gormlog "github.com/onrik/logrus/gorm"
+	// gormlog "github.com/xmlking/micro-starter-kit/shared/log/gorm"
 )
 
 // GetDatabaseConnection return (gorm.DB or error)
@@ -30,9 +33,9 @@ func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, e
 		return
 	}
 
-	//db.SetLogger(log.WithFields(log.Fields{"app": "gorm"}))
-	//db.SetLogger(log.StandardLogger())
-	db.SetLogger(gormLogger.NewGormLogger(log.WithFields(log.Fields{"module": "gorm"})))
+	//db.SetLogger(logrus.WithFields(logrus.Fields{"module": "gorm"}))
+	//db.SetLogger(logrus.StandardLogger())
+	db.SetLogger(gormlog.New(logrus.WithFields(logrus.Fields{"module": "gorm"})))
 
 	if dbConf.Logging {
 		db.Debug()

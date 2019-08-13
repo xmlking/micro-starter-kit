@@ -1,4 +1,4 @@
-package log
+package gorm
 
 import (
 	"database/sql/driver"
@@ -17,18 +17,15 @@ var (
 	numericPlaceHolderRegexp = regexp.MustCompile(`\$\d+`)
 )
 
-// GormLogger struct
-type GormLogger struct {
+type Logger struct {
 	logrus logrus.FieldLogger
 }
 
-// NewGormLogger Logger
-func NewGormLogger(l logrus.FieldLogger) *GormLogger {
-	return &GormLogger{l}
+func New(l logrus.FieldLogger) *Logger {
+	return &Logger{l}
 }
 
-// Print for Logger
-func (l *GormLogger) Print(v ...interface{}) {
+func (l *Logger) Print(v ...interface{}) {
 	message, fields := Formatter(v...)
 	if v[0] == "sql" {
 		l.logrus.WithFields(fields).WithFields(logrus.Fields{"type": "sql"}).Debug(message)
@@ -38,7 +35,6 @@ func (l *GormLogger) Print(v ...interface{}) {
 	}
 }
 
-// Formatter for Logger
 var Formatter = func(values ...interface{}) (message interface{}, fields logrus.Fields) {
 	if len(values) < 1 {
 		return
@@ -95,7 +91,7 @@ var Formatter = func(values ...interface{}) (message interface{}, fields logrus.
 			}
 		}
 
-		message = sql
+		message = sql + fmt.Sprintf(" [%s]", values[2])
 	} else {
 		message = values[2]
 	}
