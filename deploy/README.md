@@ -68,22 +68,49 @@ and apply consistence labels, environment specific overlays
 > multi component layout
 
 ```
-/deploy
-├── bases
-    account-srv <-- components
-│   ├── configMap.yaml
-│   ├── deployment.yaml
-│   ├── kustomization.yaml
-│   └── service.yaml
-├── overlay <-- environments
+deploy
+├── bases <-- components
+│   ├── account-api
+│   │   ├── deployment.yaml
+│   │   ├── kustomization.yaml
+│   │   └── service.yaml
+│   ├── account-srv
+│   │   ├── deployment.yaml
+│   │   ├── kustomization.yaml
+│   │   └── service.yaml
+│   ├── config
+│   │   └── config.yaml
+│   ├── emailer-srv
+│   │   ├── deployment.yaml
+│   │   ├── kustomization.yaml
+│   │   └── service.yaml
+│   ├── gateway
+│   │   ├── deployment.yaml
+│   │   ├── kustomization.yaml
+│   │   └── service.yaml
+│   ├── kustomization.yaml
+│   └──  micro-service-account.yaml
+├── kustomization.yaml
+└── overlays <-- environments
     ├── dev
+    │   ├── config
+    │   │   └── config.yaml
     │   └── kustomization.yaml
-    ├── kustomization.yaml
-    ├── test
-    │   ├── map.yaml
-    │   └── kustomization.yaml
-    └── prod
-        └── deployment.yaml
+    ├── production
+    │   ├── config
+    │   │   └── config.yaml
+    │   ├── kustomization.yaml
+    │   ├── patches
+    │   │   ├── replica_count.yaml
+    │   │   └── resource_limit.yaml
+    │   └── resources
+    │       ├── hpa.yaml
+    │       └── namespace.yaml
+    └── staging
+        ├── config
+        │   └── config.yaml
+        ├── config.env
+        ├── deployment.yaml
         └── kustomization.yaml
 ```
 
