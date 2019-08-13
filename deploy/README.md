@@ -46,6 +46,27 @@ and apply consistence labels, environment specific overlays
 
 ### Layout for Matrix Deployment
 
+> single component layout
+
+```
+├── base
+│   ├── deployment.yaml
+│   ├── kustomization.yaml
+│   └── service.yaml
+└── overlays
+    ├── dev
+    │   ├── kustomization.yaml
+    │   └── patch.yaml
+    ├── prod
+    │   ├── kustomization.yaml
+    │   └── patch.yaml
+    └── staging
+        ├── kustomization.yaml
+      └── patch.yaml
+```
+
+> multi component layout
+
 ```
 /deploy
 ├── bases
