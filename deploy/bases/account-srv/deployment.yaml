@@ -46,7 +46,7 @@ spec:
             - name: APP_GATEWAY
               value: $(GATEWAY_SERVICE_NAME)
             - name: CONFIG_DIR
-              value: /var/run/ko
+              value: /config
             - name: CONFIG_FILE
               value: config.yaml
             # - name: DATABASE_PASSWORD

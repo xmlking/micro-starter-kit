@@ -243,7 +243,7 @@ docker run -it \
 
 ```bash
 # build
-VERSION=0.0.1-SNAPSHOT
+VERSION=0.0.3-SNAPSHOT
 BUILD_PKG=./srv/account
 IMANGE_NAME=xmlking/account-srv
 docker build --rm \
@@ -258,7 +258,7 @@ docker tag $IMANGE_NAME $IMANGE_NAME:$VERSION
 
 # push
 docker push $IMANGE_NAME:$VERSION
-docker push $IMANGE_NAME:latest
+docker push $IMANGE_NAME:"latest"
 
 # check
 docker inspect  $IMANGE_NAME:$VERSION
@@ -269,6 +269,8 @@ docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
 ```
 
 #### Docker Run
+
+> run just for testing image...
 
 ```bash
 docker run -it \
@@ -290,6 +292,19 @@ docker-compose up gateway
 docker-compose up account-api
 docker-compose up gateway-api
 curl "http://localhost:8081/account/AccountService/list?limit=10"
+```
+
+#### Kubernetes Run
+
+> run just for testing image...
+
+```bash
+kubectl run --rm mytest --image=xmlking/account-srv:latest \
+--env="MICRO_REGISTRY=kubernetes" \
+--env="MICRO_SELECTOR=static" \
+--env="MICRO_SERVER_ADDRESS=0.0.0.0:8080" \
+--env="MICRO_BROKER_ADDRESS=0.0.0.0:10001" \
+--restart=Never -it
 ```
 
 ### Make

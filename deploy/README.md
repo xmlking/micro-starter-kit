@@ -101,3 +101,4 @@ kubectl delete -k ./deploy
 2. <https://blog.jetstack.io/blog/kustomize-cert-manager/>
 3. <https://kustomize.io/>
 4. with sops <https://teuto.net/deploying-jupyterhub-to-kubernetes-via-kustomize-using-sops-secret-management/?lang=en>
+5. <https://github.com/pwittrock-me/petclinic-config/tree/master/config>

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gateway
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+      name: gateway
+    spec:
+      serviceAccountName: micro
+      containers:
+        - name: gateway
+          env:
+            - name: MICRO_ENABLE_STATS
+              value: "true"
+            - name: MICRO_REGISTRY
+              value: kubernetes
+            - name: MICRO_SELECTOR
+              value: static
+            - name: MICRO_API_NAMESPACE
+              value: go.micro.srv
+            - name: MICRO_WEB_NAMESPACE
+              value: go.micro.srv
+          args:
+            # web or proxy
+            - api
+          image: microhq/micro:kubernetes
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: api-port

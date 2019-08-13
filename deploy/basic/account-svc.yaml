@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-srv
+  labels:
+    app: account-srv
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 8080
+      protocol: TCP
+      targetPort: grpc
+  selector:
+    app: account-srv

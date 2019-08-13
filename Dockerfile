@@ -43,7 +43,7 @@ ARG BUILD_PKG="./srv/account"
 
 RUN go build -a \
     -ldflags="-w -s -linkmode external -extldflags '-static' $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
-    -o /app $BUILD_PKG
+    -o /app $BUILD_PKG/main.go $BUILD_PKG/plugin.go
 
 # Final stage: the running container.
 FROM scratch AS final
