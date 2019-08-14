@@ -107,20 +107,15 @@ docker system prune --volumes
 
 ```bash
 # dev mode
-# test account srv (plugin adds custom logger )
+make run-account
 # MY_VPN_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
 # go run srv/account/main.go srv/account/plugin.go --server_address=${MY_VPN_IP}:55011 --broker_address=${MY_VPN_IP}:55021
 go run srv/account/main.go srv/account/plugin.go
 # go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${MY_VPN_IP}:55012 --broker_address=${MY_VPN_IP}:55022
 go run srv/emailer/main.go srv/emailer/plugin.go
 
-# prod mode
-MICRO_BROKER=nats \
-MICRO_REGISTRY=kubernetes \
-MICRO_TRANSPORT=nats \
-./build/account-srv
-
 # integration tests for config module via CMD
+make run TARGET=demo TYPE=cmd
 go run cmd/demo/main.go --help
 go run cmd/demo/main.go --database_host=1.1.1.1 --database_port=7777
 
@@ -132,11 +127,12 @@ go run cmd/demo/main.go
 
 ```bash
 # Run only Unit tests:
+make test-emailer
 go test -v -short
 go test -v -short ./srv/emailer/service
 # Run only Integration Tests: Useful for smoke testing canaries in production.
+make inte-emailer
 go test -v -run
-
 go test -v -run Integration ./srv/emailer/service
 ```
 
