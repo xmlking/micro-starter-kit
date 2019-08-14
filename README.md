@@ -132,7 +132,6 @@ go test -v -short
 go test -v -short ./srv/emailer/service
 # Run only Integration Tests: Useful for smoke testing canaries in production.
 make inte-emailer
-go test -v -run
 go test -v -run Integration ./srv/emailer/service
 ```
 

@@ -32,6 +32,8 @@ spec:
               value: 0.0.0.0:10001
             - name: MICRO_SELECTOR
               value: static
+            - name: MICRO_LOG_LEVEL
+              value: debug
             - name: APP_ENV
               value: production
             - name: CONFIG_DIR

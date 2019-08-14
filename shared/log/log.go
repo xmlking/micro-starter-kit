@@ -1,6 +1,8 @@
 package log
 
 import (
+	"os"
+
 	"github.com/micro/go-micro/config"
 	microlog "github.com/micro/go-micro/util/log"
 	"github.com/sirupsen/logrus"
@@ -15,6 +17,9 @@ func init() {
 
 	microLogger := micrologrus.NewMicroLogrus(logrusLogger)
 	microlog.SetLogger(microLogger)
+	// also set same log_level for go-micro
+	// microlog.SetLevel(microlog.LevelDebug)
+	os.Setenv("MICRO_LOG_LEVEL", logrusLogger.GetLevel().String())
 }
 
 // newLogger create new logrus logger from config

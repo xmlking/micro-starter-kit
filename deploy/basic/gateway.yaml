@@ -29,6 +29,8 @@ spec:
               value: go.micro.srv
             - name: MICRO_WEB_NAMESPACE
               value: go.micro.srv
+            - name: MICRO_LOG_LEVEL
+              value: debug
           args:
             # web or proxy
             - api
