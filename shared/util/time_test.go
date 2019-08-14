@@ -1,8 +1,8 @@
 package util
 
 import (
-	"time"
 	"testing"
+	"time"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/assert"

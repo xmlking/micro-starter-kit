@@ -32,7 +32,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 // Exist
 func (repo *userRepository) Exist(model *pb.UserORM) bool {
-	log.Info("Received userRepository.Exist request %v", *model)
+	log.Infof("Received userRepository.Exist request %v", *model)
 	var count int
 	if model.Username != "" {
 		repo.db.Model(&pb.UserORM{}).Where("username = ?", model.Username).Count(&count)

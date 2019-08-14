@@ -21,7 +21,7 @@ func TestErrors(t *testing.T) {
 	}
 
 	testData := []*myErrors.Error{
-		&myErrors.Error{
+		{
 			Id:     "go.micro.srv.account",
 			Code:   422,
 			Detail: "proto validation: sumo-val-error",
@@ -30,7 +30,7 @@ func TestErrors(t *testing.T) {
 	}
 
 	appErrTestData := []*myErrors.Error{
-		&myErrors.Error{
+		{
 			Id:     "EC1",
 			Code:   500,
 			Detail: "not good",

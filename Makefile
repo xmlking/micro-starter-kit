@@ -15,7 +15,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: proto proto-% lint build build-% test run release clean update_deps docker
+.PHONY: proto proto-% lint build build-% test test-% inte inte-% run run-% release clean update_deps docker
 
 tools:
 	@echo "==> Installing dev tools"
@@ -66,12 +66,26 @@ endif
 		go build -o  build/${TARGET}-${TYPE} -a -ldflags "-w -s ${BUILD_FLAGS}" ./${TYPE}/${TARGET}; \
 	fi
 
-test:
-	go test -v -short ./... -cover
+test test-%:
+	@if [ -z $(TARGET) ]; then \
+		echo "no  TARGET. example usage: make test TARGET=account"; \
+	else \
+		go test -v -short  ./${TYPE}/${TARGET}/... -cover; \
+	fi
 
-run:
-	docker-compose build
-	docker-compose up
+inte inte-%:
+	@if [ -z $(TARGET) ]; then \
+		echo "no  TARGET. example usage: make test TARGET=account"; \
+	else \
+		go test -v -run Integration  ./${TYPE}/${TARGET}/... ; \
+	fi
+
+run run-%:
+	@if [ -z $(TARGET) ]; then \
+		echo "no  TARGET. example usage: make test TARGET=account"; \
+	else \
+		go run  ./${TYPE}/${TARGET} ; \
+	fi
 
 release:
 	git tag -a $(VERSION) -m "Release" || true

@@ -135,7 +135,8 @@ go run cmd/demo/main.go
 go test -v -short
 go test -v -short ./srv/emailer/service
 # Run only Integration Tests: Useful for smoke testing canaries in production.
-go test -v -run Integration
+go test -v -run
+
 go test -v -run Integration ./srv/emailer/service
 ```
 
@@ -322,6 +323,17 @@ make proto-account
 make proto-account-api
 ## generate for protos in shared package
 make proto TARGET=shared TYPE=.
+
+# unit tests
+make test-account
+make test-emailer
+# integration tests
+make inte-account
+make inte-emailer
+
+# run
+make run-account
+make run-emailer
 
 # build
 make build VERSION=v0.1.1
