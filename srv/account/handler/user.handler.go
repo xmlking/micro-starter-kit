@@ -7,6 +7,7 @@ import (
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/errors"
 	log "github.com/sirupsen/logrus"
+	"github.com/thoas/go-funk"
 
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 
@@ -62,11 +63,15 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 	rsp.Total = total
 
 	newUsers := make([]*pb.User, len(users))
-	for index, user := range users {
+	// for index, user := range users {
+	// 	tmpUser, _ := user.ToPB(ctx)
+	// 	newUsers[index] = &tmpUser
+	// 	// *newUsers[index], _ = user.ToPB(ctx) ???
+	// }
+	newUsers = funk.Map(users, func(user *pb.UserORM) *pb.User {
 		tmpUser, _ := user.ToPB(ctx)
-		newUsers[index] = &tmpUser
-		// *newUsers[index], _ = user.ToPB(ctx) ???
-	}
+		return &tmpUser
+	}).([]*pb.User)
 
 	rsp.Results = newUsers
 	return nil

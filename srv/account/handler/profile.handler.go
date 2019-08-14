@@ -6,6 +6,7 @@ import (
 
 	// "github.com/golang/protobuf/ptypes"
 	"github.com/jinzhu/gorm"
+	"github.com/thoas/go-funk"
 
 	ptypes1 "github.com/golang/protobuf/ptypes"
 	log "github.com/sirupsen/logrus"
@@ -44,10 +45,15 @@ func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rs
 	}
 	rsp.Total = total
 	newProfiles := make([]*pb.Profile, len(profiles))
-	for index, profile := range profiles {
+	// for index, profile := range profiles {
+	// 	tempProfile, _ := profile.ToPB(ctx)
+	// 	newProfiles[index] = &tempProfile
+	// }
+	newProfiles = funk.Map(profiles, func(profile *pb.ProfileORM) *pb.Profile {
 		tempProfile, _ := profile.ToPB(ctx)
-		newProfiles[index] = &tempProfile
-	}
+		return &tempProfile
+	}).([]*pb.Profile)
+
 	rsp.Results = newProfiles
 	return nil
 }
