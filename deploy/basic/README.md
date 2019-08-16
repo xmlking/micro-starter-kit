@@ -41,3 +41,16 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 kubectl delete -f deploy/basic/gateway.yaml
 kubectl delete -f deploy/basic/gateway-svc.yaml
 ```
+
+> Test inside `micro:kubernetes` container
+
+```bash
+POD_NAME=$(kubectl get pods  -lapp=gateway -o jsonpath='{.items[0].metadata.name}')
+kubectl exec -it $POD_NAME -- /bin/busybox sh
+./micro \
+  --registry=kubernetes \
+  --selector=static \
+  --api_namespace=go.micro.srv \
+  call go.micro.srv.account UserService.Create \
+  '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+```
