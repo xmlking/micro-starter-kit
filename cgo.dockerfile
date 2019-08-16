@@ -43,13 +43,13 @@ ARG BUILD_PKG="./srv/account"
 
 RUN go build -a \
     -ldflags="-w -s -linkmode external -extldflags '-static' $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
-    -o /app $BUILD_PKG
+    -o /app $BUILD_PKG/main.go $BUILD_PKG/plugin.go
 
 # Final stage: the running container.
 FROM scratch AS final
 
 # copy 1 MiB busybox executable
-COPY --from=busybox:1.30.1 /bin/busybox /bin/busybox
+COPY --from=busybox:1.31.0 /bin/busybox /bin/busybox
 
 # Import the user and group files from the first stage.
 COPY --from=builder /user/group /user/passwd /etc/

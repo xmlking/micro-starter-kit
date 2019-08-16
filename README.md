@@ -142,6 +142,7 @@ go test -v -run Integration ./srv/emailer/service
 ```bash
 micro list services
 micro get service go.micro.srv.account
+micro get service go.micro.srv.emailer
 
 # Start API Gateway
 micro api --namespace=go.micro.srv
@@ -239,7 +240,7 @@ docker run -it \
 
 ```bash
 # build
-VERSION=0.0.3-SNAPSHOT
+VERSION=0.0.4-SNAPSHOT
 BUILD_PKG=./srv/account
 IMANGE_NAME=xmlking/account-srv
 docker build --rm \
@@ -292,15 +293,23 @@ curl "http://localhost:8081/account/AccountService/list?limit=10"
 
 #### Kubernetes Run
 
-> run just for testing image...
+> run just for testing image in k8s...
 
 ```bash
+# account-srv
 kubectl run --rm mytest --image=xmlking/account-srv:latest \
 --env="MICRO_REGISTRY=kubernetes" \
 --env="MICRO_SELECTOR=static" \
 --env="MICRO_SERVER_ADDRESS=0.0.0.0:8080" \
 --env="MICRO_BROKER_ADDRESS=0.0.0.0:10001" \
 --restart=Never -it
+
+# gateway
+kubectl run --rm mygateway --image=microhq/micro:kubernetes \
+--env="MICRO_REGISTRY=kubernetes" \
+--env="MICRO_SELECTOR=static" \
+--restart=Never -it \
+--command ./micro api
 ```
 
 ### Make

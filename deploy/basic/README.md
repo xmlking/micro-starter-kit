@@ -19,12 +19,24 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 kubectl delete -f deploy/basic/account.yaml
 kubectl delete -f deploy/basic/account-svc.yaml
 
+# emailer-srv
+kubectl create -f deploy/basic/emailer.yaml
+kubectl create -f deploy/basic/emailer-svc.yaml
+
+POD_NAME=$(kubectl get pods  -lapp=emailer-srv -o jsonpath='{.items[0].metadata.name}')
+kubectl logs $POD_NAME -f
+kubectl exec -it $POD_NAME -- /bin/busybox sh
+
+kubectl delete -f deploy/basic/emailer.yaml
+kubectl delete -f deploy/basic/emailer-svc.yaml
+
 # Gateway
 kubectl create -f deploy/basic/gateway.yaml
 kubectl create -f deploy/basic/gateway-svc.yaml
 
 POD_NAME=$(kubectl get pods  -lapp=gateway -o jsonpath='{.items[0].metadata.name}')
 kubectl logs $POD_NAME -f
+kubectl exec -it $POD_NAME -- /bin/busybox sh
 
 kubectl delete -f deploy/basic/gateway.yaml
 kubectl delete -f deploy/basic/gateway-svc.yaml

@@ -2,32 +2,33 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: account-srv
-  name: account-srv
+    app: emailer-srv
+  name: emailer-srv
 spec:
   selector:
     matchLabels:
-      app: account-srv
+      app: emailer-srv
   template:
     metadata:
       labels:
-        app: account-srv
-      name: account-srv
+        app: emailer-srv
+      name: emailer-srv
     spec:
       serviceAccountName: micro
       containers:
-        - name: account-srv
-          image: xmlking/account-srv:latest
+        - name: emailer-srv
+          image: xmlking/emailer-srv:latest
           imagePullPolicy: Always
           ports:
             - name: grpc
               containerPort: 8080
               protocol: TCP
+            - name: broker
+              containerPort: 10001
+              protocol: TCP
           env:
             - name: MICRO_REGISTRY
               value: kubernetes
-            # - name: MICRO_SERVER_NAME
-            #   value: account-srv
             - name: MICRO_SERVER_ADDRESS
               value: 0.0.0.0:8080
             - name: MICRO_BROKER_ADDRESS

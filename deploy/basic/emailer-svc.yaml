@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: emailer-srv
+  labels:
+    app: emailer-srv
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 8080
+      protocol: TCP
+      targetPort: grpc
+    - name: broker
+      port: 10001
+      protocol: TCP
+      targetPort: broker
+  selector:
+    app: emailer-srv

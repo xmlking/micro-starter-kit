@@ -27,14 +27,19 @@ spec:
               value: static
             - name: MICRO_API_NAMESPACE
               value: go.micro.srv
-            - name: MICRO_WEB_NAMESPACE
-              value: go.micro.srv
+            # - name: MICRO_WEB_NAMESPACE
+            #   value: go.micro.srv
+            - name: MICRO_API_HANDLER
+              value: api
+            - name: MICRO_API_ENABLE_RPC
+              value: "true"
             - name: MICRO_LOG_LEVEL
               value: debug
           args:
             # web or proxy
             - api
-          image: microhq/micro:kubernetes
+          # image: microhq/micro:kubernetes
+          image: xmlking/micro:kubernetes
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
