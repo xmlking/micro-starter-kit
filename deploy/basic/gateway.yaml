@@ -5,7 +5,6 @@ metadata:
     app: gateway
   name: gateway
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: gateway
@@ -18,19 +17,23 @@ spec:
       serviceAccountName: micro
       containers:
         - name: gateway
+          # image: microhq/micro:kubernetes
+          image: xmlking/micro:kubernetes
+          imagePullPolicy: Always
+          args:
+            # web or proxy
+            - api
+          ports:
+            - name: rest
+              containerPort: 8080
+              protocol: TCP
           env:
-            - name: MICRO_ENABLE_STATS
-              value: "true"
             - name: MICRO_REGISTRY
               value: kubernetes
             - name: MICRO_SELECTOR
               value: static
-            - name: MICRO_API_NAMESPACE
-              value: go.micro.srv
-            # - name: MICRO_WEB_NAMESPACE
-            #   value: go.micro.srv
-            - name: MICRO_API_HANDLER
-              value: api
+            - name: MICRO_SERVER_NAME
+              value: gateway
             - name: MICRO_API_ENABLE_RPC
               value: "true"
             - name: MICRO_LOG_LEVEL
@@ -41,12 +44,3 @@ spec:
               value: "https://api.kashmora.com"
             - name: CORS_ALLOWED_METHODS
               value: "POST,GET"
-          args:
-            # web or proxy
-            - api
-          # image: microhq/micro:kubernetes
-          image: xmlking/micro:kubernetes
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080
-              name: api-port

@@ -1,5 +1,9 @@
 # HOWTO
 
+- go-micro service interactions
+
+  ![Image of micro-interactions](micro-interactions.png)
+
 - How to update 3rd party dependencies?
 
 ```bash
@@ -87,3 +91,10 @@ go test all
 
   **Note:** google wrapper types google.protobuf.StringValue, .BoolValue, .UInt32Value, .FloatValue, etc. map to <br/>
   pointers of the internal type at the ORM level, e.g. *string, *bool, *uint32, *float <br/>
+
+- How to run `go-micro` gRPC services and `Micro` REST Gateway on k8s?
+
+  SO you want to use k8s internal `CoreDNS` as `service registry`, then you have to follow some rules:
+
+  - Service name cannot have `.`(dot) due to k8s DNS limits, so make it simple via environment variables e.g., `MICRO_SERVER_NAME=account`
+  - custom build REST Gateway as `microhq/micro:kubernetes` image is outdated. optionally add CORS plugin.

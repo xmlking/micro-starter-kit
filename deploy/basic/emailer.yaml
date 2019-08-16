@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: emailer-srv
-  name: emailer-srv
+    app: emailer
+  name: emailer
 spec:
   selector:
     matchLabels:
-      app: emailer-srv
+      app: emailer
   template:
     metadata:
       labels:
-        app: emailer-srv
-      name: emailer-srv
+        app: emailer
+      name: emailer
     spec:
       serviceAccountName: micro
       containers:
-        - name: emailer-srv
+        - name: emailer
           image: xmlking/emailer-srv:latest
           imagePullPolicy: Always
           ports:
@@ -29,12 +29,14 @@ spec:
           env:
             - name: MICRO_REGISTRY
               value: kubernetes
+            - name: MICRO_SELECTOR
+              value: static
+            - name: MICRO_SERVER_NAME
+              value: emailer
             - name: MICRO_SERVER_ADDRESS
               value: 0.0.0.0:8080
             - name: MICRO_BROKER_ADDRESS
               value: 0.0.0.0:10001
-            - name: MICRO_SELECTOR
-              value: static
             - name: MICRO_LOG_LEVEL
               value: debug
             - name: APP_ENV
