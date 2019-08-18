@@ -4,6 +4,15 @@
 
 > To use as a `REST Gateway` for gRPC microservices. CORS enabled.
 
+## Run
+
+```bash
+# with plugins
+go run cmd/micro/main.go cmd/micro/plugin.go --api_address=0.0.0.0:8088  api
+# without plugins (same as official micro cli)
+go run cmd/micro/main.go  --api_address=0.0.0.0:8088  api
+```
+
 ## Docker
 
 ### Docker Build
