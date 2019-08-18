@@ -4,6 +4,8 @@ import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
+
+	// "github.com/micro/go-micro/service/grpc"
 	log "github.com/sirupsen/logrus"
 	_ "github.com/xmlking/micro-starter-kit/shared/config"
 	_ "github.com/xmlking/micro-starter-kit/shared/log"
@@ -31,6 +33,7 @@ func main() {
 
 	// New Service
 	service := micro.NewService(
+		// service := grpc.NewService(
 		// optional cli flag to override config.
 		// comment out if you don't need to override any base config via CLI
 		micro.Flags(

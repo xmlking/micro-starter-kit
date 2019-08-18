@@ -67,6 +67,9 @@ micro new --namespace="go.micro" --type="srv" --gopath=false --alias="account" s
 micro new --namespace="go.micro" --type="srv" --gopath=false \
 --alias="emailer"  --plugin=registry=mdns:broker=nats srv/emailer
 
+micro new --namespace="go.micro" --type="srv" --gopath=false \
+--alias="greeter"  --plugin=registry=kubernetes:transport=grpc srv/greeter
+
 micro new --namespace="go.micro" --type="api" --gopath=false --alias="account" api/account
 ```
 
@@ -153,6 +156,11 @@ micro web --namespace=go.micro.srv
 #### Test gRPC Directly
 
 ```bash
+micro --client=grpc call go.micro.srv.account UserService.Create \
+'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+./micro call  account UserService.Create \
+'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+
 micro call go.micro.srv.account UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call go.micro.srv.account UserService.List '{}'

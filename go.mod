@@ -3,7 +3,6 @@ module github.com/xmlking/micro-starter-kit
 go 1.12
 
 require (
-	github.com/DATA-DOG/go-sqlmock v1.3.3 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/golang/protobuf v1.3.2
 	github.com/infobloxopen/atlas-app-toolkit v0.18.2
@@ -12,8 +11,9 @@ require (
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.8.3
 	github.com/micro/go-plugins v1.2.0
+	github.com/micro/micro v1.8.4
 	github.com/onrik/logrus v0.4.1
-	github.com/sarulabs/di/v2 v2.1.2
+	github.com/sarulabs/di/v2 v2.2.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.3.0

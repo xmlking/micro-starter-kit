@@ -40,6 +40,17 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 
 kubectl delete -f deploy/basic/gateway.yaml
 kubectl delete -f deploy/basic/gateway-svc.yaml
+
+# greeter service
+kubectl create -f deploy/basic/greeter.yaml
+kubectl create -f deploy/basic/greeter-svc.yaml
+
+POD_NAME=$(kubectl get pods  -lapp=greeter -o jsonpath='{.items[0].metadata.name}')
+kubectl logs $POD_NAME -f
+kubectl exec -it $POD_NAME -- /bin/busybox sh
+
+kubectl delete -f deploy/basic/greeter.yaml
+kubectl delete -f deploy/basic/greeter-svc.yaml
 ```
 
 > Test from inside `micro:kubernetes` container
@@ -49,22 +60,23 @@ POD_NAME=$(kubectl get pods  -lapp=gateway -o jsonpath='{.items[0].metadata.name
 kubectl exec -it $POD_NAME -- /bin/busybox sh
 
 # list services
-./micro --registry=kubernetes --selector=static list services
+./micro --client=grpc --registry=kubernetes --selector=static list services
 # describe `account` service
 ./micro  --registry=kubernetes --selector=static  get service account
 
 # create new user
-./micro --registry=kubernetes --selector=static \
+./micro   --registry=kubernetes --selector=static \
 call account UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 
 # list users - working
-./micro --registry=kubernetes --selector=static \
+./micro --client=grpc --registry=kubernetes --selector=static \
 call account UserService.List '{}'
 
 # list users - not working
-./micro --registry=kubernetes --selector=static \
+./micro --client=grpc  --registry=kubernetes --selector=static \
 call account UserService.List '{"limit": 10, "page": 1}'
+
 
 ./micro --registry=kubernetes --selector=static \
 call account ProfileService.Create  \
@@ -81,6 +93,7 @@ curl --request POST \
 --url http://localhost:8080/rpc \
 --header 'accept: application/json' \
 --header 'content-type: application/json' \
---data '{"service": "account","method": "UserService.List","request": {"limit": 10, "page": 1}}'
+--data '{"service": "account", "method": "UserService.List","request": {"limit": 10, "page": 1}}'
+
 
 ```

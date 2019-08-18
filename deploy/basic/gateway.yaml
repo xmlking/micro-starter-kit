@@ -34,8 +34,11 @@ spec:
               value: static
             - name: MICRO_SERVER_NAME
               value: gateway
-            - name: MICRO_API_ENABLE_RPC
-              value: "true"
+              # api, proxy, rpc
+            # - name: MICRO_API_HANDLER
+            #   value: api
+            # - name: MICRO_API_ENABLE_RPC
+            #   value: "true"
             - name: MICRO_LOG_LEVEL
               value: debug
             - name: CORS_ALLOWED_HEADERS

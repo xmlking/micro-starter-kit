@@ -24,6 +24,8 @@ func main() {
 		micro.Version(myConfig.Version),
 	)
 
+	// NOTE: has to give `port` when using with k8s
+	// userSrvClient := userPB.NewUserService("account:8080", service.Client())?
 	userSrvClient := userPB.NewUserService("go.micro.srv.account", service.Client())
 	profSrvClient := userPB.NewProfileService("go.micro.srv.account", service.Client()) // service.Client() or client.DefaultClient???
 	accountHandler := handler.NewAccountHandler(userSrvClient, profSrvClient)

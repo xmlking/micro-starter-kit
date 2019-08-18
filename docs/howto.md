@@ -94,7 +94,7 @@ go test all
 
 - How to run `go-micro` gRPC services and `Micro` REST Gateway on k8s?
 
-  SO you want to use k8s internal `CoreDNS` as `service registry`, then you have to follow some rules:
+  So you want to use k8s internal `CoreDNS` as `service registry`?, then you have to follow some rules:
 
   - Service name cannot have `.`(dot) due to k8s DNS limits, so make it simple via environment variables e.g., `MICRO_SERVER_NAME=account`
   - custom build REST Gateway as `microhq/micro:kubernetes` image is outdated. optionally add CORS plugin.
