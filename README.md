@@ -126,6 +126,19 @@ export APP_ENV=production
 go run cmd/demo/main.go
 ```
 
+#### Services with `gRPC` transport
+
+> go-micro by default use `transport=http` and `protocol=mucp`. If you want to switch to `gRPC`, do this
+
+```bash
+# run account micro with gRPC transport, NOTE: we also have to add --server_name as it will remove server_name
+go run srv/account/main.go srv/account/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.account
+go run srv/emailer/main.go srv/emailer/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.emailer
+# we also has to use grpc for gateway and `micro call` cli
+go run cmd/micro/main.go cmd/micro/plugin.go --api_address=0.0.0.0:8088 --client=grpc --server=grpc api
+micro --client=grpc call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
+```
+
 ### Test
 
 ```bash
@@ -155,15 +168,17 @@ micro web --namespace=go.micro.srv
 
 #### Test gRPC Directly
 
-```bash
-micro --client=grpc call go.micro.srv.account UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-./micro call  account UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+> remember to use `micro --client=grpc` when microservices and gateway are using `grpc` transport
 
+```bash
+# micro --client=grpc call go.micro.srv.account UserService.Create \
+# '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+micro call  go.micro.srv.account UserService.Create \
+'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call go.micro.srv.account UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call go.micro.srv.account UserService.List '{}'
+micro call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
 micro call go.micro.srv.account UserService.Get '{"id": "UserIdFromList"}'
 micro call go.micro.srv.account UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
 micro call go.micro.srv.account UserService.Update \
