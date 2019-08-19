@@ -61,8 +61,10 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 
 # list services
 ./micro --client=grpc --registry=kubernetes --selector=static list services
+# describe `gateway` service
+./micro  --registry=kubernetes --selector=static  get service gateway
 # describe `account` service
-./micro  --registry=kubernetes --selector=static  get service account
+./micro  --registry=kubernetes --selector=static  get service account  | /bin/busybox less
 
 # list users - working
 ./micro --registry=kubernetes --selector=static \
