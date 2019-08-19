@@ -18,7 +18,7 @@ func init() {
 	microLogger := micrologrus.NewMicroLogrus(logrusLogger)
 	microlog.SetLogger(microLogger)
 	// also set same log_level for go-micro
-	// microlog.SetLevel(microlog.LevelDebug)
+	// TODO: microlog.SetLevel(microlog.LevelDebug)
 	os.Setenv("MICRO_LOG_LEVEL", logrusLogger.GetLevel().String())
 }
 
