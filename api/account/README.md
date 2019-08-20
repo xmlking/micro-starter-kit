@@ -8,37 +8,11 @@ Showcase:
 2. calling external microservices
 3. Error Handling with `micro/go-micro/errors`
 
-Generated with
-
-```bash
-micro new --namespace=go.micro --type=srv --gopath=false --alias=account srv/account
-```
-
-## Getting Started
-
-- [Configuration](#configuration)
-- [Dependencies](#dependencies)
-- [Usage](#usage)
-
 ## Configuration
 
 - FQDN: go.micro.api.account
 - Type: api
 - Alias: account
-
-## Dependencies
-
-Micro services depend on service discovery. The default is multicast DNS, a zeroconf system.
-
-In the event you need a resilient multi-host setup we recommend consul.
-
-```bash
-# install consul
-brew install consul
-
-# run consul
-consul agent -dev
-```
 
 ## Usage
 
@@ -55,6 +29,7 @@ Run the service
 > make sure `account-srv` and `emailer-srv` services are running before you start `account-api`
 
 ```bash
+make run-account-api
 # Run the go.micro.api.account API Service
 go run api/account/main.go api/account/plugin.go
 

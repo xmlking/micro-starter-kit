@@ -111,6 +111,8 @@ docker system prune --volumes
 ```bash
 # dev mode
 make run-account
+make run-emailer
+# or
 # MY_VPN_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
 # go run srv/account/main.go srv/account/plugin.go --server_address=${MY_VPN_IP}:55011 --broker_address=${MY_VPN_IP}:55021
 go run srv/account/main.go srv/account/plugin.go
@@ -135,7 +137,10 @@ go run cmd/demo/main.go
 go run srv/account/main.go srv/account/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.account
 go run srv/emailer/main.go srv/emailer/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.emailer
 # we also has to use grpc for gateway and `micro call` cli
-go run cmd/micro/main.go cmd/micro/plugin.go --api_address=0.0.0.0:8088 --client=grpc --server=grpc api
+go run cmd/micro/main.go cmd/micro/plugin.go --client=grpc --server=grpc api
+# go run cmd/micro/main.go cmd/micro/plugin.go --client=grpc --server=grpc api --enable_rpc=true
+go run cmd/micro/main.go cmd/micro/plugin.go  --api_handler=rpc  api --namespace=go.micro.srv --enable_rpc=true
+
 micro --client=grpc call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
 ```
 
@@ -161,7 +166,7 @@ micro get service go.micro.srv.account
 micro get service go.micro.srv.emailer
 
 # Start API Gateway
-micro api --namespace=go.micro.srv
+micro api --namespace=go.micro.srv --enable_rpc=true
 # (or) Start Web UX for testing
 micro web --namespace=go.micro.srv
 ```

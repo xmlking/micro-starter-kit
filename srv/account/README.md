@@ -11,37 +11,11 @@ showcase
 5. Config Managment
 6. Custom Logging
 
-Generated with
-
-```bash
-micro new --namespace=go.micro --type=srv --gopath=false --alias=account srv/account
-```
-
-## Getting Started
-
-- [Configuration](#configuration)
-- [Dependencies](#dependencies)
-- [Usage](#usage)
-
 ## Configuration
 
 - FQDN: go.micro.srv.account
 - Type: srv
 - Alias: account
-
-## Dependencies
-
-Micro services depend on service discovery. The default is multicast DNS, a zeroconf system.
-
-In the event you need a resilient multi-host setup we recommend consul.
-
-```bash
-# install consul
-brew install consul
-
-# run consul
-consul agent -dev
-```
 
 ## Usage
 
