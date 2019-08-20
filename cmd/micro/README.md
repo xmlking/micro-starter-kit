@@ -19,7 +19,7 @@ go run cmd/micro/main.go  --api_address=0.0.0.0:8088  api
 
 ```bash
 # build
-VERSION=kubernetes
+VERSION=0.0.9-SNAPSHOT
 BUILD_PKG=./cmd/micro
 IMANGE_NAME=xmlking/micro
 docker build --rm \
@@ -34,7 +34,8 @@ docker tag $IMANGE_NAME $IMANGE_NAME:$VERSION
 
 # push
 docker push $IMANGE_NAME:$VERSION
-docker push $IMANGE_NAME:"latest"
+docker push $IMANGE_NAME:"kubernetes"
+
 
 # check
 docker inspect  $IMANGE_NAME:$VERSION

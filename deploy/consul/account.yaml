@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: account
+  name: account
+spec:
+  selector:
+    matchLabels:
+      app: account
+  template:
+    metadata:
+      labels:
+        app: account
+      name: account
+    spec:
+      serviceAccountName: micro
+      containers:
+        - name: account
+          image: xmlking/account-srv:latest
+          imagePullPolicy: Always
+          ports:
+            - name: grpc
+              containerPort: 8080
+              protocol: TCP
+            - name: broker
+              containerPort: 10001
+              protocol: TCP
+          env:
+            - name: MICRO_REGISTRY
+              value: consul
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "consul:8500"
+            - name: MICRO_SERVER_ADDRESS
+              value: 0.0.0.0:8080
+            - name: MICRO_BROKER_ADDRESS
+              value: 0.0.0.0:10001
+            - name: MICRO_LOG_LEVEL
+              value: debug
+            - name: APP_ENV
+              value: production
+            - name: CONFIG_DIR
+              value: /config
+            - name: CONFIG_FILE
+              value: config.yaml
