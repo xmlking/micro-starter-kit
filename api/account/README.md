@@ -59,8 +59,10 @@ Run the service
 go run api/account/main.go api/account/plugin.go
 
 # Run the micro API
-micro api --namespace=go.micro.api --handler=api
-# (or) Run Micro Web to trst via Web UI
+micro --client=grpc --server=grpc api --namespace=go.micro.api --handler=api
+# or use custom built micro with `grpc`
+go run cmd/micro/main.go cmd/micro/plugin.go api  --namespace=go.micro.api --handler=api
+# (or) Run Micro Web to test via Web UI
 micro web --namespace=go.micro.api
 
 # see service definitions

@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/service/grpc"
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/api/account/handler"
 	_ "github.com/xmlking/micro-starter-kit/shared/config"
@@ -19,7 +20,8 @@ const (
 func main() {
 
 	// New Service
-	service := micro.NewService(
+	// service := micro.NewService(
+	service := grpc.NewService(
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
 	)

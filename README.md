@@ -135,7 +135,11 @@ go run cmd/demo/main.go
 go run srv/account/main.go srv/account/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.account
 go run srv/emailer/main.go srv/emailer/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.emailer
 # we also has to use grpc for gateway and `micro call` cli
-go run cmd/micro/main.go cmd/micro/plugin.go --api_address=0.0.0.0:8088 --client=grpc --server=grpc api
+# Run the micro API gateway
+micro --client=grpc --server=grpc api --namespace=go.micro.api --handler=api
+# or use custom built micro with `grpc`
+go run cmd/micro/main.go cmd/micro/plugin.go api --namespace=go.micro.srv --handler=rpc  --enable_rpc=true
+# go run cmd/micro/main.go cmd/micro/plugin.go  --api_handler=rpc  api --namespace=go.micro.srv --enable_rpc=true
 micro --client=grpc call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
 ```
 
@@ -171,6 +175,8 @@ micro web --namespace=go.micro.srv
 > remember to use `micro --client=grpc` when microservices and gateway are using `grpc` transport
 
 ```bash
+go run cmd/micro/main.go cmd/micro/plugin.go call  go.micro.srv.account UserService.Create \
+'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 # micro --client=grpc call go.micro.srv.account UserService.Create \
 # '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call  go.micro.srv.account UserService.Create \

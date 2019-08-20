@@ -8,6 +8,7 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	api "github.com/micro/go-micro/api/proto"
 	"github.com/micro/go-micro/errors"
+	"github.com/micro/go-micro/metadata"
 	log "github.com/sirupsen/logrus"
 	accountPB "github.com/xmlking/micro-starter-kit/api/account/proto/account"
 	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
@@ -41,8 +42,17 @@ func (h *accountHandler) List(ctx context.Context, req *api.Request, rsp *api.Re
 	}
 
 	limit, _ := strconv.Atoi(limitStr.Values[0])
+
+	// Set arbitrary headers in context
+	// clientCtx := metadata.NewContext( ctx, map[string]string{
+	clientCtx := metadata.NewContext(context.Background(), map[string]string{
+		"X-User-Id": "john",
+		"X-From-Id": "script",
+	})
 	// make request
-	response, err := h.userSrvClient.List(ctx, &userPB.UserListQuery{
+	// response, err := h.userSrvClient.List(ctx, &userPB.UserListQuery{
+	response, err := h.userSrvClient.List(clientCtx, &userPB.UserListQuery{
+
 		Limit: &wrappers.UInt32Value{Value: uint32(limit)},
 		Page:  &wrappers.UInt32Value{Value: 1},
 	})
