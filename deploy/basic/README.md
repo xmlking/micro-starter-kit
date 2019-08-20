@@ -64,19 +64,22 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 # describe `account` service
 ./micro  --registry=kubernetes --selector=static  get service account
 
-# create new user
+# list users - working
+./micro --registry=kubernetes --selector=static \
+call account UserService.List '{}'
+
+# call Greeter - working
+./micro call greeter Greeter.Hello  '{"name": "John"}'
+
+# list users - not working
+# error - json: cannot unmarshal string into Go struct field UserRequest.email of type wrappers.StringValue
+./micro --registry=kubernetes --selector=static \
+call account UserService.List '{"limit": 10, "page": 1}'
+
+# create new user  - not working
 ./micro   --registry=kubernetes --selector=static \
 call account UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-
-# list users - working
-./micro --client=grpc --registry=kubernetes --selector=static \
-call account UserService.List '{}'
-
-# list users - not working
-./micro --client=grpc  --registry=kubernetes --selector=static \
-call account UserService.List '{"limit": 10, "page": 1}'
-
 
 ./micro --registry=kubernetes --selector=static \
 call account ProfileService.Create  \
