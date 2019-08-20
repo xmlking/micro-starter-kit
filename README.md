@@ -263,7 +263,7 @@ docker run -it \
 
 ```bash
 # build
-VERSION=0.0.4-SNAPSHOT
+VERSION=0.0.5-SNAPSHOT
 BUILD_PKG=./srv/account
 IMANGE_NAME=xmlking/account-srv
 docker build --rm \

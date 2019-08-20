@@ -36,6 +36,21 @@ git flow release finish '0.1.0'
 git push origin --tags
 ```
 
+### FAQ
+
+- How to keep your feature branch in sync with your develop branch?
+
+  While using GitFlow, it is a good practice to keep your feature branch in sync with the develop branch to make merging easy.
+
+  > I do the following to keep my feature branch in sync with develop.
+
+  ```bash
+  git checkout develop    #if you don't have it already
+  git checkout feature/x  #if you don't have it already
+  git pull --all
+  git merge develop
+  ```
+
 ## Reference
 
 - <https://nvie.com/posts/a-successful-git-branching-model/>

@@ -30,17 +30,6 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 kubectl delete -f deploy/basic/emailer.yaml
 kubectl delete -f deploy/basic/emailer-svc.yaml
 
-# Gateway service
-kubectl create -f deploy/basic/gateway.yaml
-kubectl create -f deploy/basic/gateway-svc.yaml
-
-POD_NAME=$(kubectl get pods  -lapp=gateway -o jsonpath='{.items[0].metadata.name}')
-kubectl logs $POD_NAME -f
-kubectl exec -it $POD_NAME -- /bin/busybox sh
-
-kubectl delete -f deploy/basic/gateway.yaml
-kubectl delete -f deploy/basic/gateway-svc.yaml
-
 # greeter service
 kubectl create -f deploy/basic/greeter.yaml
 kubectl create -f deploy/basic/greeter-svc.yaml
@@ -51,6 +40,17 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 
 kubectl delete -f deploy/basic/greeter.yaml
 kubectl delete -f deploy/basic/greeter-svc.yaml
+
+# Gateway service
+kubectl create -f deploy/basic/gateway.yaml
+kubectl create -f deploy/basic/gateway-svc.yaml
+
+POD_NAME=$(kubectl get pods  -lapp=gateway -o jsonpath='{.items[0].metadata.name}')
+kubectl logs $POD_NAME -f
+kubectl exec -it $POD_NAME -- /bin/busybox sh
+
+kubectl delete -f deploy/basic/gateway.yaml
+kubectl delete -f deploy/basic/gateway-svc.yaml
 ```
 
 > Test from inside `micro:kubernetes` container
@@ -58,11 +58,13 @@ kubectl delete -f deploy/basic/greeter-svc.yaml
 ```bash
 POD_NAME=$(kubectl get pods  -lapp=gateway -o jsonpath='{.items[0].metadata.name}')
 kubectl exec -it $POD_NAME -- /bin/busybox sh
-
+# use `-client=grpc` when using gRPC transport
 # list services
-./micro --client=grpc --registry=kubernetes --selector=static list services
+./micro --registry=kubernetes --selector=static list services
+# describe `gateway` service
+./micro  --registry=kubernetes --selector=static  get service gateway
 # describe `account` service
-./micro  --registry=kubernetes --selector=static  get service account
+./micro  --registry=kubernetes --selector=static  get service account  | /bin/busybox less
 
 # list users - working
 ./micro --registry=kubernetes --selector=static \
@@ -97,6 +99,4 @@ curl --request POST \
 --header 'accept: application/json' \
 --header 'content-type: application/json' \
 --data '{"service": "account", "method": "UserService.List","request": {"limit": 10, "page": 1}}'
-
-
 ```

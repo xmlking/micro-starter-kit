@@ -27,15 +27,13 @@ spec:
               protocol: TCP
           env:
             - name: MICRO_REGISTRY
-              value: kubernetes
-            - name: MICRO_SELECTOR
-              value: static
+              value: consul
+            - name: MICRO_REGISTRY_ADDRESS
+              value: "consul:8500"
             - name: MICRO_REGISTER_TTL
               value: "10"
             - name: MICRO_REGISTER_INTERVAL
               value: "5"
-            - name: MICRO_SERVER_NAME
-              value: gateway
             - name: MICRO_API_NAMESPACE
               value: go.micro.srv
             - name: MICRO_API_HANDLER
