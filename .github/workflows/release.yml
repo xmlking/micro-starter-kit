@@ -24,12 +24,15 @@ jobs:
         uses: actions/checkout@v1
       - name: Get dependencies
         run: go mod download
-        env:
-          GOPROXY: https://proxy.golang.org
+        # env:
+        #   GO111MODULE: "on"
+        #   GOPROXY: https://proxy.golang.org
       - name: Lint
         run: make lint
       - name: Unit Test
-        run: make test TARGET=account
+        run: make test-account
+      - name: Integration Test
+        run: make inte-account
       # - name: Build
       #   run: go build -v ./cmd/gophrase.go
       #   env:
