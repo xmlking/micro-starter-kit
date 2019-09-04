@@ -49,7 +49,7 @@ func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, e
 
 	if dbConf.UTC {
 		if _, err = db.DB().Exec(timezoneCommand); err != nil {
-			return nil, fmt.Errorf("error setting UTC timezone: %v", err)
+			return nil, fmt.Errorf("error setting UTC timezone: %w", err)
 		}
 	}
 

@@ -1,6 +1,6 @@
 module github.com/xmlking/micro-starter-kit
 
-go 1.12
+go 1.13
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.1.0

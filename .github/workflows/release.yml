@@ -9,30 +9,26 @@ on: [release]
 #   pull_request:
 #     branches:
 #       - master
-
 jobs:
   build:
     name: Build and Publish
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.12
+      - name: Set up Go 1.13
         uses: actions/setup-go@v1
         with:
-          go-version: 1.12
+          go-version: 1.13
         id: go
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: Get dependencies
         run: go mod download
-        # env:
-        #   GO111MODULE: "on"
-        #   GOPROXY: https://proxy.golang.org
       - name: Lint
         run: make lint
       - name: Unit Test
-        run: make test-account
+        run: make test TARGET=account
       - name: Integration Test
-        run: make inte-account
+        run: make inte TARGET=account
       # - name: Build
       #   run: go build -v ./cmd/gophrase.go
       #   env:
