@@ -70,7 +70,7 @@ test test-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "no  TARGET. example usage: make test TARGET=account"; \
 	else \
-		go test -v -short  ./${TYPE}/${TARGET}/... -cover; \
+		go test -v -short  ./${TYPE}/${TARGET}/... -cover -race; \
 	fi
 
 inte inte-%:

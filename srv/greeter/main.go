@@ -1,10 +1,9 @@
 package main
 
 import (
-	"github.com/micro/go-micro/util/log"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/util/log"
 	"github.com/xmlking/micro-starter-kit/srv/greeter/handler"
-
 
 	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
@@ -21,7 +20,6 @@ func main() {
 
 	// Register Handler
 	greeterPB.RegisterGreeterHandler(service.Server(), new(handler.Greeter))
-
 
 	// Run service
 	if err := service.Run(); err != nil {

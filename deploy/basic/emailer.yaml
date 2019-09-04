@@ -31,6 +31,8 @@ spec:
               value: kubernetes
             - name: MICRO_SELECTOR
               value: static
+            # - name: MICRO_NAMESPACE
+            #   value: go-micro-srv
             - name: MICRO_SERVER_NAME
               value: emailer
             - name: MICRO_SERVER_ADDRESS

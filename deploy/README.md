@@ -147,3 +147,4 @@ kubectl delete -k ./deploy
 3. <https://kustomize.io/>
 4. with sops <https://teuto.net/deploying-jupyterhub-to-kubernetes-via-kustomize-using-sops-secret-management/?lang=en>
 5. <https://github.com/pwittrock-me/petclinic-config/tree/master/config>
+6. <https://github.com/venilnoronha/grpc-web-istio-demo>

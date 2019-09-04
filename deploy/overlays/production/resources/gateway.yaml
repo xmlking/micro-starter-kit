@@ -1,0 +1,62 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: virtual-service
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - gateway
+  http:
+    - match:
+        - uri:
+            prefix: /proto.EmojiService
+      route:
+        - destination:
+            host: server
+      corsPolicy:
+        allowOrigin:
+          - "*"
+        allowMethods:
+          - POST
+          - GET
+          - OPTIONS
+          - PUT
+          - DELETE
+        allowHeaders:
+          - grpc-timeout
+          - content-type
+          - keep-alive
+          - user-agent
+          - cache-control
+          - content-type
+          - content-transfer-encoding
+          - custom-header-1
+          - x-accept-content-transfer-encoding
+          - x-accept-response-streaming
+          - x-user-agent
+          - x-grpc-web
+        maxAge: 1728s
+        exposeHeaders:
+          - custom-header-1
+          - grpc-status
+          - grpc-message
+        allowCredentials: true
+    - route:
+        - destination:
+            host: web-ui

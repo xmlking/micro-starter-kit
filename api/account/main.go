@@ -24,13 +24,27 @@ func main() {
 		micro.Version(myConfig.Version),
 	)
 
-	// NOTE: has to give `port` when using with k8s
-	// userSrvClient := userPB.NewUserService("account:8080", service.Client())?
+	// retry client
+	// cli := client.NewClient(
+	// 	client.Retries(4),
+	// 	client.Retry(func(ctx context.Context, req client.Request, retryCount int, err error) (b bool, e error) {
+	// 		if err != nil {
+	// 			log.Errorf("[ERR] , err: %s, %v", retryCount, err)
+	// 			return true, nil
+	// 		}
+
+	// 		return false, nil
+	// 	}),
+	// )
+	// userSrvClient := userPB.NewUserService("go.micro.srv.account", cli)
+
+	// NOTE: has to give `port` when using with k8s as `registry`
+	// userSrvClient := userPB.NewUserService("account:8080", service.Client())
 	userSrvClient := userPB.NewUserService("go.micro.srv.account", service.Client())
 	profSrvClient := userPB.NewProfileService("go.micro.srv.account", service.Client()) // service.Client() or client.DefaultClient???
 	accountHandler := handler.NewAccountHandler(userSrvClient, profSrvClient)
 
-	// Initialise service
+	// initialize service
 	service.Init()
 
 	// Register Handler

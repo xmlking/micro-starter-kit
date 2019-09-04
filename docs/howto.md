@@ -98,3 +98,11 @@ go test all
 
   - Service name cannot have `.`(dot) due to k8s DNS limits, so make it simple via environment variables e.g., `MICRO_SERVER_NAME=account`
   - custom build REST Gateway as `microhq/micro:kubernetes` image is outdated. optionally add CORS plugin.
+
+- performance
+  If you’re concerned about performance, try
+
+  ```bash
+  --selector=cache # enables in memory caching of discovered nodes
+  --client_pool_size=10 # enables the client side connection pool
+  ```

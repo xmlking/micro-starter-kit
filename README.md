@@ -3,9 +3,10 @@
 Microservices starter kit for **Golang**, aims to be developer friendly.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
+[![GoDoc](https://godoc.org/github.com/xmlking/micro-starter-kit?status.svg)](https://godoc.org/github.com/xmlking/micro-starter-kit)
+[![Go 1.12](https://img.shields.io/badge/go-1.12-9cf.svg)](https://golang.org/dl/)
 [![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
-[![GoDoc](https://godoc.org/github.com/xmlking/micro-starter-kit?status.svg)](https://godoc.org/github.com/xmlking/micro-starter-kit)
 
 ## Overview
 
@@ -45,6 +46,8 @@ go get sigs.k8s.io/kustomize
 go get github.com/ahmetb/govvv
 # for mac, use brew to install protobuf
 brew install protobuf
+# GUI Client for GRPC Services
+brew cask install bloomrpc
 
 # fetch protoc plugins into $GOPATH
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
@@ -169,6 +172,8 @@ micro get service go.micro.srv.emailer
 micro api --namespace=go.micro.srv --enable_rpc=true
 # (or) Start Web UX for testing
 micro web --namespace=go.micro.srv
+
+micro proxy --protocol=grpc
 ```
 
 #### Test gRPC Directly

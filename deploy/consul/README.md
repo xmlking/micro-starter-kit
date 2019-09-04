@@ -1,5 +1,21 @@
 # Testing k8s consul
 
+## consul deployment via Helm
+
+> check for [values.yaml](https://www.consul.io/docs/platform/k8s/helm.html)
+
+```bash
+# Clone the chart repo
+$ git clone https://github.com/hashicorp/consul-helm.git
+$ cd consul-helm
+
+# Checkout a tagged version
+$ git checkout v0.1.0
+
+# Run Helm
+$ helm install --name consul ./
+```
+
 ```bash
 # create service account
 kubectl create -f deploy/consul/micro-service-account.yaml
