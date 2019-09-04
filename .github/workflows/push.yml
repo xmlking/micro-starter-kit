@@ -21,7 +21,7 @@ jobs:
       - name: Get dependencies
         run: go mod download
         env:
-          # GO111MODULE: "on"
+          GO111MODULE: "on"
           GOPROXY: https://proxy.golang.org
       - name: Lint
         run: make lint
