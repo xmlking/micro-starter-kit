@@ -10,6 +10,8 @@
 go get -u # to use the latest minor or patch releases
 go get -u=patch # to use the latest patch releases
 go mod tidy
+# to find out why you have specific dependency
+go mod why -m github.com/DATA-DOG/go-sqlmock
 ```
 
 - How to Prepare for a Release?
