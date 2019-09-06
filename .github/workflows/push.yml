@@ -21,9 +21,16 @@ jobs:
       # - name: Integration Test
       #   run: make inte
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.0.2
+        run: make send-codecov-ci
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           file: ./build/coverage.txt
           flags: unittests
           name: codecov-umbrella
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v1.0.2
+      #   with:
+      #     token: ${{secrets.CODECOV_TOKEN}}
+      #     file: ./build/coverage.txt
+      #     flags: unittests
+      #     name: codecov-umbrella

@@ -1,7 +1,9 @@
-VERSION		:= $(shell git describe --tags || echo "HEAD")
-GOPATH		:= $(shell go env GOPATH)
-HAS_GOVVV	:= $(shell command -v govvv 2> /dev/null)
-HAS_KO		:= $(shell command -v ko 2> /dev/null)
+SHELL=/bin/bash
+VERSION				:= $(shell git describe --tags || echo "HEAD")
+GOPATH				:= $(shell go env GOPATH)
+HAS_GOVVV			:= $(shell command -v govvv 2> /dev/null)
+HAS_KO				:= $(shell command -v ko 2> /dev/null)
+CODECOV_FILE 	:= build/coverage.txt
 # Type of service e.g api, fnc, srv, web (default: "srv")
 TYPE = $(or $(word 2,$(subst -, ,$*)), srv)
 override TYPES:= api srv
@@ -69,11 +71,18 @@ endif
 test test-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Testing all"; \
-		go test -short -race ./... -coverprofile=build/coverage.txt -covermode=atomic; \
+		go test -short -race ./... -coverprofile=${CODECOV_FILE} -covermode=atomic; \
 	else \
 		echo "Testing ${TARGET}-${TYPE}..."; \
-		go test -v -short  -race ./${TYPE}/${TARGET}/... -coverprofile=build/coverage.txt -covermode=atomic; \
+		go test -v -short  -race ./${TYPE}/${TARGET}/... -coverprofile=${CODECOV_FILE} -covermode=atomic; \
 	fi
+
+send-codecov-ci:
+	bash <(curl -s https://codecov.io/bash)
+
+send-codecov-local: SHELL:=/bin/bash
+send-codecov-local:
+	bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
 
 inte inte-%:
 	@if [ -z $(TARGET) ]; then \
