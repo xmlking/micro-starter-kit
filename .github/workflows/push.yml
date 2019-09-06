@@ -21,13 +21,21 @@ jobs:
       # - name: Integration Test
       #   run: make inte
       - name: Upload coverage to Codecov
+        # -U "--proxy http://http-proxy"
         run: bash <(curl -s https://codecov.io/bash)
+          -F unittests
+          -n codecov-micros
+          -f ./build/coverage.txt
+          -C $GITHUB_SHA -B ${GITHUB_REF#refs/heads/}
+          -B ${{ github.head_ref }}
+          -C ${{ github.event.after }}
+          -P ${{ github.event.number }}
+          -T ${{ GITHUB_REF#refs/tags/ }}
+          -Z || echo 'Codecov upload failed'
+        # run: bash <(curl -s https://codecov.io/bash) -F unittests -f ./build/coverage.txt -n codecov-umbrella
         env:
+          CI: true
+          CODECOV_SLUG: ":xmlking/:micro-starter-kit"
+          CODECOV_NAME: codecov-micros
+          CODECOV_ENV: github-action
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v1.0.2
-      #   with:
-      #     token: ${{secrets.CODECOV_TOKEN}}
-      #     file: ./build/coverage.txt
-      #     flags: unittests
-      #     name: codecov-umbrella

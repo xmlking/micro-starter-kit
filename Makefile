@@ -77,13 +77,6 @@ test test-%:
 		go test -v -short  -race ./${TYPE}/${TARGET}/... -coverprofile=${CODECOV_FILE} -covermode=atomic; \
 	fi
 
-# send-codecov-ci:
-# 	bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
-
-# send-codecov-local: SHELL:=/bin/bash
-# send-codecov-local:
-# 	bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
-
 inte inte-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Integration testing all"; \
