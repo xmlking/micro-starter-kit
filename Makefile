@@ -68,30 +68,20 @@ endif
 
 test test-%:
 	@if [ -z $(TARGET) ]; then \
-		for type in $(TYPES); do \
-			echo "Testing Type: $${type}..."; \
-			for _target in $${type}/*/; do \
-				temp=$${_target%%/}; target=$${temp#*/}; \
-				echo "Testing $${target}-$${type}..."; \
-				go test -short ./$${type}/$${target}/... -cover -race; \
-			done \
-		done \
+		echo "Testing all"; \
+		go test -short -race ./... -coverprofile=build/coverage.txt -covermode=atomic; \
 	else \
-		go test -v -short  ./${TYPE}/${TARGET}/... -cover -race; \
+		echo "Testing ${TARGET}-${TYPE}..."; \
+		go test -v -short  -race ./${TYPE}/${TARGET}/... -coverprofile=build/coverage.txt -covermode=atomic; \
 	fi
 
 inte inte-%:
 	@if [ -z $(TARGET) ]; then \
-		for type in $(TYPES); do \
-			echo "Integration Testing Type: $${type}..."; \
-			for _target in $${type}/*/; do \
-				temp=$${_target%%/}; target=$${temp#*/}; \
-				echo "Integration Testing $${target}-$${type}..."; \
-				go test -run Integration ./$${type}/$${target}/... ; \
-			done \
-		done \
+		echo "Integration testing all"; \
+		go test -run Integration ./... ; \
 	else \
-		go test -v -run Integration  ./${TYPE}/${TARGET}/... ; \
+		echo "Integration testing ${TARGET}-${TYPE}..."; \
+		go test -v -run Integration ./${TYPE}/${TARGET}/... ; \
 	fi
 
 run run-%:

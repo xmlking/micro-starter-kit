@@ -20,3 +20,10 @@ jobs:
         run: make test
       # - name: Integration Test
       #   run: make inte
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./build/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
