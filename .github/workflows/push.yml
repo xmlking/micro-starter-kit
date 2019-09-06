@@ -9,6 +9,10 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: 1.13
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: ./build/coverage.txt
+          flags: unittests
+          name: codecov-umbrella
         id: go
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
@@ -22,11 +26,6 @@ jobs:
       #   run: make inte
       - name: Upload coverage to Codecov
         run: make send-codecov-ci
-        with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          file: ./build/coverage.txt
-          flags: unittests
-          name: codecov-umbrella
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1.0.2
       #   with:
