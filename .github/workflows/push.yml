@@ -30,10 +30,7 @@ jobs:
           -C ${{ github.event.after }}
           -P ${{ github.event.number }}
           -Z || echo 'Codecov upload failed'
-        # run: bash <(curl -s https://codecov.io/bash) -F unittests -f ./build/coverage.txt -n codecov-umbrella
         env:
           CI: true
-          CODECOV_SLUG: ":xmlking/:micro-starter-kit"
-          CODECOV_NAME: codecov-micros
           CODECOV_ENV: github-action
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
