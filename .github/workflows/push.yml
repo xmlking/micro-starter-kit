@@ -9,10 +9,6 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: 1.13
-          token: ${{secrets.CODECOV_TOKEN}}
-          file: ./build/coverage.txt
-          flags: unittests
-          name: codecov-umbrella
         id: go
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
@@ -25,7 +21,9 @@ jobs:
       # - name: Integration Test
       #   run: make inte
       - name: Upload coverage to Codecov
-        run: make send-codecov-ci CODECOV_TOKEN=${{secrets.CODECOV_TOKEN}}
+        run: bash <(curl -s https://codecov.io/bash)
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1.0.2
       #   with:
