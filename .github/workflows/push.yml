@@ -29,7 +29,6 @@ jobs:
           -B ${{ github.head_ref }}
           -C ${{ github.event.after }}
           -P ${{ github.event.number }}
-          -T ${{ GITHUB_REF#refs/tags/ }}
           -Z || echo 'Codecov upload failed'
         # run: bash <(curl -s https://codecov.io/bash) -F unittests -f ./build/coverage.txt -n codecov-umbrella
         env:
