@@ -17,6 +17,6 @@ jobs:
       - name: Lint
         run: make lint
       - name: Unit Test
-        run: make test TARGET=emailer
+        run: make test
       # - name: Integration Test
-      #   run: make inte TARGET=emailer
+      #   run: make inte

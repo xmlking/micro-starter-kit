@@ -54,7 +54,7 @@ ifndef HAS_GOVVV
 endif
 	@if [ -z $(TARGET) ]; then \
 		for type in $(TYPES); do \
-			echo "Building $${type}..."; \
+			echo "Building Type: $${type}..."; \
 			for _target in $${type}/*/; do \
 				temp=$${_target%%/}; target=$${temp#*/}; \
 				echo "\tBuilding $${target}-$${type}"; \
@@ -68,14 +68,28 @@ endif
 
 test test-%:
 	@if [ -z $(TARGET) ]; then \
-		echo "no  TARGET. example usage: make test TARGET=account"; \
+		for type in $(TYPES); do \
+			echo "Testing Type: $${type}..."; \
+			for _target in $${type}/*/; do \
+				temp=$${_target%%/}; target=$${temp#*/}; \
+				echo "Testing $${target}-$${type}..."; \
+				go test -short ./$${type}/$${target}/... -cover -race; \
+			done \
+		done \
 	else \
 		go test -v -short  ./${TYPE}/${TARGET}/... -cover -race; \
 	fi
 
 inte inte-%:
 	@if [ -z $(TARGET) ]; then \
-		echo "no  TARGET. example usage: make test TARGET=account"; \
+		for type in $(TYPES); do \
+			echo "Integration Testing Type: $${type}..."; \
+			for _target in $${type}/*/; do \
+				temp=$${_target%%/}; target=$${temp#*/}; \
+				echo "Integration Testing $${target}-$${type}..."; \
+				go test -run Integration ./$${type}/$${target}/... ; \
+			done \
+		done \
 	else \
 		go test -v -run Integration  ./${TYPE}/${TARGET}/... ; \
 	fi
@@ -84,7 +98,7 @@ run run-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "no  TARGET. example usage: make test TARGET=account"; \
 	else \
-		go run  ./${TYPE}/${TARGET} ; \
+		go run  ./${TYPE}/${TARGET} ${ARGS}; \
 	fi
 
 release:
@@ -92,13 +106,10 @@ release:
 	git push origin $(VERSION)
 	# goreleaser --rm-dist
 
-# delegate to sub projects
 clean:
-	@for d in $(TYPES); do \
-		for sd in $$d/*; do \
-			$(MAKE) -C $$sd $(MAKECMDGOALS); \
-			echo cleaned: $$sd; \
-		done \
+	@for d in ./build/*-{srv,api}; do \
+		echo "Deleting $$d;"; \
+		rm -f $$d; \
 	done
 
 update_deps:
@@ -108,6 +119,19 @@ update_deps:
 docker docker-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "no  TARGET. example usage: make docker TARGET=account"; \
+		for type in $(TYPES); do \
+			echo "Building Type: $${type}..."; \
+			for _target in $${type}/*/; do \
+				temp=$${_target%%/}; target=$${temp#*/}; \
+				echo "Building Image $${target}-$${type}..."; \
+				docker build --rm \
+				--build-arg VERSION=$(VERSION) \
+				--build-arg BUILD_PKG=./$${type}/$${target} \
+				--build-arg IMANGE_NAME=xmlking/$${target}-$${type} \
+				--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
+				-t xmlking/$${target}-$${type} .; \
+			done \
+		done \
 	else \
 		docker build --rm \
 		--build-arg VERSION=$(VERSION) \

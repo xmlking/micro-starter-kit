@@ -26,9 +26,9 @@ jobs:
       - name: Lint
         run: make lint
       - name: Unit Test
-        run: make test TARGET=account
+        run: make test
       - name: Integration Test
-        run: make inte TARGET=account
+        run: make inte
       # - name: Build
       #   run: go build -v ./cmd/gophrase.go
       #   env:

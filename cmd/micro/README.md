@@ -7,6 +7,8 @@
 ## Run
 
 ```bash
+make run-micro-cmd ARGS=api
+make run-micro-cmd ARGS="--api_address=0.0.0.0:8088 api"
 # with plugins
 go run cmd/micro/main.go cmd/micro/plugin.go --api_address=0.0.0.0:8088  api
 # without plugins (same as official micro cli)

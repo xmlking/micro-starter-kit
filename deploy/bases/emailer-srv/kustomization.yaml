@@ -7,6 +7,12 @@ resources:
   - deployment.yaml
   - service.yaml
 
+configMapGenerator:
+  - behavior: merge
+    files:
+      - config/config.yaml
+    name: configs
+
 images:
   - name: xmlking/emailer-srv
     newTag: latest
