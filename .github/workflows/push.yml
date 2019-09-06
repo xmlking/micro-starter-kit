@@ -25,7 +25,7 @@ jobs:
       # - name: Integration Test
       #   run: make inte
       - name: Upload coverage to Codecov
-        run: make send-codecov-ci
+        run: make send-codecov-ci CODECOV_TOKEN=${{secrets.CODECOV_TOKEN}}
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1.0.2
       #   with:

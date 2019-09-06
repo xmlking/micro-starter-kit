@@ -78,7 +78,7 @@ test test-%:
 	fi
 
 send-codecov-ci:
-	bash <(curl -s https://codecov.io/bash)
+	bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
 
 send-codecov-local: SHELL:=/bin/bash
 send-codecov-local:
