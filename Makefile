@@ -110,6 +110,7 @@ update_deps:
 
 docker docker-%:
 	@if [ -z $(TARGET) ]; then \
+		echo "Building images for all services..."; \
 		echo "no  TARGET. example usage: make docker TARGET=account"; \
 		for type in $(TYPES); do \
 			echo "Building Type: $${type}..."; \
@@ -125,6 +126,7 @@ docker docker-%:
 			done \
 		done \
 	else \
+		echo "Building image for ${TARGET}-${TYPE}..."; \
 		docker build --rm \
 		--build-arg VERSION=$(VERSION) \
 		--build-arg BUILD_PKG=./${TYPE}/${TARGET} \
