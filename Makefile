@@ -1,4 +1,3 @@
-SHELL=/bin/bash
 VERSION				:= $(shell git describe --tags || echo "HEAD")
 GOPATH				:= $(shell go env GOPATH)
 HAS_GOVVV			:= $(shell command -v govvv 2> /dev/null)
@@ -53,7 +52,7 @@ lint lint-%:
 		golangci-lint run ./... ; \
 	else \
 		echo "Linting ${TARGET}-${TYPE}..."; \
-		golangci-lint run ./${TYPE}/${TARGET}/... ; \
+		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
 	fi
 
 build build-%:
