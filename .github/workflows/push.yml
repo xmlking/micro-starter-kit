@@ -14,31 +14,4 @@ jobs:
         run: |
           go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
           # go get github.com/ahmetb/govvv
-          echo pwd ${GOPATH}/bin/
-      - name: Check out Code
-        uses: actions/checkout@v1
-      - name: Install Dependencies
-        run: go mod download
-      - name: Lint
-        run: ${GOPATH}/bin/golangci-lint run
-        continue-on-error: true
-      - name: Unit Test
-        run: make test
-      # - name: Integration Test
-      #   run: make inte
-      - name: Upload coverage to Codecov
-        # -U "--proxy http://http-proxy"
-        run: bash <(curl -s https://codecov.io/bash)
-          -F unittests
-          -n codecov-micros
-          -f ./build/coverage.txt
-          -B "${GITHUB_REF//refs\/heads\//}"
-          -T "${GITHUB_REF//refs\/tags\//}"
-          -C "${GITHUB_SHA}"
-          -Z || echo 'Codecov upload failed'
-        env:
-          CI: true
-          CODECOV_ENV: github-action
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          CODECOV_PR: ${{ github.event.after }}
-          CODECOV_SHA: ${{ github.sha }}
+          echo pwd /home/runner/work//bin/
