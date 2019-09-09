@@ -18,17 +18,20 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 
 - [x] Monorepo - Sharing Code Between Microservices
 - [x] gRPC microservices with REST Gateway
-- [x] Input Validation
-- [x] Config Fallback
-- [x] Custom Logging
-- [x] CRUD via ORM
+- [x] Input Validation with [protoc-gen-validate (PGV)](https://github.com/envoyproxy/protoc-gen-validate)
+- [x] Config - Pluggable Sources, Mergeable Config, Safe Recovery
+- [x] Customizable Logging
+- [x] CRUD Example using [GORM](https://gorm.io/)
 - [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
-- [x] DI Container
-- [x] One Step _build/publish/deploy_ with `ko`
-- [x] BuildInfo with `govvv`
+- [x] Dependency injection [Container](https://github.com/sarulabs/di)
+- [x] One Step _build/publish/deploy_ with [ko](https://github.com/google/ko)
+- [x] BuildInfo with [govvv](https://github.com/ahmetb/govvv)
+- [x] Linting with [GolangCI](https://github.com/golangci/golangci-lint) linters aggregator
+- [x] CICD Pipelines with [GitHub Actions](https://github.com/features/actions)
+- [x] Kubernetes _Matrix Deployment_ with [Kustomize](https://kustomize.io/)
 - [ ] Observability
-- [ ] Service Mesh
-- [ ] GraphQL Gateway with `gqlgen`
+- [ ] Service Mesh with [Istio](https://istio.io/)
+- [ ] GraphQL Gateway with [gqlgen](https://gqlgen.com/), [rejoiner](https://github.com/google/rejoiner)
 
 ## Getting Started
 
