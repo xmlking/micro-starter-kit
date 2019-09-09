@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	serviceName = "go.micro.srv.account"
+	serviceName = "go-micro-srv-account"
 )
 
 var (
@@ -56,7 +56,7 @@ func main() {
 		micro.WrapHandler(wrapper.LogWrapper),
 	)
 
-	// Initialise service
+	// Initialize service
 	service.Init(
 		micro.Action(func(c *cli.Context) {
 			// load config
@@ -65,7 +65,7 @@ func main() {
 		}),
 	)
 
-	// Initialise DI Container
+	// Initialize DI Container
 	ctn, err := registry.NewContainer(cfg)
 	defer ctn.Clean()
 	if err != nil {
