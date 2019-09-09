@@ -14,6 +14,8 @@ jobs:
         run: |
           go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
           # go get github.com/ahmetb/govvv
+        env:
+          GO111MODULE: on
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
