@@ -11,8 +11,8 @@ on: [release]
 #     branches:
 #       - master
 jobs:
-  build:
-    name: Build and Publish
+  build-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.13
@@ -20,9 +20,13 @@ jobs:
         with:
           go-version: 1.13
         id: go
-      - name: Check out code into the Go module directory
+      - name: Setup Tools
+        run: |
+          go get sigs.k8s.io/kustomize
+          go get github.com/ahmetb/govvv
+      - name: Check out Code
         uses: actions/checkout@v1
-      - name: Get dependencies
+      - name: Install Dependencies
         run: go mod download
       - name: Lint
         run: make lint

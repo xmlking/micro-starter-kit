@@ -1,7 +1,7 @@
 name: Test on Push
 on: [push]
 jobs:
-  build:
+  lint-test:
     name: Lint and Test
     runs-on: ubuntu-latest
     steps:
@@ -10,9 +10,13 @@ jobs:
         with:
           go-version: 1.13
         id: go
-      - name: Check out code into the Go module directory
+      - name: Setup Tools
+        run: |
+          go get sigs.k8s.io/kustomize
+          go get github.com/ahmetb/govvv
+      - name: Check out Code
         uses: actions/checkout@v1
-      - name: Get dependencies
+      - name: Install Dependencies
         run: go mod download
       - name: Lint
         run: make lint
@@ -34,4 +38,5 @@ jobs:
           CI: true
           CODECOV_ENV: github-action
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          CODECOV_PR: ${{ github.event.number }}
+          CODECOV_PR: ${{ github.event.after }}
+          CODECOV_SHA: ${{ github.sha }}
