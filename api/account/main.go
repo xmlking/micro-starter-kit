@@ -4,12 +4,12 @@ import (
 	"github.com/micro/go-micro"
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/api/account/handler"
-	_ "github.com/xmlking/micro-starter-kit/shared/config"
-	_ "github.com/xmlking/micro-starter-kit/shared/log"
 
 	accountPB "github.com/xmlking/micro-starter-kit/api/account/proto/account"
-	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+
+	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+	_ "github.com/xmlking/micro-starter-kit/shared/log"
 )
 
 const (

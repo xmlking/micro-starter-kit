@@ -17,7 +17,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: proto proto-% lint build build-% test test-% inte inte-% run run-% release clean update_deps docker
+.PHONY: proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-%
 
 tools:
 	@echo "==> Installing dev tools"
@@ -47,8 +47,14 @@ proto proto-%:
 		done \
 	fi
 
-lint:
-	./scripts/lint.sh
+lint lint-%:
+	@if [ -z $(TARGET) ]; then \
+		echo "Linting all"; \
+		golangci-lint run ./... ; \
+	else \
+		echo "Linting ${TARGET}-${TYPE}..."; \
+		golangci-lint run ./${TYPE}/${TARGET}/... ; \
+	fi
 
 build build-%:
 ifndef HAS_GOVVV

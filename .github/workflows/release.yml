@@ -22,16 +22,12 @@ jobs:
         id: go
       - name: Setup Tools
         run: |
-          go get sigs.k8s.io/kustomize
+          # go get sigs.k8s.io/kustomize
           go get github.com/ahmetb/govvv
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
         run: go mod download
-      - name: Lint
-        run: make lint
-      - name: Unit Test
-        run: make test
       - name: Integration Test
         run: make inte
       # - name: Build

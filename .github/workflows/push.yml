@@ -1,5 +1,5 @@
 name: Test on Push
-on: [push]
+on: [push, pull_request]
 jobs:
   lint-test:
     name: Lint and Test
@@ -12,14 +12,15 @@ jobs:
         id: go
       - name: Setup Tools
         run: |
-          go get sigs.k8s.io/kustomize
-          go get github.com/ahmetb/govvv
+          go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+          # go get github.com/ahmetb/govvv
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
         run: go mod download
       - name: Lint
-        run: make lint
+        run: golangci-lint run
+        continue-on-error: true
       - name: Unit Test
         run: make test
       # - name: Integration Test

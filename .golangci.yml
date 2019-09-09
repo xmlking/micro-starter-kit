@@ -1,0 +1,39 @@
+# This file contains all available configuration options
+# with their default values.
+
+# options for analysis running
+run:
+  # which dirs to skip: they won't be analyzed;
+  skip-dirs:
+    - srv/account/proto
+  skip-files:
+    - lib/bad.go
+
+# all available settings of specific linters
+linters-settings:
+  errcheck:
+
+# Enable/Disable specific linter
+linters:
+  enable:
+    - gofmt
+
+issues:
+  # List of regexps of issue texts to exclude, empty list by default.
+  exclude:
+
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    # Exclude some linters from running on tests files.
+    - path: srv
+      linters:
+        - errcheck
+    - path: api
+      linters:
+        - errcheck
+    - path: cmd
+      linters:
+        - errcheck
+    - path: shared
+      linters:
+        - errcheck

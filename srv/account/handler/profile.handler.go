@@ -44,12 +44,12 @@ func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rs
 		return myErrors.AppError(myErrors.DBE, err)
 	}
 	rsp.Total = total
-	newProfiles := make([]*pb.Profile, len(profiles))
+	// newProfiles := make([]*pb.Profile, len(profiles))
 	// for index, profile := range profiles {
 	// 	tempProfile, _ := profile.ToPB(ctx)
 	// 	newProfiles[index] = &tempProfile
 	// }
-	newProfiles = funk.Map(profiles, func(profile *pb.ProfileORM) *pb.Profile {
+	newProfiles := funk.Map(profiles, func(profile *pb.ProfileORM) *pb.Profile {
 		tempProfile, _ := profile.ToPB(ctx)
 		return &tempProfile
 	}).([]*pb.Profile)

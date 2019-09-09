@@ -43,9 +43,11 @@ go get -u github.com/micro/micro
 go get -u github.com/micro/go-micro
 # go lang  build/publish/deploy tool
 go get -u github.com/google/ko/cmd/ko
-go get sigs.k8s.io/kustomize
+go get -u sigs.k8s.io/kustomize
 # go better build tool
-go get github.com/ahmetb/govvv
+go get -u github.com/ahmetb/govvv
+# for static check/linter
+go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 # for mac, use brew to install protobuf
 brew install protobuf
 # GUI Client for GRPC Services

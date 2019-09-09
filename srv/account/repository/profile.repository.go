@@ -84,8 +84,8 @@ func (repo *profileRepository) Get(id string) (profile *pb.ProfileORM, err error
 
 // Create
 func (repo *profileRepository) Create(model *pb.ProfileORM) error {
-	if exist := repo.Exist(model); exist == true {
-		return fmt.Errorf("Profile already exist")
+	if exist := repo.Exist(model); exist {
+		return fmt.Errorf("profile already exist")
 	}
 
 	if err := repo.db.Create(model).Error; err != nil {

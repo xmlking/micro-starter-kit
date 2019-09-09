@@ -62,13 +62,13 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 	}
 	rsp.Total = total
 
-	newUsers := make([]*pb.User, len(users))
+	// newUsers := make([]*pb.User, len(users))
 	// for index, user := range users {
 	// 	tmpUser, _ := user.ToPB(ctx)
 	// 	newUsers[index] = &tmpUser
 	// 	// *newUsers[index], _ = user.ToPB(ctx) ???
 	// }
-	newUsers = funk.Map(users, func(user *pb.UserORM) *pb.User {
+	newUsers := funk.Map(users, func(user *pb.UserORM) *pb.User {
 		tmpUser, _ := user.ToPB(ctx)
 		return &tmpUser
 	}).([]*pb.User)

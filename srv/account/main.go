@@ -7,16 +7,16 @@ import (
 
 	// "github.com/micro/go-micro/service/grpc"
 	log "github.com/sirupsen/logrus"
-	_ "github.com/xmlking/micro-starter-kit/shared/config"
-	_ "github.com/xmlking/micro-starter-kit/shared/log"
 
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/registry"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 
-	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/wrapper"
+
+	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+	_ "github.com/xmlking/micro-starter-kit/shared/log"
 )
 
 const (

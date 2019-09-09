@@ -101,8 +101,8 @@ func (repo *userRepository) Get(id string) (user *pb.UserORM, err error) {
 
 // Create
 func (repo *userRepository) Create(model *pb.UserORM) error {
-	if exist := repo.Exist(model); exist == true {
-		return errors.New("User already exist")
+	if exist := repo.Exist(model); exist {
+		return errors.New("user already exist")
 	}
 	// if err := repo.db.Set("gorm:association_autoupdate", false).Create(model).Error; err != nil {
 	if err := repo.db.Create(model).Error; err != nil {
@@ -125,7 +125,7 @@ func (repo *userRepository) Update(id string, model *pb.UserORM) error {
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {
 		log.Errorf("Error in UserRepository.Update, rowsAffected: %v", rowsAffected)
-		return errors.New("No Records Updated, No match was found")
+		return errors.New("no records updated, No match was found")
 	}
 	return nil
 }
@@ -139,7 +139,7 @@ func (repo *userRepository) Delete(model *pb.UserORM) error {
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {
 		log.Errorf("Error in UserRepository.Delete, rowsAffected: %v", rowsAffected)
-		return errors.New("No Records Deleted, No match was found")
+		return errors.New("no records deleted, No match was found")
 	}
 	return nil
 }
