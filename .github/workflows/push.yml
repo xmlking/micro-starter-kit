@@ -14,14 +14,13 @@ jobs:
         run: |
           go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
           # go get github.com/ahmetb/govvv
-        env:
-          GO111MODULE: on
+          echo pwd ${GOPATH}/bin/
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
         run: go mod download
       - name: Lint
-        run: golangci-lint run
+        run: ${GOPATH}/bin/golangci-lint run
         continue-on-error: true
       - name: Unit Test
         run: make test
