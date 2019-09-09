@@ -21,7 +21,7 @@ jobs:
         run: go mod download
       - name: Lint
         run: |
-          make test
+          make lint
           # export PATH=$PATH:$(go env GOPATH)/bin
           # golangci-lint run
       - name: Unit Test
