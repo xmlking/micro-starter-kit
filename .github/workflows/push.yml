@@ -16,26 +16,14 @@ jobs:
         run: |
           # go get github.com/ahmetb/govvv
           go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-          ls -la /home/runner/work/
-          echo ${HOME}
-          ls -la .
-          pwd
-          ls -la ${HOME}
-          echo $(go env GOPATH)/bin
-          ls -la $(go env GOPATH)/bin
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
         run: go mod download
       - name: Lint
-        env:
-          GOPATH1: /home/runner/work
         run: |
-          ls -la /home/runner/work/
-          echo ${HOME}
-          pwd
-           ls -la ${HOME}
-          /home/runner/work/bin/golangci-lint run
+          export PATH=$PATH:$(go env GOPATH)/bin
+          golangci-lint run
         # continue-on-error: true
       - name: Unit Test
         run: make test
