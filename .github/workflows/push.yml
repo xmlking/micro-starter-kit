@@ -18,9 +18,11 @@ jobs:
           go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
           ls -la /home/runner/work/
           echo ${HOME}
+          ls -la .
           pwd
           ls -la ${HOME}
-          ls -la /home/runner/work/bin
+          echo $(go env GOPATH)/bin
+          ls -la $(go env GOPATH)/bin
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
