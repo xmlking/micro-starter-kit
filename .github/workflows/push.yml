@@ -14,7 +14,6 @@ jobs:
         # env:
         #   GO111MODULE: on
         run: |
-          # go get github.com/ahmetb/govvv
           go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
       - name: Check out Code
         uses: actions/checkout@v1
@@ -22,9 +21,9 @@ jobs:
         run: go mod download
       - name: Lint
         run: |
-          export PATH=$PATH:$(go env GOPATH)/bin
-          golangci-lint run
-        # continue-on-error: true
+          make test
+          # export PATH=$PATH:$(go env GOPATH)/bin
+          # golangci-lint run
       - name: Unit Test
         run: make test
       # - name: Integration Test
