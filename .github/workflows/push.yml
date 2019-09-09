@@ -17,6 +17,10 @@ jobs:
           # go get github.com/ahmetb/govvv
           go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
           ls -la /home/runner/work/
+          echo ${HOME}
+          pwd
+          ls -la ${HOME}
+          ls -la /home/runner/work/bin
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
@@ -27,7 +31,8 @@ jobs:
         run: |
           ls -la /home/runner/work/
           echo ${HOME}
-          echo pwd
+          pwd
+           ls -la ${HOME}
           /home/runner/work/bin/golangci-lint run
         # continue-on-error: true
       - name: Unit Test
