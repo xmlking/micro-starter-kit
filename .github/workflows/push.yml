@@ -28,6 +28,7 @@ jobs:
         run: make test
       # - name: Integration Test
       #   run: make inte
+      #   continue-on-error: true
       - name: Upload coverage to Codecov
         # -U "--proxy http://http-proxy"
         run: bash <(curl -s https://codecov.io/bash)
