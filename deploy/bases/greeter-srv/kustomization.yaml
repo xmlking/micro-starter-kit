@@ -1,0 +1,18 @@
+commonLabels:
+  app.kubernetes.io/name: greeter-srv
+  app.kubernetes.io/instance: greeter-srv-abcxzy
+  app.kubernetes.io/component: microservice
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - behavior: merge
+    files:
+      - config/config.yaml
+    name: configs
+
+images:
+  - name: xmlking/greeter-srv
+    newTag: latest

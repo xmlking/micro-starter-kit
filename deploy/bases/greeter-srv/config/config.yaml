@@ -1,0 +1,27 @@
+environment: development
+name: greeter-srv
+version: 0.1.0
+log:
+  level: debug
+  format: text
+database:
+  dialect: sqlite3
+  host: 0.0.0.0
+  port: 9999
+  Username: sumo
+  Password: demo
+  database: ":memory:"
+  logging: true
+observability:
+  metrics:
+    address: localhost:8125
+    flushInterval: 1000000000
+  tracing:
+    address: jaeger:6831
+    flushInterval: 5000000000
+email:
+  username: yourGmailUsername
+  password: password
+  emailServer: smtp.gmail.com
+  port: 587
+  from: sumo@demo.com
