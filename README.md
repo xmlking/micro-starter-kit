@@ -60,19 +60,23 @@ brew cask install bloomrpc
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 go get -u github.com/micro/protoc-gen-micro
 # go get -u github.com/envoyproxy/protoc-gen-validate
-go get -u github.com/infobloxopen/protoc-gen-gorm
+# go get -u github.com/infobloxopen/protoc-gen-gorm
 ```
 
 > Installing PGV can currently only be done from source:
 
 ```bash
-
-# fetches PGV repo into $GOPATH
 go get -d github.com/envoyproxy/protoc-gen-validate
-
-# installs PGV into $GOPATH/bin
 cd ~/go/src/github.com/envoyproxy/protoc-gen-validate
 make build
+```
+
+> Installing `protoc-gen-gorm` can currently only be done from source:
+
+```
+go get -d github.com/infobloxopen/protoc-gen-gorm
+cd ~/go/src/github.com/infobloxopen/protoc-gen-gorm
+make install
 ```
 
 ### Initial Setup
@@ -129,17 +133,16 @@ docker system prune --volumes
 
 #### Services
 
-> Node: `--server_address=<MY_VPN_IP>:5501x --broker_address=<MY_VPN_IP>:5502x` required only when you are behind VPN
+> Node: `--server_address=localhost:5501x --broker_address=localhost:5502x` required only when you are behind VPN a.k.a `Work From Home`
 
 ```bash
 # dev mode
 make run-account
 make run-emailer
 # or
-# MY_VPN_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
-# go run srv/account/main.go srv/account/plugin.go --server_address=${MY_VPN_IP}:55011 --broker_address=${MY_VPN_IP}:55021
+# go run srv/account/main.go srv/account/plugin.go --server_address=localhost:55011 --broker_address=localhost:55021
 go run srv/account/main.go srv/account/plugin.go --configDir deploy/bases/account-srv/config
-# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${MY_VPN_IP}:55012 --broker_address=${MY_VPN_IP}:55022
+# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=localhost:55012 --broker_address=localhost:55022
 go run srv/emailer/main.go srv/emailer/plugin.go --configDir deploy/bases/emailer-srv/config
 
 # integration tests for config module via CMD
