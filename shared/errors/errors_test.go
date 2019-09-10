@@ -22,7 +22,7 @@ func TestErrors(t *testing.T) {
 
 	testData := []*myErrors.Error{
 		{
-			Id:     "go.micro.srv.account",
+			Id:     "account-srv",
 			Code:   422,
 			Detail: "proto validation: sumo-val-error",
 			Status: http.StatusText(422),
@@ -50,12 +50,12 @@ func TestErrors(t *testing.T) {
 
 	// test ValidationError
 	for _, e := range testData {
-		ne := ValidationError("go.micro.srv.account", "proto validation: sumo-val-error")
+		ne := ValidationError("account-srv", "proto validation: sumo-val-error")
 		if e.Error() != ne.Error() {
 			t.Fatalf("Expected %s got %s", e.Error(), ne.Error())
 		}
 
-		ne2 := ValidationError("go.micro.srv.account", "proto validation: %v", errors.New("sumo-val-error"))
+		ne2 := ValidationError("account-srv", "proto validation: %v", errors.New("sumo-val-error"))
 
 		if e.Error() != ne2.Error() {
 			t.Fatalf("Expected %s got %s", e.Error(), ne2.Error())

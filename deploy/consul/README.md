@@ -93,22 +93,22 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 # describe `gateway` service
 ./micro get service go.micro.api
 # describe `account` service
-./micro get service  go.micro.srv.account | /bin/busybox less
+./micro get service  account-srv | /bin/busybox less
 
 # list users
-./micro call go.micro.srv.account UserService.List '{}'
+./micro call account-srv UserService.List '{}'
 
 # call Greeter
-./micro call go.micro.srv.greeter Greeter.Hello  '{"name": "John"}'
+./micro call greeter-srv Greeter.Hello  '{"name": "John"}'
 
 # list users
-./micro call go.micro.srv.account UserService.List '{"limit": 10, "page": 1}'
+./micro call account-srv UserService.List '{"limit": 10, "page": 1}'
 
 # create new user  - not working
-./micro call go.micro.srv.account UserService.Create \
+./micro call account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 
-./micro call go.micro.srv.account ProfileService.Create  \
+./micro call account-srv ProfileService.Create  \
 '{"userId": "467c715c-3f6e-40c4-9256-4c3e32d6870a", "tz" : "PST", "avatar": "sumo1.jpg", "gender": "F", "birthday": "2017-01-15T01:30:15.01Z"}'
 
 # lets try with REST Gateway..
@@ -116,13 +116,13 @@ curl --request POST \
 --url http://localhost:8080/rpc \
 --header 'accept: application/json' \
 --header 'content-type: application/json' \
---data '{"service": "go.micro.srv.account","method": "UserService.List","request": {}}'
+--data '{"service": "account-srv","method": "UserService.List","request": {}}'
 
 curl --request POST \
 --url http://localhost:8080/rpc \
 --header 'accept: application/json' \
 --header 'content-type: application/json' \
---data '{"service": "go.micro.srv.account", "method": "UserService.List","request": {"limit": 10, "page": 1}}'
+--data '{"service": "account-srv", "method": "UserService.List","request": {"limit": 10, "page": 1}}'
 
 
 ```

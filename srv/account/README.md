@@ -13,7 +13,7 @@ showcase
 
 ## Configuration
 
-- FQDN: go.micro.srv.account
+- FQDN: account-srv
 - Type: srv
 - Alias: account
 
@@ -30,7 +30,9 @@ make build TARGET=account TYPE=srv VERSION=v0.1.1
 Run the service
 
 ```bash
-go run srv/account/main.go srv/account/plugin.go
+make run-account
+# or
+go run srv/account/main.go srv/account/plugin.go --configDir deploy/bases/account-srv/config
 ```
 
 Build a docker image

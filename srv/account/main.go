@@ -72,8 +72,8 @@ func main() {
 		log.Fatalf("failed to build container: %v", err)
 	}
 
-	// Publisher publish to "go.micro.srv.emailer"
-	publisher := micro.NewPublisher("go.micro.srv.emailer", service.Client())
+	// Publisher publish to "emailer-srv"
+	publisher := micro.NewPublisher("emailer-srv", service.Client())
 
 	// // Handlers
 	userHandler := handler.NewUserHandler(ctn.Resolve("user-repository").(repository.UserRepository), publisher)

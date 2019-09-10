@@ -3,15 +3,16 @@ package main
 import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
-
-	// "github.com/micro/go-micro/server"
 	"github.com/micro/go-micro/config"
+
+	// "github.com/micro/go-micro/service/grpc"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/xmlking/micro-starter-kit/srv/emailer/registry"
 	"github.com/xmlking/micro-starter-kit/srv/emailer/subscriber"
 
-	// "github.com/micro/go-micro/service/grpc"
+	"github.com/xmlking/micro-starter-kit/shared/wrapper"
+
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	_ "github.com/xmlking/micro-starter-kit/shared/log"
 )
@@ -26,12 +27,8 @@ var (
 	cfg        myConfig.ServiceConfiguration
 )
 
-// init is called on package initialization and can therefore be used to initialize global stuff like logging, config, ..
-func init() {
-	config.Scan(&cfg)
-}
-
 func main() {
+
 	// New Service
 	service := micro.NewService(
 		// service := grpc.NewService(
@@ -54,9 +51,10 @@ func main() {
 			}),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
+		micro.WrapHandler(wrapper.LogWrapper),
 	)
 
-	// Initialise service
+	// Initialize service
 	service.Init(
 		// TODO : implement graceful shutdown
 		micro.Action(func(c *cli.Context) {
@@ -66,7 +64,7 @@ func main() {
 		}),
 	)
 
-	// Initialise DI Container
+	// Initialize DI Container
 	ctn, err := registry.NewContainer(cfg)
 	defer ctn.Clean()
 	if err != nil {
@@ -75,13 +73,13 @@ func main() {
 
 	emailSubscriber := ctn.Resolve("emailer-subscriber") //.(subscriber.EmailSubscriber)
 	// Register Struct as Subscriber
-	micro.RegisterSubscriber("go.micro.srv.emailer", service.Server(), emailSubscriber)
+	micro.RegisterSubscriber("emailer-srv", service.Server(), emailSubscriber)
 
 	// Register Function as Subscriber
-	micro.RegisterSubscriber("go.micro.srv.emailer", service.Server(), subscriber.Handler)
+	micro.RegisterSubscriber("emailer-srv", service.Server(), subscriber.Handler)
 
 	// register subscriber with queue, each message is delivered to a unique subscriber
-	// micro.RegisterSubscriber("go.micro.srv.emailer.2", service.Server(), subscriber.Handler, server.SubscriberQueue("queue.pubsub"))
+	// micro.RegisterSubscriber("emailer-srv-2", service.Server(), subscriber.Handler, server.SubscriberQueue("queue.pubsub"))
 
 	myConfig.PrintBuildInfo()
 	// Run service

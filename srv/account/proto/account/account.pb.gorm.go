@@ -2,7 +2,7 @@
 // source: srv/account/proto/account/account.proto
 
 /*
-Package go_micro_srv_account is a generated protocol buffer package.
+Package srv_account is a generated protocol buffer package.
 
 It is generated from these files:
 	srv/account/proto/account/account.proto
@@ -20,7 +20,7 @@ It has these top-level messages:
 	ProfileListQuery
 	ProfileListResponse
 */
-package go_micro_srv_account
+package srv_account
 
 import context "context"
 import strings "strings"

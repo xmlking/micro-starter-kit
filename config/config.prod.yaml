@@ -1,5 +1,5 @@
 environment: production
-name: go.micro.srv.account
+name: account-srv
 version: 0.1.0
 log:
   level: info

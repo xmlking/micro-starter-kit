@@ -8,7 +8,7 @@ Showcase
 
 ## Configuration
 
-- FQDN: go.micro.srv.emailer
+- FQDN: emailer-srv
 - Type: srv
 - Alias: emailer
 
@@ -25,7 +25,9 @@ make build TARGET=emailer TYPE=srv VERSION=v0.1.1
 Run the service
 
 ```bash
-go run srv/emailer/main.go srv/emailer/plugin.go
+make run-emailer
+# or
+go run srv/emailer/main.go srv/emailer/plugin.go --configDir deploy/bases/emailer-srv/config
 ```
 
 Build a docker image

@@ -35,7 +35,7 @@ spec:
             - name: MICRO_REGISTER_INTERVAL
               value: "5"
             - name: MICRO_API_NAMESPACE
-              value: go.micro.srv
+              value: ""
             - name: MICRO_API_HANDLER
               value: rpc
             - name: MICRO_API_ENABLE_RPC

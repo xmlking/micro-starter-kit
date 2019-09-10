@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package go.micro.api.account;
+package api.account;
 
 import "github.com/micro/go-micro/api/proto/api.proto";
 

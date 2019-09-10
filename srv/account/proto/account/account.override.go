@@ -1,4 +1,4 @@
-package go_micro_srv_account
+package srv_account
 
 import (
 	"context"

@@ -8,7 +8,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.Create",
     "request": {
         "username": "sumo",
@@ -26,7 +26,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.Create",
     "request": {
         "username": "sumo1",
@@ -43,7 +43,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.List",
     "request": {
     }
@@ -56,7 +56,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.List",
     "request": {
         "limit": 10,
@@ -71,7 +71,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.List",
     "request": {
         "limit": 10,
@@ -91,7 +91,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.Get",
     "request": {
         "id":  "{{firstUserId}}"
@@ -105,7 +105,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.Exist",
     "request": {
         "id": "{{firstUserId}}"
@@ -119,7 +119,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.Exist",
     "request": {
         "username": "sumo",
@@ -135,7 +135,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.Update",
     "request": {
         "id":  "{{firstUserId}}",
@@ -154,7 +154,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "UserService.Delete",
     "request": {
         "id":  "{{firstUserId}}"
@@ -170,7 +170,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "ProfileService.Create",
     "request": {
         "userId": "{{firstUserId}}",
@@ -188,7 +188,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "ProfileService.List",
     "request": {
     }
@@ -201,7 +201,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "ProfileService.List",
     "request": {
         "limit": 10,
@@ -221,7 +221,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "go.micro.srv.account",
+    "service": "account-srv",
     "method": "ProfileService.Get",
     "request": {
        "id": "{{firstProfileId}}"

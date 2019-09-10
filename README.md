@@ -2,7 +2,7 @@
 
 Microservices starter kit for **Golang**, aims to be developer friendly.
 
-[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fxmlking%2Fmicro-starter-kit%2Fbadge%3Fref%3Ddevelop&style=popout)](https://actions-badge.atrox.dev/xmlking/micro-starter-kit/goto)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fxmlking%2Fmicro-starter-kit%2Fbadge%3Fref%3Ddevelop&style=popout)](https://actions-badge.atrox.dev/xmlking/micro-starter-kit/goto?ref=develop)
 [![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
 [![GoDoc](https://godoc.org/github.com/xmlking/micro-starter-kit?status.svg)](https://godoc.org/github.com/xmlking/micro-starter-kit)
@@ -59,8 +59,20 @@ brew cask install bloomrpc
 # fetch protoc plugins into $GOPATH
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
 go get -u github.com/micro/protoc-gen-micro
-go get -u github.com/envoyproxy/protoc-gen-validate
+# go get -u github.com/envoyproxy/protoc-gen-validate
 go get -u github.com/infobloxopen/protoc-gen-gorm
+```
+
+> Installing PGV can currently only be done from source:
+
+```bash
+
+# fetches PGV repo into $GOPATH
+go get -d github.com/envoyproxy/protoc-gen-validate
+
+# installs PGV into $GOPATH/bin
+cd ~/go/src/github.com/envoyproxy/protoc-gen-validate
+make build
 ```
 
 ### Initial Setup
@@ -72,15 +84,17 @@ go mod init github.com/xmlking/micro-starter-kit
 mkdir srv api fnc
 
 # scaffold modules
-micro new --namespace="go.micro" --type="srv" --gopath=false --alias="account" srv/account
+micro new --fqdn="account-srv" --type="srv" --gopath=false \
+--alias="account" --plugin=registry=kubernetes srv/account
 
-micro new --namespace="go.micro" --type="srv" --gopath=false \
---alias="emailer"  --plugin=registry=mdns:broker=nats srv/emailer
+micro new --fqdn="emailer-srv" --type="srv" --gopath=false \
+--alias="emailer"  --plugin=registry=kubernetes:broker=nats srv/emailer
 
-micro new --namespace="go.micro" --type="srv" --gopath=false \
---alias="greeter"  --plugin=registry=kubernetes:transport=grpc srv/greeter
+micro new --fqdn="greeter-srv" --type="srv" --gopath=false \
+--alias="greeter"  --plugin=registry=kubernetes srv/greeter
 
-micro new --namespace="go.micro" --type="api" --gopath=false --alias="account" api/account
+micro new --fqdn="account-api" --type="api" --gopath=false \
+--alias="account" --plugin=registry=kubernetes api/account
 ```
 
 ### Build
@@ -90,8 +104,7 @@ make proto
 # silence
 make -s proto
 
-# Prod build. This build command includes plugins.go
-go build -o build/account-srv ./srv/account
+make build
 ```
 
 ### Run
@@ -125,9 +138,9 @@ make run-emailer
 # or
 # MY_VPN_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
 # go run srv/account/main.go srv/account/plugin.go --server_address=${MY_VPN_IP}:55011 --broker_address=${MY_VPN_IP}:55021
-go run srv/account/main.go srv/account/plugin.go
+go run srv/account/main.go srv/account/plugin.go --configDir deploy/bases/account-srv/config
 # go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${MY_VPN_IP}:55012 --broker_address=${MY_VPN_IP}:55022
-go run srv/emailer/main.go srv/emailer/plugin.go
+go run srv/emailer/main.go srv/emailer/plugin.go --configDir deploy/bases/emailer-srv/config
 
 # integration tests for config module via CMD
 make run TARGET=demo TYPE=cmd
@@ -144,14 +157,14 @@ go run cmd/demo/main.go
 
 ```bash
 # run account micro with gRPC transport, NOTE: we also have to add --server_name as it will remove server_name
-go run srv/account/main.go srv/account/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.account
-go run srv/emailer/main.go srv/emailer/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.emailer
+go run srv/account/main.go srv/account/plugin.go --client=grpc --server=grpc --server_name=account-srv
+go run srv/emailer/main.go srv/emailer/plugin.go --client=grpc --server=grpc --server_name=emailer-srv
 # we also has to use grpc for gateway and `micro call` cli
 go run cmd/micro/main.go cmd/micro/plugin.go --client=grpc --server=grpc api
 # go run cmd/micro/main.go cmd/micro/plugin.go --client=grpc --server=grpc api --enable_rpc=true
-go run cmd/micro/main.go cmd/micro/plugin.go  --api_handler=rpc  api --namespace=go.micro.srv --enable_rpc=true
+go run cmd/micro/main.go cmd/micro/plugin.go  --api_handler=rpc  api  --enable_rpc=true
 
-micro --client=grpc call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
+micro --client=grpc call account-srv UserService.List '{ "limit": 10, "page": 1}'
 ```
 
 ### Test
@@ -172,14 +185,10 @@ go test -v -run Integration ./srv/emailer/service
 
 ```bash
 micro list services
-micro get service go.micro.srv.account
-micro get service go.micro.srv.emailer
+micro get service account-srv
+micro get service emailer-srv
 
-# Start API Gateway
-micro api --namespace=go.micro.srv --enable_rpc=true
-# (or) Start Web UX for testing
-micro web --namespace=go.micro.srv
-
+# how to start proxy
 micro proxy --protocol=grpc
 ```
 
@@ -188,24 +197,27 @@ micro proxy --protocol=grpc
 > remember to use `micro --client=grpc` when microservices and gateway are using `grpc` transport
 
 ```bash
-# micro --client=grpc call go.micro.srv.account UserService.Create \
+# micro --client=grpc call account-srv UserService.Create \
 # '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call  go.micro.srv.account UserService.Create \
+micro call  account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call go.micro.srv.account UserService.Create \
+micro call account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call go.micro.srv.account UserService.List '{}'
-micro call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
-micro call go.micro.srv.account UserService.Get '{"id": "UserIdFromList"}'
-micro call go.micro.srv.account UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
-micro call go.micro.srv.account UserService.Update \
+micro call account-srv UserService.List '{}'
+micro call account-srv UserService.List '{ "limit": 10, "page": 1}'
+micro call account-srv UserService.Get '{"id": "UserIdFromList"}'
+micro call account-srv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
+micro call account-srv UserService.Update \
 '{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
-micro call go.micro.srv.account UserService.Delete '{ "id": "UserIdFromGet" }'
+micro call account-srv UserService.Delete '{ "id": "UserIdFromGet" }'
 ```
 
 #### Test via Micro Web UI
 
 ```bash
+# Start Web UI for testing
+micro web
+
 open http://localhost:8082
 ```
 
@@ -222,7 +234,14 @@ open http://localhost:8082
 
 #### Test via Micro API Gateway
 
+# Start API Gateway
+
 > Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
+
+```bash
+# start API Gateway to test via REST-Client
+micro api --enable_rpc=true
+```
 
 ## GitOps
 

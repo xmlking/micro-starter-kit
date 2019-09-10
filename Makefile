@@ -98,7 +98,7 @@ run run-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "no  TARGET. example usage: make test TARGET=account"; \
 	else \
-		go run  ./${TYPE}/${TARGET} ${ARGS}; \
+		go run  ./${TYPE}/${TARGET} --configDir deploy/bases/${TARGET}-${TYPE}/config ${ARGS}; \
 	fi
 
 release:

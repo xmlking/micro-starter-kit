@@ -33,7 +33,7 @@ func NewUserHandler(repo repository.UserRepository, pub micro.Publisher) pb.User
 func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.UserExistResponse) error {
 	log.Info("Received UserHandler.Exist request")
 	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.exist", "validation error: %v", err)
+		return myErrors.ValidationError("account-srv.user.exist", "validation error: %v", err)
 	}
 	model := pb.UserORM{}
 	model.Id = req.Id.GetValue()
@@ -49,7 +49,7 @@ func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.Us
 func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.UserListResponse) error {
 	log.Info("Received UserHandler.List request")
 	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.list", "validation error: %v", err)
+		return myErrors.ValidationError("account-srv.user.list", "validation error: %v", err)
 	}
 	model := pb.UserORM{}
 	model.Username = req.Username.GetValue()
@@ -58,7 +58,7 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 
 	total, users, err := h.userRepository.List(req.Limit.GetValue(), req.Page.GetValue(), req.Sort.GetValue(), &model)
 	if err != nil {
-		return errors.NotFound("go.micro.srv.account.user.list", "Error %v", err.Error())
+		return errors.NotFound("account-srv.user.list", "Error %v", err.Error())
 	}
 	rsp.Total = total
 
@@ -80,11 +80,11 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Get request")
 	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.get", "validation error: %v", err)
+		return myErrors.ValidationError("account-srv.user.get", "validation error: %v", err)
 	}
 	id := req.Id.GetValue()
 	if id == "" {
-		return myErrors.ValidationError("go.micro.srv.account.user.get", "validation error: Missing Id")
+		return myErrors.ValidationError("account-srv.user.get", "validation error: Missing Id")
 	}
 	user, err := h.userRepository.Get(id)
 	if err != nil {
@@ -104,7 +104,7 @@ func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.User
 func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Create request")
 	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.create", "validation error: %v", err)
+		return myErrors.ValidationError("account-srv.user.create", "validation error: %v", err)
 	}
 
 	model := pb.UserORM{}
@@ -129,12 +129,12 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Update request")
 	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: %v", err)
+		return myErrors.ValidationError("account-srv.user.update", "validation error: %v", err)
 	}
 
 	id := req.Id.GetValue()
 	if id == "" {
-		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: Missing Id")
+		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
 	model := pb.UserORM{}
@@ -153,12 +153,12 @@ func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 func (h *userHandler) Delete(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Delete request")
 	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.delete", "validation error: %v", err)
+		return myErrors.ValidationError("account-srv.user.delete", "validation error: %v", err)
 	}
 
 	id := req.Id.GetValue()
 	if id == "" {
-		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: Missing Id")
+		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
 	model := pb.UserORM{}
