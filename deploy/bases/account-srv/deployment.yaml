@@ -24,7 +24,7 @@ spec:
           image: xmlking/account-srv:latest
           imagePullPolicy: Always
           ports:
-            - name: grpc
+            - name: grpc-port
               containerPort: 8080
               protocol: TCP
           envFrom:

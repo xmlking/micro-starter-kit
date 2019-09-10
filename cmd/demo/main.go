@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	serviceName = "go.micro.cli.account"
+	serviceName = "account-cmd"
 )
 
 var (

@@ -280,25 +280,27 @@ docker run -it \
 
 ```bash
 # build
+TYPE=srv
+TARGET=account
 VERSION=0.0.5-SNAPSHOT
-BUILD_PKG=./srv/account
-IMANGE_NAME=xmlking/account-srv
+# DOCKER_REGISTRY=gcr.io
+DOCKER_CONTEXT_PATH=xmlking
 docker build --rm \
 --build-arg VERSION=$VERSION \
---build-arg BUILD_PKG=$BUILD_PKG \
---build-arg IMANGE_NAME=$IMANGE_NAME \
+--build-arg TYPE=${TYPE} \
+--build-arg TARGET=${TARGET} \
+--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
+--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
--t $IMANGE_NAME .
+-t ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION} .
 
-# tag
-docker tag $IMANGE_NAME $IMANGE_NAME:$VERSION
+IMANGE_NAME=${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}
 
 # push
-docker push $IMANGE_NAME:$VERSION
-docker push $IMANGE_NAME:"latest"
+docker push $IMANGE_NAME
 
 # check
-docker inspect  $IMANGE_NAME:$VERSION
+docker inspect  $IMANGE_NAME
 # remove temp images after build
 docker image prune -f
 # Remove all untagged images
@@ -371,6 +373,10 @@ make proto TARGET=shared TYPE=.
 # unit tests
 make test-account
 make test-emailer
+make test-account-api
+make test-config-shared
+make test-demo-cmd
+
 # integration tests
 make inte-account
 make inte-emailer
@@ -378,6 +384,9 @@ make inte-emailer
 # run
 make run-account
 make run-emailer
+make run-account-api
+make run-micro-cmd ARGS="--api_address=0.0.0.0:8088 api"
+make run-demo-cmd
 
 # build
 make build VERSION=v0.1.1
@@ -392,12 +401,14 @@ make build-account-api VERSION=v0.1.1
 make release VERSION=v0.1.1
 
 # build docker image
-make docker TARGET=account VERSION=v0.1.1
-make docker TARGET=account TYPE=srv VERSION=v0.1.1
 make docker-account VERSION=v0.1.1
 make docker-account-srv VERSION=v0.1.1
-make docker-emailer-srv VERSION=v0.1.1
-make docker-account-api VERSION=v0.1.1
+make docker TARGET=account VERSION=v0.1.1
+make docker TARGET=account TYPE=srv VERSION=v0.1.1
+make docker TARGET=account DOCKER_REGISTRY=gcr.io DOCKER_CONTEXT_PATH=micro-starter-kit
+
+make docker-emailer-srv
+make docker-account-api
 ```
 
 ## Reference

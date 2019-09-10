@@ -7,9 +7,9 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: grpc
+    - name: grpc-port
       port: 8080
       protocol: TCP
-      targetPort: grpc
+      targetPort: grpc-port
   selector:
     app: account-srv

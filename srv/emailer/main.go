@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	serviceName = "go.micro.srv.emailer"
+	serviceName = "emailer-srv"
 )
 
 var (

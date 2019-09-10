@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	serviceName = "go-micro-srv-account"
+	serviceName = "account-srv"
 )
 
 var (

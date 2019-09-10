@@ -17,30 +17,29 @@ go run cmd/micro/main.go  --api_address=0.0.0.0:8088  api
 
 ## Docker
 
+> from project root directory, run following commands.
+
 ### Docker Build
 
 ```bash
 # build
 VERSION=0.0.9-SNAPSHOT
-BUILD_PKG=./cmd/micro
-IMANGE_NAME=xmlking/micro
+# DOCKER_REGISTRY=gcr.io
+DOCKER_CONTEXT_PATH=xmlking
 docker build --rm \
 --build-arg VERSION=$VERSION \
---build-arg BUILD_PKG=$BUILD_PKG \
---build-arg IMANGE_NAME=$IMANGE_NAME \
+--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
+--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
--t $IMANGE_NAME -f micro.dockerfile .
+-t ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION} -f cmd/micro/Dockerfile .
 
-# tag
-docker tag $IMANGE_NAME $IMANGE_NAME:$VERSION
+IMANGE_NAME=${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION}
 
 # push
-docker push $IMANGE_NAME:$VERSION
-docker push $IMANGE_NAME:"kubernetes"
-
+docker push $IMANGE_NAME
 
 # check
-docker inspect  $IMANGE_NAME:$VERSION
+docker inspect  $IMANGE_NAME
 # remove temp images after build
 docker image prune -f
 # Remove all untagged images

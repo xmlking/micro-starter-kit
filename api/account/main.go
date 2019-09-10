@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	serviceName = "go.micro.api.account"
+	serviceName = "account-api"
 )
 
 func main() {

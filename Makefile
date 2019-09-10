@@ -1,8 +1,11 @@
-VERSION				:= $(shell git describe --tags || echo "HEAD")
-GOPATH				:= $(shell go env GOPATH)
-HAS_GOVVV			:= $(shell command -v govvv 2> /dev/null)
-HAS_KO				:= $(shell command -v ko 2> /dev/null)
-CODECOV_FILE 	:= build/coverage.txt
+VERSION					:= $(shell git describe --tags || echo "HEAD")
+GOPATH					:= $(shell go env GOPATH)
+HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
+HAS_KO					:= $(shell command -v ko 2> /dev/null)
+CODECOV_FILE 		:= build/coverage.txt
+# DOCKER_CONTEXT_PATH 			:= my_project_id/micro-starter-kit
+DOCKER_CONTEXT_PATH 			:= xmlking
+
 # Type of service e.g api, fnc, srv, web (default: "srv")
 TYPE = $(or $(word 2,$(subst -, ,$*)), srv)
 override TYPES:= api srv
@@ -124,18 +127,22 @@ docker docker-%:
 				echo "Building Image $${target}-$${type}..."; \
 				docker build --rm \
 				--build-arg VERSION=$(VERSION) \
-				--build-arg BUILD_PKG=./$${type}/$${target} \
-				--build-arg IMANGE_NAME=xmlking/$${target}-$${type} \
+				--build-arg TYPE=$${type} \
+				--build-arg TARGET=$${target} \
+				--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
+				--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
 				--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
-				-t xmlking/$${target}-$${type} .; \
+				-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/$${target}-$${type}:$(VERSION) .; \
 			done \
 		done \
 	else \
 		echo "Building image for ${TARGET}-${TYPE}..."; \
 		docker build --rm \
 		--build-arg VERSION=$(VERSION) \
-		--build-arg BUILD_PKG=./${TYPE}/${TARGET} \
-		--build-arg IMANGE_NAME=xmlking/${TARGET}-${TYPE} \
+		--build-arg TYPE=${TYPE} \
+		--build-arg TARGET=${TARGET} \
+		--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
+		--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
 		--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
-		-t xmlking/${TARGET}-${TYPE} .; \
+		-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:$(VERSION) .; \
 	fi
