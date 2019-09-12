@@ -52,7 +52,7 @@ proto proto-%:
 lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all"; \
-		${GOPATH}/bin/golangci-lint run ./... ; \
+		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
 	else \
 		echo "Linting ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
