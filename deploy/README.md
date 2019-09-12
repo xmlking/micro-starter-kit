@@ -24,7 +24,7 @@ brew install kubernetes-helm
 
 A _workflow_ is the sequence of steps one takes to use and maintain a configuration.
 
-![bespoke config workflow image](../docs/images/workflowbespoke.jpg)
+![bespoke config workflow image](docs/images/workflowBespoke.jpg)
 
 ## Matrix Deployment
 
