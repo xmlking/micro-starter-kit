@@ -12,7 +12,7 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 
 ## Overview
 
-![Image of Deployment](docs/deployment.png)
+![Image of Deployment](docs/images/deployment.png)
 
 ### What you get
 

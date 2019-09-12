@@ -20,6 +20,12 @@ brew install skaffold
 brew install kubernetes-helm
 ```
 
+## Workflows
+
+A _workflow_ is the sequence of steps one takes to use and maintain a configuration.
+
+![bespoke config workflow image](../docs/images/workflowbespoke.jpg)
+
 ## Matrix Deployment
 
 Typical release process includes deploying multiple related components to multiple environments/profiles <br/>
