@@ -45,3 +45,12 @@ replicas:
 images:
   - name: docker.io/bitnami/postgresql
     newTag: "10.7.0"
+
+vars:
+  - name: CONSUL_SA
+    objref:
+      kind: ServiceAccount
+      name: micro
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

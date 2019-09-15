@@ -3,19 +3,12 @@ namePrefix: consul-
 
 commonLabels:
   environment: production
-  # Hot to apply below Labels to only resources/consul.yaml and resources/consul-svc.yaml ?
-  # app.kubernetes.io/name: consul
-  # app.kubernetes.io/instance: consul-abcxzy
-  # app.kubernetes.io/component: infra
 commonAnnotations:
   note: Hello, I am production!
 
 bases:
   - ../../bases
-
-resources:
-  - resources/consul.yaml
-  - resources/consul-svc.yaml
+  - resources
 
 patches:
   - path: patches/health-sidecar.yaml

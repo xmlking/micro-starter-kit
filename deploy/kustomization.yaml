@@ -1,6 +1,6 @@
 bases:
-  # - overlays/k8s
-  - overlays/consul
+  - overlays/k8s
+  # - overlays/consul
 
 nameSuffix: -v1
 commonLabels:
