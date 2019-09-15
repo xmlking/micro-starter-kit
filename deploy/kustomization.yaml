@@ -1,15 +1,21 @@
 bases:
-  - overlays/production
+  # - overlays/k8s
+  - overlays/consul
 
-namespace: default
 nameSuffix: -v1
 commonLabels:
   app.kubernetes.io/version: v1
 
 images:
-  - name: xmlking/account-srv
+  - name: postgres
     newTag: latest
-  - name: xmlking/emailer-srv
-    newTag: latest
+  - name: microhq/micro
+    newTag: kubernetes
   - name: xmlking/account-api
-    newTag: latest
+    newTag: v0.1.0-118-g21f8a30
+  - name: xmlking/account-srv
+    newTag: v0.1.0-118-g21f8a30
+  - name: xmlking/emailer-srv
+    newTag: v0.1.0-118-g21f8a30
+  - name: xmlking/greeter-srv
+    newTag: v0.1.0-118-g21f8a30

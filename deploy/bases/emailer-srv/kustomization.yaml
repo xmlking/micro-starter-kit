@@ -3,16 +3,27 @@ commonLabels:
   app.kubernetes.io/instance: emailer-srv-abcxzy
   app.kubernetes.io/component: microservice
 
+namePrefix: emailer-
+
 resources:
   - deployment.yaml
   - service.yaml
 
 configMapGenerator:
-  - behavior: merge
+  - name: config
     files:
       - config/config.yaml
-    name: configs
+  # - name: env-vars
+  - name: env-vars1
+    literals:
+      - SERVICE_NAME=$(EMAILER_SERVICE_NAME)
+      - DATABASE_HOST=$(DATABASE_SERVICE_NAME)
 
-images:
-  - name: xmlking/emailer-srv
-    newTag: latest
+vars:
+  - name: EMAILER_SERVICE_NAME
+    objref:
+      kind: Service
+      name: srv
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

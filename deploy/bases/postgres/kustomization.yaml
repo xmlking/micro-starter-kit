@@ -7,10 +7,6 @@ resources:
   - postgres.yaml
   - service.yaml
 
-images:
-  - name: postgres
-    newTag: 11.5-alpine
-
 secretGenerator:
   - name: postgres-secrets
     literals:

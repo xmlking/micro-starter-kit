@@ -1,0 +1,17 @@
+# fuzz:
+#   runs-on: ubuntu-latest
+#   steps:
+#     - name: Install Go
+#       uses: actions/setup-go@v1
+#       with:
+#         go-version: 1.13
+#     - name: Checkout code
+#       uses: actions/checkout@v1
+
+#     - name: fuzz regression tests
+#       run: cd _fuzz/it && ./fuzz-ci local-regression 2>&1 | grep -vE '^Running|^Executed'
+#     - name: fuzz continuous job
+#       run: export PATH="$PATH:$(go env GOPATH)/bin"; cd _fuzz/it && ./fuzz-ci fuzzing
+#       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+#       env:
+#         FUZZIT_API_KEY: ${{ secrets.FUZZIT_API_KEY }}

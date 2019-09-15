@@ -3,16 +3,28 @@ commonLabels:
   app.kubernetes.io/instance: account-srv-abcxzy
   app.kubernetes.io/component: microservice
 
+namePrefix: account-
+
 resources:
   - deployment.yaml
   - service.yaml
 
 configMapGenerator:
-  - behavior: merge
+  - name: config
     files:
       - config/config.yaml
-    name: configs
+  - name: env-vars
+    literals:
+      - SERVICE_NAME=$(ACCOUNT_SERVICE_NAME)
+      - APP_GATEWAY=$(GATEWAY_SERVICE_NAME)
+      - DATABASE_HOST=$(DATABASE_SERVICE_NAME)
+      - EMAILER_HOST=$(EMAILER_SERVICE_NAME)
 
-images:
-  - name: xmlking/account-srv
-    newTag: latest
+vars:
+  - name: ACCOUNT_SERVICE_NAME
+    objref:
+      kind: Service
+      name: srv
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

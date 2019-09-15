@@ -5,6 +5,7 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fxmlking%2Fmicro-starter-kit%2Fbadge%3Fref%3Ddevelop&style=popout)](https://actions-badge.atrox.dev/xmlking/micro-starter-kit/goto?ref=develop)
 [![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
+[![fuzzit](https://app.fuzzit.dev/badge?org_id=xmlkinggithub&branch=develop)](https://app.fuzzit.dev/orgs/xmlkinggithub/dashboard)
 [![GoDoc](https://godoc.org/github.com/xmlking/micro-starter-kit?status.svg)](https://godoc.org/github.com/xmlking/micro-starter-kit)
 [![Go 1.13](https://img.shields.io/badge/go-1.13-9cf.svg)](https://golang.org/dl/)
 [![Renovate dependency Status](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)

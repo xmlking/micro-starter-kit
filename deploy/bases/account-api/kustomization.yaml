@@ -3,16 +3,26 @@ commonLabels:
   app.kubernetes.io/instance: account-api-abcxzy
   app.kubernetes.io/component: microservice
 
+namePrefix: account-api-
+
 resources:
   - deployment.yaml
   - service.yaml
 
 configMapGenerator:
-  - behavior: merge
+  - name: config
     files:
       - config/config.yaml
-    name: configs
+  - name: env-vars1
+    literals:
+      - SERVICE_NAME=$(ACCOUNT_API_SERVICE_NAME)
+      - ACCOUNT_HOST=$(ACCOUNT_SERVICE_NAME)
 
-images:
-  - name: xmlking/account-api
-    newTag: latest
+vars:
+  - name: ACCOUNT_API_SERVICE_NAME
+    objref:
+      kind: Service
+      name: api
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

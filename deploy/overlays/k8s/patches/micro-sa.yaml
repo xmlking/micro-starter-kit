@@ -1,0 +1,8 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srv
+spec:
+  template:
+    spec:
+      serviceAccountName: micro

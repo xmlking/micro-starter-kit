@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  template:
+    spec:
+      containers:
+        - name: api
+          image: xmlking/account-api:latest
+          imagePullPolicy: Always
+          ports:
+            - name: grpc-port
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              readOnly: true
+              mountPath: /config
+          envFrom:
+            - configMapRef:
+                name: env-vars
+            - secretRef:
+                name: secrets
+      volumes:
+        - name: config
+          configMap:
+            name: config

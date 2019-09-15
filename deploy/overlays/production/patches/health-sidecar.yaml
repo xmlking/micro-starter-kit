@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-sidecar
+spec:
+  template:
+    spec:
+      containers:
+        - name: opa
+          image: openpolicyagent/opa:latest
+          args:
+            - "run"
+            - "-s"
+            - "--addr=http://127.0.0.1:8181"
+            - "--config-file=/etc/opa/config.yaml"

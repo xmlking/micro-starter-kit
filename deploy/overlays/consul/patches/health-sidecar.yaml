@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-sidecar
+spec:
+  template:
+    spec:
+      containers:
+        - name: health
+          image: microhq/health:kubernetes
+          command:
+            [
+              "/health",
+              "--health_address=0.0.0.0:8081",
+              "--server_name=micro",
+              "--server_address=0.0.0.0:8989",
+            ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

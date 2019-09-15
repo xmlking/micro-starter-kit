@@ -1,0 +1,60 @@
+namespace: consul-ns
+namePrefix: consul-
+
+commonLabels:
+  environment: production
+  # Hot to apply below Labels to only resources/consul.yaml and resources/consul-svc.yaml ?
+  # app.kubernetes.io/name: consul
+  # app.kubernetes.io/instance: consul-abcxzy
+  # app.kubernetes.io/component: infra
+commonAnnotations:
+  note: Hello, I am production!
+
+bases:
+  - ../../bases
+
+resources:
+  - resources/consul.yaml
+  - resources/consul-svc.yaml
+
+patches:
+  - path: patches/health-sidecar.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
+
+configMapGenerator:
+  # - name: env-vars-common
+  - name: env-vars
+    behavior: merge
+    literals:
+      - APP_ENV=production
+      - MICRO_REGISTRY=consul
+      - MICRO_REGISTRY_ADDRESS="$(CONSUL_SERVICE_NAME):8500"
+      - MICRO_REGISTER_TTL="10"
+      - MICRO_REGISTER_INTERVAL="5"
+
+secretGenerator:
+  - name: secrets
+    behavior: replace
+    literals:
+      - DATABASE_PASSWORD=prod-real-pass
+
+replicas:
+  - name: srv
+    count: 5
+
+# imagePullPolicy: IfNotPresent
+
+images:
+  - name: progrium/consul
+    newTag: latest
+
+vars:
+  - name: CONSUL_SERVICE_NAME
+    objref:
+      kind: Service
+      name: consul
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

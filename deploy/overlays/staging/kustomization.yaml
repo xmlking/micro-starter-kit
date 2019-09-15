@@ -1,4 +1,4 @@
-namespace: default
+namespace: staging-ns
 namePrefix: staging-
 
 commonLabels:

@@ -5,53 +5,56 @@ commonLabels:
 commonAnnotations:
   org: acmeCorporation
 
-# labels for generated ConfigMap at this level
-generatorOptions:
-  labels:
-    app.kubernetes.io/name: app-config
-    app.kubernetes.io/instance: app-config-abcxzy
-    app.kubernetes.io/component: config
-
 bases:
-  - account-srv
-  - account-api
-  - emailer-srv
-  - postgres
   - gateway
+  # - postgres
+  - account-api
+  - account-srv
+  - emailer-srv
+  - greeter-srv
 
-# resources:
-#   - micro-service-account.yaml
+configurations:
+  - kconfig.yaml
 
 configMapGenerator:
+  # - name: env-vars-common
   - name: env-vars
+    behavior: merge
     literals:
-      - MICRO_REGISTRY=kubernetes
       - MICRO_SERVER_ADDRESS=0.0.0.0:8080
+      - MICRO_BROKER_ADDRESS=0.0.0.0:10001
       - APP_ENV=development
-  - name: configs
-    files:
-      - config/config.yaml
-# secretGenerator:
-# - name: secrets
-#   env: secrets
+      - CONFIG_DIR=/config
+      - CONFIG_FILE=config.yaml
+      - MICRO_REGISTRY=mdns
+
+secretGenerator:
+  - name: secrets
+    literals:
+      - DATABASE_PASSWORD=fake
+
+# patches:
+#   - patch: |-
+#       - op: replace
+#         path: /some/existing/replicas
+#         value: new value
+
 # secretGenerator:
 # - name: app-tls
 #   files:
 #     - secret/tls.cert
 #     - secret/tls.key
 
-vars:
-  - name: GATEWAY_SERVICE_NAME
-    objref:
-      kind: Service
-      name: gateway
-      apiVersion: v1
-    fieldref:
-      fieldpath: metadata.name
-  - name: ACCOUNT_SERVICE_NAME
-    objref:
-      kind: Service
-      name: account-srv
-      apiVersion: v1
-    fieldref:
-      fieldpath: metadata.name
+images:
+  - name: postgres
+    newTag: latest
+  - name: microhq/micro
+    newTag: kubernetes
+  - name: xmlking/account-api
+    newTag: latest
+  - name: xmlking/account-srv
+    newTag: latest
+  - name: xmlking/emailer-srv
+    newTag: latest
+  - name: xmlking/greeter-srv
+    newTag: latest

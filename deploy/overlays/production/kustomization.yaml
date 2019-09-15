@@ -1,4 +1,4 @@
-namespace: default
+namespace: prod-ns
 namePrefix: prod-
 
 commonLabels:
@@ -17,6 +17,12 @@ patchesStrategicMerge:
   - patches/replica_count.yaml
   - patches/resource_limit.yaml
 
+patches:
+  - path: patches/health-sidecar.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=service
+
 configMapGenerator:
   - behavior: merge
     files:
@@ -30,7 +36,11 @@ secretGenerator:
     name: postgres-secrets
 
 images:
-  - name: xmlking/account-srv
-    newTag: v1.0.1
+  - name: postgres
+    newTag: 11.5-alpine
   - name: docker.io/bitnami/postgresql
     newTag: "10.7.0"
+  - name: progrium/consul
+    newTag: consul-0.4
+  - name: xmlking/account-srv
+    newTag: v1.0.1

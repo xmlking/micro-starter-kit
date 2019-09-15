@@ -1,4 +1,4 @@
-namespace: default
+namespace: dev-ns
 namePrefix: dev-
 
 commonLabels:
@@ -8,6 +8,8 @@ commonAnnotations:
 
 bases:
   - ../../bases
+
+# imagePullPolicy: Always
 
 configMapGenerator:
   - behavior: merge

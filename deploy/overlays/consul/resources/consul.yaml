@@ -1,22 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: consul
   name: consul
 spec:
   # http://www.devoperandi.com/cluster-consul-using-kubernetes-api/
   replicas: 1 # need to figure out how to replication
-  selector:
-    matchLabels:
-      app: consul
   template:
-    metadata:
-      labels:
-        app: consul
-      name: consul
     spec:
-      serviceAccountName: micro
       containers:
         - name: consul
           image: progrium/consul:latest

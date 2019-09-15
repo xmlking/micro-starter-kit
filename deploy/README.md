@@ -141,6 +141,8 @@ kustomize build someapp/overlays/production | kubectl apply -f -
 # Fix the missing and deprecated fields in kustomization file
 kustomize edit fix
 
+kustomize build ./deploy
+
 kubectl get -k ./deploy
 kubectl describe -k ./deploy
 kubectl delete -k ./deploy
@@ -154,3 +156,4 @@ kubectl delete -k ./deploy
 4. with sops <https://teuto.net/deploying-jupyterhub-to-kubernetes-via-kustomize-using-sops-secret-management/?lang=en>
 5. <https://github.com/pwittrock-me/petclinic-config/tree/master/config>
 6. <https://github.com/venilnoronha/grpc-web-istio-demo>
+7. patch example, keycloak traefik <https://github.com/piotrjanik/opa-warsaw-cloud-native-conf/tree/master/manifests>

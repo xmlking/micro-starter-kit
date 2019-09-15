@@ -1,70 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app: greeter-srv
-  name: greeter-srv
+  name: srv
 spec:
-  selector:
-    matchLabels:
-      app: greeter-srv
-  strategy:
-    type: RollingUpdate
   template:
-    metadata:
-      labels:
-        app: greeter-srv
-      name: greeter-srv
     spec:
-      serviceAccountName: micro
       containers:
-        - name: greeter-srv
-          # This is the import path for the Go binary to build and run.
-          # image: github.com/xmlking/micro-starter-kit/srv/greeter
+        - name: srv
           image: xmlking/greeter-srv:latest
           imagePullPolicy: Always
           ports:
             - name: grpc-port
               containerPort: 8080
               protocol: TCP
+          volumeMounts:
+            - name: config
+              readOnly: true
+              mountPath: /config
           envFrom:
             - configMapRef:
-                name: configs
+                name: env-vars
             - secretRef:
                 name: secrets
-          # https://github.com/inigofu/temac-user-service/blob/master/deployments/deployment.yml
-          # https://github.com/hmoragrega/grpc/tree/master/kubernetes
-          env:
-            - name: MICRO_REGISTRY
-              value: kubernetes
-            - name: MICRO_SERVER_ADDRESS
-              value: 0.0.0.0:8080
-            - name: MICRO_BROKER_ADDRESS
-              value: 0.0.0.0:10001
-            - name: APP_ENV
-              value: production
-            - name: APP_GATEWAY
-              value: $(GATEWAY_SERVICE_NAME)
-            - name: CONFIG_DIR
-              value: /config
-            - name: CONFIG_FILE
-              value: config.yaml
-            # - name: DATABASE_PASSWORD
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: greeter-postgresql
-            #       key: postgresql-password
-        # - name: health
-        #   command: [
-        #         "/health",
-        #         "--health_address=0.0.0.0:8081",
-        #         "--server_name=greeter-srv",
-        #         "--server_address=0.0.0.0:8080"
-        #   ]
-        #   image: microhq/health:kubernetes
-        #   livenessProbe:
-        #     httpGet:
-        #       path: /health
-        #       port: 8081
-        #     initialDelaySeconds: 3
-        #     periodSeconds: 3
+      volumes:
+        - name: config
+          configMap:
+            name: config

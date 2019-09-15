@@ -1,0 +1,47 @@
+namespace: k8s-ns
+namePrefix: k8s-
+
+commonLabels:
+  environment: production
+commonAnnotations:
+  note: Hello, I am production!
+
+bases:
+  - ../../bases
+
+resources:
+  - resources/micro-service-account.yaml
+
+patches:
+  - path: patches/health-sidecar.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
+  - path: patches/micro-sa.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
+
+configMapGenerator:
+  # - name: env-vars-common
+  - name: env-vars
+    behavior: merge
+    literals:
+      - APP_ENV=production
+      - MICRO_REGISTRY=consul
+
+secretGenerator:
+  - name: secrets
+    behavior: replace
+    literals:
+      - DATABASE_PASSWORD=prod-real-pass
+
+replicas:
+  - name: srv
+    count: 4
+
+# imagePullPolicy: IfNotPresent
+
+images:
+  - name: docker.io/bitnami/postgresql
+    newTag: "10.7.0"

@@ -2,20 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gateway
-  labels:
-    app: gateway
 spec:
-  replicas: 1
-  strategy:
-  type: RollingUpdate
-  selector:
-    matchLabels:
-      app: gateway
   template:
-    metadata:
-      name: gateway
-      labels:
-        app: gateway
     spec:
       containers:
         - name: gateway
@@ -34,19 +22,3 @@ spec:
             - name: gateway-http
               containerPort: 8080
               protocol: TCP
-        - name: health
-          command:
-            [
-              "/health",
-              "--health_address=0.0.0.0:8081",
-              "--server_name=gateway",
-              "--server_address=0.0.0.0:8989",
-            ]
-          image: microhq/health:kubernetes
-          imagePullPolicy: Always
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8081
-            initialDelaySeconds: 3
-            periodSeconds: 3
