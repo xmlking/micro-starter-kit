@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consul
+spec:
+  # http://www.devoperandi.com/cluster-consul-using-kubernetes-api/
+  replicas: 1 # need to figure out how to replication
+  template:
+    spec:
+      containers:
+        - name: consul
+          image: progrium/consul:latest
+          command: ["/bin/start", "-server", "-bootstrap"]
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8500
+              name: ui-port
+            - containerPort: 8400
+              name: alt-port
+            - containerPort: 53
+              name: udp-port
+            - containerPort: 443
+              name: https-port
+            - containerPort: 8080
+              name: http-port
+            - containerPort: 8301
+              name: serflan
+            - containerPort: 8302
+              name: serfwan
+            - containerPort: 8600
+              name: consuldns
+            - containerPort: 8300
+              name: server

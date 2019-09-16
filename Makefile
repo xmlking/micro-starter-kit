@@ -19,7 +19,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-%
+.PHONY: proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean
 
 tools:
 	@echo "==> Installing dev tools"
@@ -146,3 +146,11 @@ docker docker-%:
 		--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
 		-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:$(VERSION) .; \
 	fi
+
+docker_clean:
+	@echo "Cleaning dangling images..."
+	@docker images -f "dangling=true" -q  | xargs docker rmi
+	@echo "Removing microservice images..."
+	@docker images -f "label=org.label-schema.vendor=sumo" -q | xargs docker rmi
+	@echo "Pruneing images..."
+	@docker image prune -f

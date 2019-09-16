@@ -10,15 +10,20 @@ bases:
   - ../../bases
   - resources
 
-patches:
-  - path: patches/health-sidecar.yaml
-    target:
-      kind: Deployment
-      labelSelector: app.kubernetes.io/component=microservice
-  # - path: patches/image-pull-policy-if-not-present.yaml
-  #   target:
-  #     kind: Deployment
-  #     labelSelector: app.kubernetes.io/component=microservice
+# lets make it simple
+# patches:
+#   - path: patches/health-sidecar.yaml
+#     target:
+#       kind: Deployment
+#       labelSelector: app.kubernetes.io/component=microservice
+#   - path: patches/resource_limit.yaml
+#     target:
+#       kind: Deployment
+#       labelSelector: app.kubernetes.io/component=microservice
+#   - path: patches/image-pull-policy-if-not-present.yaml
+#     target:
+#       kind: Deployment
+#       labelSelector: app.kubernetes.io/component=microservice
 
 configMapGenerator:
   # - name: env-vars

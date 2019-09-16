@@ -6,10 +6,18 @@ spec:
   template:
     spec:
       containers:
-        - name: opa
-          image: openpolicyagent/opa:latest
-          args:
-            - "run"
-            - "-s"
-            - "--addr=http://127.0.0.1:8181"
-            - "--config-file=/etc/opa/config.yaml"
+        - name: health
+          image: microhq/health:kubernetes
+          command:
+            [
+              "/health",
+              "--health_address=0.0.0.0:8081",
+              "--server_name=micro",
+              "--server_address=0.0.0.0:8989",
+            ]
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8081
+            initialDelaySeconds: 3
+            periodSeconds: 3

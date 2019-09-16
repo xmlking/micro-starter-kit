@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 8500
+    - name: rpc
+      port: 8400
+    - name: serflan
+      port: 8301
+    - name: serfwan
+      port: 8302
+    - name: server
+      port: 8300
+    - name: consuldns
+      port: 8600

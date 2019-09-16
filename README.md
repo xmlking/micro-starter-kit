@@ -308,6 +308,7 @@ TARGET=account
 VERSION=0.0.5-SNAPSHOT
 # DOCKER_REGISTRY=gcr.io
 DOCKER_CONTEXT_PATH=xmlking
+# docker build --force-rm=true --rm=true --no-cache \
 docker build --rm \
 --build-arg VERSION=$VERSION \
 --build-arg TYPE=${TYPE} \
@@ -326,8 +327,12 @@ docker push $IMANGE_NAME
 docker inspect  $IMANGE_NAME
 # remove temp images after build
 docker image prune -f
-# Remove all untagged images
-docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+# Remove dangling images
+docker rmi $(docker images -f "dangling=true" -q)
+# Remove images tagged with vendor=sumo
+docker rmi $(docker images -f "label=org.label-schema.vendor=sumo"  -q)
+# Remove all <none> layers
+docker rmi $(docker images -a|grep "<none>"|awk '$1=="<none>" {print $3}')
 ```
 
 #### Docker Run
