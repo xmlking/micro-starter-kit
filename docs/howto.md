@@ -2,7 +2,7 @@
 
 - go-micro service interactions
 
-  ![Image of micro-interactions](micro-interactions.png)
+  ![Image of micro-interactions](images/micro-interactions.png)
 
 - How to update 3rd party dependencies?
 
@@ -12,8 +12,19 @@ go get -u=patch # to use the latest patch releases
 go mod tidy
 # to find out why you have specific dependency
 go mod why -m github.com/DATA-DOG/go-sqlmock
+# with golang 1.13, some modules are not compatible yet. please use this as temp solution.
+go env -w GOPROXY=direct
+go env -w GOSUMDB=off
+go mod download
 ```
 
+- How to clean cached go modules?
+
+```bash
+# this empties $GOPATH/pkg/mod/
+go clean -cache -modcache
+```
+  
 - How to Prepare for a Release?
 
 ```bash
@@ -108,3 +119,9 @@ go test all
   --selector=cache # enables in memory caching of discovered nodes
   --client_pool_size=10 # enables the client side connection pool
   ```
+  
+### Refer
+
+- [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
+- [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
+
