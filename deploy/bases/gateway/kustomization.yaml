@@ -3,17 +3,30 @@ commonLabels:
   app.kubernetes.io/instance: gateway-abcxzy
   app.kubernetes.io/component: microservice
 
-# namePrefix: gateway-
+namePrefix: gateway-
 
 resources:
   - deployment.yaml
   - service.yaml
 
+configMapGenerator:
+  - name: env-vars
+    literals:
+      - SERVICE_NAME=$(GATEWAY_SERVICE_NAME)
+      - MICRO_SERVER_NAME=$(GATEWAY_SERVICE_NAME)
+      - MICRO_API_NAMESPACE=""
+      - MICRO_API_HANDLER=rpc
+      - MICRO_API_ENABLE_RPC="true"
+      - MICRO_LOG_LEVEL=debug
+      - CORS_ALLOWED_HEADERS="Authorization,Content-Type"
+      - CORS_ALLOWED_ORIGINS="*"
+      - CORS_ALLOWED_METHODS="POST,GET"
+
 vars:
   - name: GATEWAY_SERVICE_NAME
     objref:
       kind: Service
-      name: gateway
+      name: srv
       apiVersion: v1
     fieldref:
       fieldpath: metadata.name

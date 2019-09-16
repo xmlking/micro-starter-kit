@@ -28,6 +28,7 @@ GO111MODULE=on go get -v sigs.k8s.io/kustomize/v3@master
 cd ~/go/pkg/mod/sigs.k8s.io/kustomize/v3@v3.1.1-0.20190913222800-32be1cf4c21e
  make install
 alias kustomize='~/go/bin/kustomize'
+kustomize version
 ```
 
 ## Workflows
@@ -158,6 +159,23 @@ kustomize build ./deploy
 kubectl get -k ./deploy
 kubectl describe -k ./deploy
 kubectl delete -k ./deploy
+```
+
+## verify
+
+```bash
+kustomize build ./deploy > release.yaml
+k apply -f release.yaml
+k get all -l app.kubernetes.io/managed-by=kustomize
+open http://localhost:8500/ui/#/dc1/services
+
+POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
+kubectl exec -it $POD_NAME -- /bin/sh
+kubectl logs $POD_NAME -f
+
+k get svc
+
+k delete -f release.yaml
 ```
 
 ## kustomize-sopssecret-plugin
