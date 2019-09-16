@@ -139,12 +139,16 @@ docker system prune --volumes
 ```bash
 # dev mode
 make run-account
+# or
+make run-account ARGS="--server_address=localhost:55012 --broker_address=localhost:55022"
+# or
+go run srv/account/main.go srv/account/plugin.go \
+--configDir deploy/bases/account-srv/config \
+--server_address=localhost:55011 --broker_address=localhost:55021
+
 make run-emailer
 # or
-# go run srv/account/main.go srv/account/plugin.go --server_address=localhost:55011 --broker_address=localhost:55021
-go run srv/account/main.go srv/account/plugin.go --configDir deploy/bases/account-srv/config
-# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=localhost:55012 --broker_address=localhost:55022
-go run srv/emailer/main.go srv/emailer/plugin.go --configDir deploy/bases/emailer-srv/config
+make run-emailer ARGS="--server_address=localhost:55011 --broker_address=localhost:55021"
 
 # integration tests for config module via CMD
 make run TARGET=demo TYPE=cmd
