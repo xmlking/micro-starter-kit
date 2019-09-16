@@ -188,10 +188,10 @@ k delete -f release.yaml
 ```bash
 # VERSION=1.0.0 PLATFORM=linux ARCH=amd64
 VERSION=1.0.0 PLATFORM=darwin ARCH=amd64
-wget https://github.com/goabout/kustomize-sopssecret-plugin/releases/download/v${VERSION}/SopsSecret_${VERSION}_${PLATFORM}_${ARCH} -O SopsSecret
+curl -Lo SopsSecret https://github.com/goabout/kustomize-sopssecret-plugin/releases/download/v${VERSION}/SopsSecret_${VERSION}_${PLATFORM}_${ARCH}
 chmod +x SopsSecret
-mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/sopssecret"
-mv SopsSecret "${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/sopssecret"
+mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/goabout.com/v1beta1/sopssecret"
+mv SopsSecret "${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/goabout.com/v1beta1/sopssecret"
 ```
 
 ### Usage
@@ -225,6 +225,10 @@ files:
   - secret-file.txt
 .
 ```
+
+> Run kustomize build with the --enable_alpha_plugins flag:
+
+`kustomize build --enable_alpha_plugins`
 
 ## Reference
 
