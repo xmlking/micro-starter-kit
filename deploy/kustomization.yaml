@@ -1,16 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 bases:
-  - overlays/k8s
-  # - overlays/consul
+  - overlays/consul
+  # - overlays/k8s
 
 nameSuffix: -v1
 commonLabels:
   app.kubernetes.io/version: v1
 
 images:
+  - name: microhq/micro
+    newTag: latest
+  - name: progrium/consul
+    newTag: latest
   - name: postgres
     newTag: latest
-  - name: microhq/micro
-    newTag: kubernetes
   - name: xmlking/account-api
     newTag: v0.1.0-118-g21f8a30
   - name: xmlking/account-srv

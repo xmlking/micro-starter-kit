@@ -20,6 +20,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: env-vars
+            - configMapRef:
+                name: env-vars-common
             - secretRef:
                 name: secrets
       volumes:

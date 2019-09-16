@@ -13,8 +13,7 @@ configMapGenerator:
   - name: config
     files:
       - config/config.yaml
-  # - name: env-vars
-  - name: env-vars1
+  - name: env-vars
     literals:
       - SERVICE_NAME=$(EMAILER_SERVICE_NAME)
       - DATABASE_HOST=$(DATABASE_SERVICE_NAME)

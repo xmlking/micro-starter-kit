@@ -13,7 +13,7 @@ configMapGenerator:
   - name: config
     files:
       - config/config.yaml
-  - name: env-vars1
+  - name: env-vars
     literals:
       - SERVICE_NAME=$(ACCOUNT_API_SERVICE_NAME)
       - ACCOUNT_HOST=$(ACCOUNT_SERVICE_NAME)

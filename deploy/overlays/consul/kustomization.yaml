@@ -15,10 +15,14 @@ patches:
     target:
       kind: Deployment
       labelSelector: app.kubernetes.io/component=microservice
+  # - path: patches/image-pull-policy-if-not-present.yaml
+  #   target:
+  #     kind: Deployment
+  #     labelSelector: app.kubernetes.io/component=microservice
 
 configMapGenerator:
-  # - name: env-vars-common
-  - name: env-vars
+  # - name: env-vars
+  - name: env-vars-common
     behavior: merge
     literals:
       - APP_ENV=production
@@ -36,8 +40,6 @@ secretGenerator:
 replicas:
   - name: srv
     count: 5
-
-# imagePullPolicy: IfNotPresent
 
 images:
   - name: progrium/consul

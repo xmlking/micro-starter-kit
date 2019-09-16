@@ -20,6 +20,16 @@ brew install skaffold
 brew install kubernetes-helm
 ```
 
+> lets get latest, as we need unreleased version
+
+```bash
+cd ~
+GO111MODULE=on go get -v sigs.k8s.io/kustomize/v3@master
+cd ~/go/pkg/mod/sigs.k8s.io/kustomize/v3@v3.1.1-0.20190913222800-32be1cf4c21e
+ make install
+alias kustomize='~/go/bin/kustomize'
+```
+
 ## Workflows
 
 A _workflow_ is the sequence of steps one takes to use and maintain a configuration.
@@ -133,7 +143,9 @@ kubectl apply -k ./deploy
 # only production env
 kubectl kustomize ./deploy/overlays/production
 
-kustomize edit set image busybox=alpine:3.6
+# update image version
+IMAGE_VERSION=v0.1.0-118-g21f8a30
+cd deploy && kustomize edit set image xmlking/account-srv:$IMAGE_VERSION && cd ..
 
 kustomize build someapp/overlays/staging | kubectl apply -f -
 kustomize build someapp/overlays/production | kubectl apply -f -
@@ -146,6 +158,51 @@ kustomize build ./deploy
 kubectl get -k ./deploy
 kubectl describe -k ./deploy
 kubectl delete -k ./deploy
+```
+
+## kustomize-sopssecret-plugin
+
+> Installing [kustomize-sopssecret-plugin](https://github.com/goabout/kustomize-sopssecret-plugin)
+
+```bash
+# VERSION=1.0.0 PLATFORM=linux ARCH=amd64
+VERSION=1.0.0 PLATFORM=darwin ARCH=amd64
+wget https://github.com/goabout/kustomize-sopssecret-plugin/releases/download/v${VERSION}/SopsSecret_${VERSION}_${PLATFORM}_${ARCH} -O SopsSecret
+chmod +x SopsSecret
+mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/sopssecret"
+mv SopsSecret "${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/sopssecret"
+```
+
+### Usage
+
+> Create some encrypted values using sops:
+
+```bash
+echo FOO=secret >secret-vars.env
+sops -e -i secret-vars.env
+
+echo secret >secret-file.txt
+sops -e -i secret-file.txt
+```
+
+> Add a generator to your kustomization:
+
+```bash
+cat <<. >kustomization.yaml
+generators:
+  - generator.yaml
+.
+
+cat <<. >generator.yaml
+apiVersion: goabout.com/v1beta1
+kind: SopsSecret
+metadata:
+  name: my-secret
+envs:
+  - secret-vars.env
+files:
+  - secret-file.txt
+.
 ```
 
 ## Reference
