@@ -1,4 +1,4 @@
-namespace: k8s-ns
+namespace: default
 namePrefix: k8s-
 
 commonLabels:
@@ -12,27 +12,28 @@ bases:
 resources:
   - resources/micro-service-account.yaml
 
+# lets make it simple
 patches:
-  - path: patches/health-sidecar.yaml
-    target:
-      kind: Deployment
-      labelSelector: app.kubernetes.io/component=microservice
   - path: patches/micro-sa.yaml
     target:
       kind: Deployment
       labelSelector: app.kubernetes.io/component=microservice
-  - path: patches/image-pull-policy-if-not-present.yaml
-    target:
-      kind: Deployment
-      labelSelector: app.kubernetes.io/component=microservice
+  # - path: patches/health-sidecar.yaml
+  #   target:
+  #     kind: Deployment
+  #     labelSelector: app.kubernetes.io/component=microservice
+  # - path: patches/image-pull-policy-if-not-present.yaml
+  #   target:
+  #     kind: Deployment
+  #     labelSelector: app.kubernetes.io/component=microservice
 
 configMapGenerator:
-  # - name: env-vars-common
-  - name: env-vars
+  # - name: env-vars
+  - name: env-vars-common
     behavior: merge
     literals:
       - APP_ENV=production
-      - MICRO_REGISTRY=consul
+      - MICRO_REGISTRY=kubernetes
 
 secretGenerator:
   - name: secrets
@@ -42,9 +43,7 @@ secretGenerator:
 
 replicas:
   - name: srv
-    count: 4
-
-# imagePullPolicy: IfNotPresent
+    count: 1
 
 images:
   - name: docker.io/bitnami/postgresql

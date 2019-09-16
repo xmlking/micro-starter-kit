@@ -1,4 +1,4 @@
-namespace: consul-ns
+namespace: default
 namePrefix: consul-
 
 commonLabels:
@@ -44,7 +44,7 @@ secretGenerator:
 
 replicas:
   - name: srv
-    count: 5
+    count: 1
 
 images:
   - name: progrium/consul
