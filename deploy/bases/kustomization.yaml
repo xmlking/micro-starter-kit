@@ -27,6 +27,10 @@ configMapGenerator:
       - CONFIG_DIR=/config
       - CONFIG_FILE=config.yaml
       - MICRO_REGISTRY=mdns
+      # for switching to grpc
+      - MICRO_CLIENT=grpc
+      - MICRO_SERVER=grpc
+      - MICRO_TRANSPORT=grpc
 
 secretGenerator:
   - name: secrets

@@ -13,7 +13,7 @@ configMapGenerator:
   - name: env-vars
     literals:
       - SERVICE_NAME=$(GATEWAY_SERVICE_NAME)
-      - MICRO_SERVER_NAME=$(GATEWAY_SERVICE_NAME)
+      - MICRO_SERVER_NAME=gateway-srv
       - MICRO_API_NAMESPACE=""
       - MICRO_API_HANDLER=rpc
       - MICRO_API_ENABLE_RPC="true"
