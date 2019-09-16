@@ -315,6 +315,7 @@ docker build --rm \
 --build-arg TARGET=${TARGET} \
 --build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 --build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
+--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
 -t ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION} .
 
@@ -437,6 +438,11 @@ make docker TARGET=account DOCKER_REGISTRY=gcr.io DOCKER_CONTEXT_PATH=micro-star
 
 make docker-emailer-srv
 make docker-account-api
+
+# publish all microservices images
+make docker_push
+# remove all previous microservices images and any dangling images
+make docker_clean
 ```
 
 ## Reference

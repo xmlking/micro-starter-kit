@@ -19,7 +19,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean
+.PHONY: proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push
 
 tools:
 	@echo "==> Installing dev tools"
@@ -131,6 +131,7 @@ docker docker-%:
 				--build-arg TARGET=$${target} \
 				--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 				--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
+				--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
 				--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
 				-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/$${target}-$${type}:$(VERSION) .; \
 			done \
@@ -143,6 +144,7 @@ docker docker-%:
 		--build-arg TARGET=${TARGET} \
 		--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 		--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
+		--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
 		--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
 		-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:$(VERSION) .; \
 	fi
@@ -154,3 +156,11 @@ docker_clean:
 	@docker images -f "label=org.label-schema.vendor=sumo" -q | xargs docker rmi
 	@echo "Pruneing images..."
 	@docker image prune -f
+
+docker_push:
+	@echo "Piblishing images with VCS_REF=$(shell git rev-parse --short HEAD)"
+	@docker images -f "label=org.label-schema.vcs-ref=$(shell git rev-parse --short HEAD)" --format {{.Repository}}:{{.Tag}} | \
+	while read -r image; do \
+		echo Now pushing $$image; \
+		docker push $$image; \
+	done;

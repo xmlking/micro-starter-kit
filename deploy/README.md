@@ -170,8 +170,11 @@ k get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services
 
 POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
-kubectl exec -it $POD_NAME -- /bin/sh
 kubectl logs $POD_NAME -f
+kubectl logs $POD_NAME -c srv -f
+kubectl logs $POD_NAME -c health -f
+
+kubectl exec -it $POD_NAME -- /bin/sh
 
 k get svc
 

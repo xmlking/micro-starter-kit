@@ -10,12 +10,12 @@ bases:
   - ../../bases
   - resources
 
-# lets make it simple
-# patches:
-#   - path: patches/health-sidecar.yaml
-#     target:
-#       kind: Deployment
-#       labelSelector: app.kubernetes.io/component=microservice
+# enable mage-pull-policy and resource_limit as needed
+patches:
+  - path: patches/health-sidecar.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
 #   - path: patches/resource_limit.yaml
 #     target:
 #       kind: Deployment

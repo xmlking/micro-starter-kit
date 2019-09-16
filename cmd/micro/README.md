@@ -30,6 +30,7 @@ docker build --rm \
 --build-arg VERSION=$VERSION \
 --build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 --build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
+--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
 -t ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION} -f cmd/micro/Dockerfile .
 

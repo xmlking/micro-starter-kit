@@ -13,10 +13,10 @@ spec:
             - "api"
             - "--handler=rpc"
             - "--enable_rpc=true"
-            - "--address=0.0.0.0:8080"
+            - "--address=0.0.0.0:8090"
           ports:
             - name: gateway-http
-              containerPort: 8080
+              containerPort: 8090
               protocol: TCP
           envFrom:
             - configMapRef:
@@ -24,5 +24,5 @@ spec:
             - configMapRef:
                 name: env-vars-common
           env:
-            - name: MICRO_SERVER_ADDRESS
-              value: 0.0.0.0:8989
+            - name: MICRO_API_ADDRESS
+              value: 0.0.0.0:8090

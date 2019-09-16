@@ -8,13 +8,16 @@ spec:
       containers:
         - name: health
           image: microhq/health:kubernetes
-          command:
+          command: ["/health"]
+          args:
             [
-              "/health",
               "--health_address=0.0.0.0:8081",
-              "--server_name=$(ACCOUNT_SERVICE_NAME)",
+              "--server_name=$(MICRO_SERVER_NAME)",
               "--server_address=0.0.0.0:8080",
             ]
+          envFrom:
+            - configMapRef:
+                name: env-vars
           livenessProbe:
             httpGet:
               path: /health
