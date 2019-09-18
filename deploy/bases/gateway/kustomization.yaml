@@ -2,6 +2,10 @@ commonLabels:
   app.kubernetes.io/name: gateway
   app.kubernetes.io/instance: gateway-abcxzy
   app.kubernetes.io/component: microservice
+  app.kubernetes.io/part-of: micro-starter-kit
+  app.kubernetes.io/managed-by: kustomize
+commonAnnotations:
+  org: acmeCorporation
 
 namePrefix: gateway-
 

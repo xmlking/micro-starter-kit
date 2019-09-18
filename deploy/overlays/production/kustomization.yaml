@@ -8,7 +8,9 @@ commonAnnotations:
 
 bases:
   - ../../bases
-  - resources
+  - ../../bases/consul
+  # - ../../bases/gateway
+  # - ../../bases/postgres
 
 # enable mage-pull-policy and resource_limit as needed
 patches:
@@ -16,14 +18,14 @@ patches:
     target:
       kind: Deployment
       labelSelector: app.kubernetes.io/component=microservice
-#   - path: patches/resource_limit.yaml
-#     target:
-#       kind: Deployment
-#       labelSelector: app.kubernetes.io/component=microservice
-#   - path: patches/image-pull-policy-if-not-present.yaml
-#     target:
-#       kind: Deployment
-#       labelSelector: app.kubernetes.io/component=microservice
+  # - path: patches/resource_limit.yaml
+  #   target:
+  #     kind: Deployment
+  #     labelSelector: app.kubernetes.io/component=microservice
+  # - path: patches/image-pull-policy-if-not-present.yaml
+  #   target:
+  #     kind: Deployment
+  #     labelSelector: app.kubernetes.io/component=microservice
 
 configMapGenerator:
   # - name: env-vars
@@ -47,7 +49,13 @@ replicas:
     count: 1
 
 images:
+  - name: microhq/health
+    newTag: kubernetes
+  - name: microhq/micro
+    newTag: latest
   - name: progrium/consul
+    newTag: latest
+  - name: postgres
     newTag: latest
 
 vars:

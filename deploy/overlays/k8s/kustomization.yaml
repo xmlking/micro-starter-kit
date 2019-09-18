@@ -8,7 +8,8 @@ commonAnnotations:
 
 bases:
   - ../../bases
-
+  # - ../../bases/postgres
+  
 resources:
   - resources/micro-service-account.yaml
 
@@ -46,8 +47,14 @@ replicas:
     count: 1
 
 images:
-  - name: docker.io/bitnami/postgresql
-    newTag: "10.7.0"
+  - name: microhq/health
+    newTag: kubernetes
+  - name: microhq/micro
+    newTag: latest
+  - name: progrium/consul
+    newTag: latest
+  - name: postgres
+    newTag: latest
 
 vars:
   - name: CONSUL_SA

@@ -10,6 +10,8 @@ commonLabels:
   app.kubernetes.io/version: v1
 
 images:
+  - name: microhq/health
+    newTag: kubernetes
   - name: microhq/micro
     newTag: latest
   - name: progrium/consul

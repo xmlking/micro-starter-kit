@@ -7,7 +7,6 @@ commonAnnotations:
 
 bases:
   - gateway
-  # - postgres
   - account-api
   - account-srv
   - emailer-srv
@@ -50,10 +49,12 @@ secretGenerator:
 #     - secret/tls.key
 
 images:
+  - name: microhq/micro
+    newTag: latest
+  - name: progrium/consul
+    newTag: latest
   - name: postgres
     newTag: latest
-  - name: microhq/micro
-    newTag: kubernetes
   - name: xmlking/account-api
     newTag: latest
   - name: xmlking/account-srv
