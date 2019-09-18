@@ -26,6 +26,7 @@ configMapGenerator:
       - CONFIG_DIR=/config
       - CONFIG_FILE=config.yaml
       - MICRO_REGISTRY=mdns
+      - MICRO_LOG_LEVEL=debug
       # for switching to grpc
       - MICRO_CLIENT=grpc
       - MICRO_SERVER=grpc

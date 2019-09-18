@@ -43,14 +43,14 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 
 ```bash
 # fetch micro into $GOPATH
-go get -u github.com/micro/micro
-go get -u github.com/micro/go-micro
+go get github.com/micro/micro
+go get github.com/micro/go-micro
 # go lang  build/publish/deploy tool
-go get -u github.com/google/ko/cmd/ko
+go get github.com/google/ko/cmd/ko
 # go better build tool
-go get -u github.com/ahmetb/govvv
+go get github.com/ahmetb/govvv
 # for static check/linter
-go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+go get github.com/golangci/golangci-lint/cmd/golangci-lint
 # for mac, use brew to install protobuf
 brew install protobuf
 # GUI Client for GRPC Services
@@ -59,8 +59,8 @@ brew cask install bloomrpc
 brew install kustomize
 
 # fetch protoc plugins into $GOPATH
-go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
-go get -u github.com/micro/protoc-gen-micro
+go get github.com/golang/protobuf/{proto,protoc-gen-go}
+go get github.com/micro/protoc-gen-micro
 # go get -u github.com/envoyproxy/protoc-gen-validate
 # go get -u github.com/infobloxopen/protoc-gen-gorm
 ```

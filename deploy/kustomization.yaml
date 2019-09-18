@@ -19,10 +19,10 @@ images:
   - name: postgres
     newTag: latest
   - name: xmlking/account-api
-    newTag: v0.1.0-133-gc1ea319
+    newTag: v0.1.0-143-g8201919
   - name: xmlking/account-srv
-    newTag: v0.1.0-133-gc1ea319
+    newTag: v0.1.0-143-g8201919
   - name: xmlking/emailer-srv
-    newTag: v0.1.0-133-gc1ea319
+    newTag: v0.1.0-143-g8201919
   - name: xmlking/greeter-srv
-    newTag: v0.1.0-133-gc1ea319
+    newTag: v0.1.0-143-g8201919

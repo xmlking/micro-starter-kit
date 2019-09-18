@@ -37,6 +37,7 @@ configMapGenerator:
       - MICRO_REGISTRY_ADDRESS="$(CONSUL_SERVICE_NAME):8500"
       - MICRO_REGISTER_TTL="10"
       - MICRO_REGISTER_INTERVAL="5"
+      - MICRO_LOG_LEVEL=info
 
 secretGenerator:
   - name: secrets

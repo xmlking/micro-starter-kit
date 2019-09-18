@@ -1,0 +1,971 @@
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: account-api
+    version: 0.1.0
+    log:
+      level: debug
+      format: text
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-api-config-v1-2th7fmk92f
+  namespace: default
+---
+apiVersion: v1
+data:
+  ACCOUNT_HOST: prod-account-srv-v1
+  MICRO_SERVER_NAME: account-api
+  SERVICE_NAME: prod-account-api-api-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-api-env-vars-v1-mtfgf6529b
+  namespace: default
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: account-srv
+    version: 0.1.0
+    log:
+      level: debug
+      format: text
+    database:
+      dialect: sqlite3
+      host: 0.0.0.0
+      port: 9999
+      Username: sumo
+      Password: demo
+      database: ":memory:"
+      logging: true
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-config-v1-bbdb42mc87
+  namespace: default
+---
+apiVersion: v1
+data:
+  APP_GATEWAY: prod-gateway-srv-v1
+  DATABASE_HOST: $(DATABASE_SERVICE_NAME)
+  EMAILER_HOST: prod-emailer-srv-v1
+  MICRO_SERVER_NAME: account-srv
+  SERVICE_NAME: prod-account-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-env-vars-v1-gfd5f668tk
+  namespace: default
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: emailer-srv
+    version: 0.1.0
+    log:
+      level: debug
+      format: text
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+    email:
+      username: yourGmailUsername
+      password: password
+      emailServer: smtp.gmail.com
+      port: 587
+      from: sumo@demo.com
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-emailer-config-v1-hbc24hhm8f
+  namespace: default
+---
+apiVersion: v1
+data:
+  DATABASE_HOST: $(DATABASE_SERVICE_NAME)
+  MICRO_SERVER_NAME: emailer-srv
+  SERVICE_NAME: prod-emailer-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-emailer-env-vars-v1-8hhhb9dg77
+  namespace: default
+---
+apiVersion: v1
+data:
+  APP_ENV: production
+  CONFIG_DIR: /config
+  CONFIG_FILE: config.yaml
+  MICRO_BROKER_ADDRESS: 0.0.0.0:10001
+  MICRO_CLIENT: grpc
+  MICRO_REGISTER_INTERVAL: "5"
+  MICRO_REGISTER_TTL: "10"
+  MICRO_REGISTRY: consul
+  MICRO_REGISTRY_ADDRESS: prod-consul-v1:8500
+  MICRO_SERVER: grpc
+  MICRO_SERVER_ADDRESS: 0.0.0.0:8080
+  MICRO_TRANSPORT: grpc
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-env-vars-common-v1-4btkmbf7c5
+  namespace: default
+---
+apiVersion: v1
+data:
+  CORS_ALLOWED_HEADERS: Authorization,Content-Type
+  CORS_ALLOWED_METHODS: POST,GET
+  CORS_ALLOWED_ORIGINS: '*'
+  MICRO_API_ENABLE_RPC: "true"
+  MICRO_API_HANDLER: rpc
+  MICRO_API_NAMESPACE: ""
+  MICRO_LOG_LEVEL: debug
+  MICRO_SERVER_NAME: gateway-srv
+  SERVICE_NAME: prod-gateway-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-gateway-env-vars-v1-7cd7842867
+  namespace: default
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: greeter-srv
+    version: 0.1.0
+    log:
+      level: debug
+      format: text
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-greeter-config-v1-75d57ck26k
+  namespace: default
+---
+apiVersion: v1
+data:
+  DATABASE_HOST: $(DATABASE_SERVICE_NAME)
+  MICRO_SERVER_NAME: greater-srv
+  SERVICE_NAME: prod-greeter-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-greeter-env-vars-v1-52fcthg74c
+  namespace: default
+---
+apiVersion: v1
+data:
+  DATABASE_PASSWORD: cHJvZC1yZWFsLXBhc3M=
+kind: Secret
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-secrets-v1-t45t559g92
+  namespace: default
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-api-api-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am production!
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-consul-v1
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8500
+  - name: rpc
+    port: 8400
+  - name: serflan
+    port: 8301
+  - name: serfwan
+    port: 8302
+  - name: server
+    port: 8300
+  - name: consuldns
+    port: 8600
+  selector:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-emailer-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-gateway-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: gateway-http
+    port: 8080
+    protocol: TCP
+    targetPort: gateway-http
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-greeter-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-api-api-v1
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: account-api-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: account-api
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: production
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am production!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: account-api-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: account-api
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: production
+    spec:
+      containers:
+      - args:
+        - --health_address=0.0.0.0:8081
+        - --server_name=$(MICRO_SERVER_NAME)
+        - --server_address=0.0.0.0:8080
+        command:
+        - /health
+        envFrom:
+        - configMapRef:
+            name: prod-account-api-env-vars-v1-mtfgf6529b
+        image: microhq/health:kubernetes
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        name: health
+      - envFrom:
+        - configMapRef:
+            name: prod-account-api-env-vars-v1-mtfgf6529b
+        - configMapRef:
+            name: prod-env-vars-common-v1-4btkmbf7c5
+        - secretRef:
+            name: prod-secrets-v1-t45t559g92
+        image: xmlking/account-api:v0.1.0-133-gc1ea319
+        imagePullPolicy: Always
+        name: api
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config
+          name: config
+          readOnly: true
+      volumes:
+      - configMap:
+          name: prod-account-api-config-v1-2th7fmk92f
+        name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-account-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: account-srv-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: account-srv
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: production
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am production!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: account-srv-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: account-srv
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: production
+    spec:
+      containers:
+      - args:
+        - --health_address=0.0.0.0:8081
+        - --server_name=$(MICRO_SERVER_NAME)
+        - --server_address=0.0.0.0:8080
+        command:
+        - /health
+        envFrom:
+        - configMapRef:
+            name: prod-account-env-vars-v1-gfd5f668tk
+        image: microhq/health:kubernetes
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        name: health
+      - envFrom:
+        - configMapRef:
+            name: prod-account-env-vars-v1-gfd5f668tk
+        - configMapRef:
+            name: prod-env-vars-common-v1-4btkmbf7c5
+        - secretRef:
+            name: prod-secrets-v1-t45t559g92
+        image: xmlking/account-srv:v0.1.0-133-gc1ea319
+        imagePullPolicy: Always
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config
+          name: config
+          readOnly: true
+      volumes:
+      - configMap:
+          name: prod-account-config-v1-bbdb42mc87
+        name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am production!
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-consul-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: infra
+      app.kubernetes.io/instance: consul-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: consul
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: production
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am production!
+      labels:
+        app.kubernetes.io/component: infra
+        app.kubernetes.io/instance: consul-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: consul
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: production
+    spec:
+      containers:
+      - command:
+        - /bin/start
+        - -server
+        - -bootstrap
+        image: progrium/consul:latest
+        imagePullPolicy: Always
+        name: consul
+        ports:
+        - containerPort: 8500
+          name: ui-port
+        - containerPort: 8400
+          name: alt-port
+        - containerPort: 53
+          name: udp-port
+        - containerPort: 443
+          name: https-port
+        - containerPort: 8080
+          name: http-port
+        - containerPort: 8301
+          name: serflan
+        - containerPort: 8302
+          name: serfwan
+        - containerPort: 8600
+          name: consuldns
+        - containerPort: 8300
+          name: server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-emailer-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: emailer-srv-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: emailer-srv
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: production
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am production!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: emailer-srv-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: emailer-srv
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: production
+    spec:
+      containers:
+      - args:
+        - --health_address=0.0.0.0:8081
+        - --server_name=$(MICRO_SERVER_NAME)
+        - --server_address=0.0.0.0:8080
+        command:
+        - /health
+        envFrom:
+        - configMapRef:
+            name: prod-emailer-env-vars-v1-8hhhb9dg77
+        image: microhq/health:kubernetes
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        name: health
+      - envFrom:
+        - configMapRef:
+            name: prod-emailer-env-vars-v1-8hhhb9dg77
+        - configMapRef:
+            name: prod-env-vars-common-v1-4btkmbf7c5
+        - secretRef:
+            name: prod-secrets-v1-t45t559g92
+        image: xmlking/emailer-srv:v0.1.0-133-gc1ea319
+        imagePullPolicy: Always
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config
+          name: config
+          readOnly: true
+      volumes:
+      - configMap:
+          name: prod-emailer-config-v1-hbc24hhm8f
+        name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-gateway-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: gateway-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: gateway
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: production
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am production!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: gateway-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: gateway
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: production
+    spec:
+      containers:
+      - args:
+        - --health_address=0.0.0.0:8081
+        - --server_name=$(MICRO_SERVER_NAME)
+        - --server_address=0.0.0.0:8080
+        command:
+        - /health
+        envFrom:
+        - configMapRef:
+            name: prod-gateway-env-vars-v1-7cd7842867
+        image: microhq/health:kubernetes
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        name: health
+      - args:
+        - api
+        - --handler=rpc
+        - --enable_rpc=true
+        - --address=0.0.0.0:8090
+        env:
+        - name: MICRO_API_ADDRESS
+          value: 0.0.0.0:8090
+        envFrom:
+        - configMapRef:
+            name: prod-gateway-env-vars-v1-7cd7842867
+        - configMapRef:
+            name: prod-env-vars-common-v1-4btkmbf7c5
+        image: microhq/micro:latest
+        imagePullPolicy: Always
+        name: srv
+        ports:
+        - containerPort: 8090
+          name: gateway-http
+          protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am production!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: production
+  name: prod-greeter-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: greeter-srv-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: greeter-srv
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: production
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am production!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: greeter-srv-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: greeter-srv
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: production
+    spec:
+      containers:
+      - args:
+        - --health_address=0.0.0.0:8081
+        - --server_name=$(MICRO_SERVER_NAME)
+        - --server_address=0.0.0.0:8080
+        command:
+        - /health
+        envFrom:
+        - configMapRef:
+            name: prod-greeter-env-vars-v1-52fcthg74c
+        image: microhq/health:kubernetes
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8081
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        name: health
+      - envFrom:
+        - configMapRef:
+            name: prod-greeter-env-vars-v1-52fcthg74c
+        - configMapRef:
+            name: prod-env-vars-common-v1-4btkmbf7c5
+        - secretRef:
+            name: prod-secrets-v1-t45t559g92
+        image: xmlking/greeter-srv:v0.1.0-133-gc1ea319
+        imagePullPolicy: Always
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config
+          name: config
+          readOnly: true
+      volumes:
+      - configMap:
+          name: prod-greeter-config-v1-75d57ck26k
+        name: config

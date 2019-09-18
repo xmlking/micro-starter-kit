@@ -9,7 +9,7 @@ commonAnnotations:
 bases:
   - ../../bases
   # - ../../bases/postgres
-  
+
 resources:
   - resources/micro-service-account.yaml
 
@@ -35,6 +35,7 @@ configMapGenerator:
     literals:
       - APP_ENV=production
       - MICRO_REGISTRY=kubernetes
+      - MICRO_LOG_LEVEL=info
 
 secretGenerator:
   - name: secrets
