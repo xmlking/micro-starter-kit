@@ -51,10 +51,6 @@ build/*
 !build/.gitkeep
 release.yaml
 
-./srv/emailer/emailer-srv
-./srv/account/account-srv
-./api/account/account-api
-
 # Project
 TODO
 

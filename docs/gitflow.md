@@ -11,6 +11,11 @@
 ## Setup
 
 ```bash
+# install git-flow for mac
+brew install git-flow-avh
+```
+
+```bash
 # Start using git-flow by initializing it inside an existing git repository
 git flow init [-d] # The -d flag will accept all defaults.
 # Start a new feature

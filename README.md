@@ -47,7 +47,6 @@ go get -u github.com/micro/micro
 go get -u github.com/micro/go-micro
 # go lang  build/publish/deploy tool
 go get -u github.com/google/ko/cmd/ko
-go get -u sigs.k8s.io/kustomize
 # go better build tool
 go get -u github.com/ahmetb/govvv
 # for static check/linter
@@ -56,6 +55,8 @@ go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 brew install protobuf
 # GUI Client for GRPC Services
 brew cask install bloomrpc
+# k8s tool similar to helm
+brew install kustomize
 
 # fetch protoc plugins into $GOPATH
 go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
@@ -421,6 +422,9 @@ make run-account-api
 make run-micro-cmd ARGS="--api_address=0.0.0.0:8088 api"
 make run-demo-cmd
 
+# Lint
+make lint-account-srv
+
 # build
 make build VERSION=v0.1.1
 make build TARGET=account VERSION=v0.1.1
@@ -443,6 +447,8 @@ make docker TARGET=account DOCKER_REGISTRY=gcr.io DOCKER_CONTEXT_PATH=micro-star
 make docker-emailer-srv
 make docker-account-api
 
+# build all docker images
+make docker
 # publish all microservices images
 make docker_push
 # remove all previous microservices images and any dangling images

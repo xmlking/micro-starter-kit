@@ -164,6 +164,15 @@ kubectl delete -k ./deploy
 ## verify
 
 ```bash
+# highlight `microhq/health:kubernetes`
+kustomize build ./deploy | grep -C 3 microhq/health:kubernetes
+
+# compare the output directly to see how consul and production differ:
+diff \
+  <(kustomize build ./deploy/overlays/consul) \
+  <(kustomize build ./deploy/overlays/production) |\
+  more
+
 kustomize build ./deploy > release.yaml
 k apply -f release.yaml
 k get all -l app.kubernetes.io/managed-by=kustomize
