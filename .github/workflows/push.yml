@@ -45,21 +45,24 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           CODECOV_PR: ${{ github.event.after }}
           CODECOV_SHA: ${{ github.sha }}
-  # fuzz:
-  #   name: Fuzz
+  # fuzzing:
+  #   name: Run fuzzing
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - name: Install Go
+  #     - name: Set up Go 1.13
   #       uses: actions/setup-go@v1
   #       with:
   #         go-version: 1.13
   #     - name: Checkout code
   #       uses: actions/checkout@v1
-
   #     - name: fuzz regression tests
-  #       run: cd _fuzz/it && ./fuzz-ci local-regression 2>&1 | grep -vE '^Running|^Executed'
+  #       run: ./scripts/fuzzit.sh
+  #       env:
+  #         FUZZIT_API_KEY: ${{ secrets.FUZZIT_API_KEY }}
+  #         TYPE: local-regression
   #     - name: fuzz continuous job
-  #       run: export PATH="$PATH:$(go env GOPATH)/bin"; cd _fuzz/it && ./fuzz-ci fuzzing
+  #       run: ./scripts/fuzzit.sh
   #       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
   #       env:
   #         FUZZIT_API_KEY: ${{ secrets.FUZZIT_API_KEY }}
+  #         TYPE: fuzzing
