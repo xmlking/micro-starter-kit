@@ -24,7 +24,7 @@ go mod download
 # this empties $GOPATH/pkg/mod/
 go clean -cache -modcache
 ```
-  
+
 - How to Prepare for a Release?
 
 ```bash
@@ -75,10 +75,19 @@ go test all
   go test -v -run Integration ./srv/emailer/service
   ```
 
-  Refer
+- How to ssh and debug a `scratch` container?
 
-  - [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
-  - [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
+  > Ephemeral containers are a great way to debug running pods, as you can’t add regular containers to a pod after creation.
+  > These containers executes within the namespace of an existing pod and has access to the file systems of its individual containers.
+
+  ```bash
+  kubectl debug -c debug-shell --image=busybox target-pod -- sh
+  ```
+
+## Refer
+
+- [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
+- [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
 
 - Why some ORM model fields are pointers?
 
@@ -119,9 +128,8 @@ go test all
   --selector=cache # enables in memory caching of discovered nodes
   --client_pool_size=10 # enables the client side connection pool
   ```
-  
-### Refer
+
+## Refer
 
 - [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
 - [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
-

@@ -14,21 +14,11 @@ Why Kustomize?
 
 ```bash
 brew install kubernetes-cli
+# make sure you v3.2.0 or above
 brew install kustomize
 # optional
 brew install skaffold
 brew install kubernetes-helm
-```
-
-> lets get latest, as we need unreleased version
-
-```bash
-cd ~
-GO111MODULE=on go get -v sigs.k8s.io/kustomize/v3@master
-cd ~/go/pkg/mod/sigs.k8s.io/kustomize/v3@v3.1.1-0.20190913222800-32be1cf4c21e
- make install
-alias kustomize='~/go/bin/kustomize'
-kustomize version
 ```
 
 ## Workflows
@@ -165,7 +155,7 @@ kubectl delete -k ./deploy
 
 ```bash
 # highlight `microhq/health:kubernetes`
-kustomize build ./deploy | grep -C 3 microhq/health:kubernetes
+kustomize build ./deploy | grep -C 3 microhq/micro:latest
 
 # compare the output directly to see how consul and production differ:
 diff \

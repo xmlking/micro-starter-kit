@@ -11,7 +11,8 @@ commonLabels:
 
 images:
   - name: microhq/health
-    newTag: kubernetes
+    newName: microhq/micro
+    newTag: latest
   - name: microhq/micro
     newTag: latest
   - name: progrium/consul

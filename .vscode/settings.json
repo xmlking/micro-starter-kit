@@ -10,7 +10,7 @@
   "editor.cursorSmoothCaretAnimation": true,
   "editor.cursorStyle": "line",
   // "editor.fontSize": 16,
-  "editor.fontFamily": "SourceCodePro-Regular, FiraCode-Retina, Menlo",
+  "editor.fontFamily": "FiraCode-Retina, SourceCodePro-Regular, Menlo",
   "editor.fontLigatures": true,
   "editor.formatOnPaste": true,
   "editor.formatOnType": false,
