@@ -12,16 +12,16 @@ commonLabels:
 images:
   - name: microhq/micro
     newName: xmlking/micro
-    newTag: 0.1.0-SNAPSHOT
+    newTag: v0.1.0-146-gec0789c
   - name: progrium/consul
     newTag: latest
   - name: postgres
     newTag: latest
   - name: xmlking/account-api
-    newTag: v0.1.0-145-g3b8aab2
+    newTag: v0.1.0-146-gec0789c
   - name: xmlking/account-srv
-    newTag: v0.1.0-145-g3b8aab2
+    newTag: v0.1.0-146-gec0789c
   - name: xmlking/emailer-srv
-    newTag: v0.1.0-145-g3b8aab2
+    newTag: v0.1.0-146-gec0789c
   - name: xmlking/greeter-srv
-    newTag: v0.1.0-145-g3b8aab2
+    newTag: v0.1.0-146-gec0789c

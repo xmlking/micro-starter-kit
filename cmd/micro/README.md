@@ -4,6 +4,22 @@
 
 > To use as a `REST Gateway` for gRPC microservices. CORS enabled.
 
+## Build
+
+```bash
+go build -a -o build/micro  cmd/micro/main.go cmd/micro/plugin.go
+# install micro to ~/go/bin
+go install -a cmd/micro/main.go cmd/micro/plugin.go
+go build -a -o ~/go/bin/micro  cmd/micro/main.go cmd/micro/plugin.go
+```
+
+## Test
+
+```bash
+# health checking with micro. use correct target gRPC port below
+micro health --check_service=account-srv --check_address=0.0.0.0:55493
+```
+
 ## Run
 
 ```bash
@@ -43,8 +59,10 @@ docker push $IMANGE_NAME
 docker inspect  $IMANGE_NAME
 # remove temp images after build
 docker image prune -f
-# Remove all untagged images
-docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+# Remove dangling images
+docker rmi $(docker images -f "dangling=true" -q)
+# Remove images tagged with vendor=sumo
+docker rmi $(docker images -f "label=org.label-schema.vendor=sumo"  -q)
 ```
 
 ### Docker Run

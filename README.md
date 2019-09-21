@@ -188,6 +188,9 @@ micro proxy --protocol=grpc
 #### Test gRPC Directly
 
 ```bash
+## local build has gRPC by default.
+# ./build/micro call  account-srv UserService.Create \
+#   '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro --client=grpc call  account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro --client=grpc call account-srv UserService.Create \

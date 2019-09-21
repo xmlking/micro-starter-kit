@@ -149,6 +149,16 @@ docker docker-%:
 		-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:$(VERSION) .; \
 	fi
 
+docker_micro:
+	@echo "Building micro image...";
+	@docker build --rm \
+	--build-arg VERSION=$(VERSION) \
+	--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
+	--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
+	--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
+	--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
+	-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION} -f cmd/micro/Dockerfile .
+
 docker_clean:
 	@echo "Cleaning dangling images..."
 	@docker images -f "dangling=true" -q  | xargs docker rmi
