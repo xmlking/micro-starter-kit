@@ -12,7 +12,7 @@ spec:
           image: xmlking/account-srv:latest
           imagePullPolicy: Always
           ports:
-            - name: grpc-port
+            - name: grpc-web-port
               containerPort: 8080
               protocol: TCP
           volumeMounts:

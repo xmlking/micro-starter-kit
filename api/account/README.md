@@ -37,7 +37,7 @@ make run-account-api ARGS=--server_name=go.micro.api.account
 go run api/account/main.go api/account/plugin.go --configDir deploy/bases/account-api/config --server_name=go.micro.api.account
 
 # Run the micro API
-micro api --handler=api
+micro --client=grpc api --handler=api
 # (or) Run Micro Web to trst via Web UI
 micro web
 

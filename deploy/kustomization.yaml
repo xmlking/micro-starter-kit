@@ -10,20 +10,18 @@ commonLabels:
   app.kubernetes.io/version: v1
 
 images:
-  - name: microhq/health
-    newName: microhq/micro
-    newTag: latest
   - name: microhq/micro
-    newTag: latest
+    newName: xmlking/micro
+    newTag: 0.1.0-SNAPSHOT
   - name: progrium/consul
     newTag: latest
   - name: postgres
     newTag: latest
   - name: xmlking/account-api
-    newTag: v0.1.0-143-g8201919
+    newTag: v0.1.0-145-g3b8aab2
   - name: xmlking/account-srv
-    newTag: v0.1.0-143-g8201919
+    newTag: v0.1.0-145-g3b8aab2
   - name: xmlking/emailer-srv
-    newTag: v0.1.0-143-g8201919
+    newTag: v0.1.0-145-g3b8aab2
   - name: xmlking/greeter-srv
-    newTag: v0.1.0-143-g8201919
+    newTag: v0.1.0-145-g3b8aab2

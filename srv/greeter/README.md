@@ -35,10 +35,10 @@ make docker TARGET=greeter TYPE=srv VERSION=v0.1.1
 ### Test
 
 ```bash
-micro call greeter-srv Greeter.Hello  '{"name": "John"}'
+micro --client=grpc call greeter-srv Greeter.Hello  '{"name": "John"}'
 
 # in k8s container
-./micro call greeter-srv Greeter.Hello  '{"name": "John"}'
+./micro --client=grpc call greeter-srv Greeter.Hello  '{"name": "John"}'
 
 curl --request POST \
 --url http://localhost:8080/rpc \

@@ -160,22 +160,6 @@ export APP_ENV=production
 go run cmd/demo/main.go
 ```
 
-#### Services with `gRPC` transport
-
-> go-micro by default use `transport=http` and `protocol=mucp`. If you want to switch to `gRPC`, do this
-
-```bash
-# run account micro with gRPC transport, NOTE: we also have to add --server_name as it will remove server_name
-go run srv/account/main.go srv/account/plugin.go --client=grpc --server=grpc --server_name=account-srv
-go run srv/emailer/main.go srv/emailer/plugin.go --client=grpc --server=grpc --server_name=emailer-srv
-# we also has to use grpc for gateway and `micro call` cli
-go run cmd/micro/main.go cmd/micro/plugin.go --client=grpc --server=grpc api
-# go run cmd/micro/main.go cmd/micro/plugin.go --client=grpc --server=grpc api --enable_rpc=true
-go run cmd/micro/main.go cmd/micro/plugin.go  --api_handler=rpc  api  --enable_rpc=true
-
-micro --client=grpc call account-srv UserService.List '{ "limit": 10, "page": 1}'
-```
-
 ### Test
 
 ```bash
@@ -203,22 +187,18 @@ micro proxy --protocol=grpc
 
 #### Test gRPC Directly
 
-> remember to use `micro --client=grpc` when microservices and gateway are using `grpc` transport
-
 ```bash
-# micro --client=grpc call account-srv UserService.Create \
-# '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call  account-srv UserService.Create \
+micro --client=grpc call  account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.Create \
+micro --client=grpc call account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.List '{}'
-micro call account-srv UserService.List '{ "limit": 10, "page": 1}'
-micro call account-srv UserService.Get '{"id": "UserIdFromList"}'
-micro call account-srv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.Update \
+micro --client=grpc call account-srv UserService.List '{}'
+micro --client=grpc call account-srv UserService.List '{ "limit": 10, "page": 1}'
+micro --client=grpc call account-srv UserService.Get '{"id": "UserIdFromList"}'
+micro --client=grpc call account-srv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
+micro --client=grpc call account-srv UserService.Update \
 '{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
-micro call account-srv UserService.Delete '{ "id": "UserIdFromGet" }'
+micro --client=grpc call account-srv UserService.Delete '{ "id": "UserIdFromGet" }'
 ```
 
 #### Test via Micro Web UI
@@ -249,7 +229,9 @@ open http://localhost:8082
 
 ```bash
 # start API Gateway to test via REST-Client
-micro api --enable_rpc=true
+micro --client=grpc --server=grpc --transport=grpc  api --enable_rpc=true
+# or grpc pre-loaded micro
+go run cmd/micro/main.go  api --enable_rpc=true
 ```
 
 ## GitOps
@@ -320,7 +302,7 @@ docker build --rm \
 --build-arg TARGET=${TARGET} \
 --build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 --build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
---build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
+--build-arg VCS_REF=$(git rev-parse --short HEAD) \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
 -t ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION} .
 

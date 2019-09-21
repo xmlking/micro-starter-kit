@@ -23,14 +23,14 @@ go run cmd/micro/main.go  --api_address=0.0.0.0:8088  api
 
 ```bash
 # build
-VERSION=0.0.9-SNAPSHOT
+VERSION=0.1.0-SNAPSHOT
 # DOCKER_REGISTRY=gcr.io
 DOCKER_CONTEXT_PATH=xmlking
 docker build --rm \
 --build-arg VERSION=$VERSION \
 --build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 --build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
---build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
+--build-arg VCS_REF=$(git rev-parse --short HEAD) \
 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
 -t ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION} -f cmd/micro/Dockerfile .
 

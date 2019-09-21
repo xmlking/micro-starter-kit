@@ -50,8 +50,6 @@ replicas:
     count: 1
 
 images:
-  - name: microhq/health
-    newTag: kubernetes
   - name: microhq/micro
     newTag: latest
   - name: progrium/consul

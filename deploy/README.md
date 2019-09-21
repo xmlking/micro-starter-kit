@@ -154,7 +154,7 @@ kubectl delete -k ./deploy
 ## verify
 
 ```bash
-# highlight `microhq/health:kubernetes`
+# highlight `microhq/micro:latest`
 kustomize build ./deploy | grep -C 3 microhq/micro:latest
 
 # compare the output directly to see how consul and production differ:

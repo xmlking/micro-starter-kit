@@ -8,9 +8,6 @@ import (
 	// Flags usage of cors plugin `micro --cors-allowed-headers=X-Custom-Header --cors-allowed-origins=someotherdomain.com  --cors-allowed-methods=POST`
 	"github.com/micro/go-plugins/micro/cors"
 	"github.com/micro/micro/plugin"
-	// Flags usage of grpc plugin `micro --client=grpc --server=grpc`
-	// _ "github.com/micro/go-plugins/client/grpc"
-	// _ "github.com/micro/go-plugins/server/grpc"
 )
 
 func init() {
