@@ -9,7 +9,7 @@
 ```bash
 go build -a -o build/micro  cmd/micro/main.go cmd/micro/plugin.go
 # install micro to ~/go/bin
-go install -a cmd/micro/main.go cmd/micro/plugin.go
+# go install -a cmd/micro/main.go cmd/micro/plugin.go
 go build -a -o ~/go/bin/micro  cmd/micro/main.go cmd/micro/plugin.go
 ```
 

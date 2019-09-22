@@ -10,7 +10,7 @@ spec:
           image: microhq/micro:latest
           args:
             - "health"
-            - "--health_address=0.0.0.0:8088"
+            - "--address=0.0.0.0:8088"
             - "--check_service=$(MICRO_SERVER_NAME)"
             - "--check_address=0.0.0.0:8080"
           envFrom:

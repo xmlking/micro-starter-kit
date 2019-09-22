@@ -41,10 +41,13 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 > run following `go get ...` commands outside **this project root** and `$GOPATH`<br/>
 > if you get error, try setting `export GO111MODULE=on` befor running `go get ...`
 
+Lets build and install `grpc` pre-loaded **Micro CLI** from [here](cmd/micro/README.md#Build) instead of default **Micro CLI**
+
 ```bash
 # fetch micro into $GOPATH
-go get github.com/micro/micro
-go get github.com/micro/go-micro
+# build and install your own grpc pre-loaded micro-cli
+# go get github.com/micro/micro
+
 # go lang  build/publish/deploy tool
 go get github.com/google/ko/cmd/ko
 # go better build tool
@@ -191,17 +194,17 @@ micro proxy --protocol=grpc
 ## local build has gRPC by default.
 # ./build/micro call  account-srv UserService.Create \
 #   '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro --client=grpc call  account-srv UserService.Create \
+micro call  account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro --client=grpc call account-srv UserService.Create \
+micro call account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro --client=grpc call account-srv UserService.List '{}'
-micro --client=grpc call account-srv UserService.List '{ "limit": 10, "page": 1}'
-micro --client=grpc call account-srv UserService.Get '{"id": "UserIdFromList"}'
-micro --client=grpc call account-srv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
-micro --client=grpc call account-srv UserService.Update \
+micro call account-srv UserService.List '{}'
+micro call account-srv UserService.List '{ "limit": 10, "page": 1}'
+micro call account-srv UserService.Get '{"id": "UserIdFromList"}'
+micro  call account-srv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
+micro call account-srv UserService.Update \
 '{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
-micro --client=grpc call account-srv UserService.Delete '{ "id": "UserIdFromGet" }'
+micro call account-srv UserService.Delete '{ "id": "UserIdFromGet" }'
 ```
 
 #### Test via Micro Web UI
@@ -226,7 +229,7 @@ open http://localhost:8082
 
 #### Test via Micro API Gateway
 
-# Start API Gateway
+> Start API Gateway
 
 > Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
 
