@@ -16,19 +16,18 @@ go build -a -o ~/go/bin/micro  cmd/micro/main.go cmd/micro/plugin.go
 ## Test
 
 ```bash
-# health checking with micro. use correct target gRPC port below
+# health checking with micro. use correct target service gRPC port below
 micro health --check_service=account-srv --check_address=0.0.0.0:55493
 ```
 
 ## Run
 
 ```bash
-# make run-micro-cmd ARGS=api
-# make run-micro-cmd ARGS="--api_address=0.0.0.0:8088 api"
-# with plugins
-go run cmd/micro/main.go cmd/micro/plugin.go --api_address=0.0.0.0:8088  api
-# without plugins (same as official micro cli)
-go run cmd/micro/main.go  --api_address=0.0.0.0:8088  api
+make run-micro-cmd ARGS="api --enable_rpc=true"
+# with plugins (cors, kubernetes )
+go run cmd/micro/main.go cmd/micro/plugin.go  api --enable_rpc=true
+# without plugins
+go run cmd/micro/main.go  api --enable_rpc=true
 ```
 
 ## Docker

@@ -2,8 +2,8 @@ environment: development
 name: account-api
 version: 0.1.0
 log:
-  level: debug
-  format: text
+  level: info
+  format: json
 observability:
   metrics:
     address: localhost:8125

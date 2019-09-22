@@ -98,7 +98,7 @@ run run-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "no  TARGET. example usage: make test TARGET=account"; \
 	else \
-		go run  ./${TYPE}/${TARGET} --configDir deploy/bases/${TARGET}-${TYPE}/config ${ARGS}; \
+		go run  ./${TYPE}/${TARGET} ${ARGS}; \
 	fi
 
 release:
@@ -118,8 +118,15 @@ update_deps:
 
 docker docker-%:
 	@if [ -z $(TARGET) ]; then \
+		echo "Building micro image..."; \
+		docker build --rm \
+		--build-arg VERSION=$(VERSION) \
+		--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
+		--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
+		--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
+		--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
+		-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION} -f cmd/micro/Dockerfile .; \
 		echo "Building images for all services..."; \
-		echo "no  TARGET. example usage: make docker TARGET=account"; \
 		for type in $(TYPES); do \
 			echo "Building Type: $${type}..."; \
 			for _target in $${type}/*/; do \
@@ -148,16 +155,6 @@ docker docker-%:
 		--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
 		-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:$(VERSION) .; \
 	fi
-
-docker_micro:
-	@echo "Building micro image...";
-	@docker build --rm \
-	--build-arg VERSION=$(VERSION) \
-	--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
-	--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
-	--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
-	--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
-	-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION} -f cmd/micro/Dockerfile .
 
 docker_clean:
 	@echo "Cleaning dangling images..."

@@ -234,10 +234,13 @@ open http://localhost:8082
 > Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
 
 ```bash
-# start API Gateway to test via REST-Client
-micro --client=grpc --server=grpc --transport=grpc  api --enable_rpc=true
-# or grpc pre-loaded micro
+# start local micro (grpc pre-loaded micro)
+make run-micro-cmd ARGS="api --enable_rpc=true"
+# (or)
 go run cmd/micro/main.go  api --enable_rpc=true
+
+# (or) start global micro
+micro  api --enable_rpc=true
 ```
 
 ## GitOps
