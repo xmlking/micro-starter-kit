@@ -433,13 +433,16 @@ make docker-account VERSION=v0.1.1
 make docker-account-srv VERSION=v0.1.1
 make docker TARGET=account VERSION=v0.1.1
 make docker TARGET=account TYPE=srv VERSION=v0.1.1
-make docker TARGET=account DOCKER_REGISTRY=gcr.io DOCKER_CONTEXT_PATH=micro-starter-kit
+make docker TARGET=account DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit
 
 make docker-emailer-srv
 make docker-account-api
 
 # build all docker images
 make docker
+# build all docker images for google cloud
+make docker DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit
+
 # publish all microservices images
 make docker_push
 # remove all previous microservices images and any dangling images

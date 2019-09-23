@@ -3,6 +3,7 @@ module github.com/xmlking/micro-starter-kit
 go 1.13
 
 replace (
+	github.com/lucas-clemente/quic-go => github.com/lucas-clemente/quic-go v0.7.1-0.20190917080620-9e6bff0b9872
 	k8s.io/api => k8s.io/api v0.0.0-20190813180838-e711354a0280
 	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20190813060636-0c17871ad6fd
 )
@@ -14,7 +15,7 @@ require (
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.10
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.10.1-0.20190923144749-d38c8b23f2a0
+	github.com/micro/go-micro v1.10.1-0.20190923170452-71ab35e0557f
 	github.com/micro/go-plugins v1.3.0
 	github.com/micro/micro v1.10.1-0.20190923155659-9ccb86fccac3
 	github.com/onrik/logrus v0.4.1
