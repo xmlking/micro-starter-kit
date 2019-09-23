@@ -1,6 +1,6 @@
 # Micro
 
-> Custom build for `microhq/micro:kubernetes` to use with k8s.
+> Custom build for `microhq/micro:latest` to use with k8s.
 
 > To use as a `REST Gateway` for gRPC microservices. CORS enabled.
 

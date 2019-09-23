@@ -57,7 +57,7 @@
     }
   },
   // "files.hotExit": "onExit",
-  "files.defaultLanguage": "typescript",
+  "files.defaultLanguage": "go",
   "files.trimTrailingWhitespace": true,
   // Peacock Settings
   "peacock.color": "#5dc9e2",
