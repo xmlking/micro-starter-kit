@@ -56,6 +56,15 @@ git push origin --tags
   git merge develop
   ```
 
+- Ever annoyed by the long list of local Git branches that are no longer relevant?
+
+  Solution:
+
+  `git remote prune origin`
+
+  That removes all local branches that have been deleted from remote (typically GitHub)<br/>
+  Add --dry-run to merely see a list first to confirm.
+
 ## Reference
 
 - <https://nvie.com/posts/a-successful-git-branching-model/>

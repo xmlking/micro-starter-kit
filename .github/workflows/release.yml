@@ -1,21 +1,19 @@
 name: Build, Push and Deploy on Release
-on: [release]
+on:
+  release:
+    types: [published]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Build
+      - name: Check out Code
+        uses: actions/checkout@v1
+      - name: Build docker images
         run: make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=$GITHUB_REPOSITORY
-      - name: Push
+      - name: Push docker images
         run: |
-          docker login docker.pkg.github.com -u ${{ secrets.GITHUB_ACTOR }} -p ${{ secrets.GITHUB_TOKEN }}
+          # docker login docker.pkg.github.com -u $GITHUB_ACTOR -p  ${{ secrets.GITHUB_TOKEN }}
+          docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_DOCKER_PASSWORD }}
           make docker_push
-      # - name: Push
-      #   run: |
-      #     docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      #     docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-      #     make docker_push
-      #   env:
-      #     DOCKER_USERNAME: ${{ secrets.GITHUB_DOCKER_USERNAME }}
-      #     DOCKER_PASSWORD: ${{ secrets.GITHUB_DOCKER_PASSWORD }}
+      - name: Deploy to KinD
+        run: echo "TODO Deploy.."
