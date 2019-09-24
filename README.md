@@ -425,8 +425,8 @@ make build TARGET=account TYPE=api VERSION=v0.1.1
 make build-account VERSION=v0.1.1
 make build-account-api VERSION=v0.1.1
 
-# push tag to git
-make release VERSION=v0.1.1
+# tag and release
+make release VERSION=v0.1.1 GITHUB_TOKEN=123...
 
 # build docker image
 make docker-account VERSION=v0.1.1
