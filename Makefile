@@ -104,10 +104,10 @@ run run-%:
 release:
 	git tag -a $(VERSION) -m "Release" || true
 	git push origin $(VERSION)
-  curl -H "Content-Type:application/json" \
-  -H "Authorization: token $(GITHUB_TOKEN)" \
-  -XPOST "https://api.github.com/repos/xmlking/micro-starter-kit/releases" \
-  -d '{"tag_name":"$(VERSION)", "target_commitish": "master", "draft": false, "prerelease": false}'
+	curl -H "Content-Type:application/json" \
+		-H "Authorization: token $(GITHUB_TOKEN)" \
+		-XPOST "https://api.github.com/repos/xmlking/micro-starter-kit/releases" \
+		-d '{"tag_name":"$(VERSION)", "target_commitish": "master", "draft": false, "prerelease": false}'
 
 clean:
 	@for d in ./build/*-{srv,api}; do \
