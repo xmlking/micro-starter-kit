@@ -1,9 +1,10 @@
-name: Build, Push and Deploy on Release
+name: Deploy on Release
 on:
   release:
     types: [published]
 jobs:
-  build:
+  build-deploy:
+    name: Build, Push and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Check out Code
