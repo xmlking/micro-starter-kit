@@ -1,90 +1,21 @@
-name: Build on Release
+name: Build, Push and Deploy on Release
 on: [release]
-# on:
-#   push:
-#     branches:
-#       - master
-#       - 'releases/*'
-#     tags:
-#     - 'v*'
-#   pull_request:
-#     branches:
-#       - master
 jobs:
-  build-deploy:
-    name: Build and Deploy
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Go 1.13
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.13
-        id: go
-      - name: Setup Tools
-        # env:
-        #   GO111MODULE: on
+      - uses: actions/checkout@master
+      - name: Build
+        run: make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=$GITHUB_REPOSITORY
+      - name: Push
         run: |
-          go get -u github.com/ahmetb/govvv
-          # go get -u sigs.k8s.io/kustomize
-      - name: Check out Code
-        uses: actions/checkout@v1
-      - name: Install Dependencies
-        run: go mod download
-      - name: Integration Test
-        run: make inte
-        continue-on-error: true
-      # - name: Build
-      #   run: go build -v ./cmd/gophrase.go
-      #   env:
-      #     CGO_ENABLED: 0
-      # - name: Build Cross Platform Binaries
+          docker login docker.pkg.github.com -u ${{ secrets.GITHUB_ACTOR }} -p ${{ secrets.GITHUB_TOKEN }}
+          make docker_push
+      # - name: Push
       #   run: |
-      #     make build_binaries
-      #     find binaries -type f | xargs ls -ltrh
-      #     cat binaries/sha256sum.txt
-      #     ./$(find binaries -name "*.linux.amd64")
-      #     ./$(find binaries -name "*.linux.amd64") -n 6
-      #     ./$(find binaries -name "*.linux.amd64") --help || true
-      # - name: docker-publish
-      #   uses: docker://docker
+      #     docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      #     docker login docker.pkg.github.com -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      #     make docker_push
       #   env:
-      #     DOCKER_USERNAME: ${{ secrets.docker_username }}
-      #     DOCKER_PASSWORD: ${{ secrets.docker_password }}
-      #   with:
-      #     entrypoint: sh
-      #     args: ci/docker-build.sh
-# name: Build and Push
-# on:
-#   push:
-#     branches:
-#       - master
-# jobs:
-#   build:
-#     name: Build and Push
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@master
-#     - uses: actions/setup-node@v1
-#       with:
-#         version: '10.x'
-#     - run: npm ci
-#     - run: npm test
-#     - name: Build Docker Image
-#       uses: actions/docker/cli@master
-#       env:
-#         CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
-#       with:
-#         args: >
-#           build -t $CONTAINER_REGISTRY/${{ github.repository }} . \
-#             --build-arg VCS_REF=${{ github.sha }} \
-#             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
-#     - name: Push Docker Image
-#       uses: actions/docker/cli@master
-#       env:
-#         CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
-#         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-#         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#       with:
-#         args: >
-#           login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $CONTAINER_REGISTRY && \
-#             docker push $CONTAINER_REGISTRY/${{ github.repository }}
+      #     DOCKER_USERNAME: ${{ secrets.GITHUB_DOCKER_USERNAME }}
+      #     DOCKER_PASSWORD: ${{ secrets.GITHUB_DOCKER_PASSWORD }}
