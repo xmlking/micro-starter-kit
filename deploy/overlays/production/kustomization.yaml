@@ -22,10 +22,10 @@ patches:
   #   target:
   #     kind: Deployment
   #     labelSelector: app.kubernetes.io/component=microservice
-  # - path: patches/image-pull-policy-if-not-present.yaml
-  #   target:
-  #     kind: Deployment
-  #     labelSelector: app.kubernetes.io/component=microservice
+  - path: patches/image-pull-policy-if-not-present.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
 
 configMapGenerator:
   # - name: env-vars
@@ -44,6 +44,10 @@ secretGenerator:
     behavior: replace
     literals:
       - DATABASE_PASSWORD=prod-real-pass
+  - name: regcred
+    files:
+      - secrets/.dockerconfigjson
+    type: kubernetes.io/dockerconfigjson
 
 replicas:
   - name: srv
@@ -51,11 +55,24 @@ replicas:
 
 images:
   - name: microhq/micro
-    newTag: latest
-  - name: progrium/consul
-    newTag: latest
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
+    newTag: v0.1.1
+  - name: consul
+    newTag: 1.6.1
   - name: postgres
-    newTag: latest
+    newTag: 11.5-alpine
+  - name: xmlking/account-api
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-api
+    newTag: v0.1.1
+  - name: xmlking/account-srv
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
+    newTag: v0.1.1
+  - name: xmlking/emailer-srv
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv
+    newTag: v0.1.1
+  - name: xmlking/greeter-srv
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
+    newTag: v0.1.1
 
 vars:
   - name: CONSUL_SERVICE_NAME

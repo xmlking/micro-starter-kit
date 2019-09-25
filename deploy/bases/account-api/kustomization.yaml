@@ -23,7 +23,7 @@ vars:
   - name: ACCOUNT_API_SERVICE_NAME
     objref:
       kind: Service
-      name: api
+      name: srv
       apiVersion: v1
     fieldref:
       fieldpath: metadata.name

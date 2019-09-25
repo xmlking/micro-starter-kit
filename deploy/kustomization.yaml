@@ -8,20 +8,3 @@ bases:
 nameSuffix: -v1
 commonLabels:
   app.kubernetes.io/version: v1
-
-images:
-  - name: microhq/micro
-    newName: xmlking/micro
-    newTag: v0.1.0-149-g0cb2cd2
-  - name: progrium/consul
-    newTag: latest
-  - name: postgres
-    newTag: latest
-  - name: xmlking/account-api
-    newTag: v0.1.0-149-g0cb2cd2
-  - name: xmlking/account-srv
-    newTag: v0.1.0-149-g0cb2cd2
-  - name: xmlking/emailer-srv
-    newTag: v0.1.0-149-g0cb2cd2
-  - name: xmlking/greeter-srv
-    newTag: v0.1.0-149-g0cb2cd2

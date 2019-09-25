@@ -7,8 +7,6 @@ spec:
     spec:
       containers:
         - name: srv
-          # This is the import path for the Go binary to build and run.
-          # image: github.com/xmlking/micro-starter-kit/srv/account
           image: xmlking/account-srv:latest
           imagePullPolicy: Always
           ports:

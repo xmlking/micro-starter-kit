@@ -23,10 +23,14 @@ patches:
     target:
       kind: Deployment
       labelSelector: app.kubernetes.io/component=microservice
-  # - path: patches/image-pull-policy-if-not-present.yaml
+  # - path: patches/resource_limit.yaml
   #   target:
   #     kind: Deployment
   #     labelSelector: app.kubernetes.io/component=microservice
+  - path: patches/image-pull-policy-if-not-present.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
 
 configMapGenerator:
   # - name: env-vars
@@ -49,11 +53,19 @@ replicas:
 
 images:
   - name: microhq/micro
-    newTag: latest
-  - name: progrium/consul
-    newTag: latest
+    newTag: v1.10.0
+  - name: consul
+    newTag: 1.6.1
   - name: postgres
-    newTag: latest
+    newTag: 11.5-alpine
+  - name: xmlking/account-api
+    newTag: v0.1.0-149-g0cb2cd2
+  - name: xmlking/account-srv
+    newTag: v0.1.0-149-g0cb2cd2
+  - name: xmlking/emailer-srv
+    newTag: v0.1.0-149-g0cb2cd2
+  - name: xmlking/greeter-srv
+    newTag: v0.1.0-149-g0cb2cd2
 
 vars:
   - name: CONSUL_SA

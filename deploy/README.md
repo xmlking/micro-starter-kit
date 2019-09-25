@@ -21,6 +21,25 @@ brew install skaffold
 brew install kubernetes-helm
 ```
 
+> Generate `.dockerconfigjson` for imagePullSecrets from **GitHub Docker Registry**
+
+```bash
+kubectl create secret docker-registry regcred \
+--docker-server=<your-registry-server> \
+--docker-username=<user | org> \
+--docker-password=<password | token> \
+--docker-email=<email> \
+-o 'go-template={{index .data ".dockerconfigjson"}}' --dry-run | base64 --decode > deploy/overlays/production/secrets/.dockerconfigjson
+
+# example
+kubectl create secret docker-registry regcred \
+--docker-server=https://docker.pkg.github.com \
+--docker-username=xmlking \
+--docker-password=15650cad4e8a6602284255f7caf76134eb977b45 \
+--docker-email=xmlking@gmail.com \
+-o 'go-template={{index .data ".dockerconfigjson"}}' --dry-run | base64 --decode > deploy/overlays/production/secrets/.dockerconfigjson
+```
+
 ## Workflows
 
 A _workflow_ is the sequence of steps one takes to use and maintain a configuration.

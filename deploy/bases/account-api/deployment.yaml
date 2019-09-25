@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: srv
 spec:
   template:
     spec:
       containers:
-        - name: api
+        - name: srv
           image: xmlking/account-api:latest
           imagePullPolicy: Always
           ports:

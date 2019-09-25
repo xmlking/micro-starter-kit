@@ -48,10 +48,10 @@ secretGenerator:
 images:
   - name: microhq/micro
     newTag: latest
-  - name: progrium/consul
+  - name: consul
     newTag: latest
   - name: postgres
-    newTag: latest
+    newTag: alpine
   - name: xmlking/account-api
     newTag: latest
   - name: xmlking/account-srv
