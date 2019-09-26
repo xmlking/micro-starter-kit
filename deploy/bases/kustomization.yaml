@@ -32,18 +32,10 @@ secretGenerator:
   - name: secrets
     literals:
       - DATABASE_PASSWORD=fake
-
-# patches:
-#   - patch: |-
-#       - op: replace
-#         path: /some/existing/replicas
-#         value: new value
-
-# secretGenerator:
-# - name: app-tls
-#   files:
-#     - secret/tls.cert
-#     - secret/tls.key
+  # - name: app-tls
+  #   files:
+  #     - secret/tls.cert
+  #     - secret/tls.key
 
 images:
   - name: microhq/micro

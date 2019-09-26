@@ -2,6 +2,18 @@
 
 Ephemeral Kubernetes Clusters with KinD
 
+## Prerequisite
+
+```bash
+# install `docker for mac`
+brew cask install docker
+# then go to the gui launcher and start up docker, and follow the prompts.
+# uninstalling `docker for mac`
+brew cask zap docker
+
+# brew cask install minikube
+```
+
 ## Install
 
 ```bash

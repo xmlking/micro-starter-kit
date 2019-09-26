@@ -15,8 +15,9 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: config
+              mountPath: /config/config.yaml
+              subPath: config.yaml
               readOnly: true
-              mountPath: /config
           envFrom:
             - configMapRef:
                 name: env-vars

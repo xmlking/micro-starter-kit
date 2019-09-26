@@ -84,6 +84,28 @@ go test all
   kubectl debug -c debug-shell --image=busybox target-pod -- sh
   ```
 
+- How to debug a `pod` that is crashing during initialization?
+  If you `pod` crashing you cannot SSH to it, e.g., to see file system etc.
+  Assuming your container has **busybox** at `/bin/busybox`, add following `command` to your deployment yaml.
+
+  ```yaml
+  # Just spin & wait forever
+  command:
+    [
+      '/bin/busybox',
+      'sh',
+      '-ec',
+      "while :; do echo '.'; /bin/busybox sleep 5 ; done",
+    ]
+  ```
+
+  Then run `kubectl exec -it $POD_NAME -- /bin/busybox sh` to SSH to the container.
+
+  ```bash
+  /bin/busybox ls config
+  /bin/busybox more config/config.yaml
+  ```
+
 ## Refer
 
 - [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
