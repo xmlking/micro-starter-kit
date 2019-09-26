@@ -4,8 +4,19 @@ commonLabels:
   app.kubernetes.io/component: infra
   app.kubernetes.io/part-of: micro-starter-kit
   app.kubernetes.io/managed-by: kustomize
+commonAnnotations:
+  org: acmeCorporation
 
 resources:
   - service-account.yaml
   - deployment.yaml
   - service.yaml
+
+vars:
+  - name: CONSUL_SERVICE_NAME
+    objref:
+      kind: Service
+      name: consul
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

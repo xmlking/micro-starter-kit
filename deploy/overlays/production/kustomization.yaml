@@ -74,11 +74,3 @@ images:
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
     newTag: v0.1.1
 
-vars:
-  - name: CONSUL_SERVICE_NAME
-    objref:
-      kind: Service
-      name: consul
-      apiVersion: v1
-    fieldref:
-      fieldpath: metadata.name

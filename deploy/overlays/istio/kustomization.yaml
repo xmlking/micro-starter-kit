@@ -64,11 +64,3 @@ images:
   - name: xmlking/greeter-srv
     newTag: v0.1.0-149-g0cb2cd2
 
-vars:
-  - name: CONSUL_SERVICE_NAME
-    objref:
-      kind: Service
-      name: consul
-      apiVersion: v1
-    fieldref:
-      fieldpath: metadata.name
