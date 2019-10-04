@@ -144,37 +144,36 @@ deploy
 
 ```bash
 # Kustomize command the modified manifests can be generated and printed to the terminal with: --load_restrictions none
-kubectl kustomize ./deploy
-# only production env
+# for production env
 kubectl kustomize ./deploy/overlays/production
+# for istio env
+kubectl kustomize ./deploy/overlays/istio
 
 # The manifests can be applied
-kubectl apply -k ./deploy
-# only production env
-kubectl kustomize ./deploy/overlays/production
+kubectl apply -k ./deploy/overlays/production
 
 # update image version
 IMAGE_VERSION=v0.1.0-118-g21f8a30
 cd deploy && kustomize edit set image xmlking/account-srv:$IMAGE_VERSION && cd ..
 
-kustomize build someapp/overlays/staging | kubectl apply -f -
-kustomize build someapp/overlays/production | kubectl apply -f -
+kustomize build ./deploy/overlays/staging | kubectl apply -f -
+kustomize build ./deploy/overlays/production | kubectl apply -f -
 
 # Fix the missing and deprecated fields in kustomization file
 kustomize edit fix
 
-kustomize build ./deploy
+kustomize build ./deploy/overlays/production
 
-kubectl get -k ./deploy
-kubectl describe -k ./deploy
-kubectl delete -k ./deploy
+kubectl get -k ./deploy/overlays/production
+kubectl describe -k ./deploy/overlays/production
+kubectl delete -k ./deploy/overlays/production
 ```
 
 ## verify
 
 ```bash
 # highlight `microhq/micro:latest`
-kustomize build ./deploy | grep -C 3 microhq/micro:latest
+kustomize build ./deploy/overlays/production | grep -C 3 microhq/micro:latest
 
 # compare the output directly to see how consul and production differ:
 diff \
@@ -182,7 +181,7 @@ diff \
   <(kustomize build ./deploy/overlays/production) |\
   more
 
-kustomize build ./deploy > release.yaml
+kustomize build ./deploy/overlays/production > release.yaml
 k apply -f release.yaml
 k get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services

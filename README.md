@@ -276,9 +276,9 @@ ko -n nondefault apply -f deploy/
 
 ```bash
 # publish to  docker repo ar KO_DOCKER_REPO
-ko resolve -P -f deploy/ > release.yaml
+ko resolve -P -f deploy/production > release.yaml
 # publish to local docker repo
-ko resolve -P -L -f deploy/ > release.yaml
+ko resolve -P -L -f deploy/production > release.yaml
 ```
 
 > run local image

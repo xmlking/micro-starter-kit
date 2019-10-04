@@ -1,8 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 namespace: default
 namePrefix: prod-
+nameSuffix: -v1
 
 commonLabels:
   environment: production
+  app.kubernetes.io/version: v1
 commonAnnotations:
   note: Hello, I am production!
 
@@ -73,4 +78,3 @@ images:
   - name: xmlking/greeter-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
     newTag: v0.1.1
-

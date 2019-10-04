@@ -1,11 +1,10 @@
 module github.com/xmlking/micro-starter-kit
 
-go 1.13
+go 1.13.1
 
 replace (
-	github.com/lucas-clemente/quic-go => github.com/lucas-clemente/quic-go v0.7.1-0.20190917080620-9e6bff0b9872
-	k8s.io/api => k8s.io/api v0.0.0-20190813180838-e711354a0280
-	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20190813060636-0c17871ad6fd
+	k8s.io/api => k8s.io/api v0.0.0-20191003035645-10e821c09743
+	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20191003115452-c31ffd88d5d2
 )
 
 require (

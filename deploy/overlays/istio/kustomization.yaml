@@ -1,8 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
 namespace: default
 namePrefix: istio-
+nameSuffix: -v1
 
 commonLabels:
   environment: production
+  app.kubernetes.io/version: v1
 commonAnnotations:
   note: Hello, I am production!
 
@@ -63,4 +68,3 @@ images:
     newTag: v0.1.0-149-g0cb2cd2
   - name: xmlking/greeter-srv
     newTag: v0.1.0-149-g0cb2cd2
-
