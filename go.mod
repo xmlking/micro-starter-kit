@@ -23,7 +23,7 @@ require (
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.11.0
 	github.com/micro/go-plugins v1.3.0
-	github.com/micro/micro v1.10.1-0.20190923155659-9ccb86fccac3
+	github.com/micro/micro v1.11.0
 	github.com/onrik/logrus v0.4.1
 	github.com/sarulabs/di/v2 v2.2.0
 	github.com/satori/go.uuid v1.2.0
