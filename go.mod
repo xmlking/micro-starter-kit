@@ -17,7 +17,7 @@ require (
 	github.com/golang/protobuf v1.3.2
 	github.com/infobloxopen/atlas-app-toolkit v0.19.0
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
-	github.com/jinzhu/gorm v1.9.10
+	github.com/jinzhu/gorm v1.9.11
 	github.com/lusis/go-slackbot v0.0.0-20180109053408-401027ccfef5 // indirect
 	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/micro/cli v0.2.0
