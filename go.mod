@@ -21,7 +21,7 @@ require (
 	github.com/lusis/go-slackbot v0.0.0-20180109053408-401027ccfef5 // indirect
 	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.10.1-0.20190923170452-71ab35e0557f
+	github.com/micro/go-micro v1.11.0
 	github.com/micro/go-plugins v1.3.0
 	github.com/micro/micro v1.10.1-0.20190923155659-9ccb86fccac3
 	github.com/onrik/logrus v0.4.1
