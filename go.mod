@@ -9,11 +9,17 @@ replace (
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.3.3 // indirect
+	github.com/chzyer/logex v1.1.10 // indirect
+	github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
+	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible // indirect
 	github.com/golang/protobuf v1.3.2
 	github.com/infobloxopen/atlas-app-toolkit v0.19.0
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
-	github.com/jinzhu/gorm v1.9.10
+	github.com/jinzhu/gorm v1.9.11
+	github.com/lusis/go-slackbot v0.0.0-20180109053408-401027ccfef5 // indirect
+	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.10.1-0.20190923170452-71ab35e0557f
 	github.com/micro/go-plugins v1.3.0
