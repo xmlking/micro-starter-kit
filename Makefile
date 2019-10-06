@@ -23,7 +23,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push deploy
+.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push deploy e2e
 
 all: build
 
@@ -108,9 +108,13 @@ run run-%:
 	fi
 
 release:
-	git tag -a $(VERSION) -m "Release" || true
-	git push origin $(VERSION)
-	curl -H "Content-Type:application/json" \
+	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.production.yaml
+	@kustomize build deploy/overlays/e2e/ 			 | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.e2e.yaml
+	@git add deploy/deploy.production.yaml deploy/deploy.e2e.yaml
+	@git commit -m 'Adding k8s deployment yaml for version: $(VERSION)'
+	@git tag -a $(VERSION) -m "Release" || true
+	@git push origin $(VERSION)
+	@curl -H "Content-Type:application/json" \
 		-H "Authorization: token $(GITHUB_TOKEN)" \
 		-XPOST "https://api.github.com/repos/xmlking/micro-starter-kit/releases" \
 		-d '{"tag_name":"$(VERSION)", "target_commitish": "master", "draft": false, "prerelease": false}'
@@ -185,4 +189,8 @@ deploy: OVERLAY := e2e
 deploy: NS 			:= default
 deploy:
 	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
-	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > release.yaml
+	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.yaml
+
+e2e:
+	@echo "TODO: Run e2e tests on KinD with e2e overlay"
+

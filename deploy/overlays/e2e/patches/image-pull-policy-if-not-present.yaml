@@ -5,6 +5,8 @@ metadata:
 spec:
   template:
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: srv
           imagePullPolicy: IfNotPresent

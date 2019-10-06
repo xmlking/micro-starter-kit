@@ -1,10 +1,10 @@
-name: Deploy on Release
+name: Publish on Release
 on:
   release:
     types: [published]
 jobs:
-  build-deploy:
-    name: Build, Push and Deploy
+  build:
+    name: Build and Publish docker images
     runs-on: ubuntu-latest
     steps:
       - name: Check out Code
@@ -16,5 +16,3 @@ jobs:
           # docker login docker.pkg.github.com -u $GITHUB_ACTOR -p  ${{ secrets.GITHUB_TOKEN }}
           docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_DOCKER_PASSWORD }}
           make docker_push
-      - name: Deploy to KinD
-        run: echo "TODO Deploy.."

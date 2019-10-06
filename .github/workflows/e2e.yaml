@@ -1,0 +1,66 @@
+name: E2E Tests
+on:
+  deployment:
+    environment: [e2e]
+jobs:
+  deploy-n-e2e:
+    name: Deploy to KinD and run e2e tests
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Check out Code
+        uses: actions/checkout@v1
+      - name: "deployment pending"
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "pending"
+          token: "${{ github.token }}"
+
+      - name: "Deploy ${{ github.event.deployment.environment }}"
+        run: |
+          echo "task - ${{ github.event.deployment.task }}"
+          echo "environment - ${{ github.event.deployment.environment }}"
+          echo "payload - ${{ toJson(github.event.deployment.payload) }}"
+      - name: Create Kubernetes cluster
+        id: kind
+        uses: engineerd/setup-kind@v0.1.0
+        # with:
+        #   config: .github/kubernetes/kind.yaml
+      - name: Prepare cluster for testing
+        id: local-path
+        env:
+          DOCKER_TOKEN: ${{ secrets.GITHUB_DOCKER_PASSWORD }}
+          DOCKER_USERNAME: xmlking
+          DOCKER_EMAIL: xmlking@gmail.com
+          REGISTRY_SECRET: regcred
+        run: |
+          export KUBECONFIG="$(kind get kubeconfig-path)"
+          echo "waiting for nodes to be ready ..."
+          kubectl wait --for=condition=Ready nodes --all --timeout=5m
+          kubectl get nodes
+          kubectl cluster-info
+          echo "create docker-registry secret"
+          kubectl create secret docker-registry ${REGISTRY_SECRET} \
+          --docker-server=https://docker.pkg.github.com \
+          --docker-username=${DOCKER_USERNAME} \
+          --docker-email=${DOCKER_EMAIL} \
+          --docker-password=${DOCKER_TOKEN}
+          kubectl get secret
+          echo "installing e2e overlay..."
+          # kubectl apply -f deploy/deploy.e2e.yaml
+          kubectl get pods
+      - name: Run e2e tests
+        run: make e2e
+
+      - name: "E2E Test success"
+        if: success()
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "e2e success"
+          token: "${{ github.token }}"
+
+      - name: "E2E Test failure"
+        if: failure()
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "e2e failure"
+          token: "${{ github.token }}"

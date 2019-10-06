@@ -106,7 +106,7 @@ make docker_clean
 
 ### deploy
 
-> generate `release.yaml` for given `overlay` and `namespace` using **kustomize**
+> generate `deploy/deploy.yaml` for given `overlay` and `namespace` using **kustomize**
 
 ```bash
 make deploy OVERLAY=production NS=default VERSION=v1.0.1

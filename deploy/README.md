@@ -32,10 +32,11 @@ kubectl create secret docker-registry regcred \
 -o 'go-template={{index .data ".dockerconfigjson"}}' --dry-run | base64 --decode > deploy/overlays/production/secrets/.dockerconfigjson
 
 # example
+export GITHUB_DOCKER_READ_PASSWORD=15650cad4e8a6602284255f7caf76134eb977b45
 kubectl create secret docker-registry regcred \
 --docker-server=https://docker.pkg.github.com \
 --docker-username=xmlking \
---docker-password=15650cad4e8a6602284255f7caf76134eb977b45 \
+--docker-password=$GITHUB_DOCKER_READ_PASSWORD \
 --docker-email=xmlking@gmail.com \
 -o 'go-template={{index .data ".dockerconfigjson"}}' --dry-run | base64 --decode > deploy/overlays/production/secrets/.dockerconfigjson
 ```
@@ -187,7 +188,7 @@ diff \
 
 # make deploy OVERLAY=e2e NS=default VERSION=v0.1.0-445-frc7fj0c
 make deploy
-kubectl apply -f release.yaml
+kubectl apply -f deploy/deploy.yaml
 kubectl get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services
 
@@ -199,7 +200,7 @@ kubectl exec -it $POD_NAME -- /bin/busybox sh
 
 kubectl get svc
 
-kubectl delete -f release.yaml
+kubectl delete -f deploy/deploy.yaml
 ```
 
 ## kustomize-sopssecret-plugin

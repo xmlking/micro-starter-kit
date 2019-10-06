@@ -125,12 +125,12 @@ docker rmi $(docker images -f "dangling=true" -q)
 
 # make deploy OVERLAY=e2e NS=default VERSION=v0.1.0-440-g6c7fb7a
 make deploy
-kubectl apply -f release.yaml
+kubectl apply -f deploy/deploy.yaml
 
 POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
 kubectl logs -f -c srv $POD_NAME
 
-kubectl delete -f release.yaml
+kubectl delete -f deploy/deploy.yaml
 ```
 
 ## Reference

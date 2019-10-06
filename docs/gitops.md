@@ -25,5 +25,5 @@ TODO: lets automate _PR Pipeline_ that is triggered when PR is created for `deve
 - build docker images
 - sign images
 - push images to GCR
-- generate release.yaml for k8s with Helm or Kustomize
+- generate deploy/deploy.yaml for k8s with Helm or Kustomize
 - deploy to GKE
