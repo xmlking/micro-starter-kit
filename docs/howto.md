@@ -160,6 +160,13 @@ go test all
   git push --delete origin v0.1.3
   ```
 
+- How to Push Git Tags with Commit?
+  Refer: [how-to-push-git-tags-with-commit](https://blog.ssanj.net/posts/2018-10-30-how-to-push-git-tags-with-commit.html)
+
+  ```bash
+  git config --global push.followTags true
+  ```
+
 ## Refer
 
 - [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)

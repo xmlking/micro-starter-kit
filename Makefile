@@ -113,7 +113,7 @@ release:
 	@git add deploy/deploy.production.yaml deploy/deploy.e2e.yaml
 	@git commit -m '[skip ci] Adding k8s deployment yaml for version: $(VERSION)'
 	@git push
-	@git tag -a $(VERSION) -m "Release" || true
+	@git tag -a $(VERSION) -m "[skip ci] Release" || true
 	@git push origin $(VERSION)
 	@curl -H "Content-Type:application/json" \
 		-H "Authorization: token $(GITHUB_TOKEN)" \

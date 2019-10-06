@@ -28,7 +28,7 @@ jobs:
       - name: Prepare cluster for testing
         id: local-path
         env:
-          DOCKER_TOKEN: ${{ secrets.GITHUB_DOCKER_PASSWORD }}
+          DOCKER_TOKEN: ${{ secrets.GITHUB_DOCKER_READ_PASSWORD }}
           DOCKER_USERNAME: xmlking
           DOCKER_EMAIL: xmlking@gmail.com
           REGISTRY_SECRET: regcred

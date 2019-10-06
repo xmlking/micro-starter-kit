@@ -32,7 +32,7 @@ curl POST -H "Authorization: token $GITHUB_TOKEN" \
           -H "Accept: application/vnd.github.ant-man-preview+json"  \
           -H "Content-Type: application/json" \
           https://api.github.com/repos/org/repo/deployments \
-          --data '{"ref": "master", "environment": "production"}'
+          --data '{"ref": "develop", "environment": "production"}'
 ```
 
 ## Ref
