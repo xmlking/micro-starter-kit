@@ -1,0 +1,973 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-consul-v1
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-consul-v1
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-consul-v1
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: e2e-consul-v1
+subjects:
+- kind: ServiceAccount
+  name: e2e-consul-v1
+  namespace: default
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: account-api
+    version: 0.1.0
+    log:
+      level: info
+      format: json
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-api-config-v1-tdmd9hc52b
+  namespace: default
+---
+apiVersion: v1
+data:
+  ACCOUNT_SERVICE_NAME: e2e-account-srv-v1
+  MICRO_SERVER_NAME: account-api
+  SERVICE_NAME: e2e-account-api-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-api-env-vars-v1-k4m677k4k2
+  namespace: default
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: account-srv
+    version: 0.1.0
+    log:
+      level: info
+      format: json
+    database:
+      dialect: sqlite3
+      host: 0.0.0.0
+      port: 9999
+      Username: sumo
+      Password: demo
+      database: ":memory:"
+      logging: true
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-config-v1-kmhd47fk9c
+  namespace: default
+---
+apiVersion: v1
+data:
+  DATABASE_HOST: $(DATABASE_SERVICE_NAME)
+  EMAILER_SERVICE_NAME: e2e-emailer-srv-v1
+  GATEWAY_SERVICE_NAME: e2e-gateway-srv-v1
+  MICRO_SERVER_NAME: account-srv
+  SERVICE_NAME: e2e-account-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-env-vars-v1-7hc8cb6ddt
+  namespace: default
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: emailer-srv
+    version: 0.1.0
+    log:
+      level: info
+      format: json
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+    email:
+      username: yourGmailUsername
+      password: password
+      emailServer: smtp.gmail.com
+      port: 587
+      from: sumo@demo.com
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-emailer-config-v1-tc6b9fck45
+  namespace: default
+---
+apiVersion: v1
+data:
+  MICRO_SERVER_NAME: emailer-srv
+  SERVICE_NAME: e2e-emailer-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-emailer-env-vars-v1-chdcttcd45
+  namespace: default
+---
+apiVersion: v1
+data:
+  APP_ENV: production
+  CONFIG_DIR: /config
+  CONFIG_FILE: config.yaml
+  MICRO_BROKER_ADDRESS: 0.0.0.0:10001
+  MICRO_LOG_LEVEL: info
+  MICRO_REGISTER_INTERVAL: "5"
+  MICRO_REGISTER_TTL: "10"
+  MICRO_REGISTRY: consul
+  MICRO_REGISTRY_ADDRESS: e2e-consul-v1:8500
+  MICRO_SERVER_ADDRESS: 0.0.0.0:8080
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-env-vars-common-v1-6cm96c2k9f
+  namespace: default
+---
+apiVersion: v1
+data:
+  CORS_ALLOWED_HEADERS: Authorization,Content-Type
+  CORS_ALLOWED_METHODS: POST,GET
+  CORS_ALLOWED_ORIGINS: '*'
+  MICRO_API_ENABLE_RPC: "true"
+  MICRO_API_HANDLER: rpc
+  MICRO_API_NAMESPACE: ""
+  MICRO_LOG_LEVEL: debug
+  MICRO_SERVER_NAME: gateway-srv
+  SERVICE_NAME: e2e-gateway-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-gateway-env-vars-v1-fmh798cg5g
+  namespace: default
+---
+apiVersion: v1
+data:
+  config.yaml: |
+    environment: development
+    name: greeter-srv
+    version: 0.1.0
+    log:
+      level: info
+      format: json
+    observability:
+      metrics:
+        address: localhost:8125
+        flushInterval: 1000000000
+      tracing:
+        address: jaeger:6831
+        flushInterval: 5000000000
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-greeter-config-v1-fkf749m9g5
+  namespace: default
+---
+apiVersion: v1
+data:
+  MICRO_SERVER_NAME: greater-srv
+  SERVICE_NAME: e2e-greeter-srv-v1
+kind: ConfigMap
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-greeter-env-vars-v1-fd5552b5b5
+  namespace: default
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2RvY2tlci5wa2cuZ2l0aHViLmNvbSI6eyJ1c2VybmFtZSI6InhtbGtpbmciLCJwYXNzd29yZCI6IjFlODg0ZDk5MGQ2ZGYzYWVjNTYwNTQ0YTg0NjA5Mjk2M2E2NjExNDkiLCJlbWFpbCI6InhtbGtpbmdAZ21haWwuY29tIiwiYXV0aCI6ImVHMXNhMmx1WnpveFpUZzROR1E1T1RCa05tUm1NMkZsWXpVMk1EVTBOR0U0TkRZd09USTVOak5oTmpZeE1UUTUifX19
+kind: Secret
+metadata:
+  annotations:
+    note: Hello, I am integration!
+  labels:
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-regcred-v1-g65tb57h64
+  namespace: default
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+data:
+  DATABASE_PASSWORD: ZTJlLXJlYWwtcGFzcw==
+kind: Secret
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-secrets-v1-24hg9kfgb4
+  namespace: default
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-api-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-web-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-web-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-web-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-web-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-consul-v1
+  namespace: default
+spec:
+  ports:
+  - name: http
+    port: 8500
+  selector:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-emailer-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-gateway-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: gateway-http
+    port: 8080
+    protocol: TCP
+    targetPort: gateway-http
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-greeter-srv-v1
+  namespace: default
+spec:
+  ports:
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
+  selector:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-api-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-api
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-api-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: account-api-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: account-api
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: integration
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am integration!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: account-api-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: account-api
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: integration
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: e2e-account-api-env-vars-v1-k4m677k4k2
+        - configMapRef:
+            name: e2e-env-vars-common-v1-6cm96c2k9f
+        - secretRef:
+            name: e2e-secrets-v1-24hg9kfgb4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-api:v0.1.3
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-web-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config/config.yaml
+          name: config
+          readOnly: true
+          subPath: config.yaml
+      imagePullSecrets:
+      - name: e2e-regcred-v1-g65tb57h64
+      volumes:
+      - configMap:
+          name: e2e-account-api-config-v1-tdmd9hc52b
+        name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: account-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: account-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-account-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: account-srv-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: account-srv
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: integration
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am integration!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: account-srv-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: account-srv
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: integration
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: e2e-account-env-vars-v1-7hc8cb6ddt
+        - configMapRef:
+            name: e2e-env-vars-common-v1-6cm96c2k9f
+        - secretRef:
+            name: e2e-secrets-v1-24hg9kfgb4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.1.3
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-web-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config/config.yaml
+          name: config
+          readOnly: true
+          subPath: config.yaml
+      imagePullSecrets:
+      - name: e2e-regcred-v1-g65tb57h64
+      volumes:
+      - configMap:
+          name: e2e-account-config-v1-kmhd47fk9c
+        name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: emailer-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: emailer-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-emailer-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: emailer-srv-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: emailer-srv
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: integration
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am integration!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: emailer-srv-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: emailer-srv
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: integration
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: e2e-emailer-env-vars-v1-chdcttcd45
+        - configMapRef:
+            name: e2e-env-vars-common-v1-6cm96c2k9f
+        - secretRef:
+            name: e2e-secrets-v1-24hg9kfgb4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.1.3
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config/config.yaml
+          name: config
+          readOnly: true
+          subPath: config.yaml
+      imagePullSecrets:
+      - name: e2e-regcred-v1-g65tb57h64
+      volumes:
+      - configMap:
+          name: e2e-emailer-config-v1-tc6b9fck45
+        name: config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: gateway-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-gateway-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: gateway-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: gateway
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: integration
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am integration!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: gateway-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: gateway
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: integration
+    spec:
+      containers:
+      - args:
+        - api
+        - --handler=rpc
+        - --enable_rpc=true
+        - --address=0.0.0.0:8090
+        env:
+        - name: MICRO_API_ADDRESS
+          value: 0.0.0.0:8090
+        envFrom:
+        - configMapRef:
+            name: e2e-gateway-env-vars-v1-fmh798cg5g
+        - configMapRef:
+            name: e2e-env-vars-common-v1-6cm96c2k9f
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.3
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8090
+          name: gateway-http
+          protocol: TCP
+      imagePullSecrets:
+      - name: e2e-regcred-v1-g65tb57h64
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: microservice
+    app.kubernetes.io/instance: greeter-srv-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: greeter-srv
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-greeter-srv-v1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: microservice
+      app.kubernetes.io/instance: greeter-srv-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: greeter-srv
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: integration
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am integration!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: microservice
+        app.kubernetes.io/instance: greeter-srv-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: greeter-srv
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: integration
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: e2e-greeter-env-vars-v1-fd5552b5b5
+        - configMapRef:
+            name: e2e-env-vars-common-v1-6cm96c2k9f
+        - secretRef:
+            name: e2e-secrets-v1-24hg9kfgb4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.1.3
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config/config.yaml
+          name: config
+          readOnly: true
+          subPath: config.yaml
+      imagePullSecrets:
+      - name: e2e-regcred-v1-g65tb57h64
+      volumes:
+      - configMap:
+          name: e2e-greeter-config-v1-fkf749m9g5
+        name: config
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    note: Hello, I am integration!
+    org: acmeCorporation
+  labels:
+    app.kubernetes.io/component: infra
+    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: consul
+    app.kubernetes.io/part-of: micro-starter-kit
+    app.kubernetes.io/version: v1
+    environment: integration
+  name: e2e-consul-v1
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: infra
+      app.kubernetes.io/instance: consul-abcxzy
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: consul
+      app.kubernetes.io/part-of: micro-starter-kit
+      app.kubernetes.io/version: v1
+      environment: integration
+  serviceName: e2e-consul-v1
+  template:
+    metadata:
+      annotations:
+        note: Hello, I am integration!
+        org: acmeCorporation
+      labels:
+        app.kubernetes.io/component: infra
+        app.kubernetes.io/instance: consul-abcxzy
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: consul
+        app.kubernetes.io/part-of: micro-starter-kit
+        app.kubernetes.io/version: v1
+        environment: integration
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - consul
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - args:
+        - agent
+        - -bootstrap-expect=3
+        - -retry-join=provider=k8s label_selector="app.kubernetes.io/name=consul"
+        - -client=0.0.0.0
+        - -data-dir=/consul/data
+        - -server
+        - -ui
+        image: consul:1.6.1
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - consul leave
+        name: consul
+      serviceAccountName: e2e-consul-v1
+      terminationGracePeriodSeconds: 10
