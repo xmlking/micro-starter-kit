@@ -38,12 +38,12 @@ secretGenerator:
   #     - secret/tls.key
 
 images:
-  - name: microhq/micro
-    newTag: latest
   - name: consul
     newTag: latest
   - name: postgres
     newTag: alpine
+  - name: microhq/micro
+    newTag: latest
   - name: xmlking/account-api
     newTag: latest
   - name: xmlking/account-srv

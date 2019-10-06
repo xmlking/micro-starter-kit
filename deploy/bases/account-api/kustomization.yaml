@@ -17,7 +17,7 @@ configMapGenerator:
     literals:
       - SERVICE_NAME=$(ACCOUNT_API_SERVICE_NAME)
       - MICRO_SERVER_NAME=account-api
-      - ACCOUNT_HOST=$(ACCOUNT_SERVICE_NAME)
+      - ACCOUNT_SERVICE_NAME=$(ACCOUNT_SERVICE_NAME)
 
 vars:
   - name: ACCOUNT_API_SERVICE_NAME

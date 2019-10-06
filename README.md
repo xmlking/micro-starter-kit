@@ -38,82 +38,18 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 
 ### Prerequisite
 
-> run following `go get ...` commands outside **this project root** and `$GOPATH`<br/>
-> if you get error, try setting `export GO111MODULE=on` befor running `go get ...`
-
-Lets build and install `grpc` pre-loaded **Micro CLI** from [here](cmd/micro/README.md#Build) instead of default **Micro CLI**
-
-```bash
-# fetch micro into $GOPATH
-# build and install your own grpc pre-loaded micro-cli
-# go get github.com/micro/micro
-
-# go lang  build/publish/deploy tool
-go get github.com/google/ko/cmd/ko
-# go better build tool
-go get github.com/ahmetb/govvv
-# for static check/linter
-go get github.com/golangci/golangci-lint/cmd/golangci-lint
-# for mac, use brew to install protobuf
-brew install protobuf
-# GUI Client for GRPC Services
-brew cask install bloomrpc
-# k8s tool similar to helm
-brew install kustomize
-
-# fetch protoc plugins into $GOPATH
-go get github.com/golang/protobuf/{proto,protoc-gen-go}
-go get github.com/micro/protoc-gen-micro
-# go get -u github.com/envoyproxy/protoc-gen-validate
-# go get -u github.com/infobloxopen/protoc-gen-gorm
-```
-
-> Installing PGV can currently only be done from source:
-
-```bash
-go get -d github.com/envoyproxy/protoc-gen-validate
-cd ~/go/src/github.com/envoyproxy/protoc-gen-validate
-make build
-```
-
-> Installing `protoc-gen-gorm` can currently only be done from source:
-
-```
-go get -d github.com/infobloxopen/protoc-gen-gorm
-cd ~/go/src/github.com/infobloxopen/protoc-gen-gorm
-make install
-```
+Refer [prerequisites](docs/prerequisites.md) docs
 
 ### Initial Setup
 
-> (optional) setup your workspace from scratch
+Also Refer [scaffolding](docs/scaffolding.md) docs
+
+> clone the repo
 
 ```bash
-go mod init github.com/xmlking/micro-starter-kit
-mkdir srv api fnc
-
-# scaffold modules
-micro new --fqdn="account-srv" --type="srv" --gopath=false \
---alias="account" --plugin=registry=kubernetes srv/account
-
-micro new --fqdn="emailer-srv" --type="srv" --gopath=false \
---alias="emailer"  --plugin=registry=kubernetes:broker=nats srv/emailer
-
-micro new --fqdn="greeter-srv" --type="srv" --gopath=false \
---alias="greeter"  --plugin=registry=kubernetes srv/greeter
-
-micro new --fqdn="account-api" --type="api" --gopath=false \
---alias="account" --plugin=registry=kubernetes api/account
-```
-
-### Build
-
-```bash
-make proto
-# silence
-make -s proto
-
-make build
+git clone https://github.com/xmlking/micro-starter-kit /Developer/Work/go/micro-starter-kit
+# pull dependencies (when every time `go.mod` changed)
+go mod download
 ```
 
 ### Run
@@ -165,291 +101,51 @@ go run cmd/demo/main.go
 
 ### Test
 
-```bash
-# Run only Unit tests:
-make test-emailer
-go test -v -short
-go test -v -short ./srv/emailer/service
-# Run only Integration Tests: Useful for smoke testing canaries in production.
-make inte-emailer
-go test -v -run Integration ./srv/emailer/service
-```
-
-### UAT Test
-
-> using `micro` CLI
-
-```bash
-micro list services
-micro get service account-srv
-micro get service emailer-srv
-
-# how to start proxy
-micro proxy --protocol=grpc
-```
-
-#### Test gRPC Directly
-
-```bash
-## local build has gRPC by default.
-# ./build/micro call  account-srv UserService.Create \
-#   '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call  account-srv UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.List '{}'
-micro call account-srv UserService.List '{ "limit": 10, "page": 1}'
-micro call account-srv UserService.Get '{"id": "UserIdFromList"}'
-micro  call account-srv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.Update \
-'{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
-micro call account-srv UserService.Delete '{ "id": "UserIdFromGet" }'
-```
-
-#### Test via Micro Web UI
-
-```bash
-# Start Web UI for testing
-micro web
-
-open http://localhost:8082
-```
-
-> create new user from `Micro Web UI` and see if an email is send
-
-```json
-{
-  "username": "sumo",
-  "firstName": "sumo",
-  "lastName": "demo",
-  "email": "sumo@demo.com"
-}
-```
-
-#### Test via Micro API Gateway
-
-> Start API Gateway
-
-> Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
-
-```bash
-# start local micro (grpc pre-loaded micro)
-make run-micro-cmd ARGS="api --enable_rpc=true"
-# (or)
-go run cmd/micro/main.go  api --enable_rpc=true
-
-# (or) start global micro
-micro  api --enable_rpc=true
-```
+Refer [testing](docs/testing.md) docs
 
 ## GitOps
 
-### Deploy
+### Make
 
-Use `ko`. If you are new to `ko` check out the [ko-demo](https://github.com/xmlking/ko-demo)
-
-Set a registry and make sure you can push to it:
-
-```bash
-export PROJECT_ID=ngx-starter-kit
-export KO_DOCKER_REPO=gcr.io/${PROJECT_ID}
-```
-
-> to publish locally set: `export KO_DOCKER_REPO=ko.local`
-
-Then `apply` like this:
-
-```bash
-ko apply -f deploy/
-```
-
-To deploy in a different namespace:
-
-```bash
-ko -n nondefault apply -f deploy/
-```
-
-### Release
-
-> This will publish all of the binary components as container images and create a release.yaml
-
-```bash
-# publish to  docker repo ar KO_DOCKER_REPO
-ko resolve -P -f deploy/production > release.yaml
-# publish to local docker repo
-ko resolve -P -L -f deploy/production > release.yaml
-```
-
-> run local image
-
-```bash
-docker run -it \
--e MICRO_SERVER_ADDRESS=0.0.0.0:8080 \
--e MICRO_BROKER_ADDRESS=0.0.0.0:10001 \
--e MICRO_REGISTRY=mdns \
--e CONFIG_DIR=/var/run/ko \
--e CONFIG_FILE=config.yaml \
--p 8080:8080 -p 10001:10001 ko.local/github.com/xmlking/micro-starter-kit/srv/account
-```
+Refer [makefile](docs/makefile.md) docs
 
 ### Docker
 
-#### Docker Build
+Refer [docker](docs/docker.md) docs
+
+### Release
+
+Refer [releasing](docs/releasing.md) docs
+
+### Deploy
 
 ```bash
-# build
-TYPE=srv
-TARGET=account
-VERSION=0.0.5-SNAPSHOT
-# DOCKER_REGISTRY=gcr.io
-DOCKER_CONTEXT_PATH=xmlking
-# docker build --force-rm=true --rm=true --no-cache \
-docker build --rm \
---build-arg VERSION=$VERSION \
---build-arg TYPE=${TYPE} \
---build-arg TARGET=${TARGET} \
---build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
---build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
---build-arg VCS_REF=$(git rev-parse --short HEAD) \
---build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
--t ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION} .
-
-IMANGE_NAME=${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}
-
-# push
-docker push $IMANGE_NAME
-
-# check
-docker inspect  $IMANGE_NAME
-# remove temp images after build
-docker image prune -f
-# Remove dangling images
+make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit
 docker rmi $(docker images -f "dangling=true" -q)
-# Remove images tagged with vendor=sumo
-docker rmi $(docker images -f "label=org.label-schema.vendor=sumo"  -q)
-# Remove all <none> layers
-docker rmi $(docker images -a|grep "<none>"|awk '$1=="<none>" {print $3}')
-```
 
-#### Docker Run
+# make deploy OVERLAY=production NS=default VERSION=v0.1.0-440-g6c7fb7a
+make deploy
+kubectl apply -f release.yaml
 
-> run just for testing image...
+POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
+kubectl logs -f -c srv $POD_NAME
 
-```bash
-docker run -it \
--e MICRO_SERVER_ADDRESS=0.0.0.0:8080 \
--e MICRO_BROKER_ADDRESS=0.0.0.0:10001 \
--e MICRO_REGISTRY=mdns \
--p 8080:8080 -p 10001:10001 $IMANGE_NAME
-```
-
-#### Docker Compose Run
-
-Run complete app suite with `docker-compose`
-
-```bash
-docker-compose up consul
-docker-compose up account-srv
-docker-compose up emailer-srv
-docker-compose up gateway
-docker-compose up account-api
-docker-compose up gateway-api
-curl "http://localhost:8081/account/AccountService/list?limit=10"
-```
-
-#### Kubernetes Run
-
-> run just for testing image in k8s...
-
-```bash
-# account-srv
-kubectl run --rm mytest --image=xmlking/account-srv:latest \
---env="MICRO_REGISTRY=kubernetes" \
---env="MICRO_SELECTOR=static" \
---env="MICRO_SERVER_ADDRESS=0.0.0.0:8080" \
---env="MICRO_BROKER_ADDRESS=0.0.0.0:10001" \
---restart=Never -it
-
-# gateway
-kubectl run --rm mygateway --image=microhq/micro:kubernetes \
---env="MICRO_REGISTRY=kubernetes" \
---env="MICRO_SELECTOR=static" \
---restart=Never -it \
---command ./micro api
-```
-
-### Make
-
-using Makefile
-
-> use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing
-
-```bash
-# codegen from proto
-make proto
-make proto TARGET=account
-make proto TARGET=account TYPE=api
-make proto-account
-make proto-account-api
-## generate for protos in shared package
-make proto TARGET=shared TYPE=.
-
-# unit tests
-make test-account
-make test-emailer
-make test-account-api
-make test-config-shared
-make test-demo-cmd
-
-# integration tests
-make inte-account
-make inte-emailer
-
-# run
-make run-account
-make run-emailer
-make run-account-api
-make run-micro-cmd ARGS="--api_address=0.0.0.0:8088 api"
-make run-demo-cmd
-
-# Lint
-make lint-account-srv
-
-# build
-make build VERSION=v0.1.1
-make build TARGET=account VERSION=v0.1.1
-make build TARGET=account TYPE=srv VERSION=v0.1.1
-make build TARGET=emailer TYPE=srv VERSION=v0.1.1
-make build TARGET=account TYPE=api VERSION=v0.1.1
-make build-account VERSION=v0.1.1
-make build-account-api VERSION=v0.1.1
-
-# tag and release
-make release VERSION=v0.1.1 GITHUB_TOKEN=123...
-
-# build docker image
-make docker-account VERSION=v0.1.1
-make docker-account-srv VERSION=v0.1.1
-make docker TARGET=account VERSION=v0.1.1
-make docker TARGET=account TYPE=srv VERSION=v0.1.1
-make docker TARGET=account DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit
-
-make docker-emailer-srv
-make docker-account-api
-
-# build all docker images
-make docker
-# build all docker images for google cloud
-make docker DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit
-
-# publish all microservices images
-make docker_push
-# remove all previous microservices images and any dangling images
-make docker_clean
+kubectl delete -f release.yaml
 ```
 
 ## Reference
+
+### Project Docs
+
+1. [prerequisites](docs/prerequisites.md)
+2. [scaffolding](docs/scaffolding.md)
+3. [makefile](docs/makefile.md)
+4. [testing](docs/testing.md)
+5. [docker](docs/docker.md)
+6. [gitops](docs/gitops.md)
+7. [releasing](docs/releasing.md)
+
+### External Docs
 
 1. [examples](https://github.com/micro/examples) - example usage code for micro
 2. [microhq](https://github.com/microhq) - a place for prebuilt microservices

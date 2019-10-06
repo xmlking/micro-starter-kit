@@ -149,6 +149,10 @@ kubectl kustomize ./deploy/overlays/production
 # for istio env
 kubectl kustomize ./deploy/overlays/istio
 
+# using `sed` to further customize output
+OVERLAY="production" NS="default"; kustomize build deploy/overlays/${OVERLAY}/ | \
+sed -e "s|\$(NS)|${NS}|g" -e "s|\$(IMAGE_VERSION)|${VERSION}|g" > release.yaml
+
 # The manifests can be applied
 kubectl apply -k ./deploy/overlays/production
 
@@ -181,9 +185,10 @@ diff \
   <(kustomize build ./deploy/overlays/production) |\
   more
 
-kustomize build ./deploy/overlays/production > release.yaml
-k apply -f release.yaml
-k get all -l app.kubernetes.io/managed-by=kustomize
+# make deploy OVERLAY=development NS=default VERSION=v0.1.0-445-frc7fj0c
+make deploy
+kubectl apply -f release.yaml
+kubectl get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services
 
 POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')

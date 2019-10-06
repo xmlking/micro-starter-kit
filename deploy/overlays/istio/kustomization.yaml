@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: default
+namespace: $(NS)
 namePrefix: istio-
 nameSuffix: -v1
 
@@ -54,17 +54,22 @@ replicas:
     count: 1
 
 images:
-  - name: microhq/micro
-    newTag: v1.10.0
   - name: consul
     newTag: 1.6.1
   - name: postgres
     newTag: 11.5-alpine
+  - name: microhq/micro
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
+    newTag: $(IMAGE_VERSION)
   - name: xmlking/account-api
-    newTag: v0.1.0-149-g0cb2cd2
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-api
+    newTag: $(IMAGE_VERSION)
   - name: xmlking/account-srv
-    newTag: v0.1.0-149-g0cb2cd2
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
+    newTag: $(IMAGE_VERSION)
   - name: xmlking/emailer-srv
-    newTag: v0.1.0-149-g0cb2cd2
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv
+    newTag: $(IMAGE_VERSION)
   - name: xmlking/greeter-srv
-    newTag: v0.1.0-149-g0cb2cd2
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
+    newTag: $(IMAGE_VERSION)

@@ -17,7 +17,6 @@ configMapGenerator:
     literals:
       - SERVICE_NAME=$(EMAILER_SERVICE_NAME)
       - MICRO_SERVER_NAME=emailer-srv
-      - DATABASE_HOST=$(DATABASE_SERVICE_NAME)
 
 vars:
   - name: EMAILER_SERVICE_NAME

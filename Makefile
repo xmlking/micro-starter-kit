@@ -1,3 +1,7 @@
+# Usage:
+# make        	# compile all binary
+# make clean  	# remove ALL binaries and objects
+# make release  # add git TAG and push
 VERSION					:= $(shell git describe --tags || echo "HEAD")
 GOPATH					:= $(shell go env GOPATH)
 HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
@@ -19,7 +23,9 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push
+.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push deploy
+
+all: build
 
 tools:
 	@echo "==> Installing dev tools"
@@ -174,3 +180,9 @@ docker_push:
 		echo Now pushing $$image; \
 		docker push $$image; \
 	done;
+
+deploy: OVERLAY := production
+deploy: NS 			:= default
+deploy:
+	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
+	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > release.yaml

@@ -18,3 +18,12 @@ generatorOptions:
     app.kubernetes.io/name: postgres-secrets
     app.kubernetes.io/instance: postgres-secrets-abcxzy
     app.kubernetes.io/component: secrets
+
+vars:
+  - name: DATABASE_SERVICE_NAME
+    objref:
+      kind: Service
+      name: postgres
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

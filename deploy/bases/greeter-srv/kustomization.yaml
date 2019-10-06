@@ -17,7 +17,6 @@ configMapGenerator:
     literals:
       - SERVICE_NAME=$(GREATER_SERVICE_NAME)
       - MICRO_SERVER_NAME=greater-srv
-      - DATABASE_HOST=$(DATABASE_SERVICE_NAME)
 
 vars:
   - name: GREATER_SERVICE_NAME
