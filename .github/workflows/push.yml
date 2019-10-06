@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.13
+        if: |
+          contains(github.event.commits[0].message, '[skip ci]') == false &&
+          contains(github.event.commits[0].message, '[ci skip]') == false
         uses: actions/setup-go@v1
         with:
           go-version: 1.13

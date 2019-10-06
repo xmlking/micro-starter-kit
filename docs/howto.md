@@ -92,9 +92,9 @@ go test all
   # Just spin & wait forever
   command:
     [
-      '/bin/busybox',
-      'sh',
-      '-ec',
+      "/bin/busybox",
+      "sh",
+      "-ec",
       "while :; do echo '.'; /bin/busybox sleep 5 ; done",
     ]
   ```
@@ -105,11 +105,6 @@ go test all
   /bin/busybox ls config
   /bin/busybox more config/config.yaml
   ```
-
-## Refer
-
-- [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
-- [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
 
 - Why some ORM model fields are pointers?
 
@@ -151,7 +146,25 @@ go test all
   --client_pool_size=10 # enables the client side connection pool
   ```
 
+- How to rollback a git commit?
+
+  ```bash
+  # Undoing the Last Commit:
+  git reset --soft HEAD~1
+  # If you don't want to keep these changes, simply use the --hard flag.
+  git reset --hard HEAD~1
+
+  # Delete Tag local
+  git tag --delete v0.1.3
+  # Delete Tag remote
+  git push --delete origin v0.1.3
+  ```
+
 ## Refer
 
 - [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
 - [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
+
+```
+
+```

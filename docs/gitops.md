@@ -5,20 +5,20 @@
 - Push Pipeline
 - Pull Request(PR) Pipeline
 - Release Pipeline
+- Deployment Pipeline
 
 ## Feature Branch Push Pipeline
 
 - lint
-- build
-- tests
+- unit tests
 
 ## PR Pipeline
 
-TODO: lets automate _PR Pipeline_ that is triggered when PR is created for `develop` branch
+> triggered when PR is created for `develop` branch
 
 - lint
-- build
-- tests
+- unit tests
+- integration tests
 
 ## Release Pipeline
 
@@ -26,4 +26,11 @@ TODO: lets automate _PR Pipeline_ that is triggered when PR is created for `deve
 - sign images
 - push images to GCR
 - generate deploy/deploy.yaml for k8s with Helm or Kustomize
+- generate release on GitHub
+
+## Deployment Pipeline
+
+- Deploy to KinD on CI
+- E2E Test
+
 - deploy to GKE
