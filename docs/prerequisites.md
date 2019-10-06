@@ -2,8 +2,7 @@
 
 You should have:
 
-1. working **cntlm** (NTLM local Proxy)
-2. **golang** installed via **brew**
+1. **golang** installed via **brew**
 
 > run following `go get ...` commands outside **this project root** and outside `$GOPATH` i.e, `~/go`<br/>
 > if you get error, try setting `export GO111MODULE=on` befor running `go get ...`

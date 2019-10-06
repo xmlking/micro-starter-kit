@@ -18,3 +18,4 @@
 - https://github.com/mvdan/sh/blob/master/.github/workflows/test.yml
 - https://github.com/kjk/siser/blob/master/.github/workflows/go.yml
 - [kind, k8s](https://github.com/olegchorny/bookinfo-productpage/blob/master/.github/workflows/pr.yml)
+- [fuzz testing](https://fuzzit.dev/2019/10/02/how-to-fuzz-go-code-with-go-fuzz-continuously/)
