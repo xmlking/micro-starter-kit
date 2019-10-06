@@ -123,7 +123,7 @@ Refer [releasing](docs/releasing.md) docs
 make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit
 docker rmi $(docker images -f "dangling=true" -q)
 
-# make deploy OVERLAY=production NS=default VERSION=v0.1.0-440-g6c7fb7a
+# make deploy OVERLAY=e2e NS=default VERSION=v0.1.0-440-g6c7fb7a
 make deploy
 kubectl apply -f release.yaml
 

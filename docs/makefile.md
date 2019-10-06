@@ -113,6 +113,6 @@ make deploy OVERLAY=production NS=default VERSION=v1.0.1
 make deploy OVERLAY=production NS=default
 make deploy OVERLAY=production
 make deploy NS=default
-# default ENV=production,  NS=default VERSION=git tag
+# default ENV=e2e,  NS=default VERSION=git tag
 make deploy
 ```

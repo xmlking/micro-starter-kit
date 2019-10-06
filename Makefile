@@ -181,7 +181,7 @@ docker_push:
 		docker push $$image; \
 	done;
 
-deploy: OVERLAY := production
+deploy: OVERLAY := e2e
 deploy: NS 			:= default
 deploy:
 	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -

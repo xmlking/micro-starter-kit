@@ -14,7 +14,6 @@ commonAnnotations:
 bases:
   - ../../bases
   - ../../bases/consul
-  # - ../../bases/gateway
   # - ../../bases/postgres
 
 # enable mage-pull-policy and resource_limit as needed

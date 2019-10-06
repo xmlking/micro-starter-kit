@@ -144,13 +144,13 @@ deploy
 
 ```bash
 # Kustomize command the modified manifests can be generated and printed to the terminal with: --load_restrictions none
-# for production env
-kubectl kustomize ./deploy/overlays/production
+# for e2e env
+kubectl kustomize ./deploy/overlays/e2e
 # for istio env
 kubectl kustomize ./deploy/overlays/istio
 
 # using `sed` to further customize output
-OVERLAY="production" NS="default"; kustomize build deploy/overlays/${OVERLAY}/ | \
+OVERLAY="e2e" NS="default"; kustomize build deploy/overlays/${OVERLAY}/ | \
 sed -e "s|\$(NS)|${NS}|g" -e "s|\$(IMAGE_VERSION)|${VERSION}|g" > release.yaml
 
 # The manifests can be applied
@@ -185,7 +185,7 @@ diff \
   <(kustomize build ./deploy/overlays/production) |\
   more
 
-# make deploy OVERLAY=development NS=default VERSION=v0.1.0-445-frc7fj0c
+# make deploy OVERLAY=e2e NS=default VERSION=v0.1.0-445-frc7fj0c
 make deploy
 kubectl apply -f release.yaml
 kubectl get all -l app.kubernetes.io/managed-by=kustomize

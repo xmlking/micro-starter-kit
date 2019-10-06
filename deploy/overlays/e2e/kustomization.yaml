@@ -2,30 +2,21 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: $(NS)
-namePrefix: prod-
+namePrefix: e2e-
 nameSuffix: -v1
 
 commonLabels:
-  environment: production
+  environment: integration
   app.kubernetes.io/version: v1
 commonAnnotations:
-  note: Hello, I am production!
+  note: Hello, I am integration!
 
 bases:
   - ../../bases
   - ../../bases/consul
-  # - ../../bases/postgres
 
 # enable mage-pull-policy and resource_limit as needed
 patches:
-  - path: patches/health-sidecar.yaml
-    target:
-      kind: Deployment
-      labelSelector: app.kubernetes.io/component=microservice
-  # - path: patches/resource_limit.yaml
-  #   target:
-  #     kind: Deployment
-  #     labelSelector: app.kubernetes.io/component=microservice
   - path: patches/image-pull-policy-if-not-present.yaml
     target:
       kind: Deployment
@@ -47,7 +38,7 @@ secretGenerator:
   - name: secrets
     behavior: replace
     literals:
-      - DATABASE_PASSWORD=prod-real-pass
+      - DATABASE_PASSWORD=e2e-real-pass
   - name: regcred
     files:
       - secrets/.dockerconfigjson
