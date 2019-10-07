@@ -26,6 +26,9 @@ brew install protobuf
 brew cask install bloomrpc
 # k8s tool similar to helm
 brew install kustomize
+# validate one or more Kubernetes config files
+brew tap instrumenta/instrumenta
+brew install kubeval
 
 # fetch protoc plugins into $GOPATH
 go get github.com/golang/protobuf/{proto,protoc-gen-go}

@@ -179,6 +179,8 @@ kubectl delete -k ./deploy/overlays/production
 ```bash
 # highlight `microhq/micro:latest`
 kustomize build ./deploy/overlays/production | grep -C 3 microhq/micro:latest
+# Validate kustomize build
+kustomize build ./deploy/overlays/production | kubeval --strict --ignore-missing-schemas
 
 # compare the output directly to see how consul and production differ:
 diff \
@@ -186,8 +188,9 @@ diff \
   <(kustomize build ./deploy/overlays/production) |\
   more
 
-# make deploy OVERLAY=e2e NS=default VERSION=v0.1.0-445-frc7fj0c
-make deploy
+# make kustomize OVERLAY=e2e NS=default VERSION=v0.1.0-445-frc7fj0c
+make kustomize
+kubeval --strict --ignore-missing-schemas deploy/deploy.yaml
 kubectl apply -f deploy/deploy.yaml
 kubectl get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services
