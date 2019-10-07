@@ -16,24 +16,25 @@
 
 - How do I install private modules?
 
-```yaml
-- name: Configure git for private modules
-  env:
-    TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-  run: git config --global url."https://YOUR_GITHUB_USERNAME:${TOKEN}@github.com".insteadOf "https://github.com"
-```
+  ```yaml
+  - name: Configure git for private modules
+    env:
+      TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+    run: git config --global url."https://YOUR_GITHUB_USERNAME:${TOKEN}@github.com".insteadOf "https://github.com"
+  ```
 
 - Deployment
   GitHub has first class support for [deployment workflows](https://developer.github.com/v3/repos/deployments/)
   Trigger a deployment via the API (we have internal tooling to ease this)
 
-```bash
-curl POST -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.ant-man-preview+json"  \
-          -H "Content-Type: application/json" \
-          https://api.github.com/repos/org/repo/deployments \
-          --data '{"ref": "develop", "environment": "production"}'
-```
+  ```bash
+  export GITHUB_TOKEN=15650cad4e8a6602284255f7caf76134eb977b45
+  curl POST -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.ant-man-preview+json"  \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/xmlking/micro-starter-kit/deployments \
+            --data '{"ref": "develop", "environment": "e2e", "payload":   "payload": { "what": "deployment for e2e testing"}}'
+  ```
 
 ## Ref
 

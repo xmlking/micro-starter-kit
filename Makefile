@@ -23,7 +23,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push deploy e2e
+.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push deploy e2e start_e2e
 
 all: build
 
@@ -115,10 +115,17 @@ release:
 	@git push
 	@git tag -a $(VERSION) -m "[skip ci] Release" || true
 	@git push origin $(VERSION)
-	@curl -H "Content-Type:application/json" \
+	@curl -H "Content-Type: application/json" \
 		-H "Authorization: token $(GITHUB_TOKEN)" \
 		-XPOST "https://api.github.com/repos/xmlking/micro-starter-kit/releases" \
 		-d '{"tag_name":"$(VERSION)", "target_commitish": "master", "draft": false, "prerelease": false}'
+
+start_e2e:
+	@curl -H "Content-Type: application/json" \
+		-H "Accept: application/vnd.github.ant-man-preview+json"  \
+		-H "Authorization: token $GITHUB_TOKEN" \
+    -XPOST https://api.github.com/repos/xmlking/micro-starter-kit/deployments \
+    -d '{"ref": "develop", "environment": "e2e", "payload": { "what": "deployment for e2e testing"}}'
 
 clean:
 	@for d in ./build/*-{srv,api}; do \
