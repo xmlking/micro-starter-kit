@@ -123,7 +123,7 @@ release:
 start_e2e:
 	@curl -H "Content-Type: application/json" \
 		-H "Accept: application/vnd.github.ant-man-preview+json"  \
-		-H "Authorization: token $GITHUB_TOKEN" \
+		-H "Authorization: token $(GITHUB_TOKEN)" \
     -XPOST https://api.github.com/repos/xmlking/micro-starter-kit/deployments \
     -d '{"ref": "develop", "environment": "e2e", "payload": { "what": "deployment for e2e testing"}}'
 

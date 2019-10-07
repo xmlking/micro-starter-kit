@@ -79,6 +79,14 @@ make build-account-api VERSION=v0.1.1
 make release VERSION=v0.1.1 GITHUB_TOKEN=123...
 ```
 
+### e2e test
+
+> trigger e2e tests on GitHub Actions
+
+```bash
+make start_e2e GITHUB_TOKEN=123...
+```
+
 ### docker
 
 ```bash
