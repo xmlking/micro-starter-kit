@@ -49,3 +49,10 @@ func TestEmailService_Welcome_Integration(t *testing.T) {
 		t.Errorf("Send Welcome Email Failed: %v", err2)
 	}
 }
+
+func TestEmailService_Welcome_E2E(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping e2e test")
+	}
+	t.Log("my first E2E test")
+}

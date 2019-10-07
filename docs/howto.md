@@ -51,6 +51,13 @@ go test all
         }
         //...
     }
+
+    func TestEmailService_Welcome_E2E(t *testing.T) {
+        if testing.Short() {
+            t.Skip("skipping e2e test")
+        }
+        //...
+    }
   ```
 
   Notice the last test has the convention of:

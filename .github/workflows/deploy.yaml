@@ -4,6 +4,7 @@ jobs:
   deploy:
     name: Deploy to GKE
     runs-on: "ubuntu-latest"
+    if: github.event.deployment.environment == "production"
     steps:
       - name: Check out Code
         uses: actions/checkout@v1

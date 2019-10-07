@@ -123,8 +123,8 @@ Refer [releasing](docs/releasing.md) docs
 make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit
 docker rmi $(docker images -f "dangling=true" -q)
 
-# make deploy OVERLAY=e2e NS=default VERSION=v0.1.0-440-g6c7fb7a
-make deploy
+# make kustomize OVERLAY=e2e NS=default VERSION=v0.1.0-440-g6c7fb7a
+make kustomize
 kubectl apply -f deploy/deploy.yaml
 
 POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')

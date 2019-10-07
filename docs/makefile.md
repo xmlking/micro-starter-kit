@@ -36,6 +36,19 @@ make test-demo-cmd
 # integration tests
 make inte-account
 make inte-emailer
+
+# end-to-end tests
+make e2e-account
+make e2e-emailer
+make e2e
+```
+
+### e2e tests on CI
+
+> trigger e2e tests on GitHub Actions
+
+```bash
+make start_e2e GITHUB_TOKEN=123...
 ```
 
 ### run
@@ -79,14 +92,6 @@ make build-account-api VERSION=v0.1.1
 make release VERSION=v0.1.1 GITHUB_TOKEN=123...
 ```
 
-### e2e test
-
-> trigger e2e tests on GitHub Actions
-
-```bash
-make start_e2e GITHUB_TOKEN=123...
-```
-
 ### docker
 
 ```bash
@@ -112,15 +117,15 @@ make docker_push
 make docker_clean
 ```
 
-### deploy
+### kustomize
 
 > generate `deploy/deploy.yaml` for given `overlay` and `namespace` using **kustomize**
 
 ```bash
-make deploy OVERLAY=production NS=default VERSION=v1.0.1
-make deploy OVERLAY=production NS=default
-make deploy OVERLAY=production
-make deploy NS=default
+make kustomize OVERLAY=production NS=default VERSION=v1.0.1
+make kustomize OVERLAY=production NS=default
+make kustomize OVERLAY=production
+make kustomize NS=default
 # default ENV=e2e,  NS=default VERSION=git tag
-make deploy
+make kustomize
 ```

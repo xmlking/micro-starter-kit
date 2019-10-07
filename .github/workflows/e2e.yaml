@@ -6,6 +6,7 @@ jobs:
   deploy-n-e2e:
     name: Deploy to KinD and run e2e tests
     runs-on: "ubuntu-latest"
+    if: github.event.deployment.environment == "e2e"
     steps:
       - name: Check out Code
         uses: actions/checkout@v1

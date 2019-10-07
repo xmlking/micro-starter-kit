@@ -23,7 +23,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% run run-% release clean update_deps docker docker-% docker_clean docker_push deploy e2e start_e2e
+.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% e2e e2e-% start_e2e run run-% release clean update_deps docker docker-% docker_clean docker_push kustomize start_deploy
 
 all: build
 
@@ -100,6 +100,15 @@ inte inte-%:
 		go test -v -run Integration ./${TYPE}/${TARGET}/... ; \
 	fi
 
+e2e e2e-%:
+	@if [ -z $(TARGET) ]; then \
+		echo "E2E testing all"; \
+		go test -run E2E ./... ; \
+	else \
+		echo "E2E testing ${TARGET}-${TYPE}..."; \
+		go test -v -run E2E ./${TYPE}/${TARGET}/... ; \
+	fi
+
 run run-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "no  TARGET. example usage: make test TARGET=account"; \
@@ -126,6 +135,13 @@ start_e2e:
 		-H "Authorization: token $(GITHUB_TOKEN)" \
     -XPOST https://api.github.com/repos/xmlking/micro-starter-kit/deployments \
     -d '{"ref": "develop", "environment": "e2e", "payload": { "what": "deployment for e2e testing"}}'
+
+start_deploy:
+	@curl -H "Content-Type: application/json" \
+		-H "Accept: application/vnd.github.ant-man-preview+json"  \
+		-H "Authorization: token $(GITHUB_TOKEN)" \
+    -XPOST https://api.github.com/repos/xmlking/micro-starter-kit/deployments \
+    -d '{"ref": "develop", "environment": "production", "payload": { "what": "production deployment to GKE"}}'
 
 clean:
 	@for d in ./build/*-{srv,api}; do \
@@ -193,12 +209,9 @@ docker_push:
 		docker push $$image; \
 	done;
 
-deploy: OVERLAY := e2e
-deploy: NS 			:= default
-deploy:
+kustomize: OVERLAY := e2e
+kustomize: NS 			:= default
+kustomize:
 	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
 	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.yaml
-
-e2e:
-	@echo "TODO: Run e2e tests on KinD with e2e overlay"
 
