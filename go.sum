@@ -424,8 +424,6 @@ github.com/micro/cli v0.2.0 h1:ut3rV5JWqZjsXIa2MvGF+qMUP8DAUTvHX9Br5gO4afA=
 github.com/micro/cli v0.2.0/go.mod h1:jRT9gmfVKWSS6pkKcXQ8YhUyj6bzwxK8Fp5b0Y7qNnk=
 github.com/micro/go-micro v1.8.0/go.mod h1:RUJTXVb+qUnGx6jBK2yMCOzuB/xEKh/vdZc3uagM5TI=
 github.com/micro/go-micro v1.10.0/go.mod h1:duT+Yo83/MnUMmRAeCDKaZdqwqpYJt70eHoEdPTZGmc=
-github.com/micro/go-micro v1.11.0 h1:yQBuxjk0JXU5XNbNMZq417JJzXmcniu1KQ7qpqAhtk8=
-github.com/micro/go-micro v1.11.0/go.mod h1:IFNDLkidhgnolhx+r3Lmx73XGNFgiZ7qM7l+rg8MnU0=
 github.com/micro/go-micro v1.11.1 h1:WMc4NXlrLrHBMZb7vgCS4q9SZty0LCY8d8Tc3SeaY7s=
 github.com/micro/go-micro v1.11.1/go.mod h1:IFNDLkidhgnolhx+r3Lmx73XGNFgiZ7qM7l+rg8MnU0=
 github.com/micro/go-plugins v1.3.0 h1:zRXJ3zNfjVU5HSA1TC6spPpd7f5bJRtNylxWS1ONbR0=
@@ -434,8 +432,6 @@ github.com/micro/mdns v0.1.1-0.20190729112526-ef68c9635478/go.mod h1:KJ0dW7KmicX
 github.com/micro/mdns v0.3.0 h1:bYycYe+98AXR3s8Nq5qvt6C573uFTDPIYzJemWON0QE=
 github.com/micro/mdns v0.3.0/go.mod h1:KJ0dW7KmicXU2BV++qkLlmHYcVv7/hHnbtguSWt9Aoc=
 github.com/micro/micro v1.8.0/go.mod h1:dF7nfyek86puqmlN1cEeyCos98rGzprwehRKJ4HMudE=
-github.com/micro/micro v1.11.0 h1:z278J+c+FdG51jv6oyY5oGGj25URXLyZU6zeGgmZfRU=
-github.com/micro/micro v1.11.0/go.mod h1:EgjpA5oZwRSItsVumvTvCTw0jyZLMNu4JP2NHuWPe8w=
 github.com/micro/micro v1.11.1 h1:Cgf2+hd/66ALAuyA4MVRNdKbgNkaoZDPMEl5Ni05C8o=
 github.com/micro/micro v1.11.1/go.mod h1:pPLN83q/wmOZQgMTcnBVq+gUpJDM0jWYVFHieYOXhuQ=
 github.com/miekg/dns v1.0.14/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
@@ -808,8 +804,7 @@ google.golang.org/genproto v0.0.0-20190626174449-989357319d63/go.mod h1:z3L6/3dT
 google.golang.org/genproto v0.0.0-20190708153700-3bdd9d9f5532/go.mod h1:z3L6/3dTEVtUr6QSP8miRzeRqwQOioJ9I66odjN4I7s=
 google.golang.org/genproto v0.0.0-20190716160619-c506a9f90610/go.mod h1:DMBHOl98Agz4BDEuKkezgsaosCRResVns1a3J2ZsMNc=
 google.golang.org/genproto v0.0.0-20190801165951-fa694d86fc64/go.mod h1:DMBHOl98Agz4BDEuKkezgsaosCRResVns1a3J2ZsMNc=
-google.golang.org/genproto v0.0.0-20191002211648-c459b9ce5143 h1:tikhlQEJeezbnu0Zcblj7g5vm/L7xt6g1vnfq8mRCS4=
-google.golang.org/genproto v0.0.0-20191002211648-c459b9ce5143/go.mod h1:n3cpQtvxv34hfy77yVDNjmbRyujviMdxYliBSkLhpCc=
+google.golang.org/genproto v0.0.0-20191009194640-548a555dbc03/go.mod h1:n3cpQtvxv34hfy77yVDNjmbRyujviMdxYliBSkLhpCc=
 google.golang.org/grpc v1.13.0/go.mod h1:yo6s7OP7yaDglbqo1J04qKzAhqBH6lvTonzMVmEdcZw=
 google.golang.org/grpc v1.17.0/go.mod h1:6QZJwpn2B+Zp71q/5VxRsJ6NXXVCE5NRUHRo+f3cWCs=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
