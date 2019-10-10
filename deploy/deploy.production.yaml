@@ -454,7 +454,7 @@ metadata:
   namespace: default
 spec:
   ports:
-  - name: http
+  - name: http-consul
     port: 8500
   selector:
     app.kubernetes.io/component: infra
@@ -516,10 +516,10 @@ metadata:
   namespace: default
 spec:
   ports:
-  - name: gateway-http
+  - name: http-gateway
     port: 8080
     protocol: TCP
-    targetPort: gateway-http
+    targetPort: http-gateway
   selector:
     app.kubernetes.io/component: microservice
     app.kubernetes.io/instance: gateway-abcxzy
@@ -890,7 +890,7 @@ spec:
         name: srv
         ports:
         - containerPort: 8090
-          name: gateway-http
+          name: http-gateway
           protocol: TCP
       imagePullSecrets:
       - name: prod-regcred-v1-f7ttm4dh2m

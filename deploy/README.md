@@ -33,6 +33,7 @@ kubectl create secret docker-registry regcred \
 
 # example
 export GITHUB_DOCKER_READ_PASSWORD=15650cad4e8a6602284255f7caf76134eb977b45
+
 kubectl create secret docker-registry regcred \
 --docker-server=https://docker.pkg.github.com \
 --docker-username=xmlking \
@@ -189,6 +190,7 @@ diff \
   more
 
 # make kustomize OVERLAY=e2e NS=default VERSION=v0.1.0-445-frc7fj0c
+# make kustomize NS=micro VERSION=v0.1.3
 make kustomize
 kubeval --strict --ignore-missing-schemas deploy/deploy.yaml
 kubectl apply -f deploy/deploy.yaml
@@ -262,5 +264,5 @@ files:
 3. <https://kustomize.io/>
 4. with sops <https://teuto.net/deploying-jupyterhub-to-kubernetes-via-kustomize-using-sops-secret-management/?lang=en>
 5. <https://github.com/pwittrock-me/petclinic-config/tree/master/config>
-6. <https://github.com/venilnoronha/grpc-web-istio-demo>
+6. [TODO: gRPC-Web Istio Demo](https://github.com/venilnoronha/grpc-web-istio-demo)
 7. patch example, keycloak traefik <https://github.com/piotrjanik/opa-warsaw-cloud-native-conf/tree/master/manifests>

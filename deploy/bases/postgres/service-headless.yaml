@@ -9,8 +9,8 @@ spec:
   type: ClusterIP
   clusterIP: None
   ports:
-    - name: postgres
+    - name: tcp-pg
       port: 5432
-      targetPort: postgres
+      targetPort: tcp-pg
   selector:
     app: postgres

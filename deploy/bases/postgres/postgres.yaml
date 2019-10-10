@@ -21,8 +21,9 @@ spec:
           image: postgres:11.5-alpine
           imagePullPolicy: Always
           ports:
-            - name: postgres
+            - name: tcp-pg
               containerPort: 5432
+              protocol: TCP
           env:
             - name: POSTGRES_DB
               value: postgres

@@ -15,7 +15,7 @@ spec:
             - "--enable_rpc=true"
             - "--address=0.0.0.0:8090"
           ports:
-            - name: gateway-http
+            - name: http-gateway
               containerPort: 8090
               protocol: TCP
           envFrom:

@@ -5,5 +5,5 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - name: http
+    - name: http-consul
       port: 8500
