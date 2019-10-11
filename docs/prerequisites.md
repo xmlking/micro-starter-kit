@@ -28,7 +28,13 @@ brew cask install bloomrpc
 brew install kustomize
 # validate one or more Kubernetes config files
 brew tap instrumenta/instrumenta
+# kubeval - validate k8s YAMLs (optional)
 brew install kubeval
+# grpc cli client
+brew install grpc
+# bloomrpc is a UI client for gRPC
+# install `bloomrpc` via `brew` into ~/Applications)
+brew cask install --appdir=~/Applications bloomrpc
 
 # fetch protoc plugins into $GOPATH
 go get github.com/golang/protobuf/{proto,protoc-gen-go}

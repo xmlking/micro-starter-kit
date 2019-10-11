@@ -21,6 +21,18 @@ go test -v -run Integration ./srv/emailer/service
 
 > we can use one of the option below.
 
+### BloomRPC UI Client
+
+1. add `~/go/src` to import paths, also add any other paths to shared proto files.
+2. click (+) and import proto file you want to test.
+3. add optional metadata in the JSON format in the `Metadata Section`. e.g., Authorization Headers etc
+
+### gRPC CLI Client
+
+```bash
+grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
+```
+
 ### Micro CLI
 
 > test with gRPC clients such as Micro CLI, BloomRPC or grpcurl
@@ -39,7 +51,7 @@ micro proxy --protocol=grpc
 # ./build/micro call  account-srv UserService.Create \
 #   '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call  account-srv UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+'{"username": "sumo33", "firstName": "sumo33", "lastName": "demo33", "email": "sumo33@demo.com"}'
 micro call account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call account-srv UserService.List '{}'

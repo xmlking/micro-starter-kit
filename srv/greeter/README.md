@@ -35,6 +35,9 @@ make docker TARGET=greeter TYPE=srv VERSION=v0.1.1
 ### Test
 
 ```bash
+# test with grpc cli
+grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
+
 micro --client=grpc call greeter-srv Greeter.Hello  '{"name": "John"}'
 
 # in k8s container
