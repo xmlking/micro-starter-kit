@@ -1007,10 +1007,13 @@ spec:
         - -retry-join=prod-consul-v1-1.prod-consul-v1.$(NAMESPACE).svc
         - -retry-join=prod-consul-v1-2.prod-consul-v1.$(NAMESPACE).svc
         - -client=0.0.0.0
+        - -bind=0.0.0.0
         - -data-dir=/consul/data
         - -server
         - -ui
         env:
+        - name: CONSUL_DISABLE_PERM_MGMT
+          value: ""
         - name: NAMESPACE
           valueFrom:
             fieldRef:
@@ -1024,4 +1027,6 @@ spec:
               - -c
               - consul leave
         name: consul
+      securityContext:
+        fsGroup: 1000
       terminationGracePeriodSeconds: 10

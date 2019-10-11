@@ -204,8 +204,8 @@ diff \
   <(kustomize build ./deploy/overlays/production) |\
   more
 
-# make kustomize NS=default OVERLAY=production  VERSION=v0.1.3
-# make kustomize NS=default VERSION=v0.1.3
+# make kustomize NS=default OVERLAY=production VERSION=v0.1.3
+# make kustomize NS=default OVERLAY=e2e VERSION=v0.1.3
 make kustomize
 kubeval --strict --ignore-missing-schemas deploy/deploy.yaml
 kubectl apply -f deploy/deploy.yaml
