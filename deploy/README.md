@@ -149,8 +149,8 @@ deploy
 # Kustomize command the modified manifests can be generated and printed to the terminal with: --load_restrictions none
 # for e2e env
 kubectl kustomize ./deploy/overlays/e2e
-# for istio env
-kubectl kustomize ./deploy/overlays/istio
+# only production env
+kubectl kustomize ./deploy/overlays/production
 
 # using `sed` to further customize output
 OVERLAY="e2e" NS="default"; kustomize build deploy/overlays/${OVERLAY}/ | \
@@ -163,17 +163,17 @@ kubectl apply -k ./deploy/overlays/production
 IMAGE_VERSION=v0.1.0-118-g21f8a30
 cd deploy && kustomize edit set image xmlking/account-srv:$IMAGE_VERSION && cd ..
 
-kustomize build ./deploy/overlays/staging | kubectl apply -f -
-kustomize build ./deploy/overlays/production | kubectl apply -f -
+kustomize build deploy/overlays/staging | kubectl apply -f -
+kustomize build deploy/overlays/production | kubectl apply -f -
 
 # Fix the missing and deprecated fields in kustomization file
 kustomize edit fix
 
-kustomize build ./deploy/overlays/production
+kustomize build deploy/overlays/production
 
-kubectl get -k ./deploy/overlays/production
-kubectl describe -k ./deploy/overlays/production
-kubectl delete -k ./deploy/overlays/production
+kubectl get -k deploy/overlays/production
+kubectl describe -k deploy/overlays/production
+kubectl delete -k deploy/overlays/production
 ```
 
 ## verify
@@ -200,7 +200,7 @@ diff \
   more
 
 # make kustomize NS=default OVERLAY=production  VERSION=v0.1.3
-# make kustomize NS=micro VERSION=v0.1.3
+# make kustomize NS=default VERSION=v0.1.3
 make kustomize
 kubeval --strict --ignore-missing-schemas deploy/deploy.yaml
 kubectl apply -f deploy/deploy.yaml
