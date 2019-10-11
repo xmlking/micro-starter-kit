@@ -4,7 +4,7 @@
 
 > assume you already have `helm` cli installed and activated on your k8s with `helm init`
 
-1. Enter the following commands to download Istio:
+## Enter the following commands to download Istio
 
 ```bash
 # Download and unpack Istio
@@ -14,52 +14,39 @@ curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.3.2 sh -
 cd istio-${ISTIO_VERSION}
 ```
 
-2. Enter the following command to install the Istio CRDs:
+## Installing **Istio** via Helm (recommended)
+
+> assume you already have `helm` cli installed and activated on your k8s with `helm init`
 
 ```bash
-# Create a namespace for the istio-system components:
-kubectl create namespace istio-system
-# Install all the Istio Custom Resource Definitions (CRDs)
-helm template install/kubernetes/helm/istio-init --name istio-init --namespace istio-system | kubectl apply -f -
-# Verify that all 23 Istio CRDs
+cd  ~/Developer/Apps/istio-1.3.2/
+kubectl apply -f install/kubernetes/helm/helm-service-account.yaml
+helm init --service-account tiller
+helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
 kubectl get crds | grep 'istio.io' | wc -l
+helm install install/kubernetes/helm/istio --name istio --namespace istio-system \
+    --values install/kubernetes/helm/istio/values-istio-demo.yaml
 ```
 
-3. Install the Istio CNI components
+## Verify
 
 ```bash
- helm template install/kubernetes/helm/istio-cni --name=istio-cni --namespace=kube-system | kubectl apply -f -
-```
+helm ls -a
 
-3. Install one of the following variants of the demo profile: `default`, `demo`, `demo-auth`, `cni`
-
-> Enable CNI in Istio by setting `--set istio_cni.enabled=true` in addition to the settings for your chosen profile.<br/> For example, to configure the `cni` profile:
-
-```bash
-helm template install/kubernetes/helm/istio --name istio --namespace istio-system \
-    --values install/kubernetes/helm/istio/values-istio-demo-auth.yaml \
-    --set istio_cni.enabled=true | kubectl apply -f -
-```
-
-4. Verifying the installation
-
-```bash
 kubectl get svc -n istio-system
-ubectl get pods -n istio-system
+kubectl get pods -n istio-system
 ```
 
-5. Clean up Istio
+## Uninstall
 
 ```bash
-helm template install/kubernetes/helm/istio --name istio --namespace istio-system \
-    --values install/kubernetes/helm/istio/values-istio-demo-auth.yaml \
-    --set istio_cni.enabled=true | kubectl delete -f -
-# delete cni
-helm template install/kubernetes/helm/istio-cni --name=istio-cni --namespace=kube-system | kubectl apply -f -
-# delete CRDs
-kubectl delete -f install/kubernetes/helm/istio-init/files
-# delete namespace
+helm delete --purge istio
+helm delete --purge istio-init
+helm delete --purge istio-cni
 kubectl delete namespace istio-system
+
+# Deleting CRDs and Istio Configuration
+kubectl delete -f install/kubernetes/helm/istio-init/files
 ```
 
 ## Access
@@ -82,12 +69,21 @@ open  http://localhost:15032
 
 ## Deploy your application
 
+> switch on/off istio for `default` namespace
+
 ```bash
-# Create istio enabled namespace for the go-micro components:
-kubectl create namespace micro
-kubectl label namespace micro istio-injection=enabled
-# verify
+kubectl label namespace default istio-injection=enabled
 kubectl get namespace -L istio-injection
+# Disabling injection for the `default` namespace
+kubectl label namespace default istio-injection-
+```
+
+> if you want to exclude a specific pod from getting istio sidecar injected, add this to `Deployment` kind
+
+````yaml
+metadata:
+    annotations:
+    sidecar.istio.io/inject: "false"
 ```
 
 ## Reference
@@ -95,3 +91,4 @@ kubectl get namespace -L istio-injection
 - [ISTIO WORKSHOP](https://polarsquad.github.io/istio-workshop/install-istio/)
 - https://dzone.com/articles/setup-of-a-local-kubernetes-and-istio-dev-environm-1
 - https://istio.io/docs/setup/install/helm/
+````

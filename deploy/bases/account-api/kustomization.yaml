@@ -16,6 +16,7 @@ configMapGenerator:
   - name: env-vars
     literals:
       - SERVICE_NAME=$(ACCOUNT_API_SERVICE_NAME)
+      # - MICRO_SERVER_ADVERTISE="$(ACCOUNT_API_SERVICE_NAME):8080"
       - MICRO_SERVER_NAME=account-api
       - ACCOUNT_SERVICE_NAME=$(ACCOUNT_SERVICE_NAME)
 

@@ -8,9 +8,14 @@ commonAnnotations:
   org: acmeCorporation
 
 resources:
-  - service-account.yaml
+  # if you want retry-join=k8s, enable deployment-auto.yaml and service-account.yaml,
+  # otherwise enable deployment.yaml and service.yaml
+  # - deployment-auto.yaml
+  # - service-account.yaml
   - deployment.yaml
   - service.yaml
+  # optionally expose UI port
+  - service-ui.yaml
 
 vars:
   - name: CONSUL_SERVICE_NAME

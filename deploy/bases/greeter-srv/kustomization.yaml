@@ -16,6 +16,7 @@ configMapGenerator:
   - name: env-vars
     literals:
       - SERVICE_NAME=$(GREATER_SERVICE_NAME)
+      # - MICRO_SERVER_ADVERTISE="$(GREATER_SERVICE_NAME):8080"
       - MICRO_SERVER_NAME=greater-srv
 
 vars:

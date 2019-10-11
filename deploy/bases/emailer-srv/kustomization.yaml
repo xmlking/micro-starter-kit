@@ -16,6 +16,7 @@ configMapGenerator:
   - name: env-vars
     literals:
       - SERVICE_NAME=$(EMAILER_SERVICE_NAME)
+      # - MICRO_SERVER_ADVERTISE="$(EMAILER_SERVICE_NAME):8080"
       - MICRO_SERVER_NAME=emailer-srv
 
 vars:

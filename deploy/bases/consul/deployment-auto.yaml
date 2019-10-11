@@ -7,6 +7,7 @@ spec:
   replicas: 3
   template:
     spec:
+      serviceAccountName: consul
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -29,9 +30,7 @@ spec:
           args:
             - "agent"
             - "-bootstrap-expect=3"
-            - "-retry-join=$(CONSUL_SERVICE_NAME)-0.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
-            - "-retry-join=$(CONSUL_SERVICE_NAME)-1.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
-            - "-retry-join=$(CONSUL_SERVICE_NAME)-2.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
+            - '-retry-join=provider=k8s label_selector="app.kubernetes.io/name=consul"'
             - "-client=0.0.0.0"
             - "-data-dir=/consul/data"
             - "-server"

@@ -145,6 +145,7 @@ deploy
 ## Kustomize
 
 ```bash
+
 # Kustomize command the modified manifests can be generated and printed to the terminal with: --load_restrictions none
 # for e2e env
 kubectl kustomize ./deploy/overlays/e2e
@@ -177,6 +178,15 @@ kubectl delete -k ./deploy/overlays/production
 
 ## verify
 
+> switch on/off istio for `default` namespace
+
+```bash
+kubectl label namespace default istio-injection=enabled
+kubectl get namespace -L istio-injection
+# Disabling injection for the `default` namespace
+kubectl label namespace default istio-injection-
+```
+
 ```bash
 # highlight `microhq/micro:latest`
 kustomize build ./deploy/overlays/production | grep -C 3 microhq/micro:latest
@@ -189,7 +199,7 @@ diff \
   <(kustomize build ./deploy/overlays/production) |\
   more
 
-# make kustomize OVERLAY=e2e NS=default VERSION=v0.1.0-445-frc7fj0c
+# make kustomize NS=default OVERLAY=production  VERSION=v0.1.3
 # make kustomize NS=micro VERSION=v0.1.3
 make kustomize
 kubeval --strict --ignore-missing-schemas deploy/deploy.yaml
@@ -201,7 +211,7 @@ POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{
 kubectl logs -f -c initcar $POD_NAME
 kubectl logs -f -c srv $POD_NAME
 kubectl logs -f -c health  $POD_NAME
-kubectl exec -it $POD_NAME -- /bin/busybox sh
+kubectl exec -it $POD_NAME -- busybox sh
 
 kubectl get svc
 

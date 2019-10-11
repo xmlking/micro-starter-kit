@@ -3,7 +3,12 @@ kind: Service
 metadata:
   name: consul
 spec:
-  type: LoadBalancer
+  clusterIP: None
+  # We want the servers to become available even if they're not ready
+  # since this DNS is also used for join operations.
+  publishNotReadyAddresses: true
   ports:
-    - name: http-consul
-      port: 8500
+    - port: 8500
+      name: http
+    - port: 8300
+      name: tcp
