@@ -178,15 +178,6 @@ kubectl delete -k deploy/overlays/production
 
 ## verify
 
-> switch on/off istio for `default` namespace
-
-```bash
-kubectl label namespace default istio-injection=enabled
-kubectl get namespace -L istio-injection
-# Disabling injection for the `default` namespace
-kubectl label namespace default istio-injection-
-```
-
 ```bash
 # highlight `microhq/micro:latest`
 kustomize build ./deploy/overlays/production | grep -C 3 microhq/micro:latest
@@ -266,6 +257,26 @@ files:
 > Run kustomize build with the --enable_alpha_plugins flag:
 
 `kustomize build --enable_alpha_plugins`
+
+## FAQ
+
+- How to check if the `Service Account` is able to access k8s?
+
+  ```bash
+  POD_NAME="$(kubectl get pod -n key-qa -l app.kubernetes.io/name=consul -o jsonpath='{.items[0].metadata.name}')"
+  API_TOKEN="$(kubectl exec -it -n key-qa $POD_NAME -c consul cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+  kubectl exec -it -n key-qa $POD_NAME -c consul curl -- -vvk -H "Authorization: bearer $API_TOKEN" \
+      "https://kubernetes.default.svc/api/v1/namespaces/key-qa/pods?labelSelector=app.kubernetes.io%2Fname%3Dconsul"
+  ```
+
+- How to switch on/off istio for `default` namespace
+
+  ```bash
+  kubectl label namespace default istio-injection=enabled
+  kubectl get namespace -L istio-injection
+  # Disabling injection for the `default` namespace
+  kubectl label namespace default istio-injection-
+  ```
 
 ## Reference
 
