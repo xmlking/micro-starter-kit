@@ -1,14 +1,12 @@
 # Istio
 
-**NOTE: If you have Teller, then recommended to install Istio via Helm as documented [here](istio-helm.md)**
-
 > assume you already have `helm` cli installed and activated on your k8s with `helm init`
 
 ## Enter the following commands to download Istio
 
 ```bash
-# Download and unpack Istio
-cd ~/Developer/Apps/
+# Download latest Istio and unpack Istio
+cd ~/Developer/Work/tools/
 export ISTIO_VERSION=1.3.2
 curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.3.2 sh -
 cd istio-${ISTIO_VERSION}
@@ -16,10 +14,8 @@ cd istio-${ISTIO_VERSION}
 
 ## Installing **Istio** via Helm (recommended)
 
-> assume you already have `helm` cli installed and activated on your k8s with `helm init`
-
 ```bash
-cd  ~/Developer/Apps/istio-1.3.2/
+cd  ~/Developer/Work/tools/istio-1.3.2/
 kubectl apply -f install/kubernetes/helm/helm-service-account.yaml
 helm init --service-account tiller
 helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system

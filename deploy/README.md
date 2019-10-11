@@ -99,16 +99,27 @@ and apply consistence labels, environment specific overlays
 deploy
 ├── bases <-- components
 │   ├── account-api
+│   │   ├── config
+│   │   │   └── config.yaml
 │   │   ├── deployment.yaml
 │   │   ├── kustomization.yaml
 │   │   └── service.yaml
 │   ├── account-srv
+│   │   ├── config
+│   │   │   └── config.yaml
 │   │   ├── deployment.yaml
 │   │   ├── kustomization.yaml
 │   │   └── service.yaml
-│   ├── config
-│   │   └── config.yaml
+│   ├── consul
+│   │   ├── deployment-auto.yaml
+│   │   ├── deployment.yaml
+│   │   ├── kustomization.yaml
+│   │   ├── service-account.yaml
+│   │   ├── service-ui.yaml
+│   │   └── service.yaml
 │   ├── emailer-srv
+│   │   ├── config
+│   │   │   └── config.yaml
 │   │   ├── deployment.yaml
 │   │   ├── kustomization.yaml
 │   │   └── service.yaml
@@ -116,30 +127,33 @@ deploy
 │   │   ├── deployment.yaml
 │   │   ├── kustomization.yaml
 │   │   └── service.yaml
+│   ├── kconfig.yaml
 │   ├── kustomization.yaml
-│   └──  micro-service-account.yaml
-├── kustomization.yaml
+│   └── postgres
+│       ├── kustomization.yaml
+│       ├── postgres.yaml
+│       ├── scripts
+│       ├── service-headless.yaml
+│       ├── service.yaml
+│       └── statefulset.yaml
+├── deploy.e2e.yaml
+├── deploy.production.yaml
+├── deploy.yaml
 └── overlays <-- environments
-    ├── dev
-    │   ├── config
-    │   │   └── config.yaml
-    │   └── kustomization.yaml
-    ├── production
-    │   ├── config
-    │   │   └── config.yaml
+    ├── e2e
     │   ├── kustomization.yaml
     │   ├── patches
-    │   │   ├── replica_count.yaml
-    │   │   └── resource_limit.yaml
-    │   └── resources
-    │       ├── hpa.yaml
-    │       └── namespace.yaml
-    └── staging
-        ├── config
-        │   └── config.yaml
-        ├── config.env
-        ├── deployment.yaml
-        └── kustomization.yaml
+    │   │   └── image-pull-policy-if-not-present.yaml
+    │   └── secrets
+    └── production
+        ├── kustomization.yaml
+        ├── patches
+        │   ├── health-sidecar.yaml
+        │   ├── image-pull-policy-if-not-present.yaml
+        │   └── resource_limit.yaml
+        ├── resources
+        │   └── hpa.yaml
+        └── secrets
 ```
 
 ## Kustomize
@@ -263,10 +277,10 @@ files:
 - How to check if the `Service Account` is able to access k8s?
 
   ```bash
-  POD_NAME="$(kubectl get pod -n key-qa -l app.kubernetes.io/name=consul -o jsonpath='{.items[0].metadata.name}')"
-  API_TOKEN="$(kubectl exec -it -n key-qa $POD_NAME -c consul cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
-  kubectl exec -it -n key-qa $POD_NAME -c consul curl -- -vvk -H "Authorization: bearer $API_TOKEN" \
-      "https://kubernetes.default.svc/api/v1/namespaces/key-qa/pods?labelSelector=app.kubernetes.io%2Fname%3Dconsul"
+  POD_NAME="$(kubectl get pod -n default -l app.kubernetes.io/name=consul -o jsonpath='{.items[0].metadata.name}')"
+  API_TOKEN="$(kubectl exec -it -n default $POD_NAME -c consul cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+  kubectl exec -it -n default $POD_NAME -c consul curl -- -vvk -H "Authorization: bearer $API_TOKEN" \
+      "https://kubernetes.default.svc/api/v1/namespaces/default/pods?labelSelector=app.kubernetes.io%2Fname%3Dconsul"
   ```
 
 - How to switch on/off istio for `default` namespace
