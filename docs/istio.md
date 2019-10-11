@@ -76,10 +76,10 @@ kubectl label namespace default istio-injection-
 
 > if you want to exclude a specific pod from getting istio sidecar injected, add this to `Deployment` kind
 
-````yaml
+```yaml
 metadata:
-    annotations:
-    sidecar.istio.io/inject: "false"
+  annotations:
+  sidecar.istio.io/inject: "false"
 ```
 
 ## Reference
@@ -87,4 +87,3 @@ metadata:
 - [ISTIO WORKSHOP](https://polarsquad.github.io/istio-workshop/install-istio/)
 - https://dzone.com/articles/setup-of-a-local-kubernetes-and-istio-dev-environm-1
 - https://istio.io/docs/setup/install/helm/
-````
