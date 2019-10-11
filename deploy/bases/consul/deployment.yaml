@@ -18,10 +18,14 @@ spec:
                       - consul
               topologyKey: kubernetes.io/hostname
       terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: consul
           image: consul:latest
           env:
+            - name: CONSUL_DISABLE_PERM_MGMT
+              value: ""
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
@@ -33,6 +37,7 @@ spec:
             - "-retry-join=$(CONSUL_SERVICE_NAME)-1.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
             - "-retry-join=$(CONSUL_SERVICE_NAME)-2.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
             - "-client=0.0.0.0"
+            - "-bind=0.0.0.0"
             - "-data-dir=/consul/data"
             - "-server"
             - "-ui"

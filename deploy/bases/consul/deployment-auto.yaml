@@ -7,7 +7,6 @@ spec:
   replicas: 3
   template:
     spec:
-      serviceAccountName: consul
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -18,11 +17,16 @@ spec:
                     values:
                       - consul
               topologyKey: kubernetes.io/hostname
+      serviceAccountName: consul
+      securityContext:
+        fsGroup: 1000
       terminationGracePeriodSeconds: 10
       containers:
         - name: consul
           image: consul:latest
           env:
+            - name: CONSUL_DISABLE_PERM_MGMT
+              value: ""
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
@@ -32,6 +36,7 @@ spec:
             - "-bootstrap-expect=3"
             - '-retry-join=provider=k8s label_selector="app.kubernetes.io/name=consul"'
             - "-client=0.0.0.0"
+            - "-bind=0.0.0.0"
             - "-data-dir=/consul/data"
             - "-server"
             - "-ui"

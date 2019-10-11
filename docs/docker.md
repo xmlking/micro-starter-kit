@@ -37,6 +37,13 @@ docker rmi $(docker images -f "label=org.label-schema.vendor=sumo"  -q)
 docker rmi $(docker images -a|grep "<none>"|awk '$1=="<none>" {print $3}')
 ```
 
+> Check if the image is using root
+
+```bash
+docker run consul:1.6.1 id consul
+uid=100(consul) gid=1000(consul) groups=1000(consul),1000(consul)
+```
+
 ## Docker Run
 
 > run just for testing image...
