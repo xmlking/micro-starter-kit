@@ -2,45 +2,48 @@
 
 You should have:
 
-1. **golang** installed via **brew**
+**golang** installed via **brew**
 
-> run following `go get ...` commands outside **this project root** and outside `$GOPATH` i.e, `~/go`<br/>
-> if you get error, try setting `export GO111MODULE=on` befor running `go get ...`
+### third-party tools
+
+```bash
+# for mac, use brew to install protobuf
+brew install protobuf
+# k8s tool similar to helm  (optional)
+brew install kustomize
+# kubeval - validate one or more Kubernetes config files(optional)
+brew tap instrumenta/instrumenta
+brew install kubeval
+# grpc cli client (optional)
+brew install grpc
+# bloomrpc is a UI client for gRPC (optional)
+# install `bloomrpc` via `brew` into ~/Applications)
+brew cask install --appdir=~/Applications bloomrpc
+```
+
+### third-party golang tools
 
 > Lets build and install `grpc` pre-loaded **Micro CLI** from [here](../cmd/micro/README.md#Build) instead of official **Micro CLI**
 
 ```bash
-# fetch micro into $GOPATH
-# build and install your own grpc pre-loaded micro-cli
-# go get github.com/micro/micro
-
-# go lang  build/publish/deploy tool
-go get github.com/google/ko/cmd/ko
+# micro-cli
+# GO111MODULE=off go get github.com/micro/micro
+# instead of using default micro-cli, build and install your own gRPC enabled micro-cli
+go install ./cmd/micro/...
 # go better build tool
-go get github.com/ahmetb/govvv
+GO111MODULE=off go get github.com/ahmetb/govvv
 # for static check/linter
-go get github.com/golangci/golangci-lint/cmd/golangci-lint
-# for mac, use brew to install protobuf
-brew install protobuf
-# GUI Client for GRPC Services
-brew cask install bloomrpc
-# k8s tool similar to helm
-brew install kustomize
-# validate one or more Kubernetes config files
-brew tap instrumenta/instrumenta
-# kubeval - validate k8s YAMLs (optional)
-brew install kubeval
-# grpc cli client
-brew install grpc
-# bloomrpc is a UI client for gRPC
-# install `bloomrpc` via `brew` into ~/Applications)
-brew cask install --appdir=~/Applications bloomrpc
+GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint
+# kind - kubernetes in docker (optional)
+GO111MODULE=on go get sigs.k8s.io/kind
+# go lang  build/publish/deploy tool (optional)
+GO111MODULE=off go get github.com/google/ko/cmd/ko
 
 # fetch protoc plugins into $GOPATH
-go get github.com/golang/protobuf/{proto,protoc-gen-go}
-go get github.com/micro/protoc-gen-micro
-# go get -u github.com/envoyproxy/protoc-gen-validate
-# go get -u github.com/infobloxopen/protoc-gen-gorm
+GO111MODULE=off go get github.com/golang/protobuf/{proto,protoc-gen-go}
+GO111MODULE=off go get github.com/micro/protoc-gen-micro
+# GO111MODULE=off go get -u github.com/envoyproxy/protoc-gen-validate
+# GO111MODULE=off go get -u github.com/infobloxopen/protoc-gen-gorm
 ```
 
 > Installing PGV can currently only be done from source:

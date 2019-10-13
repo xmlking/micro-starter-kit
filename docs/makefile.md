@@ -27,20 +27,30 @@ make proto TARGET=shared TYPE=.
 
 ```bash
 # unit tests
-make test-account
-make test-emailer
-make test-account-api
-make test-config-shared
-make test-demo-cmd
+make test-unit TARGET=account
+make test-unit TARGET=emailer
+make test-unit TARGET=account TYPE=api
+make test-unit TARGET=config TYPE=shared
+make test-unit TARGET=demo TYPE=cmd
+make test-unit
 
 # integration tests
-make inte-account
-make inte-emailer
+make test-inte TARGET=account
+make test-inte TARGET=emailer
+make test-inte TARGET=emailer TIMEOUT=30s
+make test-inte
 
 # end-to-end tests
-make e2e-account
-make e2e-emailer
-make e2e
+make test-e2e TARGET=account
+make test-e2e TARGET=emailer
+make test-e2e
+
+# generate code coverage
+make test-cover
+# benchmark testing
+make test-bench
+make test-race
+
 ```
 
 ### e2e tests on CI
@@ -55,6 +65,7 @@ make start_e2e GITHUB_TOKEN=123...
 
 ```bash
 make run-account
+make run TARGET=emailer
 make run-emailer
 make run-account-api
 make run-micro-cmd ARGS="--api_address=0.0.0.0:8088 api"
@@ -129,3 +140,7 @@ make kustomize NS=default
 # default ENV=e2e,  NS=default VERSION=git tag
 make kustomize
 ```
+
+### Reference
+
+1. [A Makefile for your Go project](https://vincent.bernat.ch/en/blog/2019-makefile-build-golang)

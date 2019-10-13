@@ -4,6 +4,20 @@
 
   ![Image of micro-interactions](images/micro-interactions.png)
 
+- How to download all dependencies after cloning the repo?
+
+```bash
+# by default this will download all modules in go.mod
+go mod download
+# with golang 1.13, some modules are not compatible yet. please use this as temp solution.
+go env -w GOPROXY=direct
+go env -w GOSUMDB=off
+go mod download
+# If you are importing internal/private modules, use following setting with `go mod download`
+GOPRIVATE=bitbucket.com/banzaicloud/*
+go mod download
+```
+
 - How to update 3rd party dependencies?
 
 ```bash
@@ -12,10 +26,8 @@ go get -u=patch # to use the latest patch releases
 go mod tidy
 # to find out why you have specific dependency
 go mod why -m github.com/DATA-DOG/go-sqlmock
-# with golang 1.13, some modules are not compatible yet. please use this as temp solution.
-go env -w GOPROXY=direct
-go env -w GOSUMDB=off
-go mod download
+# if you want to get binaries into $GOHOME/bin or $GOBIN
+GO111MODULE=off go get whatever
 ```
 
 - How to clean cached go modules?

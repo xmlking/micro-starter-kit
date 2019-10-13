@@ -7,6 +7,7 @@ GOPATH					:= $(shell go env GOPATH)
 HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
 HAS_KO					:= $(shell command -v ko 2> /dev/null)
 CODECOV_FILE 		:= build/coverage.txt
+TIMEOUT  				:= 60s
 # DOCKER_CONTEXT_PATH 			:= my_project_id/micro-starter-kit
 DOCKER_CONTEXT_PATH 			:= xmlking
 
@@ -23,7 +24,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: all tools proto proto-% lint lint-% build build-% test test-% inte inte-% e2e e2e-% start_e2e run run-% release clean update_deps docker docker-% docker_clean docker_push kustomize start_deploy
+.PHONY: all tools proto proto-% lint lint-% build build-% run run-% release clean update_deps docker docker-% docker_clean docker_push kustomize start_e2e start_deploy
 
 all: build
 
@@ -74,39 +75,31 @@ endif
 			for _target in $${type}/*/; do \
 				temp=$${_target%%/}; target=$${temp#*/}; \
 				echo "\tBuilding $${target}-$${type}"; \
-				CGO_ENABLED=0 GOOS=linux go build -o build/$${target}-$${type} -a -ldflags "-w -s ${BUILD_FLAGS}" ./$${type}/$${target}; \
+				CGO_ENABLED=0 GOOS=linux go build -o build/$${target}-$${type} -a -trimpath -ldflags "-w -s ${BUILD_FLAGS}" ./$${type}/$${target}; \
 			done \
 		done \
 	else \
 		echo "Building ${TARGET}-${TYPE}"; \
-		go build -o  build/${TARGET}-${TYPE} -a -ldflags "-w -s ${BUILD_FLAGS}" ./${TYPE}/${TARGET}; \
+		go build -o  build/${TARGET}-${TYPE} -a -trimpath -ldflags "-w -s ${BUILD_FLAGS}" ./${TYPE}/${TARGET}; \
 	fi
 
-test test-%:
+TEST_TARGETS := test-default test-bench test-unit test-inte test-e2e test-race test-cover
+.PHONY: $(TEST_TARGETS) check test tests
+test-bench:   	ARGS=-run=__absolutelynothing__ -bench=. ## Run benchmarks
+test-unit:   		ARGS=-short        					## Run only unit tests
+test-inte:   		ARGS=-run Integration       ## Run only integration tests
+test-e2e:   		ARGS=-run E2E       				## Run only E2E tests
+test-race:    	ARGS=-race         					## Run tests with race detector
+test-cover:   	ARGS=-cover -short -coverprofile=${CODECOV_FILE} -covermode=atomic ## Run tests in verbose mode with coverage reporting
+$(TEST_TARGETS): NAME=$(MAKECMDGOALS:test-%=%)
+$(TEST_TARGETS): test
+check test tests:
 	@if [ -z $(TARGET) ]; then \
-		echo "Testing all"; \
-		go test -short -race ./... -coverprofile=${CODECOV_FILE} -covermode=atomic; \
+		echo "Running $(NAME:%=% )tests for all"; \
+		go test -timeout $(TIMEOUT) $(ARGS) ./... ; \
 	else \
-		echo "Testing ${TARGET}-${TYPE}..."; \
-		go test -v -short  -race ./${TYPE}/${TARGET}/... -coverprofile=${CODECOV_FILE} -covermode=atomic; \
-	fi
-
-inte inte-%:
-	@if [ -z $(TARGET) ]; then \
-		echo "Integration testing all"; \
-		go test -run Integration ./... ; \
-	else \
-		echo "Integration testing ${TARGET}-${TYPE}..."; \
-		go test -v -run Integration ./${TYPE}/${TARGET}/... ; \
-	fi
-
-e2e e2e-%:
-	@if [ -z $(TARGET) ]; then \
-		echo "E2E testing all"; \
-		go test -run E2E ./... ; \
-	else \
-		echo "E2E testing ${TARGET}-${TYPE}..."; \
-		go test -v -run E2E ./${TYPE}/${TARGET}/... ; \
+		echo "Running $(NAME:%=% )tests for ${TARGET}-${TYPE}"; \
+		go test -timeout $(TIMEOUT) -v $(ARGS) ./${TYPE}/${TARGET}/... ; \
 	fi
 
 run run-%:

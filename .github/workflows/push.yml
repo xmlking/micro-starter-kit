@@ -14,24 +14,28 @@ jobs:
           go-version: 1.13
         id: go
       - name: Setup Tools
-        # env:
-        #   GO111MODULE: on
+        env:
+          GO111MODULE: off
         run: |
-          go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+          echo "remove me1 GO111MODULE: ${GO111MODULE}"
+          go get github.com/golangci/golangci-lint/cmd/golangci-lint
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Install Dependencies
         run: go mod download
       - name: Lint
         run: |
+          echo "remove me2 GO111MODULE: ${GO111MODULE}"
           make lint
           # export PATH=$PATH:$(go env GOPATH)/bin
           # golangci-lint run
       - name: Unit Test
-        run: make test
+        run: make test-unit
       # - name: Integration Test
-      #   run: make inte
+      #   run: make test-inte
       #   continue-on-error: true
+      - name: Coverage Test
+        run: make test-cover
       - name: Upload coverage to Codecov
         # -U "--proxy http://http-proxy"
         run: bash <(curl -s https://codecov.io/bash)

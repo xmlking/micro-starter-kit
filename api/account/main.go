@@ -80,6 +80,7 @@ func main() {
 
 	// NOTE: has to give `port` when using with k8s as `registry`
 	// userSrvClient := userPB.NewUserService("account:8080", service.Client())
+	log.Debugf("Client type: grpc or regular? %T\n", service.Client()) // FIXME: expected *grpc.grpcClient but got *micro.clientWrapper
 	userSrvClient := userPB.NewUserService("account-srv", service.Client())
 	profSrvClient := userPB.NewProfileService("account-srv", service.Client()) // service.Client() or client.DefaultClient???
 	accountHandler := handler.NewAccountHandler(userSrvClient, profSrvClient)

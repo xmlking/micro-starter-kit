@@ -3,7 +3,7 @@
 ## Unit Test
 
 ```bash
-make test-emailer
+make test-unit TARGET=emailer
 go test -v -short
 go test -v -short ./srv/emailer/service
 ```
@@ -13,7 +13,8 @@ go test -v -short ./srv/emailer/service
 > Run only Integration Tests: Useful for smoke testing canaries in production.
 
 ```bash
-make inte-emailer
+make test-inte TARGET=emailer
+make test-inte TARGET=emailer TIMEOUT=300ms
 go test -v -run Integration ./srv/emailer/service
 ```
 

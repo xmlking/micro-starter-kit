@@ -152,3 +152,6 @@ kubectl delete -f deploy/deploy.yaml
 2. [microhq](https://github.com/microhq) - a place for prebuilt microservices
 3. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
 4. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins
+5. [step-by-step-guide-micro](https://github.com/micro-in-cn/tutorials/tree/master/microservice-in-micro)
+6. [micro-in-cn](https://github.com/micro-in-cn/tutorials/tree/master/examples)
+7. [Platform Web](https://github.com/micro-in-cn/platform-web)

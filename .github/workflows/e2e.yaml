@@ -54,7 +54,10 @@ jobs:
           kubectl wait --for=condition=Ready pods --all --timeout=5m
           kubectl get pods
       - name: Run e2e tests
-        run: make e2e
+        # env:
+        #   MICRO_REGISTRY: consul
+        #   ICRO_REGISTRY_ADDRESS: "$(CONSUL_SERVICE_NAME):8500"
+        run: make test-e2e
 
       - name: "E2E Test success"
         if: success()

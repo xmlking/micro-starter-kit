@@ -6,7 +6,7 @@ set -xe
 export GO111MODULE="off"
 
 # install go-fuzz
-go get -u github.com/dvyukov/go-fuzz/go-fuzz github.com/dvyukov/go-fuzz/go-fuzz-build
+go get github.com/dvyukov/go-fuzz/go-fuzz github.com/dvyukov/go-fuzz/go-fuzz-build
 
 # TODO: needed until https://github.com/actions/setup-go/issues/14 is fixed
 # adds GOBIN to PATH so that go-fuzz-build is visible

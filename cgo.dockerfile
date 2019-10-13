@@ -33,7 +33,7 @@ WORKDIR /src
 COPY ./go.mod ./go.sum ./
 # Get dependancies - will also be cached if we won't change mod/sum
 RUN go mod download && \
-    cd / &&  go get github.com/ahmetb/govvv && cd /src
+    GO111MODULE=off go get github.com/ahmetb/govvv
 
 # COPY the source code as the last step
 COPY ./ ./

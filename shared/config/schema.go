@@ -14,6 +14,7 @@ const (
 // Environment represents an application environment.
 type Environment string
 
+// TODO: use proto to define config.yaml schema
 // ServiceConfiguration is the top level configuration struct which is loaded from the defined source(s)
 type ServiceConfiguration struct {
 	ServiceName string      `json:"name"`

@@ -31,7 +31,7 @@ WORKDIR /src
 COPY ./go.mod ./go.sum ./
 # Get dependancies - will also be cached if we won't change mod/sum
 RUN go mod download && \
-  cd / &&  go get github.com/ahmetb/govvv && cd /src
+  GO111MODULE=off go get github.com/ahmetb/govvv
 
 # COPY the source code as the last step
 COPY ./ ./
@@ -52,7 +52,7 @@ COPY --from=builder /user/group /user/passwd /etc/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Import the compiled executable from the second stage.
-COPY --from=builder /micro /micro
+COPY --from=builder /micro /bin/micro
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind
@@ -84,4 +84,4 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
   org.label-schema.docker.cmd=docker="run -it -p 8080:8080  ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/micro:${VERSION}"
 
 # Run the compiled binary.
-ENTRYPOINT ["/micro"]
+ENTRYPOINT ["/bin/micro"]
