@@ -15,12 +15,11 @@ configMapGenerator:
       - config/config.yaml
   - name: env-vars
     literals:
-      - SERVICE_NAME=$(GREATER_SERVICE_NAME)
-      # - MICRO_SERVER_ADVERTISE="$(GREATER_SERVICE_NAME):8080"
-      - MICRO_SERVER_NAME=greater-srv
+      - MICRO_SERVER_NAME=greeter-srv
+      # - MICRO_SERVER_ADVERTISE="$(GREETER-SRV_ENDPOINT):8080"
 
 vars:
-  - name: GREATER_SERVICE_NAME
+  - name: GREETER-SRV_ENDPOINT
     objref:
       kind: Service
       name: srv

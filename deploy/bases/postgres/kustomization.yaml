@@ -20,7 +20,7 @@ generatorOptions:
     app.kubernetes.io/component: secrets
 
 vars:
-  - name: DATABASE_SERVICE_NAME
+  - name: DATABASE_ENDPOINT
     objref:
       kind: Service
       name: postgres

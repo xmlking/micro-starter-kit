@@ -18,7 +18,7 @@ var (
 /**
  * set envelopment variables for CI e2e tests
  * - MICRO_REGISTRY=consul
- * - MICRO_REGISTRY_ADDRESS="$(CONSUL_SERVICE_NAME):8500"
+ * - MICRO_REGISTRY_ADDRESS="$(CONSUL-SRV_ENDPOINT):8500"
  * - MICRO_REGISTER_TTL="10"
  * - MICRO_REGISTER_INTERVAL="5"
  **/

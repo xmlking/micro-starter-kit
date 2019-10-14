@@ -37,11 +37,13 @@ configMapGenerator:
     behavior: merge
     literals:
       - APP_ENV=production
-      - MICRO_REGISTRY=consul
-      - MICRO_REGISTRY_ADDRESS="$(CONSUL_SERVICE_NAME):8500"
-      - MICRO_REGISTER_TTL="10"
-      - MICRO_REGISTER_INTERVAL="5"
       - MICRO_LOG_LEVEL=info
+      # profile specific variables
+      - MICRO_REGISTRY=consul
+      - MICRO_REGISTRY_ADDRESS="$(CONSUL-SRV_ENDPOINT):8500"
+      - MICRO_REGISTER_TTL="60"
+      - MICRO_REGISTER_INTERVAL="30"
+      - MICRO_SELECTOR=cache
 
 secretGenerator:
   - name: secrets

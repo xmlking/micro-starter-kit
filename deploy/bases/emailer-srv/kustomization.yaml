@@ -15,12 +15,11 @@ configMapGenerator:
       - config/config.yaml
   - name: env-vars
     literals:
-      - SERVICE_NAME=$(EMAILER_SERVICE_NAME)
-      # - MICRO_SERVER_ADVERTISE="$(EMAILER_SERVICE_NAME):8080"
       - MICRO_SERVER_NAME=emailer-srv
+      # - MICRO_SERVER_ADVERTISE="$(EMAILER-SRV_ENDPOINT):8080"
 
 vars:
-  - name: EMAILER_SERVICE_NAME
+  - name: EMAILER-SRV_ENDPOINT
     objref:
       kind: Service
       name: srv

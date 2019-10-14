@@ -1,6 +1,6 @@
-environment: development
+environment: production
 name: account-srv
-version: 0.1.0
+version: v0.1.0
 log:
   level: info
   format: json
@@ -14,8 +14,15 @@ database:
   logging: true
 observability:
   metrics:
-    address: localhost:8125
+    address: prometheus:8125
     flushInterval: 1000000000
   tracing:
     address: jaeger:6831
     flushInterval: 5000000000
+
+greeter-srv:
+  endpoint: greeter-srv
+  version: v0.1.0
+emailer-srv:
+  endpoint: emailer-srv
+  version: v0.1.0

@@ -14,19 +14,22 @@ import (
 	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
+	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
 
 // UserHandler struct
 type userHandler struct {
-	userRepository repository.UserRepository
-	Publisher      micro.Publisher
+	userRepository   repository.UserRepository
+	Publisher        micro.Publisher
+	greeterSrvClient greeterPB.GreeterService
 }
 
 // NewUserHandler returns an instance of `UserServiceHandler`.
-func NewUserHandler(repo repository.UserRepository, pub micro.Publisher) pb.UserServiceHandler {
+func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeterClient greeterPB.GreeterService) pb.UserServiceHandler {
 	return &userHandler{
-		userRepository: repo,
-		Publisher:      pub,
+		userRepository:   repo,
+		Publisher:        pub,
+		greeterSrvClient: greeterClient,
 	}
 }
 
@@ -121,6 +124,14 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	if err := h.Publisher.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue()}); err != nil {
 		log.WithError(err).Error("Received Publisher.Publish request error")
 		return myErrors.AppError(myErrors.PSE, err)
+	}
+
+	// call greeter
+	if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
+		log.WithError(err).Error("Received greeterService.Hello request error")
+		return myErrors.AppError(myErrors.PSE, err)
+	} else {
+		log.Infof("Got greeterService responce %s", res.Msg)
 	}
 
 	return nil

@@ -1,12 +1,12 @@
-environment: development
+environment: production
 name: greeter-srv
-version: 0.1.0
+version: v0.1.0
 log:
   level: info
   format: json
 observability:
   metrics:
-    address: localhost:8125
+    address: prometheus:8125
     flushInterval: 1000000000
   tracing:
     address: jaeger:6831

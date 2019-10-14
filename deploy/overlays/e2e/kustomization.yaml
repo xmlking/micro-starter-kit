@@ -2,8 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: $(NS)
-namePrefix: e2e-
-nameSuffix: -v1
 
 commonLabels:
   environment: integration
@@ -13,7 +11,6 @@ commonAnnotations:
 
 bases:
   - ../../bases
-  - ../../bases/consul
 
 # enable mage-pull-policy and resource_limit as needed
 patches:
@@ -28,11 +25,17 @@ configMapGenerator:
     behavior: merge
     literals:
       - APP_ENV=production
-      - MICRO_REGISTRY=consul
-      - MICRO_REGISTRY_ADDRESS="$(CONSUL_SERVICE_NAME):8500"
-      - MICRO_REGISTER_TTL="10"
-      - MICRO_REGISTER_INTERVAL="5"
-      - MICRO_LOG_LEVEL=info
+      - MICRO_LOG_LEVEL=debug
+      # profile specific variables
+      - MICRO_SELECTOR=static
+      - MICRO_REGISTRY=memory
+      - MICRO_REGISTER_TTL="60"
+      - MICRO_REGISTER_INTERVAL="30"
+      - ACCOUNT-SRV_ENDPOINT=$(ACCOUNT-SRV_ENDPOINT)
+      - GREETER-SRV_ENDPOINT=$(GREETER-SRV_ENDPOINT)
+      - EMAILER-SRV_ENDPOINT=$(EMAILER-SRV_ENDPOINT)
+      - ACCOUNT-API_ENDPOINT=$(ACCOUNT-API_ENDPOINT)
+      - GATEWAY-SRV_ENDPOINT=$(GATEWAY-SRV_ENDPOINT)
 
 secretGenerator:
   - name: secrets

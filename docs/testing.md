@@ -48,13 +48,13 @@ micro proxy --protocol=grpc
 ```
 
 ```bash
-## local build has gRPC by default.
-# ./build/micro call  account-srv UserService.Create \
+## For k8s: SSH to gateway container and run micro cli....
+# micro call e2e-account-srv-v1:8080 UserService.Create \
 #   '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call  account-srv UserService.Create \
-'{"username": "sumo33", "firstName": "sumo33", "lastName": "demo33", "email": "sumo33@demo.com"}'
-micro call account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+micro call account-srv UserService.Create \
+'{"username": "sumo1", "firstName": "sumo1", "lastName": "demo1", "email": "sumo1@demo.com"}'
 micro call account-srv UserService.List '{}'
 micro call account-srv UserService.List '{ "limit": 10, "page": 1}'
 micro call account-srv UserService.Get '{"id": "UserIdFromList"}'

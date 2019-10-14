@@ -17,7 +17,6 @@ jobs:
         env:
           GO111MODULE: off
         run: |
-          echo "remove me1 GO111MODULE: ${GO111MODULE}"
           go get github.com/golangci/golangci-lint/cmd/golangci-lint
       - name: Check out Code
         uses: actions/checkout@v1
@@ -25,7 +24,6 @@ jobs:
         run: go mod download
       - name: Lint
         run: |
-          echo "remove me2 GO111MODULE: ${GO111MODULE}"
           make lint
           # export PATH=$PATH:$(go env GOPATH)/bin
           # golangci-lint run

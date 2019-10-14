@@ -17,6 +17,7 @@ go install ./cmd/micro/...
 ```bash
 # health checking with micro. use correct target service gRPC port below
 micro health --check_service=account-srv --check_address=0.0.0.0:55493
+micro --selector static  call 10.60.1.101:8080 Debug.Health
 ```
 
 ## Run

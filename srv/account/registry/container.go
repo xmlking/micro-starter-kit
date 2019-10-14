@@ -108,5 +108,5 @@ func buildProfileHandler(ctn di.Container) (interface{}, error) {
 
 func buildUserHandler(ctn di.Container) (interface{}, error) {
 	repo := ctn.Get("user-repository").(repository.UserRepository)
-	return handler.NewUserHandler(repo, nil), nil // FIXME inject Publisher
+	return handler.NewUserHandler(repo, nil, nil), nil // FIXME inject Publisher, and greeter service
 }

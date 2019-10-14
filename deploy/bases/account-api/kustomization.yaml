@@ -15,13 +15,11 @@ configMapGenerator:
       - config/config.yaml
   - name: env-vars
     literals:
-      - SERVICE_NAME=$(ACCOUNT_API_SERVICE_NAME)
-      # - MICRO_SERVER_ADVERTISE="$(ACCOUNT_API_SERVICE_NAME):8080"
       - MICRO_SERVER_NAME=account-api
-      - ACCOUNT_SERVICE_NAME=$(ACCOUNT_SERVICE_NAME)
+      # - MICRO_SERVER_ADVERTISE="$(ACCOUNT-API_ENDPOINT):8080"
 
 vars:
-  - name: ACCOUNT_API_SERVICE_NAME
+  - name: ACCOUNT-API_ENDPOINT
     objref:
       kind: Service
       name: srv

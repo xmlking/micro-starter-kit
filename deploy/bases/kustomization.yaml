@@ -25,8 +25,9 @@ configMapGenerator:
       - APP_ENV=development
       - CONFIG_DIR=/config
       - CONFIG_FILE=config.yaml
-      - MICRO_REGISTRY=mdns
       - MICRO_LOG_LEVEL=debug
+      - MICRO_CLIENT_RETRIES=3
+      - MICRO_CLIENT_REQUEST_TIMEOUT=5s
 
 secretGenerator:
   - name: secrets

@@ -33,9 +33,9 @@ spec:
           args:
             - "agent"
             - "-bootstrap-expect=3"
-            - "-retry-join=$(CONSUL_SERVICE_NAME)-0.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
-            - "-retry-join=$(CONSUL_SERVICE_NAME)-1.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
-            - "-retry-join=$(CONSUL_SERVICE_NAME)-2.$(CONSUL_SERVICE_NAME).$(NAMESPACE).svc"
+            - "-retry-join=$(CONSUL-SRV_ENDPOINT)-0.$(CONSUL-SRV_ENDPOINT).$(NAMESPACE).svc"
+            - "-retry-join=$(CONSUL-SRV_ENDPOINT)-1.$(CONSUL-SRV_ENDPOINT).$(NAMESPACE).svc"
+            - "-retry-join=$(CONSUL-SRV_ENDPOINT)-2.$(CONSUL-SRV_ENDPOINT).$(NAMESPACE).svc"
             - "-client=0.0.0.0"
             - "-bind=0.0.0.0"
             - "-data-dir=/consul/data"

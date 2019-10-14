@@ -64,6 +64,7 @@ func main() {
 			config.Scan(&cfg)
 		}),
 	)
+	accountSrvEp := config.Get("account-srv", "endpoint").String("account-srv")
 	// retry client
 	// cli := client.NewClient(
 	// 	client.Retries(4),
@@ -72,17 +73,13 @@ func main() {
 	// 			log.Errorf("[ERR] , err: %s, %v", retryCount, err)
 	// 			return true, nil
 	// 		}
-
 	// 		return false, nil
 	// 	}),
 	// )
-	// userSrvClient := userPB.NewUserService("account-srv", cli)
-
-	// NOTE: has to give `port` when using with k8s as `registry`
-	// userSrvClient := userPB.NewUserService("account:8080", service.Client())
+	// userSrvClient := userPB.NewUserService(accountSrvEp, cli)
 	log.Debugf("Client type: grpc or regular? %T\n", service.Client()) // FIXME: expected *grpc.grpcClient but got *micro.clientWrapper
-	userSrvClient := userPB.NewUserService("account-srv", service.Client())
-	profSrvClient := userPB.NewProfileService("account-srv", service.Client()) // service.Client() or client.DefaultClient???
+	userSrvClient := userPB.NewUserService(accountSrvEp, service.Client())
+	profSrvClient := userPB.NewProfileService(accountSrvEp, service.Client()) // service.Client() or client.DefaultClient???
 	accountHandler := handler.NewAccountHandler(userSrvClient, profSrvClient)
 
 	// Register Handler

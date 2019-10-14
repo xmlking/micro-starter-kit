@@ -12,6 +12,7 @@ import (
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/registry"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
+	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 
 	"github.com/xmlking/micro-starter-kit/shared/wrapper"
 
@@ -72,10 +73,14 @@ func main() {
 	}
 
 	// Publisher publish to "emailer-srv"
-	publisher := micro.NewPublisher("emailer-srv", service.Client())
+	emailerSrvEp := config.Get("emailer-srv", "endpoint").String("emailer-srv")
+	publisher := micro.NewPublisher(emailerSrvEp, service.Client())
+	// greeterSrv Client to call "greeter-srv"
+	greeterSrvEp := config.Get("greeter-srv", "endpoint").String("greeter-srv")
+	greeterSrvClient := greeterPB.NewGreeterService(greeterSrvEp, service.Client())
 
 	// // Handlers
-	userHandler := handler.NewUserHandler(ctn.Resolve("user-repository").(repository.UserRepository), publisher)
+	userHandler := handler.NewUserHandler(ctn.Resolve("user-repository").(repository.UserRepository), publisher, greeterSrvClient)
 	profileHandler := ctn.Resolve("profile-handler").(accountPB.ProfileServiceHandler)
 
 	// Register Handlers

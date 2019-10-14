@@ -1,19 +1,19 @@
-environment: development
+environment: production
 name: emailer-srv
-version: 0.1.0
+version: v0.1.0
 log:
   level: info
   format: json
 observability:
   metrics:
-    address: localhost:8125
+    address: prometheus:8125
     flushInterval: 1000000000
   tracing:
     address: jaeger:6831
     flushInterval: 5000000000
 email:
   username: yourGmailUsername
-  password: password
+  password: yourGmailAppPassword
   emailServer: smtp.gmail.com
   port: 587
-  from: sumo@demo.com
+  from: xmlking@gmail.com
