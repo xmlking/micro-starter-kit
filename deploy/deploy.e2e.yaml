@@ -190,8 +190,8 @@ data:
   MICRO_CLIENT_REQUEST_TIMEOUT: 5s
   MICRO_CLIENT_RETRIES: "3"
   MICRO_LOG_LEVEL: debug
-  MICRO_REGISTER_INTERVAL: "30"
-  MICRO_REGISTER_TTL: "60"
+  MICRO_REGISTER_INTERVAL: "600"
+  MICRO_REGISTER_TTL: "1200"
   MICRO_REGISTRY: memory
   MICRO_SELECTOR: static
   MICRO_SERVER_ADDRESS: 0.0.0.0:8080
@@ -205,7 +205,7 @@ metadata:
     app.kubernetes.io/part-of: micro-starter-kit
     app.kubernetes.io/version: v1
     environment: integration
-  name: env-vars-common-862k89478m
+  name: env-vars-common-44tf7bf46b
   namespace: default
 ---
 apiVersion: v1
@@ -522,10 +522,10 @@ spec:
         - configMapRef:
             name: account-api-env-vars-d86k9fmtcg
         - configMapRef:
-            name: env-vars-common-862k89478m
+            name: env-vars-common-44tf7bf46b
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-api:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-api:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -590,10 +590,10 @@ spec:
         - configMapRef:
             name: account-env-vars-4c8g59b277
         - configMapRef:
-            name: env-vars-common-862k89478m
+            name: env-vars-common-44tf7bf46b
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -658,10 +658,10 @@ spec:
         - configMapRef:
             name: emailer-env-vars-8k5cf9ffm7
         - configMapRef:
-            name: env-vars-common-862k89478m
+            name: env-vars-common-44tf7bf46b
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -734,8 +734,8 @@ spec:
         - configMapRef:
             name: gateway-env-vars-b99g4h8mfk
         - configMapRef:
-            name: env-vars-common-862k89478m
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.4
+            name: env-vars-common-44tf7bf46b
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -791,10 +791,10 @@ spec:
         - configMapRef:
             name: greeter-env-vars-chg58fbcd7
         - configMapRef:
-            name: env-vars-common-862k89478m
+            name: env-vars-common-44tf7bf46b
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:

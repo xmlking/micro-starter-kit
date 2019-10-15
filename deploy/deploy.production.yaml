@@ -585,7 +585,7 @@ spec:
         envFrom:
         - configMapRef:
             name: prod-account-api-env-vars-v1-76t7chcg55
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
         livenessProbe:
           httpGet:
             path: /health
@@ -600,7 +600,7 @@ spec:
             name: prod-env-vars-common-v1-kck89b7hkf
         - secretRef:
             name: prod-secrets-v1-t45t559g92
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-api:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-api:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -669,7 +669,7 @@ spec:
         envFrom:
         - configMapRef:
             name: prod-account-env-vars-v1-5c5hm87f65
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
         livenessProbe:
           httpGet:
             path: /health
@@ -684,7 +684,7 @@ spec:
             name: prod-env-vars-common-v1-kck89b7hkf
         - secretRef:
             name: prod-secrets-v1-t45t559g92
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -753,7 +753,7 @@ spec:
         envFrom:
         - configMapRef:
             name: prod-emailer-env-vars-v1-58gdffdm58
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
         livenessProbe:
           httpGet:
             path: /health
@@ -768,7 +768,7 @@ spec:
             name: prod-env-vars-common-v1-kck89b7hkf
         - secretRef:
             name: prod-secrets-v1-t45t559g92
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -837,7 +837,7 @@ spec:
         envFrom:
         - configMapRef:
             name: prod-gateway-env-vars-v1-g8tg5g8b78
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
         livenessProbe:
           httpGet:
             path: /health
@@ -858,7 +858,7 @@ spec:
             name: prod-gateway-env-vars-v1-g8tg5g8b78
         - configMapRef:
             name: prod-env-vars-common-v1-kck89b7hkf
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -918,7 +918,7 @@ spec:
         envFrom:
         - configMapRef:
             name: prod-greeter-env-vars-v1-84f94g8t9c
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
         livenessProbe:
           httpGet:
             path: /health
@@ -933,7 +933,7 @@ spec:
             name: prod-env-vars-common-v1-kck89b7hkf
         - secretRef:
             name: prod-secrets-v1-t45t559g92
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.1.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.1.5
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
