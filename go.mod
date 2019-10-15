@@ -2,13 +2,7 @@ module github.com/xmlking/micro-starter-kit
 
 go 1.13.1
 
-replace (
-	k8s.io/api => k8s.io/api v0.0.0-20191010143144-fbf594f18f80
-	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20191014065749-fb3eea214746
-)
-
 require (
-	github.com/DATA-DOG/go-sqlmock v1.3.3 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/golang/protobuf v1.3.2
 	github.com/infobloxopen/atlas-app-toolkit v0.19.0
@@ -16,7 +10,6 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.11.3
-	github.com/micro/go-plugins v1.3.1-0.20191004210925-4b89c7541d81
 	github.com/onrik/logrus v0.4.1
 	github.com/sarulabs/di/v2 v2.2.0
 	github.com/satori/go.uuid v1.2.0

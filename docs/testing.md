@@ -49,8 +49,8 @@ micro proxy --protocol=grpc
 
 ```bash
 ## For k8s: SSH to gateway container and run micro cli....
-# micro call e2e-account-srv-v1:8080 UserService.Create \
-#   '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+# kubectl exec -it -c srv gateway-srv-c86cb8667-g2rmc -- busybox sh
+# micro call account-srv UserService.List '{}'
 micro call  account-srv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call account-srv UserService.Create \
