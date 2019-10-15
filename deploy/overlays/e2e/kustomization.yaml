@@ -58,7 +58,7 @@ images:
     newTag: 11.5-alpine
   - name: microhq/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: $(IMAGE_VERSION)
+    newTag: v0.1.5
   - name: xmlking/account-api
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-api
     newTag: $(IMAGE_VERSION)

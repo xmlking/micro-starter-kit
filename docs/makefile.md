@@ -119,7 +119,7 @@ make docker-emailer-srv
 make docker
 make docker DOCKER_REGISTRY=us.gcr.io
 make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit
-
+make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit VERSION=v0.1.5
 
 # publish all microservices images
 make docker_push
