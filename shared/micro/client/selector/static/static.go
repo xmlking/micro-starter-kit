@@ -47,11 +47,9 @@ func (s *staticSelector) Select(service string, opts ...selector.SelectOption) (
 }
 
 func (s *staticSelector) Mark(service string, node *registry.Node, err error) {
-	return
 }
 
 func (s *staticSelector) Reset(service string) {
-	return
 }
 
 func (s *staticSelector) Close() error {
