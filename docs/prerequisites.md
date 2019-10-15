@@ -26,10 +26,6 @@ brew cask install --appdir=~/Applications bloomrpc
 > Lets build and install `grpc` pre-loaded **Micro CLI** from [here](../cmd/micro/README.md#Build) instead of official **Micro CLI**
 
 ```bash
-# micro-cli
-# GO111MODULE=off go get github.com/micro/micro
-# instead of using default micro-cli, build and install your own gRPC enabled micro-cli
-go install ./cmd/micro/...
 # go better build tool
 GO111MODULE=off go get github.com/ahmetb/govvv
 # for static check/linter
@@ -60,4 +56,15 @@ make build
 go get -d github.com/infobloxopen/protoc-gen-gorm
 cd ~/go/src/github.com/infobloxopen/protoc-gen-gorm
 make install
+```
+
+> Installing `micro-cli`<br/>
+> instead of using default micro-cli, pull custom build `micro-cli` with `gRPC` and `CORS` enabled
+
+```bash
+# GO111MODULE=off go get github.com/micro/micro
+# GO111MODULE=off go get github.com/xmlking/micro/cmd/micro
+GO111MODULE=off go get -d github.com/xmlking/micro/cmd/micro
+cd ~/go/src/github.com/xmlking/micro
+go install ./cmd/micro/...
 ```

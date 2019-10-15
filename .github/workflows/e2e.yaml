@@ -56,7 +56,7 @@ jobs:
       - name: Run e2e tests
         # env:
         #   MICRO_REGISTRY: consul
-        #   ICRO_REGISTRY_ADDRESS: "$(CONSUL_SERVICE_NAME):8500"
+        #   MICRO_REGISTRY_ADDRESS: "$(CONSUL-SRV_ENDPOINT):8500"
         run: make test-e2e
 
       - name: "E2E Test success"
