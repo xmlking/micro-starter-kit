@@ -23,8 +23,6 @@ brew cask install --appdir=~/Applications bloomrpc
 
 ### third-party golang tools
 
-> Lets build and install `grpc` pre-loaded **Micro CLI** from [here](../cmd/micro/README.md#Build) instead of official **Micro CLI**
-
 ```bash
 # go better build tool
 GO111MODULE=off go get github.com/ahmetb/govvv
