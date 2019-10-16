@@ -1,0 +1,22 @@
+commonLabels:
+  app.kubernetes.io/name: etcd
+  app.kubernetes.io/instance: etcd-abcxzy
+  app.kubernetes.io/component: infra
+  app.kubernetes.io/part-of: micro-starter-kit
+  app.kubernetes.io/managed-by: kustomize
+commonAnnotations:
+  org: acmeCorporation
+
+resources:
+  - etcd.yaml
+  # optionally expose service
+  # - service.yaml
+
+vars:
+  - name: ETCD-SRV_ENDPOINT
+    objref:
+      kind: Service
+      name: etcd
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name
