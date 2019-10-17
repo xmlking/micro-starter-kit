@@ -13,7 +13,7 @@ DOCKER_CONTEXT_PATH 			:= xmlking
 
 # Type of service e.g api, fnc, srv, web (default: "srv")
 TYPE = $(or $(word 2,$(subst -, ,$*)), srv)
-override TYPES:= api srv
+override TYPES:= srv
 # Target for running the action
 TARGET = $(word 1,$(subst -, ,$*))
 

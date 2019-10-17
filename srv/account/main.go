@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	serviceName = "account-srv"
+	serviceName = "accountsrv"
 )
 
 var (
@@ -72,11 +72,13 @@ func main() {
 		log.Fatalf("failed to build container: %v", err)
 	}
 
-	// Publisher publish to "emailer-srv"
-	emailerSrvEp := config.Get("emailer-srv", "endpoint").String("emailer-srv")
+	log.Debugf("Client type: grpc or regular? %T\n", service.Client()) // FIXME: expected *grpc.grpcClient but got *micro.clientWrapper
+
+	// Publisher publish to "emailersrv"
+	emailerSrvEp := config.Get("emailersrv", "endpoint").String("emailersrv")
 	publisher := micro.NewPublisher(emailerSrvEp, service.Client())
-	// greeterSrv Client to call "greeter-srv"
-	greeterSrvEp := config.Get("greeter-srv", "endpoint").String("greeter-srv")
+	// greeterSrv Client to call "greetersrv"
+	greeterSrvEp := config.Get("greetersrv", "endpoint").String("greetersrv")
 	greeterSrvClient := greeterPB.NewGreeterService(greeterSrvEp, service.Client())
 
 	// // Handlers

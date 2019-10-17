@@ -13,7 +13,7 @@ resources:
   # - service.yaml
 
 vars:
-  - name: ETCD-SRV_ENDPOINT
+  - name: ETCD_SRV_ENDPOINT
     objref:
       kind: Service
       name: etcd

@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/errors"
+	"github.com/micro/go-micro/metadata"
 	log "github.com/sirupsen/logrus"
 	"github.com/thoas/go-funk"
 
@@ -126,8 +127,15 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 		return myErrors.AppError(myErrors.PSE, err)
 	}
 
+	// Set arbitrary headers in context
+	customCtx := metadata.NewContext(ctx, map[string]string{
+		"X-User-Id": "john",
+		"X-From-Id": "script",
+	})
+
 	// call greeter
-	if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
+	// if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
+	if res, err := h.greeterSrvClient.Hello(customCtx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
 		log.WithError(err).Error("Received greeterService.Hello request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	} else {

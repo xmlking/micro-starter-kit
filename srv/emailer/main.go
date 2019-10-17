@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	serviceName = "emailer-srv"
+	serviceName = "emailersrv"
 )
 
 var (
@@ -72,13 +72,13 @@ func main() {
 
 	emailSubscriber := ctn.Resolve("emailer-subscriber") //.(subscriber.EmailSubscriber)
 	// Register Struct as Subscriber
-	micro.RegisterSubscriber("emailer-srv", service.Server(), emailSubscriber)
+	micro.RegisterSubscriber("emailersrv", service.Server(), emailSubscriber)
 
 	// Register Function as Subscriber
-	micro.RegisterSubscriber("emailer-srv", service.Server(), subscriber.Handler)
+	micro.RegisterSubscriber("emailersrv", service.Server(), subscriber.Handler)
 
 	// register subscriber with queue, each message is delivered to a unique subscriber
-	// micro.RegisterSubscriber("emailer-srv-2", service.Server(), subscriber.Handler, server.SubscriberQueue("queue.pubsub"))
+	// micro.RegisterSubscriber("emailersrv-2", service.Server(), subscriber.Handler, server.SubscriberQueue("queue.pubsub"))
 
 	myConfig.PrintBuildInfo()
 	// Run service

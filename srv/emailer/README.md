@@ -8,7 +8,7 @@ Showcase
 
 ## Configuration
 
-- FQDN: emailer-srv
+- FQDN: emailer_srv
 - Type: srv
 - Alias: emailer
 

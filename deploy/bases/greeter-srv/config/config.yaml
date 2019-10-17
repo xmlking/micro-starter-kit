@@ -1,5 +1,5 @@
 environment: production
-name: greeter-srv
+name: greetersrv
 version: v0.1.0
 log:
   level: info

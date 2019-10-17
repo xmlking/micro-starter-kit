@@ -40,10 +40,10 @@ grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/gre
 
 ```bash
 micro list services
-micro get service account-srv
-micro get service emailer-srv
+micro get service accountsrv
+micro get service emailersrv
 
-# how to start proxy
+# how to use grpc proxy:
 micro proxy --protocol=grpc
 grpc_cli call localhost:8081 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
 ```
@@ -51,18 +51,18 @@ grpc_cli call localhost:8081 Greeter.Hello  'name: "sumo"'  --protofiles=srv/gre
 ```bash
 ## For k8s: SSH to gateway container and run micro cli....
 # kubectl exec -it -c srv gateway-srv-c86cb8667-g2rmc -- busybox sh
-# micro call account-srv UserService.List '{}'
-micro call  account-srv UserService.Create \
+# micro call accountsrv UserService.List '{}'
+micro call  accountsrv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.Create \
+micro call accountsrv UserService.Create \
 '{"username": "sumo1", "firstName": "sumo1", "lastName": "demo1", "email": "sumo1@demo.com"}'
-micro call account-srv UserService.List '{}'
-micro call account-srv UserService.List '{ "limit": 10, "page": 1}'
-micro call account-srv UserService.Get '{"id": "UserIdFromList"}'
-micro  call account-srv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
-micro call account-srv UserService.Update \
+micro call accountsrv UserService.List '{}'
+micro call accountsrv UserService.List '{ "limit": 10, "page": 1}'
+micro call accountsrv UserService.Get '{"id": "UserIdFromList"}'
+micro call accountsrv UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
+micro call accountsrv UserService.Update \
 '{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
-micro call account-srv UserService.Delete '{ "id": "UserIdFromGet" }'
+micro call accountsrv UserService.Delete '{ "id": "UserIdFromGet" }'
 ```
 
 ### Micro Web UI

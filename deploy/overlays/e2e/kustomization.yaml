@@ -31,11 +31,11 @@ configMapGenerator:
       - MICRO_REGISTRY=memory
       - MICRO_REGISTER_TTL="1200"
       - MICRO_REGISTER_INTERVAL="600"
-      - ACCOUNT-SRV_ENDPOINT=$(ACCOUNT-SRV_ENDPOINT)
-      - GREETER-SRV_ENDPOINT=$(GREETER-SRV_ENDPOINT)
-      - EMAILER-SRV_ENDPOINT=$(EMAILER-SRV_ENDPOINT)
-      - ACCOUNT-API_ENDPOINT=$(ACCOUNT-API_ENDPOINT)
-      - GATEWAY-SRV_ENDPOINT=$(GATEWAY-SRV_ENDPOINT)
+      - ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)
+      - GREETERSRV_ENDPOINT=$(GREETER_SRV_ENDPOINT)
+      - EMAILERSRV_ENDPOINT=$(EMAILER_SRV_ENDPOINT)
+      - GATEWAYSRV_ENDPOINT=$(GATEWAY_SRV_ENDPOINT)
+      - PROXYSRV_ENDPOINT=$(PROXY_SRV_ENDPOINT)
 
 secretGenerator:
   - name: secrets
@@ -59,9 +59,6 @@ images:
   - name: microhq/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
     newTag: v0.1.5
-  - name: xmlking/account-api
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-api
-    newTag: $(IMAGE_VERSION)
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)

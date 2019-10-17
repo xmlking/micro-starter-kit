@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package srv.emailer;
+package emailersrv;
 
 message Message {
 	string to = 1;

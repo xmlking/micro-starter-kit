@@ -65,9 +65,7 @@ docker-compose up consul
 docker-compose up account-srv
 docker-compose up emailer-srv
 docker-compose up gateway
-docker-compose up account-api
-docker-compose up gateway-api
-curl "http://localhost:8081/account/AccountService/list?limit=10"
+docker-compose up greeter-api
 ```
 
 ## Kubernetes Run

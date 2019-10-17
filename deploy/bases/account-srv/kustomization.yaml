@@ -3,7 +3,7 @@ commonLabels:
   app.kubernetes.io/instance: account-srv-abcxzy
   app.kubernetes.io/component: microservice
 
-namePrefix: account-
+namePrefix: account
 
 resources:
   - deployment.yaml
@@ -15,12 +15,12 @@ configMapGenerator:
       - config/config.yaml
   - name: env-vars
     literals:
-      - MICRO_SERVER_NAME=account-srv
-      # - MICRO_SERVER_ADVERTISE="$(ACCOUNT-SRV_ENDPOINT):8080"
+      - MICRO_SERVER_NAME=accountsrv
+      # - MICRO_SERVER_ADVERTISE="$(ACCOUNT_SRV_ENDPOINT):8080"
       - DATABASE_HOST=$(DATABASE_ENDPOINT)
 
 vars:
-  - name: ACCOUNT-SRV_ENDPOINT
+  - name: ACCOUNT_SRV_ENDPOINT
     objref:
       kind: Service
       name: srv

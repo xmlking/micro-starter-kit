@@ -13,7 +13,7 @@ showcase
 
 ## Configuration
 
-- FQDN: account-srv
+- FQDN: accountsrv
 - Type: srv
 - Alias: account
 

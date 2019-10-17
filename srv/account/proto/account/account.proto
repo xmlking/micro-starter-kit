@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package srv.account;
+package accountsrv;
 
 // import "shared/proto/basic/error.proto";
 import "google/protobuf/wrappers.proto";

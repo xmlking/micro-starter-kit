@@ -1,5 +1,5 @@
 environment: production
-name: account-srv
+name: accountsrv
 version: v0.1.0
 log:
   level: info
@@ -20,9 +20,9 @@ observability:
     address: jaeger:6831
     flushInterval: 5000000000
 
-greeter-srv:
-  endpoint: greeter-srv
+greetersrv:
+  endpoint: greetersrv
   version: v0.1.0
-emailer-srv:
-  endpoint: emailer-srv
+emailersrv:
+  endpoint: emailersrv
   version: v0.1.0

@@ -7,7 +7,7 @@ commonLabels:
 commonAnnotations:
   org: acmeCorporation
 
-namePrefix: gateway-
+namePrefix: gateway
 
 resources:
   - deployment.yaml
@@ -16,8 +16,8 @@ resources:
 configMapGenerator:
   - name: env-vars
     literals:
-      - MICRO_SERVER_NAME=gateway-srv
-      # - MICRO_SERVER_ADVERTISE="$(GATEWAY-SRV_ENDPOINT):8080"
+      - MICRO_SERVER_NAME=gatewaysrv
+      # - MICRO_SERVER_ADVERTISE="$(GATEWAY_SRV_ENDPOINT):8080"
       - MICRO_API_NAMESPACE=""
       - MICRO_API_HANDLER=rpc
       - MICRO_API_ENABLE_RPC="true"
@@ -27,7 +27,7 @@ configMapGenerator:
       - CORS_ALLOWED_METHODS="POST,GET"
 
 vars:
-  - name: GATEWAY-SRV_ENDPOINT
+  - name: GATEWAY_SRV_ENDPOINT
     objref:
       kind: Service
       name: srv

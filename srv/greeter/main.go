@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	serviceName = "greeter-srv"
+	serviceName = "greetersrv"
 )
 
 var (

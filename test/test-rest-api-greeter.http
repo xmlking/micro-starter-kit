@@ -8,7 +8,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "greeter-srv",
+    "service": "greetersrv",
     "method": "Greeter.Hello",
     "request": {
         "name": "sumo"

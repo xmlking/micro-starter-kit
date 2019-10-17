@@ -1,4 +1,4 @@
-package srv_account
+package accountsrv
 
 import (
 	"context"

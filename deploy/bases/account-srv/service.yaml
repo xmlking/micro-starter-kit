@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: grpc-web-port
+    - name: grpc-port
       port: 8080
       protocol: TCP
-      targetPort: grpc-web-port
+      targetPort: grpc-port

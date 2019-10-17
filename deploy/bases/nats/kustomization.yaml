@@ -11,7 +11,7 @@ resources:
   - nats.yaml
 
 vars:
-  - name: NATS-SRV_ENDPOINT
+  - name: NATS_SRV_ENDPOINT
     objref:
       kind: Service
       name: nats

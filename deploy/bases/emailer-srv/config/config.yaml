@@ -1,5 +1,5 @@
 environment: production
-name: emailer-srv
+name: emailersrv
 version: v0.1.0
 log:
   level: info

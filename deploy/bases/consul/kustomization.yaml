@@ -18,7 +18,7 @@ resources:
   - service-ui.yaml
 
 vars:
-  - name: CONSUL-SRV_ENDPOINT
+  - name: CONSUL_SRV_ENDPOINT
     objref:
       kind: Service
       name: consul

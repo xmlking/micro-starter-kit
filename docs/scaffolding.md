@@ -9,15 +9,12 @@ go mod init github.com/xmlking/micro-starter-kit
 mkdir srv api fnc
 
 # scaffold modules
-micro new --fqdn="account-srv" --type="srv" --gopath=false \
---alias="account" --plugin=registry=kubernetes srv/account
+micro new --fqdn="accountsrv" --type="srv" --gopath=false \
+--alias="account" --plugin=client/selector=static srv/account1
 
-micro new --fqdn="emailer-srv" --type="srv" --gopath=false \
---alias="emailer"  --plugin=registry=kubernetes:broker=nats srv/emailer
+micro new --fqdn="emailersrv" --type="srv" --gopath=false \
+--alias="emailer"  --plugin=client/selector=static:broker=nats srv/emailer
 
-micro new --fqdn="greeter-srv" --type="srv" --gopath=false \
---alias="greeter"  --plugin=registry=kubernetes srv/greeter
-
-micro new --fqdn="account-api" --type="api" --gopath=false \
---alias="account" --plugin=registry=kubernetes api/account
+micro new --fqdn="greetersrv" --type="srv" --gopath=false \
+--alias="greeter"  ---plugin=client/selector=static srv/greeter
 ```

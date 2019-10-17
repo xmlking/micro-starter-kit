@@ -2,7 +2,7 @@
 // source: srv/account/proto/account/account.proto
 
 /*
-Package srv_account is a generated protocol buffer package.
+Package accountsrv is a generated protocol buffer package.
 
 It is generated from these files:
 	srv/account/proto/account/account.proto
@@ -20,9 +20,10 @@ It has these top-level messages:
 	ProfileListQuery
 	ProfileListResponse
 */
-package srv_account
+package accountsrv
 
 import context "context"
+import fmt "fmt"
 import strings "strings"
 import time "time"
 
@@ -32,7 +33,6 @@ import gorm1 "github.com/jinzhu/gorm"
 import gorm2 "github.com/infobloxopen/atlas-app-toolkit/gorm"
 import ptypes1 "github.com/golang/protobuf/ptypes"
 
-import fmt "fmt"
 import math "math"
 import _ "github.com/golang/protobuf/ptypes/wrappers"
 import _ "github.com/golang/protobuf/ptypes/timestamp"
@@ -564,6 +564,25 @@ type UserWithAfterPatchSave interface {
 	AfterPatchSave(context.Context, *User, *field_mask1.FieldMask, *gorm1.DB) error
 }
 
+// DefaultPatchSetUser executes a bulk gorm update call with patch behavior
+func DefaultPatchSetUser(ctx context.Context, objects []*User, updateMasks []*field_mask1.FieldMask, db *gorm1.DB) ([]*User, error) {
+	if len(objects) != len(updateMasks) {
+		return nil, fmt.Errorf(errors1.BadRepeatedFieldMaskTpl, len(updateMasks), len(objects))
+	}
+
+	results := make([]*User, 0, len(objects))
+	for i, patcher := range objects {
+		pbResponse, err := DefaultPatchUser(ctx, patcher, updateMasks[i], db)
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, pbResponse)
+	}
+
+	return results, nil
+}
+
 // DefaultApplyFieldMaskUser patches an pbObject with patcher according to a field mask.
 func DefaultApplyFieldMaskUser(ctx context.Context, patchee *User, patcher *User, updateMask *field_mask1.FieldMask, prefix string, db *gorm1.DB) (*User, error) {
 	if patcher == nil {
@@ -938,6 +957,25 @@ type ProfileWithBeforePatchSave interface {
 }
 type ProfileWithAfterPatchSave interface {
 	AfterPatchSave(context.Context, *Profile, *field_mask1.FieldMask, *gorm1.DB) error
+}
+
+// DefaultPatchSetProfile executes a bulk gorm update call with patch behavior
+func DefaultPatchSetProfile(ctx context.Context, objects []*Profile, updateMasks []*field_mask1.FieldMask, db *gorm1.DB) ([]*Profile, error) {
+	if len(objects) != len(updateMasks) {
+		return nil, fmt.Errorf(errors1.BadRepeatedFieldMaskTpl, len(updateMasks), len(objects))
+	}
+
+	results := make([]*Profile, 0, len(objects))
+	for i, patcher := range objects {
+		pbResponse, err := DefaultPatchProfile(ctx, patcher, updateMasks[i], db)
+		if err != nil {
+			return nil, err
+		}
+
+		results = append(results, pbResponse)
+	}
+
+	return results, nil
 }
 
 // DefaultApplyFieldMaskProfile patches an pbObject with patcher according to a field mask.

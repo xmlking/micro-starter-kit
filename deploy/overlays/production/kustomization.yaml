@@ -40,7 +40,7 @@ configMapGenerator:
       - MICRO_LOG_LEVEL=info
       # profile specific variables
       - MICRO_REGISTRY=consul
-      - MICRO_REGISTRY_ADDRESS="$(CONSUL-SRV_ENDPOINT):8500"
+      - MICRO_REGISTRY_ADDRESS="$(CONSUL_SRV_ENDPOINT):8500"
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"
       - MICRO_SELECTOR=cache
@@ -67,9 +67,6 @@ images:
   - name: microhq/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
     newTag: v0.1.5
-  - name: xmlking/account-api
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-api
-    newTag: $(IMAGE_VERSION)
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)

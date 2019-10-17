@@ -7,7 +7,7 @@ commonAnnotations:
 
 bases:
   - gateway
-  - account-api
+  - proxy
   - account-srv
   - emailer-srv
   - greeter-srv
@@ -44,8 +44,6 @@ images:
   - name: postgres
     newTag: alpine
   - name: microhq/micro
-    newTag: latest
-  - name: xmlking/account-api
     newTag: latest
   - name: xmlking/account-srv
     newTag: latest

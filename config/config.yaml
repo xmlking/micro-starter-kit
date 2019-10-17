@@ -1,5 +1,5 @@
 environment: development
-name: account-srv
+name: accountsrv
 version: v0.1.0
 log:
   level: debug
@@ -26,14 +26,14 @@ email:
   port: 587
   from: xmlking@gmail.com
 
-account-srv:
-  endpoint: account-srv
+accountsrv:
+  endpoint: accountsrv
   version: v0.1.0
-greeter-srv:
-  endpoint: greeter-srv
+greetersrv:
+  endpoint: greetersrv
   version: v0.1.0
-emailer-srv:
-  endpoint: emailer-srv
+emailersrv:
+  endpoint: emailersrv
   version: v0.1.0
 
 
