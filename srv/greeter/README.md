@@ -36,13 +36,13 @@ make docker TARGET=greeter TYPE=srv VERSION=v0.1.1
 
 ```bash
 # test with grpc cli
+make run-greeter ARGS="--server_address=localhost:8080 --server_name=srv.greeter"
 grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
 
-micro --client=grpc call greeter-srv Greeter.Hello  '{"name": "John"}'
+# testing via micro-cli
+micro --client=grpc call srv.greeter Greeter.Hello  '{"name": "John"}'
 
-# in k8s container
-./micro --client=grpc call greeter-srv Greeter.Hello  '{"name": "John"}'
-
+# testing via rest proxy
 curl --request POST \
 --url http://localhost:8080/rpc \
 --header 'accept: application/json' \

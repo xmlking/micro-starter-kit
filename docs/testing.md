@@ -45,6 +45,7 @@ micro get service emailer-srv
 
 # how to start proxy
 micro proxy --protocol=grpc
+grpc_cli call localhost:8081 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
 ```
 
 ```bash

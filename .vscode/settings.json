@@ -1,6 +1,8 @@
 {
   "window.zoomLevel": 1,
   "explorer.sortOrder": "type",
+  // scm
+  "scm.defaultViewMode": "tree",
   // Editor
   "editor.autoIndent": true,
   "editor.codeActionsOnSave": {
