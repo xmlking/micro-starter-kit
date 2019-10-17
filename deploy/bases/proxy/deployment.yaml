@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: srv
-          image: microhq/micro:latest
+          image: micro/micro:latest
           imagePullPolicy: Always
           args:
             - "proxy"

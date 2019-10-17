@@ -14,7 +14,7 @@ export POD=$(kubectl get pods -l app=sumo-etcd-operator-etcd-operator --namespac
 kubectl logs $POD --namespace=default
 
 # deploy ETCD cluster
-kubectl create -f deploy/bases/etcd/etcd.yaml
+kubectl create -f deploy/bases/etcd/deployment.yaml
 # Optionally create load balancer  service (to access from laptop and test etcd is responding)
 kubectl create -f deploy/bases/etcd/service.json
 ```
@@ -25,7 +25,7 @@ kubectl create -f deploy/bases/etcd/service.json
 # uninstall ETCD operator
 helm delete  sumo
 # uninstall ETCD cluster
-kubectl delete -f deploy/bases/etcd/etcd.yaml
+kubectl delete -f deploy/bases/etcd/deployment.yaml
 ```
 
 ## Updating ETCD Operator
@@ -35,7 +35,7 @@ kubectl delete -f deploy/bases/etcd/etcd.yaml
 helm upgrade sumo stable/etcd-operator
 
 # Resize an etcd cluster
- kubectl apply -f deploy/bases/etcd/etcd.yaml
+ kubectl apply -f deploy/bases/etcd/deployment.yaml
 ```
 
 ### ETCD

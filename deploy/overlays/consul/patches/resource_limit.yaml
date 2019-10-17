@@ -1,0 +1,17 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srv
+spec:
+  template:
+    spec:
+      containers:
+        - name: srv
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1G
+            limits:
+              cpu: 500m
+              memory: 2G

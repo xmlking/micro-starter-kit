@@ -33,6 +33,9 @@ GO111MODULE=off go get whatever
 - How to clean cached go modules?
 
 ```bash
+rm go.sum
+go clean -modcache
+go mod downlaod
 # this empties $GOPATH/pkg/mod/
 go clean -cache -modcache
 ```
@@ -155,7 +158,7 @@ go test all
   So you want to use k8s internal `CoreDNS` as `service registry`?, then you have to follow some rules:
 
   - Service name cannot have `.`(dot) due to k8s DNS limits, so make it simple via environment variables e.g., `MICRO_SERVER_NAME=account`
-  - custom build REST Gateway as `microhq/micro:kubernetes` image is outdated. optionally add CORS plugin.
+  - custom build REST Gateway as `micro/micro:kubernetes` image is outdated. optionally add CORS plugin.
 
 - performance
   If you’re concerned about performance, try

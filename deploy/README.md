@@ -193,8 +193,8 @@ kubectl delete -k deploy/overlays/production
 ## verify
 
 ```bash
-# highlight `microhq/micro:latest`
-kustomize build ./deploy/overlays/production | grep -C 3 microhq/micro:latest
+# highlight `micro/micro:latest`
+kustomize build ./deploy/overlays/production | grep -C 3 micro/micro:latest
 # Validate kustomize build
 kustomize build ./deploy/overlays/production | kubeval --strict --ignore-missing-schemas
 

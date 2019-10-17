@@ -13,7 +13,8 @@ commonAnnotations:
 
 bases:
   - ../../bases
-  - ../../bases/etcd
+  - ../../bases/consul
+  # - ../../bases/postgres
 
 # enable mage-pull-policy and resource_limit as needed
 patches:
@@ -42,10 +43,8 @@ configMapGenerator:
       - APP_ENV=production
       - MICRO_LOG_LEVEL=info
       # profile specific variables
-      - MICRO_REGISTRY=etcd
-      # - MICRO_REGISTRY_ADDRESS="$(ETCD_SRV_ENDPOINT)-client"
-      - MICRO_REGISTRY_ADDRESS="prod-etcd-cluster-v1-client"
-
+      - MICRO_REGISTRY=consul
+      - MICRO_REGISTRY_ADDRESS="$(CONSUL_SRV_ENDPOINT):8500"
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"
       - MICRO_SELECTOR=cache

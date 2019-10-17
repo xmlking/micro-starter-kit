@@ -12,7 +12,7 @@ spec:
             - "health"
             - "--address=:8088"
             - "--check_service=$(MICRO_SERVER_NAME)"
-            - "--check_address=0.0.0.0:8080"
+            - "--check_address=0.0.0.0:8081"
           envFrom:
             - configMapRef:
                 name: env-vars

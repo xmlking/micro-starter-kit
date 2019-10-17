@@ -56,9 +56,9 @@ images:
     newTag: 1.6.1
   - name: postgres
     newTag: 11.5-alpine
-  - name: microhq/micro
+  - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: v0.1.5
+    newTag: v1.12.0
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)

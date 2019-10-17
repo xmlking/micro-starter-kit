@@ -43,7 +43,7 @@ images:
     newTag: latest
   - name: postgres
     newTag: alpine
-  - name: microhq/micro
+  - name: micro/micro
     newTag: latest
   - name: xmlking/account-srv
     newTag: latest

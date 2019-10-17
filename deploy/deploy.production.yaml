@@ -133,8 +133,8 @@ data:
   MICRO_LOG_LEVEL: info
   MICRO_REGISTER_INTERVAL: "30"
   MICRO_REGISTER_TTL: "60"
-  MICRO_REGISTRY: consul
-  MICRO_REGISTRY_ADDRESS: prod-consul-v1:8500
+  MICRO_REGISTRY: etcd
+  MICRO_REGISTRY_ADDRESS: prod-etcd-cluster-v1-client
   MICRO_SELECTOR: cache
   MICRO_SERVER_ADDRESS: 0.0.0.0:8080
 kind: ConfigMap
@@ -147,14 +147,14 @@ metadata:
     app.kubernetes.io/part-of: micro-starter-kit
     app.kubernetes.io/version: v1
     environment: production
-  name: prod-env-vars-common-v1-tb7k24g6fh
+  name: prod-env-vars-common-v1-d7hkb897bg
   namespace: default
 ---
 apiVersion: v1
 data:
   CORS_ALLOWED_HEADERS: Authorization,Content-Type
   CORS_ALLOWED_METHODS: POST,GET
-  CORS_ALLOWED_ORIGINS: "*"
+  CORS_ALLOWED_ORIGINS: '*'
   MICRO_API_ENABLE_RPC: "true"
   MICRO_API_HANDLER: rpc
   MICRO_API_NAMESPACE: ""
@@ -296,10 +296,10 @@ metadata:
   namespace: default
 spec:
   ports:
-    - name: grpc-port
-      port: 8080
-      protocol: TCP
-      targetPort: grpc-port
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
   selector:
     app.kubernetes.io/component: microservice
     app.kubernetes.io/instance: account-srv-abcxzy
@@ -309,69 +309,6 @@ spec:
     app.kubernetes.io/version: v1
     environment: production
   type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    note: Hello, I am production!
-    org: acmeCorporation
-  labels:
-    app.kubernetes.io/component: infra
-    app.kubernetes.io/instance: consul-abcxzy
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: consul
-    app.kubernetes.io/part-of: micro-starter-kit
-    app.kubernetes.io/version: v1
-    environment: production
-  name: prod-consul-ui-v1
-  namespace: default
-spec:
-  ports:
-    - name: http
-      port: 8500
-  selector:
-    app.kubernetes.io/component: infra
-    app.kubernetes.io/instance: consul-abcxzy
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: consul
-    app.kubernetes.io/part-of: micro-starter-kit
-    app.kubernetes.io/version: v1
-    environment: production
-  type: LoadBalancer
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    note: Hello, I am production!
-    org: acmeCorporation
-  labels:
-    app.kubernetes.io/component: infra
-    app.kubernetes.io/instance: consul-abcxzy
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: consul
-    app.kubernetes.io/part-of: micro-starter-kit
-    app.kubernetes.io/version: v1
-    environment: production
-  name: prod-consul-v1
-  namespace: default
-spec:
-  clusterIP: None
-  ports:
-    - name: http
-      port: 8500
-    - name: tcp
-      port: 8300
-  publishNotReadyAddresses: true
-  selector:
-    app.kubernetes.io/component: infra
-    app.kubernetes.io/instance: consul-abcxzy
-    app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: consul
-    app.kubernetes.io/part-of: micro-starter-kit
-    app.kubernetes.io/version: v1
-    environment: production
 ---
 apiVersion: v1
 kind: Service
@@ -391,10 +328,10 @@ metadata:
   namespace: default
 spec:
   ports:
-    - name: grpc-port
-      port: 8080
-      protocol: TCP
-      targetPort: grpc-port
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
   selector:
     app.kubernetes.io/component: microservice
     app.kubernetes.io/instance: emailer-srv-abcxzy
@@ -423,10 +360,10 @@ metadata:
   namespace: default
 spec:
   ports:
-    - name: http-gateway
-      port: 8080
-      protocol: TCP
-      targetPort: http-gateway
+  - name: http-gateway
+    port: 8080
+    protocol: TCP
+    targetPort: http-gateway
   selector:
     app.kubernetes.io/component: microservice
     app.kubernetes.io/instance: gateway-abcxzy
@@ -455,10 +392,10 @@ metadata:
   namespace: default
 spec:
   ports:
-    - name: grpc-port
-      port: 8080
-      protocol: TCP
-      targetPort: grpc-port
+  - name: grpc-port
+    port: 8080
+    protocol: TCP
+    targetPort: grpc-port
   selector:
     app.kubernetes.io/component: microservice
     app.kubernetes.io/instance: greeter-srv-abcxzy
@@ -487,10 +424,10 @@ metadata:
   namespace: default
 spec:
   ports:
-    - name: grpc-proxy
-      port: 8081
-      protocol: TCP
-      targetPort: grpc-proxy
+  - name: grpc-proxy
+    port: 8081
+    protocol: TCP
+    targetPort: grpc-proxy
   selector:
     app.kubernetes.io/component: microservice
     app.kubernetes.io/instance: proxy-abcxzy
@@ -543,47 +480,47 @@ spec:
         environment: production
     spec:
       containers:
-        - args:
-            - health
-            - --address=:8088
-            - --check_service=$(MICRO_SERVER_NAME)
-            - --check_address=0.0.0.0:8080
-          envFrom:
-            - configMapRef:
-                name: prod-accountenv-vars-v1-bkm8c88cth
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8088
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          name: health
-        - envFrom:
-            - configMapRef:
-                name: prod-accountenv-vars-v1-bkm8c88cth
-            - configMapRef:
-                name: prod-env-vars-common-v1-tb7k24g6fh
-            - secretRef:
-                name: prod-secrets-v1-t45t559g92
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.1.5
-          imagePullPolicy: IfNotPresent
-          name: srv
-          ports:
-            - containerPort: 8080
-              name: grpc-port
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /config/config.yaml
-              name: config
-              readOnly: true
-              subPath: config.yaml
-      imagePullSecrets:
-        - name: prod-regcred-v1-f7ttm4dh2m
-      volumes:
-        - configMap:
-            name: prod-accountconfig-v1-28t2ddcghb
+      - args:
+        - health
+        - --address=:8088
+        - --check_service=$(MICRO_SERVER_NAME)
+        - --check_address=0.0.0.0:8080
+        envFrom:
+        - configMapRef:
+            name: prod-accountenv-vars-v1-bkm8c88cth
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8088
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: health
+      - envFrom:
+        - configMapRef:
+            name: prod-accountenv-vars-v1-bkm8c88cth
+        - configMapRef:
+            name: prod-env-vars-common-v1-d7hkb897bg
+        - secretRef:
+            name: prod-secrets-v1-t45t559g92
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.1.6
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config/config.yaml
           name: config
+          readOnly: true
+          subPath: config.yaml
+      imagePullSecrets:
+      - name: prod-regcred-v1-f7ttm4dh2m
+      volumes:
+      - configMap:
+          name: prod-accountconfig-v1-28t2ddcghb
+        name: config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -627,47 +564,47 @@ spec:
         environment: production
     spec:
       containers:
-        - args:
-            - health
-            - --address=:8088
-            - --check_service=$(MICRO_SERVER_NAME)
-            - --check_address=0.0.0.0:8080
-          envFrom:
-            - configMapRef:
-                name: prod-emailerenv-vars-v1-7785t5275f
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8088
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          name: health
-        - envFrom:
-            - configMapRef:
-                name: prod-emailerenv-vars-v1-7785t5275f
-            - configMapRef:
-                name: prod-env-vars-common-v1-tb7k24g6fh
-            - secretRef:
-                name: prod-secrets-v1-t45t559g92
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.1.5
-          imagePullPolicy: IfNotPresent
-          name: srv
-          ports:
-            - containerPort: 8080
-              name: grpc-port
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /config/config.yaml
-              name: config
-              readOnly: true
-              subPath: config.yaml
-      imagePullSecrets:
-        - name: prod-regcred-v1-f7ttm4dh2m
-      volumes:
-        - configMap:
-            name: prod-emailerconfig-v1-9bm4dcdm69
+      - args:
+        - health
+        - --address=:8088
+        - --check_service=$(MICRO_SERVER_NAME)
+        - --check_address=0.0.0.0:8080
+        envFrom:
+        - configMapRef:
+            name: prod-emailerenv-vars-v1-7785t5275f
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8088
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: health
+      - envFrom:
+        - configMapRef:
+            name: prod-emailerenv-vars-v1-7785t5275f
+        - configMapRef:
+            name: prod-env-vars-common-v1-d7hkb897bg
+        - secretRef:
+            name: prod-secrets-v1-t45t559g92
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.1.6
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config/config.yaml
           name: config
+          readOnly: true
+          subPath: config.yaml
+      imagePullSecrets:
+      - name: prod-regcred-v1-f7ttm4dh2m
+      volumes:
+      - configMap:
+          name: prod-emailerconfig-v1-9bm4dcdm69
+        name: config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -711,44 +648,44 @@ spec:
         environment: production
     spec:
       containers:
-        - args:
-            - health
-            - --address=:8088
-            - --check_service=$(MICRO_SERVER_NAME)
-            - --check_address=0.0.0.0:8080
-          envFrom:
-            - configMapRef:
-                name: prod-gatewayenv-vars-v1-ft7gft5265
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8088
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          name: health
-        - args:
-            - api
-            - --handler=rpc
-            - --enable_rpc=true
-            - --address=0.0.0.0:8090
-          env:
-            - name: MICRO_API_ADDRESS
-              value: 0.0.0.0:8090
-          envFrom:
-            - configMapRef:
-                name: prod-gatewayenv-vars-v1-ft7gft5265
-            - configMapRef:
-                name: prod-env-vars-common-v1-tb7k24g6fh
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
-          imagePullPolicy: IfNotPresent
-          name: srv
-          ports:
-            - containerPort: 8090
-              name: http-gateway
-              protocol: TCP
+      - args:
+        - health
+        - --address=:8088
+        - --check_service=$(MICRO_SERVER_NAME)
+        - --check_address=0.0.0.0:8080
+        envFrom:
+        - configMapRef:
+            name: prod-gatewayenv-vars-v1-ft7gft5265
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8088
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: health
+      - args:
+        - api
+        - --handler=rpc
+        - --enable_rpc=true
+        - --address=0.0.0.0:8090
+        env:
+        - name: MICRO_API_ADDRESS
+          value: 0.0.0.0:8090
+        envFrom:
+        - configMapRef:
+            name: prod-gatewayenv-vars-v1-ft7gft5265
+        - configMapRef:
+            name: prod-env-vars-common-v1-d7hkb897bg
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8090
+          name: http-gateway
+          protocol: TCP
       imagePullSecrets:
-        - name: prod-regcred-v1-f7ttm4dh2m
+      - name: prod-regcred-v1-f7ttm4dh2m
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -792,47 +729,47 @@ spec:
         environment: production
     spec:
       containers:
-        - args:
-            - health
-            - --address=:8088
-            - --check_service=$(MICRO_SERVER_NAME)
-            - --check_address=0.0.0.0:8080
-          envFrom:
-            - configMapRef:
-                name: prod-greeterenv-vars-v1-b852cg88tg
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8088
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          name: health
-        - envFrom:
-            - configMapRef:
-                name: prod-greeterenv-vars-v1-b852cg88tg
-            - configMapRef:
-                name: prod-env-vars-common-v1-tb7k24g6fh
-            - secretRef:
-                name: prod-secrets-v1-t45t559g92
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.1.5
-          imagePullPolicy: IfNotPresent
-          name: srv
-          ports:
-            - containerPort: 8080
-              name: grpc-port
-              protocol: TCP
-          volumeMounts:
-            - mountPath: /config/config.yaml
-              name: config
-              readOnly: true
-              subPath: config.yaml
-      imagePullSecrets:
-        - name: prod-regcred-v1-f7ttm4dh2m
-      volumes:
-        - configMap:
-            name: prod-greeterconfig-v1-9khmk64kh6
+      - args:
+        - health
+        - --address=:8088
+        - --check_service=$(MICRO_SERVER_NAME)
+        - --check_address=0.0.0.0:8080
+        envFrom:
+        - configMapRef:
+            name: prod-greeterenv-vars-v1-b852cg88tg
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8088
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: health
+      - envFrom:
+        - configMapRef:
+            name: prod-greeterenv-vars-v1-b852cg88tg
+        - configMapRef:
+            name: prod-env-vars-common-v1-d7hkb897bg
+        - secretRef:
+            name: prod-secrets-v1-t45t559g92
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.1.6
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8080
+          name: grpc-port
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /config/config.yaml
           name: config
+          readOnly: true
+          subPath: config.yaml
+      imagePullSecrets:
+      - name: prod-regcred-v1-f7ttm4dh2m
+      volumes:
+      - configMap:
+          name: prod-greeterconfig-v1-9khmk64kh6
+        name: config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -876,119 +813,55 @@ spec:
         environment: production
     spec:
       containers:
-        - args:
-            - health
-            - --address=:8088
-            - --check_service=$(MICRO_SERVER_NAME)
-            - --check_address=0.0.0.0:8081
-          envFrom:
-            - configMapRef:
-                name: prod-proxyenv-vars-v1-6f5k5tk78d
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8088
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          name: health
-        - args:
-            - proxy
-          envFrom:
-            - configMapRef:
-                name: prod-proxyenv-vars-v1-6f5k5tk78d
-            - configMapRef:
-                name: prod-env-vars-common-v1-tb7k24g6fh
-          image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v0.1.5
-          imagePullPolicy: IfNotPresent
-          name: srv
-          ports:
-            - containerPort: 8081
-              name: grpc-proxy
-              protocol: TCP
+      - args:
+        - health
+        - --address=:8088
+        - --check_service=$(MICRO_SERVER_NAME)
+        - --check_address=0.0.0.0:8081
+        envFrom:
+        - configMapRef:
+            name: prod-proxyenv-vars-v1-6f5k5tk78d
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8088
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        name: health
+      - args:
+        - proxy
+        envFrom:
+        - configMapRef:
+            name: prod-proxyenv-vars-v1-6f5k5tk78d
+        - configMapRef:
+            name: prod-env-vars-common-v1-d7hkb897bg
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+        imagePullPolicy: IfNotPresent
+        name: srv
+        ports:
+        - containerPort: 8081
+          name: grpc-proxy
+          protocol: TCP
       imagePullSecrets:
-        - name: prod-regcred-v1-f7ttm4dh2m
+      - name: prod-regcred-v1-f7ttm4dh2m
 ---
-apiVersion: apps/v1
-kind: StatefulSet
+apiVersion: etcd.database.coreos.com/v1beta2
+kind: EtcdCluster
 metadata:
   annotations:
     note: Hello, I am production!
     org: acmeCorporation
   labels:
     app.kubernetes.io/component: infra
-    app.kubernetes.io/instance: consul-abcxzy
+    app.kubernetes.io/instance: etcd-abcxzy
     app.kubernetes.io/managed-by: kustomize
-    app.kubernetes.io/name: consul
+    app.kubernetes.io/name: etcd
     app.kubernetes.io/part-of: micro-starter-kit
     app.kubernetes.io/version: v1
     environment: production
-  name: prod-consul-v1
+  name: prod-etcd-cluster-v1
   namespace: default
 spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: infra
-      app.kubernetes.io/instance: consul-abcxzy
-      app.kubernetes.io/managed-by: kustomize
-      app.kubernetes.io/name: consul
-      app.kubernetes.io/part-of: micro-starter-kit
-      app.kubernetes.io/version: v1
-      environment: production
-  serviceName: prod-consul-v1
-  template:
-    metadata:
-      annotations:
-        note: Hello, I am production!
-        org: acmeCorporation
-      labels:
-        app.kubernetes.io/component: infra
-        app.kubernetes.io/instance: consul-abcxzy
-        app.kubernetes.io/managed-by: kustomize
-        app.kubernetes.io/name: consul
-        app.kubernetes.io/part-of: micro-starter-kit
-        app.kubernetes.io/version: v1
-        environment: production
-    spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - consul
-              topologyKey: kubernetes.io/hostname
-      containers:
-        - args:
-            - agent
-            - -bootstrap-expect=3
-            - -retry-join=prod-consul-v1-0.prod-consul-v1.$(NAMESPACE).svc
-            - -retry-join=prod-consul-v1-1.prod-consul-v1.$(NAMESPACE).svc
-            - -retry-join=prod-consul-v1-2.prod-consul-v1.$(NAMESPACE).svc
-            - -client=0.0.0.0
-            - -bind=0.0.0.0
-            - -data-dir=/consul/data
-            - -server
-            - -ui
-          env:
-            - name: CONSUL_DISABLE_PERM_MGMT
-              value: ""
-            - name: NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-          image: consul:1.6.1
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - consul leave
-          name: consul
-      securityContext:
-        fsGroup: 1000
-      terminationGracePeriodSeconds: 10
+  size: 3
+  version: 3.3.15

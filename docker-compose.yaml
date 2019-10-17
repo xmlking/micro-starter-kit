@@ -67,7 +67,7 @@ services:
     # command: api --handler=api --namespace=go.micro.api
     # command: api --handler=rpc --namespace=go.micro.srv
     command: api --handler=rpc
-    image: microhq/micro:latest
+    image: micro/micro:latest
     environment:
       MICRO_REGISTRY: consul
       MICRO_REGISTRY_ADDRESS: "consul:8500"
@@ -86,7 +86,7 @@ services:
     # command: api --handler=api --namespace=go.micro.api
     # command: api --handler=rpc --namespace=go.micro.srv
     command: api --handler=api
-    image: microhq/micro:latest
+    image: micro/micro:latest
     environment:
       MICRO_REGISTRY: consul
       MICRO_REGISTRY_ADDRESS: "consul:8500"

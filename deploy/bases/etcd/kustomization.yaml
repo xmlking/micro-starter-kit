@@ -8,15 +8,13 @@ commonAnnotations:
   org: acmeCorporation
 
 resources:
-  - etcd.yaml
-  # optionally expose service
-  # - service.yaml
+  - deployment.yaml
 
-vars:
-  - name: ETCD_SRV_ENDPOINT
-    objref:
-      kind: Service
-      name: etcd
-      apiVersion: v1
-    fieldref:
-      fieldpath: metadata.name
+# vars:
+#   - name: ETCD_SRV_ENDPOINT
+#     objref:
+#       kind: EtcdCluster
+#       name: etcd-cluster
+#       apiVersion: v1
+#     fieldref:
+#       fieldpath: metadata.name
