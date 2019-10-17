@@ -249,7 +249,7 @@ metadata:
 ---
 apiVersion: v1
 data:
-  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2RvY2tlci5wa2cuZ2l0aHViLmNvbSI6eyJ1c2VybmFtZSI6InhtbGtpbmciLCJwYXNzd29yZCI6IjFlODg0ZDk5MGQ2ZGYzYWVjNTYwNTQ0YTg0NjA5Mjk2M2E2NjExNDkiLCJlbWFpbCI6InhtbGtpbmdAZ21haWwuY29tIiwiYXV0aCI6ImVHMXNhMmx1WnpveFpUZzROR1E1T1RCa05tUm1NMkZsWXpVMk1EVTBOR0U0TkRZd09USTVOak5oTmpZeE1UUTUifX19
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2RvY2tlci5wa2cuZ2l0aHViLmNvbSI6eyJ1c2VybmFtZSI6InhtbGtpbmciLCJwYXNzd29yZCI6IjRhMzM0OWJiOTA5NTE5NDA5YzI0MDUxNzdmZDdjZmQxYzY4MzFlNGEiLCJlbWFpbCI6InhtbGtpbmdAZ21haWwuY29tIiwiYXV0aCI6ImVHMXNhMmx1WnpvMFlUTXpORGxpWWprd09UVXhPVFF3T1dNeU5EQTFNVGMzWm1RM1kyWmtNV00yT0RNeFpUUmgifX19
 kind: Secret
 metadata:
   annotations:
@@ -257,7 +257,7 @@ metadata:
   labels:
     app.kubernetes.io/version: v1
     environment: production
-  name: prod-regcred-v1-f7ttm4dh2m
+  name: prod-regcred-v1-k247bcbm8t
   namespace: default
 type: kubernetes.io/dockerconfigjson
 ---
@@ -516,7 +516,7 @@ spec:
           readOnly: true
           subPath: config.yaml
       imagePullSecrets:
-      - name: prod-regcred-v1-f7ttm4dh2m
+      - name: prod-regcred-v1-k247bcbm8t
       volumes:
       - configMap:
           name: prod-accountconfig-v1-28t2ddcghb
@@ -600,7 +600,7 @@ spec:
           readOnly: true
           subPath: config.yaml
       imagePullSecrets:
-      - name: prod-regcred-v1-f7ttm4dh2m
+      - name: prod-regcred-v1-k247bcbm8t
       volumes:
       - configMap:
           name: prod-emailerconfig-v1-9bm4dcdm69
@@ -685,7 +685,7 @@ spec:
           name: http-gateway
           protocol: TCP
       imagePullSecrets:
-      - name: prod-regcred-v1-f7ttm4dh2m
+      - name: prod-regcred-v1-k247bcbm8t
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -765,7 +765,7 @@ spec:
           readOnly: true
           subPath: config.yaml
       imagePullSecrets:
-      - name: prod-regcred-v1-f7ttm4dh2m
+      - name: prod-regcred-v1-k247bcbm8t
       volumes:
       - configMap:
           name: prod-greeterconfig-v1-9khmk64kh6
@@ -844,7 +844,7 @@ spec:
           name: grpc-proxy
           protocol: TCP
       imagePullSecrets:
-      - name: prod-regcred-v1-f7ttm4dh2m
+      - name: prod-regcred-v1-k247bcbm8t
 ---
 apiVersion: etcd.database.coreos.com/v1beta2
 kind: EtcdCluster

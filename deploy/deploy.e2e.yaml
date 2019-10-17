@@ -253,7 +253,7 @@ metadata:
 ---
 apiVersion: v1
 data:
-  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2RvY2tlci5wa2cuZ2l0aHViLmNvbSI6eyJ1c2VybmFtZSI6InhtbGtpbmciLCJwYXNzd29yZCI6IjFlODg0ZDk5MGQ2ZGYzYWVjNTYwNTQ0YTg0NjA5Mjk2M2E2NjExNDkiLCJlbWFpbCI6InhtbGtpbmdAZ21haWwuY29tIiwiYXV0aCI6ImVHMXNhMmx1WnpveFpUZzROR1E1T1RCa05tUm1NMkZsWXpVMk1EVTBOR0U0TkRZd09USTVOak5oTmpZeE1UUTUifX19
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2RvY2tlci5wa2cuZ2l0aHViLmNvbSI6eyJ1c2VybmFtZSI6InhtbGtpbmciLCJwYXNzd29yZCI6IjRhMzM0OWJiOTA5NTE5NDA5YzI0MDUxNzdmZDdjZmQxYzY4MzFlNGEiLCJlbWFpbCI6InhtbGtpbmdAZ21haWwuY29tIiwiYXV0aCI6ImVHMXNhMmx1WnpvMFlUTXpORGxpWWprd09UVXhPVFF3T1dNeU5EQTFNVGMzWm1RM1kyWmtNV00yT0RNeFpUUmgifX19
 kind: Secret
 metadata:
   annotations:
@@ -261,7 +261,7 @@ metadata:
   labels:
     app.kubernetes.io/version: v1
     environment: integration
-  name: regcred-h999dh47gb
+  name: regcred-92d9ck8c2c
   namespace: default
 type: kubernetes.io/dockerconfigjson
 ---
@@ -504,7 +504,7 @@ spec:
           readOnly: true
           subPath: config.yaml
       imagePullSecrets:
-      - name: regcred-h999dh47gb
+      - name: regcred-92d9ck8c2c
       volumes:
       - configMap:
           name: accountconfig-7m56fdt259
@@ -572,7 +572,7 @@ spec:
           readOnly: true
           subPath: config.yaml
       imagePullSecrets:
-      - name: regcred-h999dh47gb
+      - name: regcred-92d9ck8c2c
       volumes:
       - configMap:
           name: emailerconfig-2dhkfff2b2
@@ -641,7 +641,7 @@ spec:
           name: http-gateway
           protocol: TCP
       imagePullSecrets:
-      - name: regcred-h999dh47gb
+      - name: regcred-92d9ck8c2c
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -705,7 +705,7 @@ spec:
           readOnly: true
           subPath: config.yaml
       imagePullSecrets:
-      - name: regcred-h999dh47gb
+      - name: regcred-92d9ck8c2c
       volumes:
       - configMap:
           name: greeterconfig-4h67chd28f
@@ -768,4 +768,4 @@ spec:
           name: grpc-proxy
           protocol: TCP
       imagePullSecrets:
-      - name: regcred-h999dh47gb
+      - name: regcred-92d9ck8c2c
