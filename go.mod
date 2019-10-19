@@ -1,6 +1,6 @@
 module github.com/xmlking/micro-starter-kit
 
-go 1.13.1
+go 1.13
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.3.3 // indirect
@@ -10,7 +10,7 @@ require (
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.11
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.12.0
+	github.com/micro/go-micro v1.13.0
 	github.com/onrik/logrus v0.4.1
 	github.com/sarulabs/di/v2 v2.2.0
 	github.com/satori/go.uuid v1.2.0

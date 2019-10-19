@@ -35,7 +35,7 @@ GO111MODULE=off go get whatever
 ```bash
 rm go.sum
 go clean -modcache
-go mod downlaod
+go mod download
 # this empties $GOPATH/pkg/mod/
 go clean -cache -modcache
 ```
