@@ -49,7 +49,9 @@ go test all
 
 - how to debug in VS Code?
 
-  1. open go file with main() method.
+  > every time, make sure `file with main()` is opened before proceeding to next steps
+
+  1. open GoLang file with `main()` method you want to debug.
   2. click on debug icon in `Action Bar`
   3. click on Launch [▶] button.
   4. Optionally edit `.vscode/launch.json` and add `args`, `env` etc.
