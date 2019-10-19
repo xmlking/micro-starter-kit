@@ -39,7 +39,7 @@ secretGenerator:
   #     - secret/tls.key
 
 images:
-  - name: consul
+  - name: etcd
     newTag: latest
   - name: postgres
     newTag: alpine

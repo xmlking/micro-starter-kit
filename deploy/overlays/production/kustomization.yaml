@@ -65,13 +65,13 @@ replicas:
     count: 1
 
 images:
-  - name: consul
-    newTag: 1.6.1
+  - name: etcd
+    newTag: 3.3.15
   - name: postgres
     newTag: 11.5-alpine
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: v1.13.0
+    newTag: v1.13.1
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)

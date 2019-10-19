@@ -5,9 +5,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/micro/go-micro/client/grpc"
+	"github.com/stretchr/testify/assert"
 	proto "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
 
@@ -16,12 +15,14 @@ var (
 )
 
 /**
- * set envelopment variables for CI e2e tests
- * - MICRO_REGISTRY=consul
- * - MICRO_REGISTRY_ADDRESS="$(CONSUL_SRV_ENDPOINT):8500"
- * - MICRO_REGISTER_TTL="10"
- * - MICRO_REGISTER_INTERVAL="5"
- **/
+* set envelopment variables for CI e2e tests with memory registry
+* - MICRO_REGISTRY=memory
+* - MICRO_SELECTOR=static
+* - MICRO_PROXY_ADDRESS="localhost:8081"
+* set envelopment variables for CI e2e tests with etcd registry
+* - MICRO_REGISTRY=etcd
+* - MICRO_REGISTRY_ADDRESS="prod-etcd-cluster-v1-client"
+**/
 func init() {
 	greeter = proto.NewGreeterService("greetersrv", grpc.NewClient())
 }

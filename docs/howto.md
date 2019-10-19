@@ -167,7 +167,7 @@ go test all
   So you want to use k8s internal `CoreDNS` as `service registry`?, then you have to follow some rules:
 
   - Service name cannot have `.`(dot) due to k8s DNS limits, so make it simple via environment variables e.g., `MICRO_SERVER_NAME=account`
-  - custom build REST Gateway as `micro/micro:kubernetes` image is outdated. optionally add CORS plugin.
+  - custom build REST Gateway as `micro/micro:latest` image is outdated. optionally add CORS plugin.
 
 - performance
   If you’re concerned about performance, try
@@ -202,7 +202,3 @@ go test all
 
 - [separating-tests-in-go](https://filipnikolovski.com/separating-tests-in-go/)
 - [advanced testing tips & tricks](https://medium.com/@povilasve/go-advanced-tips-tricks-a872503ac859)
-
-```
-
-```

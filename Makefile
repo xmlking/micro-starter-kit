@@ -194,7 +194,7 @@ docker_push:
 		docker push $$image; \
 	done;
 
-kustomize: OVERLAY := e2e
+kustomize: OVERLAY 	:= e2e
 kustomize: NS 			:= default
 kustomize:
 	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -

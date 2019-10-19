@@ -82,7 +82,7 @@ kubectl run --rm mytest --image=xmlking/account-srv:latest \
 --restart=Never -it
 
 # gateway
-kubectl run --rm mygateway --image=micro/micro:kubernetes \
+kubectl run --rm mygateway --image=micro/micro:latest \
 --env="MICRO_REGISTRY=kubernetes" \
 --env="MICRO_SELECTOR=static" \
 --restart=Never -it \

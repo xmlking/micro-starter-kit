@@ -44,6 +44,8 @@ make test-inte
 make test-e2e TARGET=account
 make test-e2e TARGET=emailer
 make test-e2e
+# e2e tests in CI envelopment with micro gRPC proxy
+MICRO_PROXY_ADDRESS="localhost:8081" make test-e2e
 
 # generate code coverage
 make test-cover
@@ -119,7 +121,7 @@ make docker-emailer-srv
 make docker
 make docker DOCKER_REGISTRY=us.gcr.io
 make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit
-make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit VERSION=v0.1.5
+make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit VERSION=v0.2.2
 
 # publish all microservices images
 make docker_push

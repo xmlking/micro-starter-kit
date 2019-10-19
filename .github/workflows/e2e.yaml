@@ -54,9 +54,10 @@ jobs:
           kubectl wait --for=condition=Ready pods --all --timeout=5m
           kubectl get pods
       - name: Run e2e tests
-        # env:
-        #   MICRO_REGISTRY: consul
-        #   MICRO_REGISTRY_ADDRESS: "$(CONSUL_SRV_ENDPOINT):8500"
+        env:
+          # MICRO_REGISTRY: memory
+          # MICRO_SELECTOR: static
+          MICRO_PROXY_ADDRESS: "localhost:8081"
         run: make test-e2e
 
       - name: "E2E Test success"
