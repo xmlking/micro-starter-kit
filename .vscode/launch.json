@@ -7,8 +7,10 @@
       "request": "launch",
       "mode": "auto",
       "program": "${fileDirname}",
+      "cwd": "${workspaceFolder}",
       "env": {},
       "args": []
+      // "args": ["--selector=static", "--server_address=accountsrv:8080"]
     }
   ]
 }
