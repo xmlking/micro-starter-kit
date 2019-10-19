@@ -47,6 +47,13 @@ go mod tidy
 go test all
 ```
 
+- how to debug in VS Code?
+
+  1. open go file with main() method.
+  2. click on debug icon in `Action Bar`
+  3. click on Launch [▶] button.
+  4. Optionally edit `.vscode/launch.json` and add `args`, `env` etc.
+
 - How to implement integration tests?
 
   ```go
