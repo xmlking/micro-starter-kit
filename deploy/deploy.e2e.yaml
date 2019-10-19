@@ -137,7 +137,6 @@ data:
   MICRO_LOG_LEVEL: debug
   MICRO_REGISTER_INTERVAL: "600"
   MICRO_REGISTER_TTL: "1200"
-  MICRO_REGISTRY: memory
   MICRO_SELECTOR: static
   MICRO_SERVER_ADDRESS: 0.0.0.0:8080
   PROXYSRV_ENDPOINT: proxysrv
@@ -151,7 +150,7 @@ metadata:
     app.kubernetes.io/part-of: micro-starter-kit
     app.kubernetes.io/version: v1
     environment: integration
-  name: env-vars-common-f4k5gkgm82
+  name: env-vars-common-ht826fd967
   namespace: default
 ---
 apiVersion: v1
@@ -488,10 +487,10 @@ spec:
         - configMapRef:
             name: accountenv-vars-f8dmc5gt6c
         - configMapRef:
-            name: env-vars-common-f4k5gkgm82
+            name: env-vars-common-ht826fd967
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.2.0
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.2.1
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -556,10 +555,10 @@ spec:
         - configMapRef:
             name: emailerenv-vars-ch9m5b9577
         - configMapRef:
-            name: env-vars-common-f4k5gkgm82
+            name: env-vars-common-ht826fd967
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.2.0
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.2.1
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -632,8 +631,8 @@ spec:
         - configMapRef:
             name: gatewayenv-vars-th5fd48962
         - configMapRef:
-            name: env-vars-common-f4k5gkgm82
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+            name: env-vars-common-ht826fd967
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.13.0
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -689,10 +688,10 @@ spec:
         - configMapRef:
             name: greeterenv-vars-6h9mfk5bk6
         - configMapRef:
-            name: env-vars-common-f4k5gkgm82
+            name: env-vars-common-ht826fd967
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.2.0
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.2.1
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -759,8 +758,8 @@ spec:
         - configMapRef:
             name: proxyenv-vars-t88hd4g4f4
         - configMapRef:
-            name: env-vars-common-f4k5gkgm82
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.12.0
+            name: env-vars-common-ht826fd967
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/micro:v1.13.0
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
