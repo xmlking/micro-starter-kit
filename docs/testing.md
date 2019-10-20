@@ -38,10 +38,11 @@ grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/gre
 
 > test with gRPC clients such as Micro CLI, BloomRPC or grpcurl
 
-````bash
+```bash
 micro list services
 micro get service accountsrv
 micro get service emailersrv
+```
 
 ```bash
 micro call  accountsrv UserService.Create \
@@ -55,7 +56,7 @@ micro call accountsrv UserService.Exist '{"username": "sumo", "email": "sumo@dem
 micro call accountsrv UserService.Update \
 '{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
 micro call accountsrv UserService.Delete '{ "id": "UserIdFromGet" }'
-````
+```
 
 > For k8s: SSH to gateway container and run micro cli....
 
