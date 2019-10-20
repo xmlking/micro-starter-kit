@@ -20,7 +20,7 @@ go test -v -run Integration ./srv/emailer/service
 
 ## UAT Test
 
-> we can use one of the option below.
+> we can use one of the option below. They are various options for manual testing
 
 ### BloomRPC UI Client
 
@@ -38,20 +38,12 @@ grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/gre
 
 > test with gRPC clients such as Micro CLI, BloomRPC or grpcurl
 
-```bash
+````bash
 micro list services
 micro get service accountsrv
 micro get service emailersrv
 
-# how to use grpc proxy:
-micro proxy --protocol=grpc
-grpc_cli call localhost:8081 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
-```
-
 ```bash
-## For k8s: SSH to gateway container and run micro cli....
-# kubectl exec -it -c srv gateway-srv-c86cb8667-g2rmc -- busybox sh
-# micro call accountsrv UserService.List '{}'
 micro call  accountsrv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call accountsrv UserService.Create \
@@ -63,6 +55,13 @@ micro call accountsrv UserService.Exist '{"username": "sumo", "email": "sumo@dem
 micro call accountsrv UserService.Update \
 '{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
 micro call accountsrv UserService.Delete '{ "id": "UserIdFromGet" }'
+````
+
+> For k8s: SSH to gateway container and run micro cli....
+
+```bash
+kubectl exec -it -c srv gateway-srv-c86cb8667-g2rmc -- busybox sh
+micro call accountsrv UserService.List '{}'
 ```
 
 ### Micro Web UI
@@ -85,7 +84,7 @@ open http://localhost:8082
 }
 ```
 
-#### Micro API Gateway
+### Micro API Gateway
 
 > Start API Gateway
 
@@ -93,6 +92,30 @@ Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
 
 ```bash
 micro  api --enable_rpc=true
+```
+
+## E2E Testing
+
+> Assume, you are running all microservices on [local k8s cluster](../e2e/README.md) with one of the profiles(`e2e`, `production`)
+
+### E2E tests with tools
+
+```bash
+# with `grpc_cli`
+# micro proxy --protocol=grpc
+grpc_cli call localhost:8081 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
+# with Micro CLI
+MICRO_PROXY_ADDRESS=localhost:8081 micro list services
+MICRO_PROXY_ADDRESS=localhost:8081 micro --client=grpc call greetersrv Greeter.Hello  '{"name": "John"}'
+MICRO_PROXY_ADDRESS=localhost:8081 micro call accountsrv UserService.List '{}'
+MICRO_PROXY_ADDRESS=localhost:8081  micro health greetersrv
+```
+
+### E2E tests via code
+
+```bash
+MICRO_PROXY_ADDRESS="localhost:8081" \
+make test-e2e
 ```
 
 ## Fuzzing

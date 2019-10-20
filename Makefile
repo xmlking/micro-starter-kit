@@ -113,7 +113,7 @@ release:
 	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.production.yaml
 	@kustomize build deploy/overlays/e2e/ 			 | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.e2e.yaml
 	@git add deploy/deploy.production.yaml deploy/deploy.e2e.yaml
-	@git commit -m '[skip ci] Adding k8s deployment yaml for version: $(VERSION)'
+	@git commit --allow-empty -m '[skip ci] Adding k8s deployment yaml for version: $(VERSION)'
 	@git push
 	@git tag -a $(VERSION) -m "[skip ci] Release" || true
 	@git push origin $(VERSION)

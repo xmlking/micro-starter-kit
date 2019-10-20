@@ -58,53 +58,56 @@ go test all
 
 - How to implement integration tests?
 
-  ```go
-    func TestEmailService_Welcome(t *testing.T) {
+Integration tests are e2e tests that invoke `Handler` methods directly and ignore networking completely.<br/>
+True e2e tests are Black-box tests that invoke network endpoint.
+
+```go
+  func TestEmailService_Welcome(t *testing.T) {
+    t.Parallel()
+    //...
+  }
+
+  func TestEmailService_Welcome_Invalid(t *testing.T) {
       t.Parallel()
       //...
-    }
+  }
 
-    func TestEmailService_Welcome_Invalid(t *testing.T) {
-        t.Parallel()
-        //...
-    }
+  func TestEmailService_Welcome_Integration(t *testing.T) {
+      if testing.Short() {
+          t.Skip("skipping integration test")
+      }
+      //...
+  }
 
-    func TestEmailService_Welcome_Integration(t *testing.T) {
-        if testing.Short() {
-            t.Skip("skipping integration test")
-        }
-        //...
-    }
+  func TestEmailService_Welcome_E2E(t *testing.T) {
+      if testing.Short() {
+          t.Skip("skipping e2e test")
+      }
+      //...
+  }
+```
 
-    func TestEmailService_Welcome_E2E(t *testing.T) {
-        if testing.Short() {
-            t.Skip("skipping e2e test")
-        }
-        //...
-    }
-  ```
+Notice the last test has the convention of:
 
-  Notice the last test has the convention of:
+- using `Integration` in the test name.
+- checking if running under `-short` flag directive.
 
-  - using `Integration` in the test name.
-  - checking if running under `-short` flag directive.
+Basically, the spec goes:
 
-  Basically, the spec goes:
+> "write all tests normally. if it is a long-running tests, or an integration test, follow this naming convention and check for `-short`"
 
-  > "write all tests normally. if it is a long-running tests, or an integration test, follow this naming convention and check for `-short`"
+When we want to run our unit tests, we would use the -short flag, and omit it for running our integration tests or long running tests.
 
-  When we want to run our unit tests, we would use the -short flag, and omit it for running our integration tests or long running tests.
+> Use `t.Errorf` `t.Logf` for logging. don't use `logrus` or default `log`
 
-  > Use `t.Errorf` `t.Logf` for logging. don't use `logrus` or default `log`
-
-  ```bash
-  # Run only Unit tests:
-  go test -v -short
-  go test -v -short ./srv/emailer/service
-  # Run only Integration Tests: Useful for smoke testing canaries in production.
-  go test -v -run Integration
-  go test -v -run Integration ./srv/emailer/service
-  ```
+```bash
+# Run only Unit tests:
+go test -v -short
+go test -v -short ./srv/emailer/service
+# Run only Integration Tests: Useful for smoke testing canaries in production.
+go test -v -run Integration
+go test -v -run Integration ./srv/emailer/service
+```
 
 - How to ssh and debug a `scratch` container?
 

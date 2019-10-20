@@ -49,5 +49,6 @@
 - [status](https://github.com/deliverybot/status)
   - [deliverybot](https://deliverybot.dev/)
 - [kustomize](https://github.com/imranismail/setup-kustomize)
+- [Deploy to Cloud Run](https://github.com/Preetam/contrast/blob/master/.github/workflows/push.yml)
 - GitHub Actions Blogs
   - [radu](https://radu-matei.com/)

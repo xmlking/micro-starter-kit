@@ -42,7 +42,7 @@ make run-greeter ARGS="--server_address=localhost:8080"
 grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
 
 # testing via micro-cli
-micro --client=grpc call greeter_srv Greeter.Hello  '{"name": "John"}'
+micro --client=grpc call greetersrv Greeter.Hello  '{"name": "John"}'
 
 # start REST gateway
 micro api --enable_rpc=true

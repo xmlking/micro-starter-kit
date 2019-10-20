@@ -145,6 +145,7 @@ kubectl delete -f deploy/deploy.yaml
 5. [docker](docs/docker.md)
 6. [gitops](docs/gitops.md)
 7. [releasing](docs/releasing.md)
+8. [Style Guide](https://github.com/uber-go/guide/blob/master/style.md)
 
 ### External Docs
 

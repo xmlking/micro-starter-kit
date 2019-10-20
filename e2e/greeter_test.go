@@ -15,13 +15,12 @@ var (
 )
 
 /**
-* set envelopment variables for CI e2e tests with memory registry
-* - MICRO_REGISTRY=memory
-* - MICRO_SELECTOR=static
+* set envelopment variables for CI e2e tests with `memory` registry.
+* - export MICRO_REGISTRY=memory
+* - export MICRO_SELECTOR=static
+* (Or) Set envelopment variables for CI e2e tests via gRPC Proxy
 * - MICRO_PROXY_ADDRESS="localhost:8081"
-* set envelopment variables for CI e2e tests with etcd registry
-* - MICRO_REGISTRY=etcd
-* - MICRO_REGISTRY_ADDRESS="prod-etcd-cluster-v1-client"
+* You can also run this test againest your local running service. i.e., `go run ./srv/greeter`
 **/
 func init() {
 	greeter = proto.NewGreeterService("greetersrv", grpc.NewClient())

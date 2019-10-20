@@ -1,5 +1,7 @@
-name: Test on Push
-on: push
+name: Test on PR
+on:
+  pull_request:
+    types: [assigned]
 jobs:
   lint-test:
     name: Lint and Test
@@ -29,6 +31,9 @@ jobs:
           # golangci-lint run
       - name: Unit Test
         run: make test-unit
+      - name: Integration Test
+        run: make test-inte
+        continue-on-error: true
       - name: Coverage Test
         run: make test-cover
       - name: Upload coverage to Codecov
