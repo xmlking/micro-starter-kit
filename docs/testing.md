@@ -89,7 +89,7 @@ open http://localhost:8082
 
 > Start API Gateway
 
-Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
+Start `API Gateway` and run **REST Client** [tests](../e2e/test-rest-api.http)
 
 ```bash
 micro  api --enable_rpc=true
