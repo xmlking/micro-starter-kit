@@ -28,6 +28,8 @@ go mod tidy
 go mod why -m github.com/DATA-DOG/go-sqlmock
 # if you want to get binaries into $GOHOME/bin or $GOBIN
 GO111MODULE=off go get whatever
+# list modules
+go list -m all
 ```
 
 - How to clean cached go modules?

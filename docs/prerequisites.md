@@ -62,9 +62,13 @@ make install
 > instead of using default micro-cli, pull custom build `micro-cli` with `gRPC` and `CORS` enabled
 
 ```bash
-# GO111MODULE=off go get github.com/micro/micro
-# GO111MODULE=off go get github.com/xmlking/micro/cmd/micro
+# getting official micro cli
+## GO111MODULE=on go get github.com/micro/micro@master
+# lets use custom made micro with gRPC enabled by default...
+# GO111MODULE=on go get github.com/xmlking/micro/cmd/micro@master
+# Temp workaround...
 GO111MODULE=off go get -d github.com/xmlking/micro/cmd/micro
 cd ~/go/src/github.com/xmlking/micro
+git pull --all
 go install ./cmd/micro/...
 ```
