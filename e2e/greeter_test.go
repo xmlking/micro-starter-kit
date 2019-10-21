@@ -1,5 +1,5 @@
 // e2e, black-box testing
-package greeter_test
+package e2e
 
 import (
 	"context"

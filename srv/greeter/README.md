@@ -39,10 +39,11 @@ make docker TARGET=greeter TYPE=srv VERSION=v0.1.1
 make run-greeter ARGS="--server_address=localhost:8080"
 
 # test with grpc cli
-grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
-
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto list
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto describe
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8080  greetersrv.Greeter/Hello
 # testing via micro-cli
-micro --client=grpc call greetersrv Greeter.Hello  '{"name": "John"}'
+micro call greetersrv Greeter.Hello  '{"name": "John"}'
 
 # start REST gateway
 micro api --enable_rpc=true

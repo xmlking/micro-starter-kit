@@ -15,7 +15,7 @@ brew install kustomize
 brew tap instrumenta/instrumenta
 brew install kubeval
 # grpc cli client (optional)
-brew install grpc
+brew install grpcurl
 # bloomrpc is a UI client for gRPC (optional)
 # install `bloomrpc` via `brew` into ~/Applications)
 brew cask install --appdir=~/Applications bloomrpc

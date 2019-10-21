@@ -38,6 +38,8 @@ MICRO_PROXY_ADDRESS="localhost:8081" \
 make test-e2e
 # e2e tests against local standalone services
 make test-e2e
+go test -v ./e2e/...
+MICRO_PROXY_ADDRESS="localhost:8081" micro publish emailersrv '{"to": "sumo@demo.com"}'
 ```
 
 ### Reference

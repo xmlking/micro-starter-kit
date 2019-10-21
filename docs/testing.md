@@ -31,7 +31,10 @@ go test -v -run Integration ./srv/emailer/service
 ### gRPC CLI Client
 
 ```bash
-grpc_cli call localhost:8080 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto list
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto describe
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' \
+localhost:8080  greetersrv.Greeter/Hello
 ```
 
 ### Micro CLI
@@ -102,9 +105,9 @@ micro  api --enable_rpc=true
 ### E2E tests with tools
 
 ```bash
-# with `grpc_cli`
+# with `grpcurl`
 # micro proxy --protocol=grpc
-grpc_cli call localhost:8081 Greeter.Hello  'name: "sumo"'  --protofiles=srv/greeter/proto/greeter/greeter.proto
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8081  greetersrv.Greeter/Hello
 # with Micro CLI
 MICRO_PROXY_ADDRESS=localhost:8081 micro list services
 MICRO_PROXY_ADDRESS=localhost:8081 micro --client=grpc call greetersrv Greeter.Hello  '{"name": "John"}'
