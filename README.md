@@ -34,6 +34,7 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 - [ ] Service Mesh with [Istio](https://istio.io/)
 - [ ] GraphQL Gateway with [gqlgen](https://gqlgen.com/), [rejoiner](https://github.com/google/rejoiner)
 - [ ] Graph-Based ORM [ent](https://entgo.io/)
+- [ ] Switch to [Bazel Build](https://bazel.build/)
 
 ## Getting Started
 

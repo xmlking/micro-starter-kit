@@ -53,5 +53,5 @@ curl --request POST \
 --url http://localhost:8080/rpc \
 --header 'accept: application/json' \
 --header 'content-type: application/json' \
---data '{"service": "greeter_srv", "method": "Greeter.Hello","request": {"name": "sumo"}}'
+--data '{"service": "greetersrv", "method": "Greeter.Hello","request": {"name": "sumo"}}'
 ```
