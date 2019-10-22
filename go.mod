@@ -14,7 +14,7 @@ require (
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.11
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.13.1
+	github.com/micro/go-micro v1.13.2
 	github.com/onrik/logrus v0.4.1
 	github.com/sarulabs/di/v2 v2.2.0
 	github.com/satori/go.uuid v1.2.0
@@ -22,6 +22,6 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/thoas/go-funk v0.4.0
 	github.com/tudurom/micro-logrus v0.0.0-20171007082012-3704f28fa9d1
-	google.golang.org/api v0.8.0
+	google.golang.org/api v0.11.0
 	google.golang.org/genproto v0.0.0-20191009194640-548a555dbc03
 )
