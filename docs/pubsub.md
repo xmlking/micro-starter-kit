@@ -1,8 +1,8 @@
 # Google PubSub
 
 ```bash
-export PROJECT_ID=my-project-id
-gcloud beta emulators pubsub start --project=$PROJECT_ID --host-port=localhost:8085
+export GOOGLEPUBSUB_PROJECT_ID=my-project-id
+gcloud beta emulators pubsub start --project=$GOOGLEPUBSUB_PROJECT_ID --host-port=localhost:8085
 # Create topic `emailersrv` (optional)
 # Note: Second time when you run below service, it will automatically create topic
 gcloud pubsub topics create emailersrv
@@ -11,7 +11,7 @@ gcloud pubsub topics create emailersrv
 Run service
 
 ```bash
-export PROJECT_ID=my-project-id
+export GOOGLEPUBSUB_PROJECT_ID=my-project-id
 # PUBSUB_EMULATOR_HOST for Dev
 $(gcloud beta emulators pubsub env-init)
 export PUBSUB_EMULATOR_HOST=localhost:8085

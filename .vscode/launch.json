@@ -10,7 +10,7 @@
       "cwd": "${workspaceFolder}",
       "env": {
         "PUBSUB_EMULATOR_HOST": "localhost:8085",
-        "PROJECT_ID": "my-project-id",
+        "GOOGLEPUBSUB_PROJECT_ID": "my-project-id",
         "MICRO_BROKER": "googlepubsub"
       },
       "args": []

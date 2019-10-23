@@ -230,13 +230,14 @@ func NewBroker(opts ...broker.Option) broker.Broker {
 
 	// retrieve project id
 	prjID, _ := options.Context.Value(projectIDKey{}).(string)
+
+	// if `GOOGLEPUBSUB_PROJECT_ID` is present, it will overwrite programmatically set projectID
+	if envPrjID := os.Getenv("GOOGLEPUBSUB_PROJECT_ID"); len(envPrjID) > 0 {
+		prjID = envPrjID
+	}
+
 	// retrieve client opts
 	cOpts, _ := options.Context.Value(clientOptionKey{}).([]option.ClientOption)
-
-	// of prjID is not set programmatically, let look for it in Env
-	if len(prjID) == 0 {
-		prjID = os.Getenv("PROJECT_ID")
-	}
 
 	// create pubsub client
 	c, err := pubsub.NewClient(context.Background(), prjID, cOpts...)
