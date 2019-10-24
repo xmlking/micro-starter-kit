@@ -9,7 +9,7 @@ import (
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	_ "github.com/xmlking/micro-starter-kit/shared/log"
-	"github.com/xmlking/micro-starter-kit/shared/wrapper"
+	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 )
 
 const (
@@ -62,7 +62,7 @@ func main() {
 		),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-		micro.WrapHandler(wrapper.LogWrapper),
+		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
 	)
 
 	// Initialise service

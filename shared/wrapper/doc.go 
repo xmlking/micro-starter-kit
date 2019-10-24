@@ -1,4 +1,10 @@
 // shared  custom client/server wrappers for micro-strter-kit
 // see link for more go-micro wrappers
 // https://github.com/micro/go-plugins/tree/master/wrapper
+
+// HandlerWrapper https://github.com/micro/go-plugins/tree/master/wrapper/endpoint
+// BreakerWrapper https://github.com/micro/go-plugins/tree/master/wrapper/breaker/hystrix
+// MetricsWrapper https://github.com/micro/go-plugins/tree/master/wrapper/monitoring/prometheus
+// TracerWrapper https://github.com/Allenxuxu/microservices/blob/master/lib/wrapper/tracer/opentracing/std2micro/std2micro.go
+// JWTAuthWrapper
 package wrapper

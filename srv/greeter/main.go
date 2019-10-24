@@ -8,13 +8,11 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/xmlking/micro-starter-kit/srv/greeter/handler"
-	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
-
-	"github.com/xmlking/micro-starter-kit/shared/wrapper"
-
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	_ "github.com/xmlking/micro-starter-kit/shared/log"
+	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
+	"github.com/xmlking/micro-starter-kit/srv/greeter/handler"
+	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
 
 const (
@@ -50,7 +48,7 @@ func main() {
 			}),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-		micro.WrapHandler(wrapper.LogWrapper),
+		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
 	)
 
 	// Initialize service
