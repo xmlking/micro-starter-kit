@@ -3,14 +3,17 @@
 > example usage...
 
 ```go
-srv := micro.NewService(
+service := micro.NewService(
   micro.Name("com.example.srv.foo"),
   micro.Version("v0.1.0"),
   micro.WrapSubscriber(wrapper.NewSubscriberWrapper()),
 )
 
-srv.Init(
-  micro.WrapClient(wrapper.NewClientWrapper(srv)),
-  micro.WrapHandler(wrapper.NewHandlerWrapper(srv)),
+publisher := micro.NewPublisher("topic", service.Client())
+
+service.Init(
+  micro.WrapClient(wrapper.NewClientWrapper(service)),
+  micro.WrapHandler(wrapper.NewHandlerWrapper(service)),
+  micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)),
 )
 ```
