@@ -154,7 +154,8 @@ docker docker-%:
 			for _target in $${type}/*/; do \
 				temp=$${_target%%/}; target=$${temp#*/}; \
 				echo "Building Image $${target}-$${type}..."; \
-				docker build --rm \
+				DOCKER_BUILDKIT=1 docker build --rm \
+				--build-arg BUILDKIT_INLINE_CACHE=1 \
 				--build-arg VERSION=$(VERSION) \
 				--build-arg TYPE=$${type} \
 				--build-arg TARGET=$${target} \
@@ -167,7 +168,8 @@ docker docker-%:
 		done \
 	else \
 		echo "Building image for ${TARGET}-${TYPE}..."; \
-		docker build --rm \
+		DOCKER_BUILDKIT=1 docker build --rm \
+		--build-arg BUILDKIT_INLINE_CACHE=1 \
 		--build-arg VERSION=$(VERSION) \
 		--build-arg TYPE=${TYPE} \
 		--build-arg TARGET=${TARGET} \

@@ -25,6 +25,7 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 - [x] CRUD Example using [GORM](https://gorm.io/)
 - [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
 - [x] Dependency injection [Container](https://github.com/sarulabs/di)
+- [x] multi-stage-multi-target Dockerfile
 - [x] One Step _build/publish/deploy_ with [ko](https://github.com/google/ko)
 - [x] BuildInfo with [govvv](https://github.com/ahmetb/govvv)
 - [x] Linting with [GolangCI](https://github.com/golangci/golangci-lint) linters aggregator

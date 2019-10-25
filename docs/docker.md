@@ -2,6 +2,8 @@
 
 ## Docker Build
 
+> Note we are using `DOCKER_BUILDKIT` and `BUILDKIT_INLINE_CACHE`
+
 ```bash
 # build
 TYPE=srv
@@ -10,7 +12,8 @@ VERSION=0.0.5-SNAPSHOT
 # DOCKER_REGISTRY=gcr.io
 DOCKER_CONTEXT_PATH=xmlking
 # docker build --force-rm=true --rm=true --no-cache \
-docker build --rm \
+DOCKER_BUILDKIT=1 docker build --rm \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
 --build-arg VERSION=$VERSION \
 --build-arg TYPE=${TYPE} \
 --build-arg TARGET=${TARGET} \
