@@ -43,7 +43,7 @@ grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto list
 grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto describe
 grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8080  greetersrv.Greeter/Hello
 # testing via micro-cli
-micro call greetersrv Greeter.Hello  '{"name": "John"}'
+micro --client=grpc call --metadata trans-id=1234 greetersrv Greeter.Hello  '{"name": "John"}'
 
 # start REST gateway
 micro api --enable_rpc=true

@@ -48,7 +48,7 @@ micro get service emailersrv
 ```
 
 ```bash
-micro call  accountsrv UserService.Create \
+micro --client=grpc call  accountsrv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call accountsrv UserService.Create \
 '{"username": "sumo1", "firstName": "sumo1", "lastName": "demo1", "email": "sumo1@demo.com"}'
@@ -95,7 +95,8 @@ open http://localhost:8082
 Start `API Gateway` and run **REST Client** [tests](../e2e/test-rest-api.http)
 
 ```bash
-micro  api --enable_rpc=true
+#  micro --network=local # this start all
+micro api --enable_rpc=true
 ```
 
 ## E2E Testing
@@ -110,10 +111,10 @@ micro  api --enable_rpc=true
 grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8081  greetersrv.Greeter/Hello
 # with Micro CLI
 MICRO_PROXY_ADDRESS=localhost:8081 micro list services
-MICRO_PROXY_ADDRESS=localhost:8081 micro call greetersrv Greeter.Hello  '{"name": "John"}'
-MICRO_PROXY_ADDRESS=localhost:8081 micro call accountsrv UserService.List '{}'
+MICRO_PROXY_ADDRESS=localhost:8081 micro call --metadata trans-id=1234 greetersrv Greeter.Hello  '{"name": "John"}'
+MICRO_PROXY_ADDRESS=localhost:8081 micro call  accountsrv UserService.List '{}'
 MICRO_PROXY_ADDRESS=localhost:8081 micro health greetersrv
-MICRO_PROXY_ADDRESS=localhost:8081 micro publish emailersrv  '{ "to" : "sumo@demo.com", "from": "demo@sumo.com", "subject": "sub", "body": "mybody" }'
+MICRO_PROXY_ADDRESS=localhost:8081 micro publish --metadata trans-id=1234,from=pc emailersrv  '{ "to" : "sumo@demo.com", "from": "demo@sumo.com", "subject": "sub", "body": "mybody" }'
 ```
 
 ### E2E tests via code
