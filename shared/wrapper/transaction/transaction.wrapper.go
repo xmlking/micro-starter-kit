@@ -55,6 +55,7 @@ func NewHandlerWrapper(p micro.Publisher) server.HandlerWrapper {
 			err = fn(ctx, req, rsp)
 			// we already logged error in Publish. lets ignore error here.
 			_ = publish(ctx, p, req.Body().(proto.Message), rsp.(proto.Message))
+			// go publish(ctx, p, req.Body().(proto.Message), rsp.(proto.Message))
 			return
 		}
 	}

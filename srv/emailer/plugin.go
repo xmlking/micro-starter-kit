@@ -1,6 +1,7 @@
 package main
 
 import (
+	// _ "go.uber.org/automaxprocs"
 	// _ "github.com/micro/go-plugins/broker/nats"
 	// _ "github.com/micro/go-plugins/transport/nats"
 
