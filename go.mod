@@ -16,7 +16,7 @@ require (
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.14.0
 	github.com/onrik/logrus v0.4.1
-	github.com/sarulabs/di/v2 v2.2.0
+	github.com/sarulabs/di/v2 v2.3.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0
