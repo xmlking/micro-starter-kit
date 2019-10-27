@@ -59,7 +59,7 @@ images:
     newTag: 11.5-alpine
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: v1.13.2
+    newTag: v1.14.0
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)
