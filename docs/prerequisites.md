@@ -65,10 +65,10 @@ make install
 # getting official micro cli
 ## GO111MODULE=on go get github.com/micro/micro
 # lets use custom made micro with gRPC enabled by default...
-# GO111MODULE=on go get github.com/xmlking/micro/cmd/micro@master
+# GO111MODULE=on go get github.com/xmlking/micro@master
 # Temp workaround...
-GO111MODULE=off go get -d github.com/xmlking/micro/cmd/micro
+GO111MODULE=off go get -d github.com/xmlking/micro
 cd ~/go/src/github.com/xmlking/micro
 git pull --all
-go install ./cmd/micro/...
+go install ./...
 ```
