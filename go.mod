@@ -22,6 +22,6 @@ require (
 	github.com/stretchr/testify v1.4.0
 	github.com/thoas/go-funk v0.4.0
 	github.com/tudurom/micro-logrus v0.0.0-20171007082012-3704f28fa9d1
-	google.golang.org/api v0.11.0
-	google.golang.org/genproto v0.0.0-20191009194640-548a555dbc03
+	google.golang.org/api v0.13.0
+	google.golang.org/genproto v0.0.0-20191028173616-919d9bdd9fe6
 )

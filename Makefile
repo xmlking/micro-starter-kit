@@ -137,7 +137,7 @@ start_deploy:
     -d '{"ref": "develop", "environment": "production", "payload": { "what": "production deployment to GKE"}}'
 
 clean:
-	@for d in ./build/*-{srv,api}; do \
+	@for d in ./build/*-srv; do \
 		echo "Deleting $$d;"; \
 		rm -f $$d; \
 	done
