@@ -16,17 +16,6 @@ type TransationEvent struct {
 	Req []byte
 }
 
-// add TranID to context if not present
-func addTranIDToContext(ctx context.Context) context.Context {
-	md, _ := metadata.FromContext(ctx)
-	if tranId := md["trans-id"]; len(tranId) == 0 {
-		md = metadata.Copy(md)
-		md["trans-id"] = uuid.New().String()
-		return metadata.NewContext(ctx, md)
-	} else {
-		return ctx
-	}
-}
 func publish(ctx context.Context, publisher micro.Publisher, req, rsp proto.Message) (err error) {
 	reqB, err := proto.Marshal(req)
 	if err != nil {
@@ -51,7 +40,8 @@ func publish(ctx context.Context, publisher micro.Publisher, req, rsp proto.Mess
 func NewHandlerWrapper(p micro.Publisher) server.HandlerWrapper {
 	return func(fn server.HandlerFunc) server.HandlerFunc {
 		return func(ctx context.Context, req server.Request, rsp interface{}) (err error) {
-			ctx = addTranIDToContext(ctx)
+			// add TranID to context if not present
+			ctx = metadata.MergeContext(ctx, map[string]string{"trans-id": uuid.New().String()}, false)
 			err = fn(ctx, req, rsp)
 			// we already logged error in Publish. lets ignore error here.
 			_ = publish(ctx, p, req.Body().(proto.Message), rsp.(proto.Message))

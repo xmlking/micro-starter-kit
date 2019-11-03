@@ -14,7 +14,7 @@ require (
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.11
 	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.14.0
+	github.com/micro/go-micro v1.15.1
 	github.com/onrik/logrus v0.4.1
 	github.com/sarulabs/di/v2 v2.3.0
 	github.com/satori/go.uuid v1.2.0
