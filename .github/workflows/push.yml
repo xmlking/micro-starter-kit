@@ -20,7 +20,16 @@ jobs:
           go get github.com/golangci/golangci-lint/cmd/golangci-lint
       - name: Check out Code
         uses: actions/checkout@v1
+      - name: Cache go modules
+        id: cache
+        uses: actions/cache@preview
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: go mod download
       - name: Lint
         run: |
