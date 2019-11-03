@@ -36,7 +36,8 @@ make docker TARGET=greeter TYPE=srv VERSION=v0.1.1
 
 ```bash
 # start the server on fixed port
-make run-greeter ARGS="--server_address=localhost:8080"
+make run-greeter ARGS="--server_address=localhost:8080 --broker_address=localhost:10001"
+# make run-greeter ARGS="--server_address=greetersrv:8080 --broker_address=greetersrv:10001"
 
 # test with grpc cli
 grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto list

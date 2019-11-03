@@ -490,7 +490,7 @@ spec:
             name: env-vars-common-ht826fd967
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.2.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv:v0.2.4-3-ge42050b
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -558,7 +558,7 @@ spec:
             name: env-vars-common-ht826fd967
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.2.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv:v0.2.4-3-ge42050b
         imagePullPolicy: IfNotPresent
         name: srv
         ports:
@@ -691,7 +691,7 @@ spec:
             name: env-vars-common-ht826fd967
         - secretRef:
             name: secrets-tbd677b8ff
-        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.2.4
+        image: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv:v0.2.4-3-ge42050b
         imagePullPolicy: IfNotPresent
         name: srv
         ports:

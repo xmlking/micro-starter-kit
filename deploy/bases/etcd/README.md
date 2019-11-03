@@ -7,7 +7,7 @@ Default etcd operator behavior is to only manage etcd clusters created in the sa
 ```bash
 helm repo update
 # install ETCD operator
-helm install stable/etcd-operator --name sumo
+helm install --name sumo --set deployments.backupOperator=false  --set deployments.restoreOperator=false stable/etcd-operator
 
  # Check the etcd-operator logs
 export POD=$(kubectl get pods -l app=sumo-etcd-operator-etcd-operator --namespace default --output name)
@@ -23,7 +23,8 @@ kubectl create -f deploy/bases/etcd/service.json
 
 ```bash
 # uninstall ETCD operator
-helm delete  sumo
+helm delete sumo
+helm del --purge sumo
 # uninstall ETCD cluster
 kubectl delete -f deploy/bases/etcd/deployment.yaml
 ```
