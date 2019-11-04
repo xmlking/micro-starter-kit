@@ -32,7 +32,7 @@ kubectl create secret docker-registry regcred \
 -o 'go-template={{index .data ".dockerconfigjson"}}' --dry-run | base64 --decode > deploy/overlays/production/secrets/.dockerconfigjson
 
 # example
-export GITHUB_DOCKER_READ_PASSWORD=15650cad4e8a6602284255f7caf76134eb977b45
+export GITHUB_DOCKER_READ_PASSWORD=15650agc4e8a6602284643f7caf76134eb977b45
 
 kubectl create secret docker-registry regcred \
 --docker-server=https://docker.pkg.github.com \

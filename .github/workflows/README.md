@@ -28,7 +28,7 @@
   Trigger a deployment via the API (we have internal tooling to ease this)
 
   ```bash
-  export GITHUB_TOKEN=15650cad4e8a6602284255f7caf76134eb977b45
+  export GITHUB_TOKEN=16650cad4e8a4332284255f7caf76134eb965b45
   curl POST -H "Authorization: token $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github.ant-man-preview+json"  \
             -H "Content-Type: application/json" \
