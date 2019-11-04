@@ -36,6 +36,10 @@
             --data '{"ref": "develop", "environment": "e2e", "payload":   "payload": { "what": "deployment for e2e testing"}}'
   ```
 
+## TODO
+
+- [A Github Action to automatically bump and tag master, on merge, with the latest SemVer formatted version.](https://github.com/anothrNick/github-tag-action)
+
 ## Ref
 
 - [GitHub Actions for Go](https://github.com/mvdan/github-actions-golang)
