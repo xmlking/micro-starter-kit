@@ -16,12 +16,12 @@ jobs:
           echo "$RELEASE_TAG"
           echo "Downloading $DOWNLOAD_URL"
           curl -O -L $DOWNLOAD_URL
-      - name: Create Kubernetes cluster
+      - name: "Create cluster using KinD"
         id: kind
         uses: engineerd/setup-kind@v0.1.0
         # with:
         #   config: .github/kubernetes/kind.yaml
-      - name: "Create cluster using KinD"
+      - name: "Deploy deploy.e2e.yaml to KinD"
         id: local-path
         run: |
           export KUBECONFIG="$(kind get kubeconfig-path)"
