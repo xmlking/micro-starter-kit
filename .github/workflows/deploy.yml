@@ -7,27 +7,68 @@ jobs:
     name: Deploy Release Artifacts
     runs-on: ubuntu-latest
     steps:
-      - name: Check out Release
+      - name: Download deploy.e2e.yaml from Release
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           DOWNLOAD_URL: ${{ github.event.release.assets[0].browser_download_url }}
         run: |
-          echo "TODO trigger deployment"
-          echo "task - ${{ github.event.release.tag_name }}"
-          echo "task - ${{ github.event.release.upload_url }}"
-          echo "task - ${{ toJson(github.event.release.assets) }}"
           echo "browser_download_urls - ${{ toJson(github.event.release.assets.*.browser_download_url) }}"
           echo "$RELEASE_TAG"
-          echo "$DOWNLOAD_URL"
-      - name: Script
-        uses: actions/github-script@0.2.0
+          echo "Downloading $DOWNLOAD_URL"
+          curl -O -L $DOWNLOAD_URL
+      - name: "deployment pending"
+        uses: "deliverybot/deployment-status@master"
         with:
-          debug: true
-          github-token: ${{github.token}}
-          script: |
-            const assets = context.payload.release.assets
-            console.log(context)
-            console.log("----")
-            console.log(assets)
-            const e2e = assets.find(it => it.name === "deploy.e2e.yaml")
-            console.log(e2e)
+          state: "pending"
+          token: "${{ github.token }}"
+      - name: Create Kubernetes cluster
+        id: kind
+        uses: engineerd/setup-kind@v0.1.0
+        # with:
+        #   config: .github/kubernetes/kind.yaml
+      - name: Prepare cluster for testing
+        id: local-path
+        env:
+          DOCKER_TOKEN: ${{ secrets.GITHUB_DOCKER_READ_PASSWORD }}
+          DOCKER_USERNAME: xmlking
+          DOCKER_EMAIL: xmlking@gmail.com
+          REGISTRY_SECRET: regcred
+        run: |
+          export KUBECONFIG="$(kind get kubeconfig-path)"
+          echo "waiting for nodes to be ready ..."
+          kubectl wait --for=condition=Ready nodes --all --timeout=5m
+          echo "nodes ..."
+          kubectl get nodes
+          echo "cluster-info ..."
+          kubectl cluster-info
+          echo "create docker-registry secret"
+          kubectl create secret docker-registry ${REGISTRY_SECRET} \
+          --docker-server=https://docker.pkg.github.com \
+          --docker-username=${DOCKER_USERNAME} \
+          --docker-email=${DOCKER_EMAIL} \
+          --docker-password=${DOCKER_TOKEN}
+          kubectl get secret
+          echo "installing e2e overlay..."
+          kubectl apply -f deploy.e2e.yaml
+          echo "waiting for pods to be ready ..."
+          kubectl wait --for=condition=Ready pods --all --timeout=5m
+          kubectl get pods
+      - name: Run e2e tests
+        env:
+          # MICRO_REGISTRY: memory
+          # MICRO_SELECTOR: static
+          MICRO_PROXY_ADDRESS: "localhost:8081"
+        run: make test-e2e
+      - name: "E2E Test success"
+        if: success()
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "success"
+          token: "${{ github.token }}"
+
+      - name: "E2E Test failure"
+        if: failure()
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "failure"
+          token: "${{ github.token }}"
