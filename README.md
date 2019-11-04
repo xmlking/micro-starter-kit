@@ -2,7 +2,7 @@
 
 Microservices starter kit for **Golang**, aims to be developer friendly.
 
-[![Build Status](https://github.com/xmlking/micro-starter-kit/workflows/Test%20on%20Push/badge.svg?branch=develop)](https://github.com/xmlking/micro-starter-kit/actions?query=workflow%3A%22Test+on+Push%22)
+[![Build Status](https://github.com/xmlking/micro-starter-kit/workflows/Test%20on%20Push/badge.svg?branch=develop)](https://github.com/xmlking/micro-starter-kit/actions?query=branch%3Adevelop+event%3Apush+workflow%3A%22Test+on+Push%22)
 [![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
 [![fuzzit](https://app.fuzzit.dev/badge?org_id=xmlkinggithub&branch=develop)](https://app.fuzzit.dev/orgs/xmlkinggithub/dashboard)
@@ -128,12 +128,12 @@ docker rmi $(docker images -f "dangling=true" -q)
 
 # make kustomize OVERLAY=e2e NS=default VERSION=v0.1.0-440-g6c7fb7a
 make kustomize
-kubectl apply -f deploy/deploy.yaml
+kubectl apply -f build/deploy.yaml
 
 POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
 kubectl logs -f -c srv $POD_NAME
 
-kubectl delete -f deploy/deploy.yaml
+kubectl delete -f build/deploy.yaml
 ```
 
 ## Reference

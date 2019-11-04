@@ -2,7 +2,9 @@
 
 using Makefile
 
-> use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing
+> use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing<br />
+
+> `make release/*` `make deploy/*` are manually invoked.
 
 ## Targets
 
@@ -60,7 +62,7 @@ make test-race
 > trigger e2e tests on GitHub Actions
 
 ```bash
-make start_e2e GITHUB_TOKEN=123...
+make deploy/e2e GITHUB_TOKEN=123...
 ```
 
 ### run
@@ -132,7 +134,7 @@ make docker_clean
 
 ### kustomize
 
-> generate `deploy/deploy.yaml` for given `overlay` and `namespace` using **kustomize**
+> generate `build/deploy.yaml` for given `overlay` and `namespace` using **kustomize**
 
 ```bash
 make kustomize OVERLAY=production NS=default VERSION=v1.0.1
@@ -141,6 +143,25 @@ make kustomize OVERLAY=production
 make kustomize NS=default
 # default ENV=e2e,  NS=default VERSION=git tag
 make kustomize
+```
+
+### Release
+
+```bash
+make release/draft VERSION=v0.1.1
+```
+
+At this point, you should inspect the release in the Github web UI. If it looks reasonable, proceed:
+
+```bash
+make release/publish GITHUB_TOKEN=123...
+```
+
+### Deploy
+
+```bash
+make deploy/e2e GITHUB_TOKEN=123...
+make deploy/prod GITHUB_TOKEN=123...
 ```
 
 ### Reference

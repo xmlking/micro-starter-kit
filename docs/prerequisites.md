@@ -33,7 +33,7 @@ GO111MODULE=on go get sigs.k8s.io/kind
 # go lang  build/publish/deploy tool (optional)
 GO111MODULE=off go get github.com/google/ko/cmd/ko
 # other way to get latest kustomize
-go get sigs.k8s.io/kustomize/kustomize/v3
+GO111MODULE=on go get sigs.k8s.io/kustomize/kustomize/v3@v3.3.0
 
 # fetch protoc plugins into $GOPATH
 GO111MODULE=off go get github.com/golang/protobuf/{proto,protoc-gen-go}

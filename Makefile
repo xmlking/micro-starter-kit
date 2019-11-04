@@ -2,14 +2,25 @@
 # make        	# compile all binary
 # make clean  	# remove ALL binaries and objects
 # make release  # add git TAG and push
+GITHUB_REPO_OWNER 				:= xmlking
+GITHUB_REPO_NAME 					:= micro-starter-kit
+GITHUB_RELEASES_UI_URL 		:= https://github.com/$(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)/releases
+GITHUB_RELEASES_API_URL 	:= https://api.github.com/repos/$(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)/releases
+GITHUB_RELEASE_ASSET_URL	:= https://uploads.github.com/repos/$(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)/releases
+GITHUB_DEPLOY_API_URL			:= https://api.github.com/repos/$(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)/deployments
+DOCKER_REGISTRY 					:= docker.pkg.github.com
+DOCKER_CONTEXT_PATH 			:= $(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)
+# DOCKER_REGISTRY 					:= us.gcr.io
+# DOCKER_CONTEXT_PATH 			:= xmlking
+
 VERSION					:= $(shell git describe --tags || echo "HEAD")
+CURRENT_BRANCH  := $(shell git rev-parse --abbrev-ref HEAD)
 GOPATH					:= $(shell go env GOPATH)
 HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
+GIT_DIRTY 			:= $(shell git status --porcelain 2> /dev/null)
 HAS_KO					:= $(shell command -v ko 2> /dev/null)
 CODECOV_FILE 		:= build/coverage.txt
 TIMEOUT  				:= 60s
-# DOCKER_CONTEXT_PATH 			:= my_project_id/micro-starter-kit
-DOCKER_CONTEXT_PATH 			:= xmlking
 
 # Type of service e.g api, fnc, srv, web (default: "srv")
 TYPE = $(or $(word 2,$(subst -, ,$*)), srv)
@@ -24,7 +35,15 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION = $(VERSION), HAS_GOVVV = $(HAS_GOVVV), HAS_KO = $(HAS_KO))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
-.PHONY: all tools proto proto-% lint lint-% build build-% run run-% release clean update_deps docker docker-% docker_clean docker_push kustomize start_e2e start_deploy
+.PHONY: all tools, check_dirty, clean, update_deps
+.PHONY: proto proto-%
+.PHONY: lint lint-%
+.PHONY: build build-%
+.PHONY: run run-%
+.PHONY: docker_clean docker docker-% docker_push
+.PHONY: kustomize build/kustomize
+.PHONY: release/draft release/publish
+.PHONY: deploy/e2e deploy/prod
 
 all: build
 
@@ -32,6 +51,21 @@ tools:
 	@echo "==> Installing dev tools"
 	# go install github.com/ahmetb/govvv
 	# go install github.com/google/ko/cmd/ko
+
+check_dirty:
+ifdef GIT_DIRTY
+	$(error "Won't run on a dirty working copy. Commit or stash and try again.")
+endif
+
+clean:
+	@for d in ./build/*-srv; do \
+		echo "Deleting $$d;"; \
+		rm -f $$d; \
+	done
+
+update_deps:
+	go mod verify
+	go mod tidy
 
 proto proto-%:
 	@if [ -z $(TARGET) ]; then \
@@ -109,43 +143,31 @@ run run-%:
 		go run  ./${TYPE}/${TARGET} ${ARGS}; \
 	fi
 
-release:
-	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.production.yaml
-	@kustomize build deploy/overlays/e2e/ 			 | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.e2e.yaml
-	@git add deploy/deploy.production.yaml deploy/deploy.e2e.yaml
-	@git commit --allow-empty -m '[skip ci] Adding k8s deployment yaml for version: $(VERSION)'
-	@git push
-	@git tag -a $(VERSION) -m "[skip ci] Release" || true
+release/draft: check_dirty
+	@echo Publishing Draft: $(VERSION)
+	@git tag -a $(VERSION) -m "[skip ci] Release: $(VERSION)" || true
 	@git push origin $(VERSION)
-	@curl -H "Content-Type: application/json" \
-		-H "Authorization: token $(GITHUB_TOKEN)" \
-		-XPOST "https://api.github.com/repos/xmlking/micro-starter-kit/releases" \
-		-d '{"tag_name":"$(VERSION)", "target_commitish": "master", "draft": false, "prerelease": false}'
+	@echo "\n\nPlease inspect the release and run `make release/publish` if it looks good"
+	@open "$(GITHUB_RELEASES_UI_URL)/$(VERSION)"
 
-start_e2e:
+release/publish:
+	@echo Publishing Release: $(VERSION)
+
+deploy/e2e:
 	@curl -H "Content-Type: application/json" \
 		-H "Accept: application/vnd.github.ant-man-preview+json"  \
 		-H "Authorization: token $(GITHUB_TOKEN)" \
-    -XPOST https://api.github.com/repos/xmlking/micro-starter-kit/deployments \
+    -XPOST $(GITHUB_DEPLOY_API_URL) \
     -d '{"ref": "develop", "environment": "e2e", "payload": { "what": "deployment for e2e testing"}}'
 
-start_deploy:
+deploy/prod:
 	@curl -H "Content-Type: application/json" \
 		-H "Accept: application/vnd.github.ant-man-preview+json"  \
 		-H "Authorization: token $(GITHUB_TOKEN)" \
-    -XPOST https://api.github.com/repos/xmlking/micro-starter-kit/deployments \
+    -XPOST $(GITHUB_DEPLOY_API_URL) \
     -d '{"ref": "develop", "environment": "production", "payload": { "what": "production deployment to GKE"}}'
 
-clean:
-	@for d in ./build/*-srv; do \
-		echo "Deleting $$d;"; \
-		rm -f $$d; \
-	done
-
-update_deps:
-	go mod verify
-	go mod tidy
-
+# TODO: DOCKER_BUILDKIT=1 docker build --rm
 docker docker-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Building images for all services..."; \
@@ -154,7 +176,7 @@ docker docker-%:
 			for _target in $${type}/*/; do \
 				temp=$${_target%%/}; target=$${temp#*/}; \
 				echo "Building Image $${target}-$${type}..."; \
-				DOCKER_BUILDKIT=1 docker build --rm \
+				docker build --rm \
 				--build-arg BUILDKIT_INLINE_CACHE=1 \
 				--build-arg VERSION=$(VERSION) \
 				--build-arg TYPE=$${type} \
@@ -168,7 +190,7 @@ docker docker-%:
 		done \
 	else \
 		echo "Building image for ${TARGET}-${TYPE}..."; \
-		DOCKER_BUILDKIT=1 docker build --rm \
+		docker build --rm \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
 		--build-arg VERSION=$(VERSION) \
 		--build-arg TYPE=${TYPE} \
@@ -200,5 +222,9 @@ kustomize: OVERLAY 	:= e2e
 kustomize: NS 			:= default
 kustomize:
 	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
-	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > deploy/deploy.yaml
+	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.yaml
 
+build/kustomize: check_dirty
+	@kustomize build deploy/overlays/e2e/ 			 | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.e2e.yaml
+	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.production.yaml
+	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|mynamespace|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.production.mynamespace.yaml

@@ -49,7 +49,7 @@ jobs:
           --docker-password=${DOCKER_TOKEN}
           kubectl get secret
           echo "installing e2e overlay..."
-          kubectl apply -f deploy/deploy.e2e.yaml
+          kubectl apply -f build/deploy.e2e.yaml
           echo "waiting for pods to be ready ..."
           kubectl wait --for=condition=Ready pods --all --timeout=5m
           kubectl get pods

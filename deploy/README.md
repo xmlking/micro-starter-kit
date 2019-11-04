@@ -207,8 +207,8 @@ diff \
 # make kustomize NS=default OVERLAY=production VERSION=v0.1.3
 # make kustomize NS=default OVERLAY=e2e VERSION=v0.1.3
 make kustomize
-kubeval --strict --ignore-missing-schemas deploy/deploy.yaml
-kubectl apply -f deploy/deploy.yaml
+kubeval --strict --ignore-missing-schemas build/deploy.yaml
+kubectl apply -f build/deploy.yaml
 kubectl get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services
 
@@ -220,7 +220,7 @@ kubectl exec -it $POD_NAME -- busybox sh
 
 kubectl get svc
 
-kubectl delete -f deploy/deploy.yaml
+kubectl delete -f build/deploy.yaml
 ```
 
 ## kustomize-sopssecret-plugin
