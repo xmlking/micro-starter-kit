@@ -10,7 +10,7 @@ jobs:
       - name: Check out Release
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-          DOWNLOAD_URL: ${{ github.event.release.assets.*.browser_download_url[0] }}
+          DOWNLOAD_URL: ${{ github.event.release.assets[0].browser_download_url }}
         run: |
           echo "TODO trigger deployment"
           echo "task - ${{ github.event.release.tag_name }}"
