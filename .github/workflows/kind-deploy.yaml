@@ -4,7 +4,7 @@ on:
     environment: [e2e]
 jobs:
   deploy-n-e2e:
-    name: Deploy to KinD and run e2e tests
+    name: "Deploy to KinD and E2E"
     runs-on: ubuntu-latest
     if: github.event.deployment.environment == 'e2e'
     steps:
