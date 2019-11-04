@@ -191,9 +191,9 @@ go test -v -run Integration ./srv/emailer/service
   git reset --hard HEAD~1
 
   # Delete Tag local
-  git tag --delete v0.1.3
+  git tag --delete v0.2.5
   # Delete Tag remote
-  git push --delete origin v0.1.3
+  git push --delete origin v0.2.5
   ```
 
 - How to Push Git Tags with Commit?
