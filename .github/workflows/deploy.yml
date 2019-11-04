@@ -9,8 +9,8 @@ jobs:
     steps:
       - name: Check out Release
         env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}"
-          DOWNLOAD_URL: ${{ github.event.release.assets.*.browser_download_url[0] }}"
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          DOWNLOAD_URL: ${{ github.event.release.assets.*.browser_download_url[0] }}
         run: |
           echo "TODO trigger deployment"
           echo "task - ${{ github.event.release.tag_name }}"
@@ -27,5 +27,5 @@ jobs:
           script: |
             const payload = context.payload
             console.log(context)
-            const e2e = github.event.release.assets.find(it => it.name === "deploy.e2e.yaml")
-            console.log(e2e)
+            console.log("----")
+            console.log(github.event)
