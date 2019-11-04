@@ -3,8 +3,8 @@ name: Cloud Deployment
 on: ["deployment"]
 jobs:
   deploy:
+    # Deploy application to Google Kubernetes Engine
     name: Deploy to GKE
-    description: Deploy application to Google Kubernetes Engine
     runs-on: "ubuntu-latest"
     if: github.event.deployment.environment == 'production'
     steps:
