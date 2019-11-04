@@ -49,19 +49,19 @@ jobs:
           asset_path: ./build/deploy.e2e.yaml
           asset_name: deploy.e2e.yaml
           asset_content_type: text/vnd.yaml
-  build:
-    name: Build and Publish docker images
-    runs-on: ubuntu-latest
-    # needs: release
-    steps:
-      - name: Check out Code
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-      - name: Build docker images
-        run: make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=$GITHUB_REPOSITORY
-      - name: Push docker images
-        run: |
-          # docker login docker.pkg.github.com -u $GITHUB_ACTOR -p  ${{ secrets.GITHUB_TOKEN }}
-          docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_DOCKER_PASSWORD }}
-          make docker_push
+  # build:
+  #   name: Build and Publish docker images
+  #   runs-on: ubuntu-latest
+  #   # needs: release
+  #   steps:
+  #     - name: Check out Code
+  #       uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #     - name: Build docker images
+  #       run: make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=$GITHUB_REPOSITORY
+  #     - name: Push docker images
+  #       run: |
+  #         # docker login docker.pkg.github.com -u $GITHUB_ACTOR -p  ${{ secrets.GITHUB_TOKEN }}
+  #         docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_DOCKER_PASSWORD }}
+  #         make docker_push
