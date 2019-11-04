@@ -25,7 +25,9 @@ jobs:
           debug: true
           github-token: ${{github.token}}
           script: |
-            const payload = context.payload
+            const assets = context.payload.release.assets
             console.log(context)
             console.log("----")
-            console.log(github.event)
+            console.log(assets)
+            const e2e = assets.find(it => it.name === "deploy.e2e.yaml")
+            console.log(e2e)
