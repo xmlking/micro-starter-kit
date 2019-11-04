@@ -16,11 +16,6 @@ jobs:
           echo "$RELEASE_TAG"
           echo "Downloading $DOWNLOAD_URL"
           curl -O -L $DOWNLOAD_URL
-      - name: "deployment pending"
-        uses: "deliverybot/deployment-status@master"
-        with:
-          state: "pending"
-          token: "${{ github.token }}"
       - name: Create Kubernetes cluster
         id: kind
         uses: engineerd/setup-kind@v0.1.0
@@ -59,16 +54,3 @@ jobs:
           # MICRO_SELECTOR: static
           MICRO_PROXY_ADDRESS: "localhost:8081"
         run: make test-e2e
-      - name: "E2E Test success"
-        if: success()
-        uses: "deliverybot/deployment-status@master"
-        with:
-          state: "success"
-          token: "${{ github.token }}"
-
-      - name: "E2E Test failure"
-        if: failure()
-        uses: "deliverybot/deployment-status@master"
-        with:
-          state: "failure"
-          token: "${{ github.token }}"
