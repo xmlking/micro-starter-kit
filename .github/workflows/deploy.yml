@@ -1,7 +1,7 @@
 name: Deploy on Release
 on:
   release:
-    types: [published, edited]
+    types: [published]
 jobs:
   deploy:
     name: Deploy Release Artifacts
@@ -12,4 +12,5 @@ jobs:
           echo "TODO trigger deployment"
           echo "task - ${{ github.event.release.tag_name }}"
           echo "task - ${{ github.event.release.upload_url }}"
-          echo "payload - ${{ toJson(github.event.release) }}"
+          echo "task - ${{ toJson(github.event.release) }}"
+          echo "payload - ${{ toJson(github.event.release.payload) }}"
