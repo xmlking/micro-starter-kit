@@ -1,8 +1,7 @@
 name: Deploy on Release
-on: release
-# on:
-#   release:
-#     types: [published]
+on:
+  release:
+    types: [published, edited]
 jobs:
   deploy:
     name: Deploy Release Artifacts
