@@ -1,5 +1,5 @@
+# On tag, create Draft Release and Publish docker images
 name: Release Management
-description: "On tag, create Draft Release and Publish docker images"
 on:
   push:
     # Sequence of patterns matched against refs/tags
@@ -11,8 +11,8 @@ on:
 
 jobs:
   release:
+    # Draft Release with assets: k8s YAML
     name: Draft Release
-    description: "Draft Release with assets: k8s YAML"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
