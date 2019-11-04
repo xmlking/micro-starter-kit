@@ -8,9 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out Release
+        env:
+          RELEASE_CONTEXT: ${{ toJson(github.event.release.assets) }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}"
         run: |
           echo "TODO trigger deployment"
           echo "task - ${{ github.event.release.tag_name }}"
           echo "task - ${{ github.event.release.upload_url }}"
-          echo "task - ${{ toJson(github.event.release) }}"
-          echo "payload - ${{ toJson(github.event.release.payload) }}"
+          echo "task - ${{ toJson(github.event.release.assets) }}"
+          echo "browser_download_urls - ${{ toJson(github.event.release.assets.*.browser_download_url) }}"
+          echo "$RELEASE_CONTEXT"
+          echo "$RELEASE_TAG"
+          echo "download_url - {{ github.event.release.assets.find(a => a.name == 'deploy.e2e.yaml')[0].browser_download_url }}"
