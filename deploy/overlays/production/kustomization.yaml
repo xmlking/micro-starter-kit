@@ -55,10 +55,10 @@ secretGenerator:
     behavior: replace
     literals:
       - DATABASE_PASSWORD=prod-real-pass
-  - name: regcred
-    files:
-      - secrets/.dockerconfigjson
-    type: kubernetes.io/dockerconfigjson
+  # - name: regcred
+  #   files:
+  #     - secrets/.dockerconfigjson
+  #   type: kubernetes.io/dockerconfigjson
 
 replicas:
   - name: srv
