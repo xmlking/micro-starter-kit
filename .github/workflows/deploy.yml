@@ -1,0 +1,13 @@
+name: Deploy on Release
+on:
+  release:
+    types: [published]
+jobs:
+  deploy:
+    name: Deploy Release Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Release
+        uses: actions/checkout@v1
+        run: |
+          echo "TODO trigger deployment"

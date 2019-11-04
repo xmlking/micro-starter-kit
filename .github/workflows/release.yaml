@@ -1,5 +1,5 @@
 # On tag, create Draft Release and Publish docker images
-name: Release Management
+name: Release on Tag
 on:
   push:
     # Sequence of patterns matched against refs/tags
