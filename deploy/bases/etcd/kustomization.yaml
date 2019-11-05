@@ -10,11 +10,11 @@ commonAnnotations:
 resources:
   - deployment.yaml
 
-# vars:
-#   - name: ETCD_SRV_ENDPOINT
-#     objref:
-#       kind: EtcdCluster
-#       name: etcd-cluster
-#       apiVersion: v1
-#     fieldref:
-#       fieldpath: metadata.name
+vars:
+  - name: ETCD_SRV_ENDPOINT
+    objref:
+      kind: EtcdCluster
+      name: etcd-cluster
+      apiVersion: etcd.database.coreos.com/v1beta2
+    fieldref:
+      fieldpath: metadata.name

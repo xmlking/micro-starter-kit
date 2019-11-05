@@ -1,11 +1,3 @@
 varReference:
   - path: data
     kind: ConfigMap
-# image:
-#   - path: spec/version
-#     kind: EtcdCluster
-# nameReference:
-#   - kind: EtcdCluster
-#     fieldSpecs:
-#       - path: metadata/name
-#         kind: EtcdCluster
