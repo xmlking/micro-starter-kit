@@ -141,8 +141,10 @@ make kustomize OVERLAY=production NS=default VERSION=v1.0.1
 make kustomize OVERLAY=production NS=default
 make kustomize OVERLAY=production
 make kustomize NS=default
-# default ENV=e2e,  NS=default VERSION=git tag
+# defaults: ENV=e2e,  NS=default, VERSION=git tag
 make kustomize
+# build yaml files for e2e, prod overlays into ./build
+make build/kustomize VERSION=v0.2.5
 ```
 
 ### Release
