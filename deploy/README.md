@@ -166,7 +166,7 @@ kubectl kustomize ./deploy/overlays/e2e
 kubectl kustomize ./deploy/overlays/production
 # generating separate yaml files(Good for deploying, etcd first and then microservices)
 mkdir ./build/output
-kustomize build deploy/overlays/e2e --output ./build/output
+kustomize build deploy/overlays/production --output ./build/output
 
 # using `sed` to further customize output
 OVERLAY="e2e" NS="default"; kustomize build deploy/overlays/${OVERLAY}/ | \
