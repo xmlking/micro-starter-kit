@@ -29,7 +29,7 @@ configMapGenerator:
       - LOG_FORMAT=text
       - MICRO_LOG_LEVEL=debug
       # profile specific variables
-      # - MICRO_SELECTOR=static
+      # - MICRO_SELECTOR=static # static/memory still not working with gateway & proxy
       # - MICRO_REGISTRY=memory
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"

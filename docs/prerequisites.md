@@ -14,6 +14,8 @@ brew install kustomize
 # kubeval - validate one or more Kubernetes config files(optional)
 brew tap instrumenta/instrumenta
 brew install kubeval
+# Manage Your lk8s In Style!
+brew install derailed/k9s/k9s
 # grpc cli client (optional)
 brew install grpcurl
 # bloomrpc is a UI client for gRPC (optional)
