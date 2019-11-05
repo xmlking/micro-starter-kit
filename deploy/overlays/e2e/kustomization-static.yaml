@@ -31,7 +31,8 @@ configMapGenerator:
       # profile specific variables
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"
-      - MICRO_SELECTOR=static # static/memory still not working with gateway & proxy
+      # static/memory still not working with gateway & proxy. publish to emailer not working too...
+      - MICRO_SELECTOR=static
       - MICRO_REGISTRY=memory
       # following endpoint overwrites (in config.yaml) should be enabled only when  MICRO_SELECTOR=static is used.
       - ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)

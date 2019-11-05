@@ -64,7 +64,7 @@ ARG VERSION=0.0.1
 ARG TYPE=srv
 ARG TARGET=account
 COPY --from=builder /app /app
-COPY --from=builder src/deploy/bases/${TARGET}-${TYPE}/config /config
+COPY --from=builder src/deploy/bases/micro/${TARGET}-${TYPE}/config /config
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind
