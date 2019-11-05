@@ -19,7 +19,7 @@ var (
 * - export MICRO_REGISTRY=memory
 * - export MICRO_SELECTOR=static
 * (Or) Set envelopment variables for CI e2e tests via gRPC Proxy
-* - MICRO_PROXY_ADDRESS="localhost:8081"
+* - MICRO_PROXY_ADDRESS="localhost:8888"
 * You can also run this test againest your local running service. i.e., `go run ./srv/greeter`
 **/
 func init() {

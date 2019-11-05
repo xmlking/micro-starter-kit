@@ -37,17 +37,3 @@ secretGenerator:
   #   files:
   #     - secret/tls.cert
   #     - secret/tls.key
-
-images:
-  - name: etcd
-    newTag: latest
-  - name: postgres
-    newTag: alpine
-  - name: micro/micro
-    newTag: latest
-  - name: xmlking/account-srv
-    newTag: latest
-  - name: xmlking/emailer-srv
-    newTag: latest
-  - name: xmlking/greeter-srv
-    newTag: latest

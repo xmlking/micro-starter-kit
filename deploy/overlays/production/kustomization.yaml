@@ -12,7 +12,7 @@ commonAnnotations:
   note: Hello, I am production!
 
 bases:
-  - ../../bases
+  - ../../bases/micros
   - ../../bases/etcd
 
 # enable mage-pull-policy and resource_limit as needed
@@ -45,10 +45,13 @@ configMapGenerator:
       - MICRO_REGISTRY=etcd
       # - MICRO_REGISTRY_ADDRESS="$(ETCD_SRV_ENDPOINT)-client"
       - MICRO_REGISTRY_ADDRESS="prod-etcd-cluster-v1-client"
-
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"
-      - MICRO_SELECTOR=cache
+      - ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)
+      - GREETERSRV_ENDPOINT=$(GREETER_SRV_ENDPOINT)
+      - EMAILERSRV_ENDPOINT=$(EMAILER_SRV_ENDPOINT)
+      - GATEWAYSRV_ENDPOINT=$(GATEWAY_SRV_ENDPOINT)
+      - PROXYSRV_ENDPOINT=$(PROXY_SRV_ENDPOINT)
 
 secretGenerator:
   - name: secrets
@@ -67,7 +70,7 @@ images:
     newTag: 11.5-alpine
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: v1.14.0
+    newTag: v1.15.1
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)

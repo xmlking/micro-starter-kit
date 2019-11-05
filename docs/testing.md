@@ -108,19 +108,19 @@ micro api --enable_rpc=true
 ```bash
 # with `grpcurl`
 # micro proxy --protocol=grpc
-grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8081  greetersrv.Greeter/Hello
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8888  greetersrv.Greeter/Hello
 # with Micro CLI
-MICRO_PROXY_ADDRESS=localhost:8081 micro list services
-MICRO_PROXY_ADDRESS=localhost:8081 micro call --metadata trans-id=1234 greetersrv Greeter.Hello  '{"name": "John"}'
-MICRO_PROXY_ADDRESS=localhost:8081 micro call  accountsrv UserService.List '{}'
-MICRO_PROXY_ADDRESS=localhost:8081 micro health greetersrv
-MICRO_PROXY_ADDRESS=localhost:8081 micro publish --metadata trans-id=1234,from=pc emailersrv  '{ "to" : "sumo@demo.com", "from": "demo@sumo.com", "subject": "sub", "body": "mybody" }'
+MICRO_PROXY_ADDRESS=localhost:8888 micro list services
+MICRO_PROXY_ADDRESS=localhost:8888 micro call --metadata trans-id=1234 greetersrv Greeter.Hello  '{"name": "John"}'
+MICRO_PROXY_ADDRESS=localhost:8888 micro call  accountsrv UserService.List '{}'
+MICRO_PROXY_ADDRESS=localhost:8888 micro health greetersrv
+MICRO_PROXY_ADDRESS=localhost:8888 micro publish --metadata trans-id=1234,from=pc emailersrv  '{ "to" : "sumo@demo.com", "from": "demo@sumo.com", "subject": "sub", "body": "mybody" }'
 ```
 
 ### E2E tests via code
 
 ```bash
-MICRO_PROXY_ADDRESS="localhost:8081" \
+MICRO_PROXY_ADDRESS="localhost:8888" \
 make test-e2e
 ```
 

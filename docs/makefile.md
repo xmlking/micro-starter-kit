@@ -47,7 +47,7 @@ make test-e2e TARGET=account
 make test-e2e TARGET=emailer
 make test-e2e
 # e2e tests in CI envelopment with micro gRPC proxy
-MICRO_PROXY_ADDRESS="localhost:8081" make test-e2e
+MICRO_PROXY_ADDRESS="localhost:8888" make test-e2e
 
 # generate code coverage
 make test-cover

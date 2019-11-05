@@ -40,7 +40,7 @@ jobs:
         env:
           # MICRO_REGISTRY: memory
           # MICRO_SELECTOR: static
-          MICRO_PROXY_ADDRESS: "localhost:9999"
+          MICRO_PROXY_ADDRESS: "localhost:8888"
         run: |
           # make test-e2e
           # e2e/test.sh

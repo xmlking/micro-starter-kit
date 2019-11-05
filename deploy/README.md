@@ -159,12 +159,14 @@ deploy
 ## Kustomize
 
 ```bash
-
 # Kustomize command the modified manifests can be generated and printed to the terminal with: --load_restrictions none
 # for e2e env
 kubectl kustomize ./deploy/overlays/e2e
 # only production env
 kubectl kustomize ./deploy/overlays/production
+# generating separate yaml files(Good for deploying, etcd first and then microservices)
+mkdir ./build/output
+kustomize build deploy/overlays/e2e --output ./build/output
 
 # using `sed` to further customize output
 OVERLAY="e2e" NS="default"; kustomize build deploy/overlays/${OVERLAY}/ | \
