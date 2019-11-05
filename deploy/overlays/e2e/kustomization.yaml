@@ -29,15 +29,16 @@ configMapGenerator:
       - LOG_FORMAT=text
       - MICRO_LOG_LEVEL=debug
       # profile specific variables
-      # - MICRO_SELECTOR=static # static/memory still not working with gateway & proxy
-      # - MICRO_REGISTRY=memory
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"
-      - ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)
-      - GREETERSRV_ENDPOINT=$(GREETER_SRV_ENDPOINT)
-      - EMAILERSRV_ENDPOINT=$(EMAILER_SRV_ENDPOINT)
-      - GATEWAYSRV_ENDPOINT=$(GATEWAY_SRV_ENDPOINT)
-      - PROXYSRV_ENDPOINT=$(PROXY_SRV_ENDPOINT)
+      # - MICRO_SELECTOR=static # static/memory still not working with gateway & proxy
+      # - MICRO_REGISTRY=memory
+      # following endpoint overwrites (in config.yaml) should be enabled only when  MICRO_SELECTOR=static is used.
+      # - ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)
+      # - GREETERSRV_ENDPOINT=$(GREETER_SRV_ENDPOINT)
+      # - EMAILERSRV_ENDPOINT=$(EMAILER_SRV_ENDPOINT)
+      # - GATEWAYSRV_ENDPOINT=$(GATEWAY_SRV_ENDPOINT)
+      # - PROXYSRV_ENDPOINT=$(PROXY_SRV_ENDPOINT)
 
 secretGenerator:
   - name: secrets
