@@ -5,8 +5,11 @@ import (
 	"context"
 	"testing"
 
+	// "github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/client/grpc"
 	"github.com/stretchr/testify/assert"
+
+	// "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
 	proto "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
 
@@ -24,6 +27,8 @@ var (
 **/
 func init() {
 	greeter = proto.NewGreeterService("greetersrv", grpc.NewClient())
+	// if start GreeterService with `make run-greeter ARGS="--server_address=localhost:8080"`
+	// greeter = proto.NewGreeterService("localhost", grpc.NewClient(client.Selector(static.NewSelector())))
 }
 
 func TestGreeter_Hello_E2E(t *testing.T) {

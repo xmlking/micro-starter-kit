@@ -28,6 +28,8 @@ configMapGenerator:
       - LOG_LEVEL=debug
       - LOG_FORMAT=text
       - MICRO_LOG_LEVEL=debug
+      # This will write a cpu and heap profile to /tmp/[service name].[service version].{cpu, mem}.pprof
+      - MICRO_DEBUG_PROFILE=true
       # profile specific variables
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"

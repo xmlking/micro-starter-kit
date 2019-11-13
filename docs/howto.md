@@ -182,6 +182,10 @@ go test -v -run Integration ./srv/emailer/service
   --client_pool_size=10 # enables the client side connection pool
   ```
 
+  > You can now enable profiling in go-micro by setting MICRO_DEBUG_PROFILE=true<br/>
+  > This will enable pprof and write a cpu profile and heap profile to /tmp<br/>
+  > the profiles will be [service name].{cpu, mem}.pprof
+
 - How to rollback a git commit?
 
   ```bash
