@@ -5,7 +5,8 @@ go 1.13
 // replace github.com/gogo/protobuf => github.com/gogo/protobuf v1.3.1
 
 require (
-	cloud.google.com/go v0.44.0
+	cloud.google.com/go v0.48.0 // indirect
+	cloud.google.com/go/pubsub v1.0.1
 	github.com/DATA-DOG/go-sqlmock v1.3.3 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/golang/protobuf v1.3.2
@@ -13,7 +14,6 @@ require (
 	github.com/infobloxopen/atlas-app-toolkit v0.19.0
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.11
-	github.com/markbates/pkger v0.12.2
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.16.0
 	github.com/onrik/logrus v0.4.1
@@ -24,5 +24,6 @@ require (
 	github.com/thoas/go-funk v0.4.0
 	github.com/tudurom/micro-logrus v0.0.0-20171007082012-3704f28fa9d1
 	google.golang.org/api v0.13.0
-	google.golang.org/genproto v0.0.0-20191028173616-919d9bdd9fe6
+	google.golang.org/genproto v0.0.0-20191108220845-16a3f7862a1a
+	gopkg.in/yaml.v2 v2.2.4 // indirect
 )
