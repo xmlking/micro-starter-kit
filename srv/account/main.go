@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	_ "github.com/xmlking/micro-starter-kit/shared/log"
+	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
@@ -37,7 +37,7 @@ func main() {
 		micro.Flags(
 			cli.StringFlag{
 				Name:        "configDir, d",
-				Value:       "config",
+				Value:       "/config",
 				Usage:       "Path to the config directory. Defaults to 'config'",
 				EnvVar:      "CONFIG_DIR",
 				Destination: &configDir,
@@ -61,6 +61,7 @@ func main() {
 			// load config
 			myConfig.InitConfig(configDir, configFile)
 			config.Scan(&cfg)
+			logger.InitLogger(cfg.Log)
 		}),
 	)
 

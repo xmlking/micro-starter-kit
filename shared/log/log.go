@@ -3,14 +3,14 @@ package log
 import (
 	"os"
 
-	"github.com/micro/go-micro/config"
 	microlog "github.com/micro/go-micro/util/log"
 	"github.com/sirupsen/logrus"
 	micrologrus "github.com/tudurom/micro-logrus"
+	"github.com/xmlking/micro-starter-kit/shared/config"
 )
 
-func init() {
-	logrusLogger := newLogger()
+func InitLogger(cfg config.LogConfiguration) {
+	logrusLogger := newLogger(cfg)
 	// also set same Formatter and Level for logrus's global logger
 	logrus.SetFormatter(logrusLogger.Formatter)
 	logrus.SetLevel(logrusLogger.Level)
@@ -20,42 +20,42 @@ func init() {
 	// also set same log_level for go-micro
 	// TODO: microlog.SetLevel(microlog.LevelDebug)
 	os.Setenv("MICRO_LOG_LEVEL", logrusLogger.GetLevel().String())
+
+	logrus.WithFields(logrus.Fields{
+		"logLevel": cfg.Level,
+		"format":   cfg.Format,
+	}).Info("Logger set to Logrus with:")
 }
 
 // newLogger create new logrus logger from config
 // log level: panic, fatal, error, warn, info, debug, trace
 // log format: json, text
-func newLogger() *logrus.Logger {
-	level := config.Get("log", "level").String("info")
-	format := config.Get("log", "format").String("text")
-	lslog := logrus.New()
+func newLogger(cfg config.LogConfiguration) *logrus.Logger {
+	level := cfg.Level
+	format := cfg.Format
+	logger := logrus.New()
 
 	logLevel, err := logrus.ParseLevel(level)
 	if err != nil {
 		logLevel = logrus.InfoLevel
 	}
-	lslog.SetLevel(logLevel)
+	logger.SetLevel(logLevel)
 
 	if format == "json" {
-		lslog.SetFormatter(&logrus.JSONFormatter{})
+		logger.SetFormatter(&logrus.JSONFormatter{})
 	} else {
-		lslog.SetFormatter(&logrus.TextFormatter{
+		logger.SetFormatter(&logrus.TextFormatter{
 			ForceColors:   true,
 			FullTimestamp: true,
 		})
 	}
 
-	lslog.WithFields(logrus.Fields{
-		"logLevel": logLevel,
-		"format":   format,
-	}).Info("Logger set to Logrus with:")
-
-	return lslog
+	return logger
 }
 
 // NewLogger create new logrus logger from config and return FieldLogger interface
 // log level: panic, fatal, error, warn, info, debug, trace
 // log format: json, text
-func NewLogger() logrus.FieldLogger {
-	return newLogger()
+func NewLogger(cfg config.LogConfiguration) logrus.FieldLogger {
+	return newLogger(cfg)
 }

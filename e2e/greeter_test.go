@@ -10,11 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	// "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
-	proto "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
+	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
 
 var (
-	greeter proto.GreeterService
+	greeter greeterPB.GreeterService
 )
 
 /**
@@ -26,9 +26,10 @@ var (
 * You can also run this test againest your local running service. i.e., `go run ./srv/greeter`
 **/
 func init() {
-	greeter = proto.NewGreeterService("greetersrv", grpc.NewClient())
+	// if start proxy and testing with MICRO_PROXY_ADDRESS="localhost:8888"
+	greeter = greeterPB.NewGreeterService("greetersrv", grpc.NewClient())
 	// if start GreeterService with `make run-greeter ARGS="--server_address=localhost:8080"`
-	// greeter = proto.NewGreeterService("localhost", grpc.NewClient(client.Selector(static.NewSelector())))
+	// greeter = greeterPB.NewGreeterService("localhost", grpc.NewClient(client.Selector(static.NewSelector())))
 }
 
 func TestGreeter_Hello_E2E(t *testing.T) {
@@ -36,7 +37,7 @@ func TestGreeter_Hello_E2E(t *testing.T) {
 		t.Skip("skipping e2e test")
 	}
 
-	rsp, err := greeter.Hello(context.TODO(), &proto.Request{Name: "Sumo"})
+	rsp, err := greeter.Hello(context.TODO(), &greeterPB.Request{Name: "Sumo"})
 	if err != nil {
 		t.Error(err)
 	}

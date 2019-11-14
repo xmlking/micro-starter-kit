@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/database"
-	myLog "github.com/xmlking/micro-starter-kit/shared/log"
+	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
@@ -52,13 +52,17 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 		{
 			Name:  "profile-handler",
 			Scope: di.App,
-			Build: buildProfileHandler,
+			Build: func(ctn di.Container) (interface{}, error) {
+				repo := ctn.Get("profile-repository").(repository.ProfileRepository)
+				logger := logger.NewLogger(cfg.Log).WithFields(map[string]interface{}{"component": "ProfileHandler"})
+				return handler.NewProfileHandler(repo, logger), nil
+			},
 		},
 		{
 			Name:  "database",
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
-				return database.GetDatabaseConnection(&cfg.Database)
+				return database.GetDatabaseConnection(cfg.Database)
 			},
 			Close: func(obj interface{}) error {
 				return obj.(*gorm.DB).Close()
@@ -98,12 +102,6 @@ func buildProfileRepository(ctn di.Container) (interface{}, error) {
 	db := ctn.Get("database").(*gorm.DB)
 	db.AutoMigrate(&pb.ProfileORM{})
 	return repository.NewProfileRepository(db), nil
-}
-
-func buildProfileHandler(ctn di.Container) (interface{}, error) {
-	repo := ctn.Get("profile-repository").(repository.ProfileRepository)
-	logger := myLog.NewLogger().WithFields(map[string]interface{}{"component": "ProfileHandler"})
-	return handler.NewProfileHandler(repo, logger), nil
 }
 
 func buildUserHandler(ctn di.Container) (interface{}, error) {

@@ -62,6 +62,10 @@ clean:
 		echo "Deleting $$d;"; \
 		rm -f $$d; \
 	done
+	@for f in */*/pkged.go ; do \
+		echo "Deleting $$f;"; \
+		rm -f $$f; \
+	done
 
 update_deps:
 	go mod verify

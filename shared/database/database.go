@@ -9,11 +9,10 @@ import (
 	"github.com/xmlking/micro-starter-kit/shared/config"
 
 	gormlog "github.com/onrik/logrus/gorm"
-	// gormlog "github.com/xmlking/micro-starter-kit/shared/log/gorm"
 )
 
 // GetDatabaseConnection return (gorm.DB or error)
-func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, err error) {
+func GetDatabaseConnection(dbConf config.DatabaseConfiguration) (db *gorm.DB, err error) {
 	var timezoneCommand string
 
 	switch dbConf.Dialect {
@@ -56,7 +55,7 @@ func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, e
 	return
 }
 
-func connection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, err error) {
+func connection(dbConf config.DatabaseConfiguration) (db *gorm.DB, err error) {
 	url, err := dbConf.URL()
 	if err != nil {
 		return nil, err

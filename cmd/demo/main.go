@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	_ "github.com/xmlking/micro-starter-kit/shared/log"
+	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 )
 
@@ -65,12 +65,13 @@ func main() {
 		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
 	)
 
-	// Initialise service
+	// Initialize service
 	service.Init(
 		micro.Action(func(c *cli.Context) {
 			// load config
 			myConfig.InitConfig(configDir, configFile)
 			config.Scan(&cfg)
+			logger.InitLogger(cfg.Log)
 		}),
 	)
 

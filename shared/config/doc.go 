@@ -1,4 +1,0 @@
-// config package from micro-strter-kit
-// add 	_ "github.com/xmlking/micro-starter-kit/shared/config" to main.go
-// keep congig.yaml in runtime root
-package config
