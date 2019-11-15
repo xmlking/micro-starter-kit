@@ -44,7 +44,7 @@ ARG VERSION=0.0.1
 ARG TYPE=srv
 ARG TARGET=account
 
-RUN pkger -o $TYPE/$TARGET -include /deploy/bases/micros/$TARGET-$TYPE/config
+RUN pkger -o $TYPE/$TARGET -include /config
 RUN go build -a \
     -ldflags="-w -s -linkmode external -extldflags '-static' $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
     -o /app ./$TYPE/$TARGET/main.go ./$TYPE/$TARGET/plugin.go

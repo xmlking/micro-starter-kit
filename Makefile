@@ -115,12 +115,12 @@ endif
 			for _target in $${type}/*/; do \
 				temp=$${_target%%/}; target=$${temp#*/}; \
 				echo "\tPackaging config for $${target}-$${type}"; \
-				${GOPATH}/bin/pkger -o $${type}/$${target} -include /deploy/bases/micros/$${target}-$${type}/config; \
+				${GOPATH}/bin/pkger -o $${type}/$${target} -include /config; \
 			done \
 		done \
 	else \
 		echo "Packaging config for ${TARGET}-${TYPE}..."; \
-		${GOPATH}/bin/pkger -o ${TYPE}/${TARGET} -include /deploy/bases/micros/${TARGET}-${TYPE}/config ; \
+		${GOPATH}/bin/pkger -o ${TYPE}/${TARGET} -include /config ; \
 	fi
 
 build build-%: pkger-%

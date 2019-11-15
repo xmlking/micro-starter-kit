@@ -33,7 +33,8 @@ WORKDIR /src
 COPY ./go.mod ./go.sum ./
 # Get dependancies - will also be cached if we won't change mod/sum
 RUN go mod download && \
-    GO111MODULE=off go get github.com/ahmetb/govvv
+    GO111MODULE=off go get github.com/ahmetb/govvv && \
+    go install github.com/markbates/pkger/cmd/pkger
 
 # COPY the source code as the last step
 COPY ./ ./
@@ -43,6 +44,7 @@ ARG VERSION=0.0.1
 ARG TYPE=srv
 ARG TARGET=account
 
+RUN pkger -o $TYPE/$TARGET -include /config
 RUN go build -a \
     -ldflags="-w -s -linkmode external -extldflags '-static' $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
     -o /app ./$TYPE/$TARGET/main.go ./$TYPE/$TARGET/plugin.go
