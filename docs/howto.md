@@ -206,6 +206,16 @@ go test -v -run Integration ./srv/emailer/service
   ```bash
   git config --global push.followTags true
   ```
+  
+- How to debug etcd?
+
+  ```bash
+  kubectl port-forward service/etcd-cluster-client -n default  2379
+  # then
+  ETCDCTL_API=3 etcdctl version
+  ETCDCTL_API=3 etcdctl -w table member list
+  ETCDCTL_API=3 etcdctl get --from-key ''
+  ```
 
 ## Refer
 
