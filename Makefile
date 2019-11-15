@@ -17,6 +17,7 @@ VERSION					:= $(shell git describe --tags || echo "HEAD")
 CURRENT_BRANCH  := $(shell git rev-parse --abbrev-ref HEAD)
 GOPATH					:= $(shell go env GOPATH)
 HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
+HAS_PKGER				:= $(shell command -v pkger 2> /dev/null)
 GIT_DIRTY 			:= $(shell git status --porcelain 2> /dev/null)
 HAS_KO					:= $(shell command -v ko 2> /dev/null)
 CODECOV_FILE 		:= build/coverage.txt
@@ -38,6 +39,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 .PHONY: all tools, check_dirty, clean, update_deps
 .PHONY: proto proto-%
 .PHONY: lint lint-%
+.PHONY: pkger pkger-%
 .PHONY: build build-%
 .PHONY: run run-%
 .PHONY: docker_clean docker docker-% docker_push
@@ -50,7 +52,7 @@ all: build
 tools:
 	@echo "==> Installing dev tools"
 	# go install github.com/ahmetb/govvv
-	# go install github.com/google/ko/cmd/ko
+	# go install github.com/markbates/pkger/cmd/pkger
 
 check_dirty:
 ifdef GIT_DIRTY
@@ -103,7 +105,25 @@ lint lint-%:
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
 	fi
 
-build build-%:
+pkger pkger-%:
+ifndef HAS_PKGER
+	$(error "No pkger in PATH". Please install via 'go install github.com/markbates/pkger/cmd/pkger'")
+endif
+	@if [ -z $(TARGET) ]; then \
+		for type in $(TYPES); do \
+			echo "Packaging config for Type: $${type}..."; \
+			for _target in $${type}/*/; do \
+				temp=$${_target%%/}; target=$${temp#*/}; \
+				echo "\tPackaging config for $${target}-$${type}"; \
+				${GOPATH}/bin/pkger -o $${type}/$${target} -include /deploy/bases/micros/$${target}-$${type}/config; \
+			done \
+		done \
+	else \
+		echo "Packaging config for ${TARGET}-${TYPE}..."; \
+		${GOPATH}/bin/pkger -o ${TYPE}/${TARGET} -include /deploy/bases/micros/${TARGET}-${TYPE}/config ; \
+	fi
+
+build build-%: pkger-%
 ifndef HAS_GOVVV
 	$(error "No govvv in PATH". Please install via 'go install github.com/ahmetb/govvv'")
 endif

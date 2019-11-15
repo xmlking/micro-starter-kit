@@ -37,7 +37,7 @@ GO111MODULE=off go get github.com/google/ko/cmd/ko
 # other way to get latest kustomize
 GO111MODULE=on go get sigs.k8s.io/kustomize/kustomize/v3@v3.3.0
 # pkger cli
-go get github.com/markbates/pkger/cmd/pkger
+go install github.com/markbates/pkger/cmd/pkger
 
 # fetch protoc plugins into $GOPATH
 GO111MODULE=off go get github.com/golang/protobuf/{proto,protoc-gen-go}

@@ -86,6 +86,14 @@ make lint-account
 make lint-account-srv
 ```
 
+### Packager
+
+```bash
+make pkger TARGET=greeter
+make pkger-greeter
+make pkger
+```
+
 ### build
 
 ```bash
