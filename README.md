@@ -29,6 +29,7 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 - [x] One Step _build/publish/deploy_ with [ko](https://github.com/google/ko)
 - [x] BuildInfo with [govvv](https://github.com/ahmetb/govvv)
 - [x] Linting with [GolangCI](https://github.com/golangci/golangci-lint) linters aggregator
+- [x] Linting Protos with [prototool](https://github.com/uber/prototool)
 - [x] CICD Pipelines with [GitHub Actions](https://github.com/features/actions)
 - [x] Kubernetes _Matrix Deployment_ with [Kustomize](https://kustomize.io/)
 - [ ] Observability

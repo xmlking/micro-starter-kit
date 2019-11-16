@@ -53,6 +53,8 @@ tools:
 	@echo "==> Installing dev tools"
 	# go install github.com/ahmetb/govvv
 	# go install github.com/markbates/pkger/cmd/pkger
+	# GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint
+	# GO111MODULE=on go get github.com/uber/prototool/cmd/prototool@dev
 
 check_dirty:
 ifdef GIT_DIRTY
@@ -100,9 +102,11 @@ lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all"; \
 		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
+		${GOPATH}/bin/prototool lint; \
 	else \
 		echo "Linting ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
+		${GOPATH}/bin/prototool lint ./${TYPE}/${TARGET}/ ; \
 	fi
 
 pkger pkger-%:

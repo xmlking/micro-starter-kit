@@ -20,6 +20,7 @@ jobs:
           GO111MODULE: off
         run: |
           go get github.com/golangci/golangci-lint/cmd/golangci-lint
+          GO111MODULE=on go get github.com/uber/prototool/cmd/prototool@dev
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Cache go modules
@@ -38,6 +39,7 @@ jobs:
           make lint
           # export PATH=$PATH:$(go env GOPATH)/bin
           # golangci-lint run
+          # prototool lint
       - name: Unit Test
         run: make test-unit
       - name: Integration Test

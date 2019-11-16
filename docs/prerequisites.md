@@ -10,6 +10,7 @@ You should have:
 # for mac, use brew to install protobuf
 brew install protobuf
 # k8s tool similar to helm  (optional)
+# generate fill k8s yaml files from overlays
 brew install kustomize
 # kubeval - validate one or more Kubernetes config files(optional)
 brew tap instrumenta/instrumenta
@@ -32,6 +33,8 @@ brew install etcd
 GO111MODULE=off go get github.com/ahmetb/govvv
 # for static check/linter
 GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint
+# linter and tool for proto files
+GO111MODULE=on go get github.com/uber/prototool/cmd/prototool@dev
 # kind - kubernetes in docker (optional)
 GO111MODULE=on go get sigs.k8s.io/kind
 # go lang  build/publish/deploy tool (optional)
