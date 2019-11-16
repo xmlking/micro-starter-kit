@@ -1,6 +1,9 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 const (
 	// Development environment
@@ -45,17 +48,21 @@ type DatabaseDialect string
 
 // DatabaseConfiguration holds db config
 type DatabaseConfiguration struct {
-	Dialect     DatabaseDialect `json:"dialect" default:"postgres"`
-	Host        string          `json:"host"`
-	Port        int             `json:"port"`
-	Username    string          `json:"username"`
-	Password    string          `json:"password"`
-	Database    string          `json:"database"`
-	Charset     string          `json:"charset" default:"utf8"`
-	UTC         bool            `default:"true"`
-	Logging     bool            `default:"false"`
-	Singularize bool            `default:"false"`
-	Params      map[string]interface{}
+	Dialect         DatabaseDialect `json:"dialect" default:"postgres"`
+	Host            string          `json:"host"`
+	Port            int             `json:"port"`
+	Username        string          `json:"username"`
+	Password        string          `json:"password"`
+	Database        string          `json:"database"`
+	Charset         string          `json:"charset" default:"utf8"`
+	UTC             bool            `default:"true"`
+	Logging         bool            `default:"false"`
+	Singularize     bool            `default:"false"`
+	MaxOpenConns    int             `json:"maxOpenConns" default:"1"`
+	MaxIdleConns    int             `json:"maxIdleConns" default:"1"`
+	ConnMaxLifetime time.Duration   `json:"connMaxLifetime" default:"1hr"`
+
+	Params map[string]interface{}
 }
 
 // URL returns a connection string for the database.

@@ -15,6 +15,15 @@ import (
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 )
 
+/**
+* set envelopment variables for CI e2e tests with `memory` registry.
+* - export MICRO_REGISTRY=memory
+* - export MICRO_SELECTOR=static
+* (Or) Set envelopment variables for CI e2e tests via gRPC Proxy
+* - MICRO_PROXY_ADDRESS="localhost:8888"
+* You can also run this test againest your local running service with mDNS. i.e., `make run-account`
+**/
+
 // Define the suite, and absorb the built-in basic suite
 // functionality from testify - including a T() method which
 // returns the current testing context
@@ -27,13 +36,8 @@ type AccountTestSuite struct {
 // SetupSuite implements suite.SetupAllSuite
 func (suite *AccountTestSuite) SetupSuite() {
 	suite.T().Log("in SetupSuite")
-	// if start proxy and testing with MICRO_PROXY_ADDRESS="localhost:8888"
 	suite.user = accountPB.NewUserService("accountsrv", grpc.NewClient())
 	suite.profile = accountPB.NewProfileService("accountsrv", grpc.NewClient())
-	// if start GreeterService with `make run-greeter ARGS="--server_address=localhost:8081"
-	// and if start AccountService with `make run-account ARGS="--server_address=localhost:8080"`
-	// suite.user = accountPB.NewUserService("localhost", grpc.NewClient(client.Selector(static.NewSelector())))
-	// suite.profile = accountPB.NewProfileService("localhost", grpc.NewClient(client.Selector(static.NewSelector())))
 }
 
 // TearDownSuite implements suite.TearDownAllSuite

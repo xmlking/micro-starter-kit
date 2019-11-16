@@ -11,6 +11,9 @@ database:
   Username: postgres
   Password: postgres321
   database: postgres
+  maxOpenConns: 20
+  maxIdleConns: 5
+  connMaxLifetime: 1hr
   logging: true
 observability:
   metrics:

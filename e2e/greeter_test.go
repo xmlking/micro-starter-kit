@@ -23,13 +23,10 @@ var (
 * - export MICRO_SELECTOR=static
 * (Or) Set envelopment variables for CI e2e tests via gRPC Proxy
 * - MICRO_PROXY_ADDRESS="localhost:8888"
-* You can also run this test againest your local running service. i.e., `go run ./srv/greeter`
+* You can also run this test againest your local running service with mDNS. i.e., `make run-greeter`
 **/
 func init() {
-	// if start proxy and testing with MICRO_PROXY_ADDRESS="localhost:8888"
 	greeter = greeterPB.NewGreeterService("greetersrv", grpc.NewClient())
-	// if start GreeterService with `make run-greeter ARGS="--server_address=localhost:8080"`
-	// greeter = greeterPB.NewGreeterService("localhost", grpc.NewClient(client.Selector(static.NewSelector())))
 }
 
 func TestGreeter_Hello_E2E(t *testing.T) {

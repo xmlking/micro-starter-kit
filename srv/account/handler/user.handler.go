@@ -128,10 +128,10 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	}
 
 	// Set arbitrary headers in context
-	customCtx := metadata.NewContext(ctx, map[string]string{
-		"X-User-Id": "john",
-		"X-From-Id": "script",
-	})
+	customCtx := metadata.MergeContext(ctx, map[string]string{
+		"x-user-id": "john",
+		"x-from-id": "script",
+	}, true)
 
 	// call greeter
 	// if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {

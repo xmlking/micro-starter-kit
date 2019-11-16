@@ -47,16 +47,12 @@ MICRO_PROXY_ADDRESS="localhost:8888" micro publish emailersrv '{"to": "sumo@demo
 > assume `Account` service running at `localhost:8080`
 
 ```bash
-~/Developer/Apps/ghz/ghz --config ./e2e/config.json
-# or
-~/Developer/Apps/ghz/ghz --insecure \
-  --proto ./srv/account/proto/account/account.proto \
-  --call accountsrv.UserService.Create \
-  -i ~/go/src \
-  -d '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}' \
-  -m '{"trace_id":"{{.RequestNumber}}", "timestamp":"{{.TimestampUnix}}"}' \
-  -n 100 -c 10 \
-  localhost:8080
+make run-account ARGS="--server_address=localhost:8080"
+```
+
+```bash
+# set `host` and full path for `import-paths` in config.json
+~/Developer/Apps/ghz/ghz --config ./e2e/ghz-account-config.json
 ```
 
 ### Reference

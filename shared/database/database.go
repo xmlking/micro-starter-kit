@@ -42,9 +42,9 @@ func GetDatabaseConnection(dbConf config.DatabaseConfiguration) (db *gorm.DB, er
 
 	db.LogMode(dbConf.Logging)
 	db.SingularTable(dbConf.Singularize)
-	// db.DB().SetMaxOpenConns(400)
-	// db.DB().SetMaxIdleConns(0)
-	// db.DB().SetConnMaxLifetime(100 * time.Second)
+	db.DB().SetMaxOpenConns(dbConf.MaxOpenConns)
+	db.DB().SetMaxIdleConns(dbConf.MaxIdleConns)
+	db.DB().SetConnMaxLifetime(dbConf.ConnMaxLifetime)
 
 	if dbConf.UTC {
 		if _, err = db.DB().Exec(timezoneCommand); err != nil {

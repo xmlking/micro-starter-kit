@@ -10,7 +10,10 @@ database:
   port: 9999
   Username: sumo
   Password: demo
-  database: ":memory:"
+  database: "file:foobar?mode=memory&cache=shared"
+  maxOpenConns: 1
+  maxIdleConns: 1
+  connMaxLifetime: 1hr
   logging: true
 observability:
   metrics:
