@@ -25,7 +25,7 @@ kubectl delete -f  build/deploy.production.yaml
 
 ## E2E Test via REST Gateway
 
-Use **REST Client** [tests](./test-rest-api.http) for manual testing
+Use **REST Client** [tests](./test-rest-api-account.http) for manual testing
 
 ## E2E Test via gRPC Gateway
 

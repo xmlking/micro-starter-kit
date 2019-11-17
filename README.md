@@ -51,7 +51,7 @@ Also Refer [scaffolding](docs/scaffolding.md) docs
 > clone the repo
 
 ```bash
-git clone https://github.com/xmlking/micro-starter-kit /Developer/Work/go/micro-starter-kit
+git clone https://github.com/xmlking/micro-starter-kit ~/Developer/Work/go/micro-starter-kit
 # pull dependencies (when every time `go.mod` changed)
 go mod download
 ```

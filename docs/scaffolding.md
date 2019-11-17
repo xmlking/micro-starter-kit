@@ -3,8 +3,8 @@
 > setup new golang project workspace from scratch using `go-micro` cli
 
 ```bash
-mkdir -p /Developer/Work/go/micro-starter-kit
-cd /Developer/Work/go/micro-starter-kit
+mkdir -p ~/Developer/Work/go/micro-starter-kit
+cd ~/Developer/Work/go/micro-starter-kit
 go mod init github.com/xmlking/micro-starter-kit
 mkdir srv api fnc
 

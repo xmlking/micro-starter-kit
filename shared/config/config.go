@@ -34,7 +34,8 @@ var (
 )
 
 // VersionMsg is the message that is shown after process started.
-const versionMsg = `version     : %s
+const versionMsg = `
+version     : %s
 build date  : %s
 go version  : %s
 go compiler : %s
@@ -46,9 +47,9 @@ git summary : %s
 `
 
 const (
-	// DefaultConfigDir if o ConfigDir supplied
+	// DefaultConfigDir if no ConfigDir supplied
 	DefaultConfigDir = "/config"
-	// DefaultConfigFile if o ConfigFile supplied
+	// DefaultConfigFile if no ConfigFile supplied
 	DefaultConfigFile = "config.yaml"
 )
 
@@ -107,7 +108,7 @@ func LoadExtraConfig(configDir, configFile string) {
 
 	if err := microConfig.Load(pkger.NewSource(pkger.WithPath(configPath))); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Errorf(`missing config file at %s, fallback to default config path.
+			log.WithError(err).Errorf(`missing config file at %s, fallback to default config path.
             you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath)
 		} else {
 			log.Fatal(err.Error())
