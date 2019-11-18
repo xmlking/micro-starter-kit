@@ -22,3 +22,13 @@ make make pkger-greeter
 # (or)
 make pkger
 ```
+
+### Usage
+
+```go
+	if err := microConfig.Load(
+		pkger.NewSource(pkger.WithPath("/config/config.yaml")),
+	); err != nil {
+    og.Fatal(err.Error())
+	}
+```
