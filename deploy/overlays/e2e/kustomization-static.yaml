@@ -70,3 +70,6 @@ images:
   - name: xmlking/greeter-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
     newTag: $(IMAGE_VERSION)
+  - name: xmlking/recorder-srv
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/recorder-srv
+    newTag: $(IMAGE_VERSION)
