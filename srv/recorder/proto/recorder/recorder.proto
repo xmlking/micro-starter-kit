@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package recordersrv;
+
+// Transation Event
+message TransationEvent {
+    // request
+    bytes req = 1;
+    // responce
+    bytes rsp = 2;
+}
