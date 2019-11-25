@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package recordersrv;
 
-// Transation Event
-message TransationEvent {
+// Transaction Event
+message TransactionEvent {
     // request
     bytes req = 1;
     // responce

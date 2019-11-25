@@ -36,10 +36,10 @@ var (
 // define the regex for a UUID once up-front
 var _recorder_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on TransationEvent with the rules defined
+// Validate checks the field values on TransactionEvent with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
-func (m *TransationEvent) Validate() error {
+func (m *TransactionEvent) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -51,9 +51,9 @@ func (m *TransationEvent) Validate() error {
 	return nil
 }
 
-// TransationEventValidationError is the validation error returned by
-// TransationEvent.Validate if the designated constraints aren't met.
-type TransationEventValidationError struct {
+// TransactionEventValidationError is the validation error returned by
+// TransactionEvent.Validate if the designated constraints aren't met.
+type TransactionEventValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -61,22 +61,22 @@ type TransationEventValidationError struct {
 }
 
 // Field function returns field value.
-func (e TransationEventValidationError) Field() string { return e.field }
+func (e TransactionEventValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e TransationEventValidationError) Reason() string { return e.reason }
+func (e TransactionEventValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e TransationEventValidationError) Cause() error { return e.cause }
+func (e TransactionEventValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e TransationEventValidationError) Key() bool { return e.key }
+func (e TransactionEventValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e TransationEventValidationError) ErrorName() string { return "TransationEventValidationError" }
+func (e TransactionEventValidationError) ErrorName() string { return "TransactionEventValidationError" }
 
 // Error satisfies the builtin error interface
-func (e TransationEventValidationError) Error() string {
+func (e TransactionEventValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -88,14 +88,14 @@ func (e TransationEventValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sTransationEvent.%s: %s%s",
+		"invalid %sTransactionEvent.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = TransationEventValidationError{}
+var _ error = TransactionEventValidationError{}
 
 var _ interface {
 	Field() string
@@ -103,4 +103,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = TransationEventValidationError{}
+} = TransactionEventValidationError{}

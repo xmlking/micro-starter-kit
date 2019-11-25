@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/errors"
-	"github.com/micro/go-micro/metadata"
 	log "github.com/sirupsen/logrus"
 	"github.com/thoas/go-funk"
 
@@ -36,9 +35,6 @@ func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeter
 
 func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.UserExistResponse) error {
 	log.Info("Received UserHandler.Exist request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.user.exist", "validation error: %v", err)
-	}
 	model := pb.UserORM{}
 	model.Id = req.Id.GetValue()
 	model.Username = req.Username.GetValue()
@@ -52,9 +48,6 @@ func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.Us
 
 func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.UserListResponse) error {
 	log.Info("Received UserHandler.List request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.user.list", "validation error: %v", err)
-	}
 	model := pb.UserORM{}
 	model.Username = req.Username.GetValue()
 	model.FirstName = req.FirstName.GetValue()
@@ -83,9 +76,6 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 
 func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Get request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.user.get", "validation error: %v", err)
-	}
 	id := req.Id.GetValue()
 	if id == "" {
 		return myErrors.ValidationError("account-srv.user.get", "validation error: Missing Id")
@@ -107,9 +97,6 @@ func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.User
 
 func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Create request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.user.create", "validation error: %v", err)
-	}
 
 	model := pb.UserORM{}
 	model.Username = req.Username.GetValue()
@@ -127,15 +114,9 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 		return myErrors.AppError(myErrors.PSE, err)
 	}
 
-	// Set arbitrary headers in context
-	customCtx := metadata.MergeContext(ctx, map[string]string{
-		"x-user-id": "john",
-		"x-from-id": "script",
-	}, true)
-
 	// call greeter
 	// if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
-	if res, err := h.greeterSrvClient.Hello(customCtx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
+	if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
 		log.WithError(err).Error("Received greeterService.Hello request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	} else {
@@ -147,9 +128,6 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 
 func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Update request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.user.update", "validation error: %v", err)
-	}
 
 	id := req.Id.GetValue()
 	if id == "" {
@@ -171,9 +149,6 @@ func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 
 func (h *userHandler) Delete(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
 	log.Info("Received UserHandler.Delete request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.user.delete", "validation error: %v", err)
-	}
 
 	id := req.Id.GetValue()
 	if id == "" {

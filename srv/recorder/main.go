@@ -24,7 +24,6 @@ var (
 )
 
 func main() {
-
 	// New Service
 	service := grpc.NewService(
 		// optional cli flag to override config.
@@ -32,7 +31,7 @@ func main() {
 		micro.Flags(
 			cli.StringFlag{
 				Name:        "configDir, d",
-				Value:       "config",
+				Value:       "/config",
 				Usage:       "Path to the config directory. Defaults to 'config'",
 				EnvVar:      "CONFIG_DIR",
 				Destination: &configDir,
@@ -46,7 +45,6 @@ func main() {
 			}),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-		micro.WrapSubscriber(logWrapper.NewSubscriberWrapper()),
 	)
 
 	// Initialize service
@@ -58,6 +56,18 @@ func main() {
 			_ = config.Scan(&cfg)
 			logger.InitLogger(cfg.Log)
 		}),
+	)
+	// Initialize Features
+	var options []micro.Option
+	if cfg.Features["reqlogs"].Enabled {
+		options = append(options,
+			micro.WrapSubscriber(logWrapper.NewSubscriberWrapper()),
+		)
+	}
+
+	// Initialize Features
+	service.Init(
+		options...,
 	)
 
 	// Initialize DI Container

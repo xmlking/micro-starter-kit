@@ -15,13 +15,6 @@ database:
   maxIdleConns: 1
   connMaxLifetime: 1hr
   logging: true
-observability:
-  metrics:
-    address: prometheus:8125
-    flushInterval: 1000000000
-  tracing:
-    address: jaeger:6831
-    flushInterval: 5000000000
 email:
   username: yourGmailUsername
   password: yourGmailAppPassword
@@ -29,14 +22,36 @@ email:
   port: 587
   from: xmlking@gmail.com
 
-accountsrv:
-  endpoint: accountsrv
-  version: v0.1.0
-greetersrv:
-  endpoint: greetersrv
-  version: v0.1.0
-emailersrv:
-  endpoint: emailersrv
-  version: v0.1.0
+services:
+  accountsrv:
+    endpoint: accountsrv
+    version: v0.1.0
+  greetersrv:
+    endpoint: greetersrv
+    version: v0.1.0
+  emailersrv:
+    endpoint: emailersrv
+    version: v0.1.0
+  recordersrv:
+    endpoint: recordersrv
+    version: v0.1.0
 
-
+# Feature Flags (enabled/disabled)
+features:
+  metrics:
+    address: prometheus:8125
+    flushInterval: 1000000000
+    enabled: false
+  tracing:
+    address: jaeger:6831
+    flushInterval: 5000000000
+    enabled: false
+  mtls:
+    enabled: false
+  validator:
+    enabled: true
+  reqlogs:
+    enabled: true
+  translogs:
+    topic: recordersrv
+    enabled: true

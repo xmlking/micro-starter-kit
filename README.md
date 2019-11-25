@@ -22,8 +22,8 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 - [x] Input Validation with [protoc-gen-validate (PGV)](https://github.com/envoyproxy/protoc-gen-validate)
 - [x] Config - Pluggable Sources, Mergeable Config, Safe Recovery
 - [x] Customizable Logging
-- [x] CRUD Example using [GORM](https://gorm.io/)
-- [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
+- [x] CRUD Example using [GORM](https://gorm.io/), [benchmarks](https://github.com/kihamo/orm-benchmark), [XORM](https://xorm.io/) next?
+- [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm) or use [protoc-go-inject-tag](https://github.com/favadi/protoc-go-inject-tag)?
 - [x] Dependency injection [Container](https://github.com/sarulabs/di)
 - [x] multi-stage-multi-target Dockerfile
 - [x] One Step _build/publish/deploy_ with [ko](https://github.com/google/ko)
@@ -32,6 +32,8 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 - [x] Linting Protos with [prototool](https://github.com/uber/prototool)
 - [x] CICD Pipelines with [GitHub Actions](https://github.com/features/actions)
 - [x] Kubernetes _Matrix Deployment_ with [Kustomize](https://kustomize.io/)
+- [ ] Add k8s [healthchecks](https://github.com/heptiolabs/healthcheck) with [cmux](https://medium.com/@drgarcia1986/listen-grpc-and-http-requests-on-the-same-port-263c40cb45ff)
+- [x] Feature Flags (enable/disable with zero cost)
 - [ ] Observability
 - [ ] Service Mesh with [Istio](https://istio.io/)
 - [ ] GraphQL Gateway with [gqlgen](https://gqlgen.com/), [rejoiner](https://github.com/google/rejoiner)
@@ -159,3 +161,5 @@ kubectl delete -f build/deploy.yaml
 5. [step-by-step-guide-micro](https://github.com/micro-in-cn/tutorials/tree/master/microservice-in-micro)
 6. [micro-in-cn](https://github.com/micro-in-cn/tutorials/tree/master/examples)
 7. [Platform Web](https://github.com/micro-in-cn/platform-web)
+8. [grpc template](https://github.com/vtolstov/micro-template-grpc)
+9. [Simple API backed by PostgresQL, Golang and gRPC](https://medium.com/@vptech/complexity-is-the-bane-of-every-software-engineer-e2878d0ad45a)

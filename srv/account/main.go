@@ -4,6 +4,9 @@ import (
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
+	"github.com/micro/go-micro/transport"
+	gtransport "github.com/micro/go-micro/transport/grpc"
+
 	"github.com/micro/go-micro/service/grpc"
 
 	log "github.com/sirupsen/logrus"
@@ -11,6 +14,11 @@ import (
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
+	transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
+	validatorWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/validator"
+
+	"github.com/xmlking/micro-starter-kit/shared/constants"
+	"github.com/xmlking/micro-starter-kit/shared/util"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
 	"github.com/xmlking/micro-starter-kit/srv/account/registry"
@@ -29,7 +37,6 @@ var (
 )
 
 func main() {
-
 	// New Service
 	service := grpc.NewService(
 		// optional cli flag to override config.
@@ -51,8 +58,6 @@ func main() {
 			}),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
-		micro.WrapClient(logWrapper.NewClientWrapper()),
 	)
 
 	// Initialize service
@@ -65,6 +70,42 @@ func main() {
 		}),
 	)
 
+	// Initialize Features
+	var options []micro.Option
+	if cfg.Features["mtls"].Enabled {
+		tlsConf, _ := util.GetSelfSignedTLSConfig("localhost")
+		options = append(options,
+			// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
+			micro.Transport(gtransport.NewTransport(transport.TLSConfig(tlsConf))), // OR
+			micro.Transport(gtransport.NewTransport(transport.Secure(true))),       // OR
+			grpc.WithTLS(tlsConf),
+		)
+	}
+	// Wrappers are invoked in the order as they added
+	if cfg.Features["reqlogs"].Enabled {
+		options = append(options,
+			micro.WrapHandler(logWrapper.NewHandlerWrapper()),
+			micro.WrapClient(logWrapper.NewClientWrapper()),
+		)
+	}
+	if cfg.Features["validator"].Enabled {
+		options = append(options,
+			micro.WrapHandler(validatorWrapper.NewHandlerWrapper()),
+		)
+	}
+	if cfg.Features["translogs"].Enabled {
+		topic := config.Get("features", "translogs", "topic").String("recordersrv")
+		publisher := micro.NewPublisher(topic, service.Client())
+		options = append(options,
+			micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)),
+		)
+	}
+
+	// Initialize Features
+	service.Init(
+		options...,
+	)
+
 	// Initialize DI Container
 	ctn, err := registry.NewContainer(cfg)
 	defer ctn.Clean()
@@ -75,10 +116,10 @@ func main() {
 	log.Debugf("Client type: grpc or regular? %T\n", service.Client()) // FIXME: expected *grpc.grpcClient but got *micro.clientWrapper
 
 	// Publisher publish to "emailersrv"
-	emailerSrvEp := config.Get("emailersrv", "endpoint").String("emailersrv")
+	emailerSrvEp := config.Get("services", constants.EMAILERSRV, "endpoint").String(constants.EMAILERSRV)
 	publisher := micro.NewPublisher(emailerSrvEp, service.Client())
 	// greeterSrv Client to call "greetersrv"
-	greeterSrvEp := config.Get("greetersrv", "endpoint").String("greetersrv")
+	greeterSrvEp := config.Get("services", constants.GREETERSRV, "endpoint").String(constants.GREETERSRV)
 	greeterSrvClient := greeterPB.NewGreeterService(greeterSrvEp, service.Client())
 
 	// // Handlers

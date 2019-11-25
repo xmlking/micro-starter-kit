@@ -20,8 +20,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-// Transation Event
-type TransationEvent struct {
+// Transaction Event
+type TransactionEvent struct {
 	// request
 	Req []byte `protobuf:"bytes,1,opt,name=req,proto3" json:"req,omitempty"`
 	// responce
@@ -31,39 +31,39 @@ type TransationEvent struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *TransationEvent) Reset()         { *m = TransationEvent{} }
-func (m *TransationEvent) String() string { return proto.CompactTextString(m) }
-func (*TransationEvent) ProtoMessage()    {}
-func (*TransationEvent) Descriptor() ([]byte, []int) {
+func (m *TransactionEvent) Reset()         { *m = TransactionEvent{} }
+func (m *TransactionEvent) String() string { return proto.CompactTextString(m) }
+func (*TransactionEvent) ProtoMessage()    {}
+func (*TransactionEvent) Descriptor() ([]byte, []int) {
 	return fileDescriptor_65991f949dbc3f7a, []int{0}
 }
 
-func (m *TransationEvent) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_TransationEvent.Unmarshal(m, b)
+func (m *TransactionEvent) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TransactionEvent.Unmarshal(m, b)
 }
-func (m *TransationEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_TransationEvent.Marshal(b, m, deterministic)
+func (m *TransactionEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TransactionEvent.Marshal(b, m, deterministic)
 }
-func (m *TransationEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TransationEvent.Merge(m, src)
+func (m *TransactionEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TransactionEvent.Merge(m, src)
 }
-func (m *TransationEvent) XXX_Size() int {
-	return xxx_messageInfo_TransationEvent.Size(m)
+func (m *TransactionEvent) XXX_Size() int {
+	return xxx_messageInfo_TransactionEvent.Size(m)
 }
-func (m *TransationEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_TransationEvent.DiscardUnknown(m)
+func (m *TransactionEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_TransactionEvent.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_TransationEvent proto.InternalMessageInfo
+var xxx_messageInfo_TransactionEvent proto.InternalMessageInfo
 
-func (m *TransationEvent) GetReq() []byte {
+func (m *TransactionEvent) GetReq() []byte {
 	if m != nil {
 		return m.Req
 	}
 	return nil
 }
 
-func (m *TransationEvent) GetRsp() []byte {
+func (m *TransactionEvent) GetRsp() []byte {
 	if m != nil {
 		return m.Rsp
 	}
@@ -71,7 +71,7 @@ func (m *TransationEvent) GetRsp() []byte {
 }
 
 func init() {
-	proto.RegisterType((*TransationEvent)(nil), "recordersrv.TransationEvent")
+	proto.RegisterType((*TransactionEvent)(nil), "recordersrv.TransactionEvent")
 }
 
 func init() {
@@ -79,12 +79,12 @@ func init() {
 }
 
 var fileDescriptor_65991f949dbc3f7a = []byte{
-	// 107 bytes of a gzipped FileDescriptorProto
+	// 108 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xd2, 0x2a, 0x2e, 0x2a, 0xd3,
 	0x2f, 0x4a, 0x4d, 0xce, 0x2f, 0x4a, 0x49, 0x2d, 0xd2, 0x2f, 0x28, 0xca, 0x2f, 0xc9, 0x47, 0x70,
-	0x61, 0x0c, 0x3d, 0xb0, 0xb8, 0x10, 0x37, 0x8c, 0x5f, 0x5c, 0x54, 0xa6, 0x64, 0xca, 0xc5, 0x1f,
-	0x52, 0x94, 0x98, 0x57, 0x9c, 0x58, 0x92, 0x99, 0x9f, 0xe7, 0x5a, 0x96, 0x9a, 0x57, 0x22, 0x24,
-	0xc0, 0xc5, 0x5c, 0x94, 0x5a, 0x28, 0xc1, 0xa8, 0xc0, 0xa8, 0xc1, 0x13, 0x04, 0x62, 0x82, 0x45,
-	0x8a, 0x0b, 0x24, 0x98, 0xa0, 0x22, 0xc5, 0x05, 0x49, 0x6c, 0x60, 0xa3, 0x8c, 0x01, 0x01, 0x00,
-	0x00, 0xff, 0xff, 0x5a, 0x92, 0x73, 0x89, 0x78, 0x00, 0x00, 0x00,
+	0x61, 0x0c, 0x3d, 0xb0, 0xb8, 0x10, 0x37, 0x8c, 0x5f, 0x5c, 0x54, 0xa6, 0x64, 0xc6, 0x25, 0x10,
+	0x52, 0x94, 0x98, 0x57, 0x9c, 0x98, 0x5c, 0x92, 0x99, 0x9f, 0xe7, 0x5a, 0x96, 0x9a, 0x57, 0x22,
+	0x24, 0xc0, 0xc5, 0x5c, 0x94, 0x5a, 0x28, 0xc1, 0xa8, 0xc0, 0xa8, 0xc1, 0x13, 0x04, 0x62, 0x82,
+	0x45, 0x8a, 0x0b, 0x24, 0x98, 0xa0, 0x22, 0xc5, 0x05, 0x49, 0x6c, 0x60, 0xb3, 0x8c, 0x01, 0x01,
+	0x00, 0x00, 0xff, 0xff, 0x35, 0x77, 0x7f, 0x84, 0x79, 0x00, 0x00, 0x00,
 }

@@ -11,6 +11,7 @@ bases:
   - account-srv
   - emailer-srv
   - greeter-srv
+  - recorder-srv
 
 configurations:
   - kconfig.yaml

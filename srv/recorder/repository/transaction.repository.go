@@ -7,13 +7,13 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/micro/go-micro/store"
 	log "github.com/sirupsen/logrus"
-	pb "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
+	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
 )
 
 // TransactionRepository interface
 type TransactionRepository interface {
-	Read(ctx context.Context, key string) (transation *pb.TransationEvent, err error)
-	Write(ctx context.Context, key string, transation *pb.TransationEvent) error
+	Read(ctx context.Context, key string) (transation *recorderPB.TransactionEvent, err error)
+	Write(ctx context.Context, key string, transation *recorderPB.TransactionEvent) error
 }
 
 // transactionRepository struct
@@ -29,7 +29,7 @@ func NewTransactionRepository(store store.Store) TransactionRepository {
 }
 
 // Read: returns matching Records
-func (repo *transactionRepository) Read(ctx context.Context, key string) (transation *pb.TransationEvent, err error) {
+func (repo *transactionRepository) Read(ctx context.Context, key string) (transation *recorderPB.TransactionEvent, err error) {
 	var records []*store.Record
 	records, err = repo.store.Read(key)
 	if len(records) > 0 {
@@ -39,8 +39,8 @@ func (repo *transactionRepository) Read(ctx context.Context, key string) (transa
 }
 
 // Write:
-func (repo *transactionRepository) Write(ctx context.Context, key string, transation *pb.TransationEvent) error {
-	log.Debugf("Writing to database:- key: %s, transation: %v", key, transation)
+func (repo *transactionRepository) Write(ctx context.Context, key string, transation *recorderPB.TransactionEvent) error {
+	log.Debugf("Writing to database: key: %s, transation: %v", key, transation)
 	data, error := proto.Marshal(transation)
 	if error != nil {
 		return error

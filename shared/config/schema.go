@@ -26,6 +26,8 @@ type ServiceConfiguration struct {
 	Log         LogConfiguration
 	Database    DatabaseConfiguration
 	Email       EmailConfiguration
+	Services    map[string]Service
+	Features    map[string]Feature
 }
 
 // LogConfiguration holds log config
@@ -96,4 +98,13 @@ type EmailConfiguration struct {
 	EmailServer string
 	Port        int
 	From        string
+}
+
+type Service struct {
+	Endpoint string `json:"name"`
+	Version  string `json:"version" default:"v0.1.0"`
+}
+
+type Feature struct {
+	Enabled bool `default:"false"`
 }

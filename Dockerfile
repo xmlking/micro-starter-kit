@@ -1,11 +1,8 @@
-# Accept the Go version for the image to be set as a build argument.
-# Set default to Go v1.13
-ARG GO_VERSION=1.13
+# Accept the Go Micro version for the image to be set as a build argument.
+ARG GO_MICRO_VERSION=latest
 
 # First stage: build the executable.
-FROM golang:${GO_VERSION}-alpine AS builder
-
-RUN apk add --no-cache gcc musl-dev
+FROM micro/go-micro:${GO_MICRO_VERSION} AS builder
 
 # Create the user and group files that will be used in the running container to
 # run the process as an unprivileged user.
@@ -16,7 +13,7 @@ RUN mkdir /user && \
 # Install the Certificate-Authority certificates for the app to be able to make
 # calls to HTTPS endpoints.
 # Git is required for fetching the dependencies.
-RUN apk add --no-cache ca-certificates git && \
+RUN apk add --no-cache ca-certificates && \
     rm -rf /var/cache/apk/* /tmp/*
 
 # Set the environment variables for the go command:

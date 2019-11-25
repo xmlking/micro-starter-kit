@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/xmlking/micro-starter-kit/shared/constants"
-	pb "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
+	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/repository"
 )
 
@@ -22,19 +22,17 @@ type TransactionSubscriber struct {
 
 // NewTransactionSubscriber returns an instance of `TransactionSubscriber`.
 func NewTransactionSubscriber(repo repository.TransactionRepository) *TransactionSubscriber {
-	log.Debug("in NewTransactionSubscriber")
 	return &TransactionSubscriber{
 		repo:         repo,
-		accountSrvEp: config.Get("services", "accountsrv", "endpoint").String("accountsrv"),
-		emailerSrvEp: config.Get("services", "emailersrv", "endpoint").String("emailersrv"),
-		greeterSrvEp: config.Get("services", "greeterrv", "endpoint").String("greeterrv"),
+		accountSrvEp: config.Get("services", constants.ACCOUNTSRV, "endpoint").String(constants.ACCOUNTSRV),
+		emailerSrvEp: config.Get("services", constants.EMAILERSRV, "endpoint").String(constants.EMAILERSRV),
+		greeterSrvEp: config.Get("services", constants.GREETERSRV, "endpoint").String(constants.GREETERSRV),
 	}
 }
 
 // Handle is a method to record transaction event, Method can be of any name
-func (s *TransactionSubscriber) Handle(ctx context.Context, event *pb.TransationEvent) (err error) {
+func (s *TransactionSubscriber) Handle(ctx context.Context, event *recorderPB.TransactionEvent) (err error) {
 	md, _ := metadata.FromContext(ctx)
-	log.Debugf("TransactionSubscriber Struct: Received event %v with metadata %v", event, md)
 	tranId := md[constants.TransID]
 
 	if len(tranId) == 0 {
@@ -43,11 +41,11 @@ func (s *TransactionSubscriber) Handle(ctx context.Context, event *pb.Transation
 	}
 	switch from := md["Micro-From-Service"]; from {
 	case s.accountSrvEp:
-		err = s.repo.Write(ctx, "accountsrv"+tranId, event)
+		err = s.repo.Write(ctx, fmt.Sprintf("%s#%s", tranId, s.accountSrvEp), event)
 	case s.emailerSrvEp:
-		err = s.repo.Write(ctx, "emailersrv"+tranId, event)
+		err = s.repo.Write(ctx, fmt.Sprintf("%s#%s", tranId, s.emailerSrvEp), event)
 	case s.greeterSrvEp:
-		err = s.repo.Write(ctx, "greetersrv"+tranId, event)
+		err = s.repo.Write(ctx, fmt.Sprintf("%s#%s", tranId, s.greeterSrvEp), event)
 	default:
 		log.Errorf("TransactionSubscriber: unknown  from: %s", from)
 		return fmt.Errorf("TransactionSubscriber: unknown  from: %s", from)

@@ -11,8 +11,9 @@ import (
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
+	transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
 	"github.com/xmlking/micro-starter-kit/srv/emailer/registry"
-	"github.com/xmlking/micro-starter-kit/srv/emailer/subscriber"
+	// "github.com/xmlking/micro-starter-kit/srv/emailer/subscriber"
 )
 
 const (
@@ -26,7 +27,6 @@ var (
 )
 
 func main() {
-
 	// New Service
 	service := grpc.NewService(
 		// optional cli flag to override config.
@@ -48,8 +48,6 @@ func main() {
 			}),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
-		micro.WrapSubscriber(logWrapper.NewSubscriberWrapper()),
 	)
 
 	// Initialize service
@@ -58,9 +56,26 @@ func main() {
 		micro.Action(func(c *cli.Context) {
 			// load config
 			myConfig.InitConfig(configDir, configFile)
-			config.Scan(&cfg)
+			_ = config.Scan(&cfg)
 			logger.InitLogger(cfg.Log)
 		}),
+	)
+
+	// Initialize Features
+	var options []micro.Option
+	// Wrappers are invoked in the order as they added
+	if cfg.Features["reqlogs"].Enabled {
+		options = append(options, micro.WrapSubscriber(logWrapper.NewSubscriberWrapper()))
+	}
+	if cfg.Features["translogs"].Enabled {
+		topic := config.Get("features", "translogs", "topic").String("recordersrv")
+		publisher := micro.NewPublisher(topic, service.Client())
+		options = append(options, micro.WrapSubscriber(transWrapper.NewSubscriberWrapper(publisher)))
+	}
+
+	// Initialize Features
+	service.Init(
+		options...,
 	)
 
 	// Initialize DI Container
@@ -75,7 +90,7 @@ func main() {
 	micro.RegisterSubscriber("emailersrv", service.Server(), emailSubscriber)
 
 	// Register Function as Subscriber
-	micro.RegisterSubscriber("emailersrv", service.Server(), subscriber.Handler)
+	// micro.RegisterSubscriber("emailersrv", service.Server(), subscriber.Handler)
 
 	// register subscriber with queue, each message is delivered to a unique subscriber
 	// micro.RegisterSubscriber("emailersrv-2", service.Server(), subscriber.Handler, server.SubscriberQueue("queue.pubsub"))

@@ -48,7 +48,7 @@ micro get service emailersrv
 ```
 
 ```bash
-micro --client=grpc call  accountsrv UserService.Create \
+micro call  accountsrv UserService.Create \
 '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
 micro call accountsrv UserService.Create \
 '{"username": "sumo1", "firstName": "sumo1", "lastName": "demo1", "email": "sumo1@demo.com"}'
@@ -107,7 +107,7 @@ micro api --enable_rpc=true
 
 ```bash
 # with `grpcurl`
-# micro proxy --protocol=grpc
+# micro proxy --protocol=grpc  --address localhost:8888
 grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8888  greetersrv.Greeter/Hello
 # with Micro CLI
 MICRO_PROXY_ADDRESS=localhost:8888 micro list services

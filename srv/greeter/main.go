@@ -11,6 +11,7 @@ import (
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
+	transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
 	"github.com/xmlking/micro-starter-kit/srv/greeter/handler"
 	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
@@ -26,7 +27,6 @@ var (
 )
 
 func main() {
-
 	// New Service
 	service := grpc.NewService(
 		// optional cli flag to override config.
@@ -48,7 +48,6 @@ func main() {
 			}),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
 	)
 
 	// Initialize service
@@ -56,13 +55,30 @@ func main() {
 		micro.Action(func(c *cli.Context) {
 			// load config
 			myConfig.InitConfig(configDir, configFile)
-			config.Scan(&cfg)
+			_ = config.Scan(&cfg)
 			logger.InitLogger(cfg.Log)
 		}),
 	)
 
+	// Initialize Features
+	var options []micro.Option
+	// Wrappers are invoked in the order as they added
+	if cfg.Features["reqlogs"].Enabled {
+		options = append(options, micro.WrapHandler(logWrapper.NewHandlerWrapper()))
+	}
+	if cfg.Features["translogs"].Enabled {
+		topic := config.Get("features", "translogs", "topic").String("recordersrv")
+		publisher := micro.NewPublisher(topic, service.Client())
+		options = append(options, micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)))
+	}
+
+	// Initialize Features
+	service.Init(
+		options...,
+	)
+
 	// Register Handler
-	greeterPB.RegisterGreeterHandler(service.Server(), new(handler.Greeter))
+	_ = greeterPB.RegisterGreeterHandler(service.Server(), new(handler.Greeter))
 	myConfig.PrintBuildInfo()
 	// Run service
 	if err := service.Run(); err != nil {

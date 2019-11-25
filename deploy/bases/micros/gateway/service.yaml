@@ -4,6 +4,8 @@ metadata:
   name: srv
 spec:
   type: LoadBalancer
+  # We want the servers to become available even if they're not ready
+  publishNotReadyAddresses: true
   ports:
     - name: http-gateway
       port: 8080

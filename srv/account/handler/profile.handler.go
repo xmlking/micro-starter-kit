@@ -31,9 +31,6 @@ func NewProfileHandler(repo repository.ProfileRepository, logger log.FieldLogger
 
 func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rsp *pb.ProfileListResponse) error {
 	ph.contextLogger.Info("Received ProfileHandler.List request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.profile.list", "validation error: %v", err)
-	}
 	model := pb.ProfileORM{
 		Id:     req.UserId.GetValue(),
 		Gender: req.Gender.GetValue(),
@@ -60,9 +57,6 @@ func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rs
 
 func (ph *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *pb.ProfileResponse) error {
 	ph.contextLogger.Info("Received ProfileHandler.Get request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.profile.get", "validation error: %v", err)
-	}
 	id := req.Id.GetValue()
 	if id == "" {
 		return myErrors.ValidationError("account-srv.profile.get", "validation error: Missing Id")
@@ -84,9 +78,6 @@ func (ph *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *
 
 func (ph *profileHandler) Create(ctx context.Context, req *pb.ProfileRequest, rsp *pb.ProfileResponse) error {
 	ph.contextLogger.Debug("Received ProfileHandler.Create request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("account-srv.profile.rceate", "validation error: %v", err)
-	}
 	model := pb.ProfileORM{}
 	userID := req.UserId.GetValue()
 	model.UserId = &userID

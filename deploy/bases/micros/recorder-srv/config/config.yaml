@@ -1,20 +1,9 @@
 environment: production
-name: accountsrv
+name: recordersrv
 version: v0.1.0
 log:
   level: info
   format: json
-database:
-  dialect: sqlite3
-  host: 0.0.0.0
-  port: 9999
-  Username: sumo
-  Password: demo
-  database: "file:foobar?mode=memory&cache=shared"
-  maxOpenConns: 1
-  maxIdleConns: 1
-  connMaxLifetime: 1hr
-  logging: true
 
 services:
   accountsrv:
@@ -43,9 +32,9 @@ features:
   mtls:
     enabled: false
   validator:
-    enabled: true
+    enabled: false
   reqlogs:
     enabled: true
   translogs:
     topic: recordersrv
-    enabled: true
+    enabled: false

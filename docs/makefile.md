@@ -123,7 +123,7 @@ make docker-account-srv VERSION=v0.1.1
 make docker TARGET=account VERSION=v0.1.1
 make docker TARGET=account TYPE=srv VERSION=v0.1.1
 make docker TARGET=account DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit
-
+make docker TARGET=account DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit GO_MICRO_VERSION=1.16.0
 # short hand for TARGET and TYPE args
 make docker-emailer-srv
 
