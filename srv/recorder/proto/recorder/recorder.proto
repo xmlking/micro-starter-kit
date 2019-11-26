@@ -1,6 +1,23 @@
 syntax = "proto3";
 
 package recordersrv;
+import "google/protobuf/empty.proto";
+import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+
+service Transaction {
+    rpc Read(TransactionReadRequest) returns (TransactionEvent) {}
+    rpc Write(TransactionWriteRequest) returns (google.protobuf.Empty) {}
+}
+
+message TransactionReadRequest {
+    option (validate.disabled) = true;
+    string  key = 1;
+}
+message TransactionWriteRequest {
+    option (validate.disabled) = true;
+    string  key = 1;
+    TransactionEvent event = 2;
+}
 
 // Transaction Event
 message TransactionEvent {

@@ -5,8 +5,16 @@ package recordersrv
 
 import (
 	fmt "fmt"
+	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	proto "github.com/golang/protobuf/proto"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	math "math"
+)
+
+import (
+	context "context"
+	client "github.com/micro/go-micro/client"
+	server "github.com/micro/go-micro/server"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -19,3 +27,84 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ client.Option
+var _ server.Option
+
+// Client API for Transaction service
+
+type TransactionService interface {
+	Read(ctx context.Context, in *TransactionReadRequest, opts ...client.CallOption) (*TransactionEvent, error)
+	Write(ctx context.Context, in *TransactionWriteRequest, opts ...client.CallOption) (*empty.Empty, error)
+}
+
+type transactionService struct {
+	c    client.Client
+	name string
+}
+
+func NewTransactionService(name string, c client.Client) TransactionService {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(name) == 0 {
+		name = "recordersrv"
+	}
+	return &transactionService{
+		c:    c,
+		name: name,
+	}
+}
+
+func (c *transactionService) Read(ctx context.Context, in *TransactionReadRequest, opts ...client.CallOption) (*TransactionEvent, error) {
+	req := c.c.NewRequest(c.name, "Transaction.Read", in)
+	out := new(TransactionEvent)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *transactionService) Write(ctx context.Context, in *TransactionWriteRequest, opts ...client.CallOption) (*empty.Empty, error) {
+	req := c.c.NewRequest(c.name, "Transaction.Write", in)
+	out := new(empty.Empty)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for Transaction service
+
+type TransactionHandler interface {
+	Read(context.Context, *TransactionReadRequest, *TransactionEvent) error
+	Write(context.Context, *TransactionWriteRequest, *empty.Empty) error
+}
+
+func RegisterTransactionHandler(s server.Server, hdlr TransactionHandler, opts ...server.HandlerOption) error {
+	type transaction interface {
+		Read(ctx context.Context, in *TransactionReadRequest, out *TransactionEvent) error
+		Write(ctx context.Context, in *TransactionWriteRequest, out *empty.Empty) error
+	}
+	type Transaction struct {
+		transaction
+	}
+	h := &transactionHandler{hdlr}
+	return s.Handle(s.NewHandler(&Transaction{h}, opts...))
+}
+
+type transactionHandler struct {
+	TransactionHandler
+}
+
+func (h *transactionHandler) Read(ctx context.Context, in *TransactionReadRequest, out *TransactionEvent) error {
+	return h.TransactionHandler.Read(ctx, in, out)
+}
+
+func (h *transactionHandler) Write(ctx context.Context, in *TransactionWriteRequest, out *empty.Empty) error {
+	return h.TransactionHandler.Write(ctx, in, out)
+}

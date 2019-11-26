@@ -18,5 +18,6 @@ make run-recorder
 ## Test
 
 ```bash
+micro call recordersrv Transaction.Read  '{"key": "0edc8bb2-33e0-4766-bc13-e62a346465be#accountsrv"}'
 # micro publish recordersrv '{ "Header" : { "a": "aa", "b": "bb" }, "Body" : {"c": "cc"} }'
 ```

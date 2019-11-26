@@ -6,6 +6,7 @@ import (
 	"github.com/sarulabs/di/v2"
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/srv/recorder/handler"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/repository"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/subscriber"
 )
@@ -45,6 +46,14 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Build: func(ctn di.Container) (interface{}, error) {
 				transRepo := ctn.Get("transaction-repository").(repository.TransactionRepository)
 				return subscriber.NewTransactionSubscriber(transRepo), nil
+			},
+		},
+		{
+			Name:  "transaction-handler",
+			Scope: di.App,
+			Build: func(ctn di.Container) (interface{}, error) {
+				transRepo := ctn.Get("transaction-repository").(repository.TransactionRepository)
+				return handler.NewTransactionHandler(transRepo), nil
 			},
 		},
 		{

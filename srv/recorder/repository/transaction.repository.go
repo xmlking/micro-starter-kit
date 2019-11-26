@@ -33,6 +33,7 @@ func (repo *transactionRepository) Read(ctx context.Context, key string) (transa
 	var records []*store.Record
 	records, err = repo.store.Read(key)
 	if len(records) > 0 {
+		transation = &recorderPB.TransactionEvent{}
 		err = proto.Unmarshal(records[0].Value, transation)
 	}
 	return
@@ -48,7 +49,7 @@ func (repo *transactionRepository) Write(ctx context.Context, key string, transa
 	rec := &store.Record{
 		Key:    key,
 		Value:  data,
-		Expiry: 100 * time.Millisecond,
+		Expiry: 100 * time.Second,
 	}
 	return repo.store.Write(rec)
 }
