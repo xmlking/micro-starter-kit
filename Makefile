@@ -9,9 +9,11 @@ GITHUB_RELEASES_API_URL 	:= https://api.github.com/repos/$(GITHUB_REPO_OWNER)/$(
 GITHUB_RELEASE_ASSET_URL	:= https://uploads.github.com/repos/$(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)/releases
 GITHUB_DEPLOY_API_URL			:= https://api.github.com/repos/$(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)/deployments
 DOCKER_REGISTRY 					:= docker.pkg.github.com
-DOCKER_CONTEXT_PATH 			:= $(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)
 # DOCKER_REGISTRY 					:= us.gcr.io
+DOCKER_CONTEXT_PATH 			:= $(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)
+# DOCKER_REGISTRY 					:= docker.io
 # DOCKER_CONTEXT_PATH 			:= xmlking
+GO_MICRO_VERSION 					:= latest
 
 VERSION					:= $(shell git describe --tags || echo "HEAD")
 CURRENT_BRANCH  := $(shell git rev-parse --abbrev-ref HEAD)
@@ -207,13 +209,14 @@ docker docker-%:
 				docker build --rm \
 				--build-arg BUILDKIT_INLINE_CACHE=1 \
 				--build-arg VERSION=$(VERSION) \
+				--build-arg GO_MICRO_VERSION=$(GO_MICRO_VERSION) \
 				--build-arg TYPE=$${type} \
 				--build-arg TARGET=$${target} \
 				--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 				--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
 				--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
 				--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
-				-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/$${target}-$${type}:$(VERSION) .; \
+				-t ${DOCKER_REGISTRY}/${DOCKER_CONTEXT_PATH}/$${target}-$${type}:$(VERSION) .; \
 			done \
 		done \
 	else \
@@ -221,13 +224,14 @@ docker docker-%:
 		docker build --rm \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
 		--build-arg VERSION=$(VERSION) \
+		--build-arg GO_MICRO_VERSION=$(GO_MICRO_VERSION) \
 		--build-arg TYPE=${TYPE} \
 		--build-arg TARGET=${TARGET} \
 		--build-arg DOCKER_REGISTRY=${DOCKER_REGISTRY} \
 		--build-arg DOCKER_CONTEXT_PATH=${DOCKER_CONTEXT_PATH} \
 		--build-arg VCS_REF=$(shell git rev-parse --short HEAD) \
 		--build-arg BUILD_DATE=$(shell date +%FT%T%Z) \
-		-t $${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:$(VERSION) .; \
+		-t ${DOCKER_REGISTRY}/${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:$(VERSION) .; \
 	fi
 
 docker_clean:

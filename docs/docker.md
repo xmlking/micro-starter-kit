@@ -6,7 +6,7 @@
 
 ```bash
 # build
-GO_MICRO_VERSION=sha256:b0018f8a814dd4344d94ac03a8b4864e67ffd0c34f2cf5c2273ed36e1486c15e
+GO_MICRO_VERSION=v1.17.1
 TYPE=srv
 TARGET=account
 VERSION=0.0.5-SNAPSHOT
@@ -39,6 +39,8 @@ docker rmi $(docker images -f "dangling=true" -q)
 docker rmi $(docker images -f "label=org.label-schema.vendor=sumo"  -q)
 # Remove all <none> layers
 docker rmi $(docker images -a|grep "<none>"|awk '$1=="<none>" {print $3}')
+# list local images with digest
+docker images --digests
 ```
 
 > Check if the image is using root
