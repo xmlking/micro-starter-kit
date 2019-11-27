@@ -3,7 +3,7 @@ on:
   push:
     tags-ignore:
       - "v*.*.*"
-    paths-ignore: ["*.md", "docs", "deploy", "config", ".github", "scripts"]
+    # paths-ignore: ["*.md", "docs", "deploy", "config", ".github", "scripts"]
 jobs:
   lint-test:
     name: Lint and Test
