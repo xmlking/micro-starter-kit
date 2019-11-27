@@ -1,9 +1,9 @@
 name: Test on Push
 on:
   push:
-    tags-ignore:
-      - "v*.*.*"
-    # paths-ignore: ["*.md", "docs", "deploy", "config", ".github", "scripts"]
+    # tags-ignore:
+    #   - "v*.*.*"
+    paths-ignore: ["*.md", "docs", "deploy", "config", ".github", "scripts"]
 jobs:
   lint-test:
     name: Lint and Test
