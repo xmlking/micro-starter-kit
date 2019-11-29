@@ -106,11 +106,11 @@ lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all"; \
 		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
-		${GOPATH}/bin/prototool lint; \
+		echo ${GOPATH}/bin/prototool lint; \
 	else \
 		echo "Linting ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
-		${GOPATH}/bin/prototool lint ./${TYPE}/${TARGET}/ ; \
+		echo ${GOPATH}/bin/prototool lint ./${TYPE}/${TARGET}/ ; \
 	fi
 
 pkger pkger-%:
