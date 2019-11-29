@@ -11,7 +11,7 @@ import (
 )
 
 func TestSendEmail_Send(t *testing.T) {
-	myConfig.InitConfig("../../config", "config.yaml")
+	myConfig.InitConfig("/config", "config.yaml")
 	var emailConf myConfig.EmailConfiguration
 	config.Get("email").Scan(&emailConf)
 	myAuth := smtp.PlainAuth("", emailConf.Username, emailConf.Password, emailConf.EmailServer)

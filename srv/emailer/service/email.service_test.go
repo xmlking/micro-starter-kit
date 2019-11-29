@@ -19,7 +19,7 @@ func (mock *FakeEmailSender) Send(subject, body string, to []string) error {
 	return args.Error(0)
 }
 func TestEmailService_Welcome(t *testing.T) {
-	myConfig.InitConfig("../../../config", "config.yaml")
+	myConfig.InitConfig("/config", "config.yaml")
 	emailer := &FakeEmailSender{}
 	emailer.On("Send",
 		"Welcome", "Hi Bob!", []string{"bob@smith.com"}).Return(nil)
@@ -39,7 +39,7 @@ func TestEmailService_Welcome_Integration(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping long integration test")
 	}
-	myConfig.InitConfig("../../../config", "config.test.yaml")
+	myConfig.InitConfig("/config", "config.prod.yaml")
 	config.Scan(&cfg)
 	emailer := email.NewSendEmail(&cfg.Email)
 	emailService := NewEmailService(emailer)
