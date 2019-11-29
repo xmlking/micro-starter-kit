@@ -21,7 +21,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0
-	github.com/thoas/go-funk v0.4.0
+	github.com/thoas/go-funk v0.5.0
 	github.com/tudurom/micro-logrus v0.0.0-20171007082012-3704f28fa9d1
 	google.golang.org/genproto v0.0.0-20191108220845-16a3f7862a1a
 )
