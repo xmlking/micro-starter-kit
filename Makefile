@@ -16,14 +16,16 @@ DOCKER_CONTEXT_PATH 			:= $(GITHUB_REPO_OWNER)/$(GITHUB_REPO_NAME)
 GO_MICRO_VERSION 					:= latest
 
 VERSION					:= $(shell git describe --tags || echo "HEAD")
-CURRENT_BRANCH  := $(shell git rev-parse --abbrev-ref HEAD)
 GOPATH					:= $(shell go env GOPATH)
-HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
-HAS_PKGER				:= $(shell command -v pkger 2> /dev/null)
-GIT_DIRTY 			:= $(shell git status --porcelain 2> /dev/null)
-HAS_KO					:= $(shell command -v ko 2> /dev/null)
 CODECOV_FILE 		:= build/coverage.txt
 TIMEOUT  				:= 60s
+
+override GIT_TAG			= $(shell git describe --tags --abbrev=0 --always --match "v*")
+override GIT_DIRTY 		= $(shell git status --porcelain 2> /dev/null)
+override GIT_BRANCH  	= $(shell git rev-parse --abbrev-ref HEAD)
+override HAS_GOVVV		= $(shell command -v govvv 2> /dev/null)
+override HAS_PKGER		= $(shell command -v pkger 2> /dev/null)
+override HAS_KO				= $(shell command -v ko 2> /dev/null)
 
 # Type of service e.g api, fnc, srv, web (default: "srv")
 TYPE = $(or $(word 2,$(subst -, ,$*)), srv)

@@ -7,7 +7,7 @@ spec:
   # We want the servers to become available even if they're not ready
   publishNotReadyAddresses: true
   ports:
-    - name: grpc-proxy
-      port: 8888
+    - name: grpc-port
+      port: 8081
       protocol: TCP
-      targetPort: grpc-proxy
+      targetPort: grpc-port

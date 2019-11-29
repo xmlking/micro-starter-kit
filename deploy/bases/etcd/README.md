@@ -4,10 +4,18 @@ Default etcd operator behavior is to only manage etcd clusters created in the sa
 
 ## Installing ETCD Operator
 
+### Helm
+
 ```bash
+# helm v3.0.0 or higher needed
+helm repo add stable https://kubernetes-charts.storage.googleapis.com
 helm repo update
+```
+
+```bash
+
 # install ETCD operator
-helm install --name sumo --set deployments.backupOperator=false  --set deployments.restoreOperator=false stable/etcd-operator
+helm install sumo --set deployments.backupOperator=false  --set deployments.restoreOperator=false stable/etcd-operator
 
  # Check the etcd-operator logs
 export POD=$(kubectl get pods -l app=sumo-etcd-operator-etcd-operator --namespace default --output name)

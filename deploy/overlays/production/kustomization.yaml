@@ -21,10 +21,6 @@ patches:
     target:
       kind: Deployment
       labelSelector: app.kubernetes.io/component=microservice
-  - path: patches/health-sidecar-only-for-proxy.yaml
-    target:
-      kind: Deployment
-      labelSelector: app.kubernetes.io/name=proxy
   # - path: patches/resource_limit.yaml
   #   target:
   #     kind: Deployment
