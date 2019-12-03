@@ -10,7 +10,7 @@ database:
   port: 9999
   Username: sumo
   Password: demo
-  database: "file:foobar?mode=memory&cache=shared"
+  database: 'file:foobar?mode=memory&cache=shared'
   maxOpenConns: 1
   maxIdleConns: 1
   connMaxLifetime: 1hr
@@ -47,6 +47,10 @@ features:
     flushInterval: 5000000000
     enabled: false
   mtls:
+    certfile: /config/certs/micro.crt
+    keyfile: /config/certs/micro.key
+    cafile: /config/certs/ca.crt
+    servername: '*'
     enabled: false
   validator:
     enabled: true

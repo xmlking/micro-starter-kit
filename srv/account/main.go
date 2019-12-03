@@ -1,11 +1,11 @@
 package main
 
 import (
+	"path/filepath"
+
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/transport"
-	gtransport "github.com/micro/go-micro/transport/grpc"
 
 	"github.com/micro/go-micro/service/grpc"
 
@@ -71,17 +71,25 @@ func main() {
 	)
 
 	// Initialize Features
+	// Wrappers are invoked in the order as they added
 	var options []micro.Option
 	if cfg.Features["mtls"].Enabled {
-		tlsConf, _ := util.GetSelfSignedTLSConfig("localhost")
-		options = append(options,
-			// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
-			micro.Transport(gtransport.NewTransport(transport.TLSConfig(tlsConf))), // OR
-			micro.Transport(gtransport.NewTransport(transport.Secure(true))),       // OR
-			grpc.WithTLS(tlsConf),
-		)
+		// tlsConf, _ := util.GetSelfSignedTLSConfig("localhost")
+		if tlsConf, err := util.GetTLSConfig(
+			filepath.Join(configDir, config.Get("features", "mtls", "certfile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "keyfile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "cafile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "servername").String("")),
+		); err != nil {
+			log.WithError(err).Fatal("unable to load certs")
+		} else {
+			options = append(options,
+				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
+				grpc.WithTLS(tlsConf),
+			)
+		}
 	}
-	// Wrappers are invoked in the order as they added
+
 	if cfg.Features["reqlogs"].Enabled {
 		options = append(options,
 			micro.WrapHandler(logWrapper.NewHandlerWrapper()),
