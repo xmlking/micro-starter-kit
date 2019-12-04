@@ -16,9 +16,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: env-vars
-            # env-vars-common is required only when mTLS is enabled
-            # - configMapRef:
-            #     name: env-vars-common
+          # # INSECURE_SKIP_VERIFY is required only when TLS is enabled
+          # env:
+          #   - name: INSECURE_SKIP_VERIFY
+          #     value: "true"
           livenessProbe:
             httpGet:
               path: /health
