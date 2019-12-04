@@ -42,6 +42,9 @@ configMapGenerator:
       - MICRO_REGISTRY_ADDRESS="$(ETCD_SRV_ENDPOINT)-client"
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"
+      # - FEATURES_MTLS_ENABLED=true
+      # - INSECURE_SKIP_VERIFY=true
+      - FEATURES_REQLOGS_ENABLED=false
 
 secretGenerator:
   - name: secrets
@@ -60,7 +63,7 @@ images:
     newTag: 11.5-alpine
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: v1.17.1
+    newTag: v1.17.2
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)

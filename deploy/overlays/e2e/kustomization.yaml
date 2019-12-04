@@ -34,11 +34,15 @@ configMapGenerator:
       # - MICRO_SELECTOR=static # static/memory still not working with gateway & proxy
       # - MICRO_REGISTRY=memory
       # following endpoint overwrites (in config.yaml) should be enabled only when  MICRO_SELECTOR=static is used.
-      # - ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)
-      # - GREETERSRV_ENDPOINT=$(GREETER_SRV_ENDPOINT)
-      # - EMAILERSRV_ENDPOINT=$(EMAILER_SRV_ENDPOINT)
-      # - GATEWAYSRV_ENDPOINT=$(GATEWAY_SRV_ENDPOINT)
-      # - PROXYSRV_ENDPOINT=$(PROXY_SRV_ENDPOINT)
+      # - SERVICES_ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)
+      # - SERVICES_GREETERSRV_ENDPOINT=$(GREETER_SRV_ENDPOINT)
+      # - SERVICES_EMAILERSRV_ENDPOINT=$(EMAILER_SRV_ENDPOINT)
+      # - SERVICES_RECORDERSRV_ENDPOINT=$(RECORDER_SRV_ENDPOINT)
+      # - SERVICES_GATEWAYSRV_ENDPOINT=$(GATEWAY_SRV_ENDPOINT)
+      # - SERVICES_PROXYSRV_ENDPOINT=$(PROXY_SRV_ENDPOINT)
+      # - FEATURES_MTLS_ENABLED=true
+      # - INSECURE_SKIP_VERIFY=true
+      - FEATURES_REQLOGS_ENABLED=true
 
 secretGenerator:
   - name: secrets
@@ -57,7 +61,7 @@ images:
     newTag: 11.5-alpine
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: v1.17.1
+    newTag: v1.17.2
   - name: xmlking/account-srv
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
     newTag: $(IMAGE_VERSION)

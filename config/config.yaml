@@ -47,9 +47,9 @@ features:
     flushInterval: 5000000000
     enabled: false
   mtls:
-    certfile: /config/certs/micro.crt
-    keyfile: /config/certs/micro.key
-    cafile: /config/certs/ca.crt
+    certfile: certs/micro.crt
+    keyfile: certs/micro.key
+    cafile: certs/ca.crt
     servername: '*'
     enabled: false
   validator:

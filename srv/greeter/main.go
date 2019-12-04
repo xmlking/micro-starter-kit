@@ -10,6 +10,7 @@ import (
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
+	"github.com/xmlking/micro-starter-kit/shared/util"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 	transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
 	"github.com/xmlking/micro-starter-kit/srv/greeter/handler"
@@ -62,6 +63,16 @@ func main() {
 
 	// Initialize Features
 	var options []micro.Option
+	if cfg.Features["mtls"].Enabled {
+		if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
+			log.WithError(err).Fatal("unable to load certs")
+		} else {
+			options = append(options,
+				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
+				grpc.WithTLS(tlsConf),
+			)
+		}
+	}
 	// Wrappers are invoked in the order as they added
 	if cfg.Features["reqlogs"].Enabled {
 		options = append(options, micro.WrapHandler(logWrapper.NewHandlerWrapper()))

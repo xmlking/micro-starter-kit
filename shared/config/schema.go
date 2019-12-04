@@ -101,7 +101,7 @@ type EmailConfiguration struct {
 }
 
 type Service struct {
-	Endpoint string `json:"name"`
+	Endpoint string `json:"endpoint"`
 	Version  string `json:"version" default:"v0.1.0"`
 }
 

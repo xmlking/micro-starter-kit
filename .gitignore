@@ -58,3 +58,8 @@ deploy/overlays/consul/secrets/.dockerconfigjson
 
 # pkger cli generated files
 pkged.go
+
+# certs
+ca.key
+ca.srl
+micro.csr

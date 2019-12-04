@@ -36,11 +36,15 @@ features:
     flushInterval: 5000000000
     enabled: false
   mtls:
+    certfile: certs/micro.crt
+    keyfile: certs/micro.key
+    cafile: certs/ca.crt
+    servername: '*'
     enabled: false
   validator:
-    enabled: false
+    enabled: true
   reqlogs:
     enabled: true
   translogs:
     topic: recordersrv
-    enabled: false
+    enabled: true

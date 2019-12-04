@@ -6,9 +6,9 @@ import (
 	"github.com/micro/go-micro/config"
 	"github.com/micro/go-micro/service/grpc"
 	log "github.com/sirupsen/logrus"
-
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
+	"github.com/xmlking/micro-starter-kit/shared/util"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/registry"
@@ -60,6 +60,16 @@ func main() {
 	)
 	// Initialize Features
 	var options []micro.Option
+	if cfg.Features["mtls"].Enabled {
+		if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
+			log.WithError(err).Fatal("unable to load certs")
+		} else {
+			options = append(options,
+				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
+				grpc.WithTLS(tlsConf),
+			)
+		}
+	}
 	if cfg.Features["reqlogs"].Enabled {
 		options = append(options,
 			micro.WrapSubscriber(logWrapper.NewSubscriberWrapper()),

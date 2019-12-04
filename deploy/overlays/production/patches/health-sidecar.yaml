@@ -16,6 +16,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: env-vars
+            # env-vars-common is required only when mTLS is enabled
+            # - configMapRef:
+            #     name: env-vars-common
           livenessProbe:
             httpGet:
               path: /health
