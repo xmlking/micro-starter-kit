@@ -67,6 +67,14 @@
   "go.useLanguageServer": true,
   "go.lintTool": "golangci-lint",
   "go.lintFlags": ["--fast"],
+  // Proto
+  "clang-format.style": "google",
+  "protoc": {
+    "options": [
+      "--proto_path=${workspaceRoot}/proto",
+      "--proto_path=${env.GOPATH}/src"
+    ]
+  },
   // REST client
   "rest-client.environmentVariables": {
     "$shared": {

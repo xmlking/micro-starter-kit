@@ -3,13 +3,14 @@ syntax = "proto3";
 package greetersrv;
 
 service Greeter {
-	rpc Hello(Request) returns (Response) {}
+  // Hello is echo method
+  rpc Hello(HelloRequest) returns (HelloResponse) {}
 }
 
-message Request {
-	string name = 1;
+message HelloRequest {
+  string name = 1;
 }
 
-message Response {
-	string msg = 1;
+message HelloResponse {
+  string msg = 1;
 }

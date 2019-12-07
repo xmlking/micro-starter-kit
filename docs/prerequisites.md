@@ -4,11 +4,15 @@ You should have:
 
 **golang** installed via **brew**
 
+## third-party
+
 ### third-party tools
 
 ```bash
 # for mac, use brew to install protobuf
 brew install protobuf
+# VS Code plugin `vscode-proto3` need clang-format
+brew install clang-format
 # k8s tool similar to helm  (optional)
 # generate fill k8s yaml files from overlays
 brew install kustomize

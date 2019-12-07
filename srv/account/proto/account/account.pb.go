@@ -25,8 +25,7 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type User struct {
-	// gorm.types.UUID id                      = 1  [(gorm.field).tag = { type: "uuid", primary_key: true, not_null: true, unique: true }]; // primary key
-	// string id                               = 1  [(gorm.field).tag = { type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; // primary key
+	// primary key
 	Id                   string               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	CreatedAt            *timestamp.Timestamp `protobuf:"bytes,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
 	UpdatedAt            *timestamp.Timestamp `protobuf:"bytes,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
@@ -418,8 +417,10 @@ func (m *UserListResponse) GetTotal() uint32 {
 
 // Profile Entity
 type Profile struct {
-	// gorm.types.UUID id                      = 1  [(gorm.field).tag = { type: "uuid", primary_key: true, not_null: true, unique: true }]; // primary key
-	// string id                               = 1  [(gorm.field).tag = { type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; // primary key
+	// gorm.types.UUID id                      = 1  [(gorm.field).tag = { type:
+	// "uuid", primary_key: true, not_null: true, unique: true }]; // primary key
+	// string id                               = 1  [(gorm.field).tag = { type:
+	// "uuid", primary_key: true, default: "uuid_generate_v4()" }]; // primary key
 	Id        string               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	CreatedAt *timestamp.Timestamp `protobuf:"bytes,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
 	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
@@ -428,7 +429,8 @@ type Profile struct {
 	Avatar    string               `protobuf:"bytes,6,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	// FIXME: https://github.com/jinzhu/gorm/issues/1978
 	Gender string `protobuf:"bytes,7,opt,name=gender,proto3" json:"gender,omitempty"`
-	// GenderType gender                       = 7; //    GenderType `gorm:"not null;type:ENUM('M', 'F')"`
+	// GenderType gender                       = 7; //    GenderType `gorm:"not
+	// null;type:ENUM('M', 'F')"`
 	Birthday             *timestamp.Timestamp `protobuf:"bytes,8,opt,name=birthday,proto3" json:"birthday,omitempty"`
 	Age                  uint32               `protobuf:"varint,9,opt,name=age,proto3" json:"age,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
@@ -532,7 +534,8 @@ type ProfileRequest struct {
 	Tz     *wrappers.StringValue `protobuf:"bytes,3,opt,name=tz,proto3" json:"tz,omitempty"`
 	Avatar *wrappers.StringValue `protobuf:"bytes,4,opt,name=avatar,proto3" json:"avatar,omitempty"`
 	Gender *wrappers.StringValue `protobuf:"bytes,5,opt,name=gender,proto3" json:"gender,omitempty"`
-	// GenderType gender = 5; // enum // [(validate.rules).enum.defined_only = true]; // FIXME
+	// GenderType gender = 5; // enum // [(validate.rules).enum.defined_only =
+	// true]; // FIXME
 	Birthday             *timestamp.Timestamp `protobuf:"bytes,6,opt,name=birthday,proto3" json:"birthday,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`

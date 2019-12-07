@@ -3,8 +3,8 @@ syntax = "proto3";
 package emailersrv;
 
 message Message {
-	string to = 1;
-	string from = 2;
-	string subject = 3;
-	string body = 4;
+  string to = 1;
+  string from = 2;
+  string subject = 3;
+  string body = 4;
 }

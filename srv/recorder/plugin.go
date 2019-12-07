@@ -7,4 +7,13 @@ package main
 
 // 	_ "github.com/micro/go-plugins/broker/googlepubsub"
 // 	_ "github.com/micro/go-plugins/client/selector/static"
+// "os"
+// "github.com/micro/go-micro/broker"
 // )
+
+// func init() {
+//  broker.DefaultBroker = googlepubsub.NewBroker(
+//      googlepubsub.ProjectID(os.Getenv("GOOGLEPUBSUB_PROJECT_ID")),
+//      googlepubsub.CreateSubscription(false),
+//     )
+// }

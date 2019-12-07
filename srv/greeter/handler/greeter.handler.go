@@ -17,7 +17,7 @@ func NewGreeterHandler() greeterPB.GreeterHandler {
 }
 
 // Hello method
-func (s *greeterHandler) Hello(ctx context.Context, req *greeterPB.Request, rsp *greeterPB.Response) error {
+func (s *greeterHandler) Hello(ctx context.Context, req *greeterPB.HelloRequest, rsp *greeterPB.HelloResponse) error {
 	log.Info("Received Greeter.Hello request")
 	rsp.Msg = "Hello " + req.Name
 	return nil

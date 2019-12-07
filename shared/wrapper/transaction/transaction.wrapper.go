@@ -38,7 +38,7 @@ func NewHandlerWrapper(p micro.Publisher) server.HandlerWrapper {
 			// add TranID to context if not present
 			ctx = metadata.MergeContext(ctx, map[string]string{"trans-id": uuid.New().String()}, false)
 			err = fn(ctx, req, rsp)
-			// we already logged error in Publish. lets ignore error here.
+			// we already logged error in Publish. lets ignore error here. # Note: this is blocking call..
 			_ = publish(ctx, p, req.Body().(proto.Message), rsp.(proto.Message))
 			// go publish(ctx, p, req.Body().(proto.Message), rsp.(proto.Message))
 			return

@@ -34,7 +34,7 @@ func TestGreeter_Hello_E2E(t *testing.T) {
 		t.Skip("skipping e2e test")
 	}
 
-	rsp, err := greeter.Hello(context.TODO(), &greeterPB.Request{Name: "Sumo"})
+	rsp, err := greeter.Hello(context.TODO(), &greeterPB.HelloRequest{Name: "Sumo"})
 	if err != nil {
 		t.Error(err)
 	}

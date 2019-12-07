@@ -1,0 +1,97 @@
+# keep this at proto/prototool.yaml
+protoc:
+  version: 3.8.0
+  includes:
+  #   - ../..
+  #   - ./proto
+    - /Users/schintha/go/src
+    # - $GOPATH/src
+
+# LINT
+
+excludes:
+  - e2e
+
+lint:
+  group: uber2
+  rules:
+    add:
+      - RPCS_HAVE_COMMENTS
+    remove:
+      - REQUEST_RESPONSE_NAMES_MATCH_RPC
+      - REQUEST_RESPONSE_TYPES_IN_SAME_FILE
+      - REQUEST_RESPONSE_TYPES_UNIQUE
+      - FILE_OPTIONS_REQUIRE_CSHARP_NAMESPACE
+      - FILE_OPTIONS_REQUIRE_OBJC_CLASS_PREFIX
+      - FILE_OPTIONS_REQUIRE_PHP_NAMESPACE
+      - SERVICE_NAMES_API_SUFFIX
+      - SERVICES_HAVE_SENTENCE_COMMENTS
+      - RPCS_HAVE_SENTENCE_COMMENTS
+      - MESSAGES_HAVE_SENTENCE_COMMENTS_EXCEPT_REQUEST_RESPONSE_TYPES
+      - PACKAGE_MAJOR_BETA_VERSIONED
+  ignores:
+    - id: SYNTAX_PROTO3
+      files:
+        - e2e
+
+# GENERATE
+
+create:
+  packages:
+    # This means that a file created "foo.proto" in the current directory will have package "bar".
+    # A file created "a/b/foo.proto" will have package "bar.a.b".
+    - directory: .
+      name: micro-starter-kit
+
+generate:
+  go_options:
+    import_path: github.com:xmlking/micro-starter-kit
+    extra_modifiers:
+      google/api/annotations.proto: google.golang.org/genproto/googleapis/api/annotations
+      google/api/http.proto: google.golang.org/genproto/googleapis/api/annotations
+      protoc-gen-validate/validate/validate.proto: github.com/envoyproxy/protoc-gen-validate/validate
+      protoc-gen-gorm/options/gorm.proto: github.com/infobloxopen/protoc-gen-gorm/options
+      protoc-gen-gorm/types/types.proto: github.com/infobloxopen/protoc-gen-gorm/types
+
+  plugins:
+    - name: descriptor_set
+      file_suffix: pb
+      include_imports: true
+      include_source_info: true
+      output: ../gen/pb
+
+    - name: grpc-gateway
+      output: ../gen/go
+      type: go
+
+    - name: go
+      output: ../gen/go
+      flags: paths=source_relative
+      type: go
+
+    - name: micro
+      output: ../gen/go
+      flags: plugins=grpc,paths=source_relative
+      type: go
+
+    - name: js
+      flags: binary,import_style=commonjs
+      output: ../gen/js
+
+    - name: ts
+      flags: service=true
+      output: ../gen/js
+
+    - name: swagger
+      output: ../gen/swagger
+      type: go
+
+    - name: validate
+      flags: lang=go
+      output: ../gen/go
+      type: go
+
+    - name: java
+      output: ./gen/java/src/main/java
+    - name: grpc-java
+      output: ./gen/java/src/main/java
