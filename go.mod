@@ -12,7 +12,7 @@ require (
 	github.com/infobloxopen/atlas-app-toolkit v0.19.1
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.11
-	github.com/markbates/pkger v0.12.8
+	github.com/markbates/pkger v0.13.0
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.17.1
 	github.com/onrik/logrus v0.4.1
