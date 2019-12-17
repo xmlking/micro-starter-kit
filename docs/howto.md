@@ -18,36 +18,53 @@ GOPRIVATE=bitbucket.com/banzaicloud/*
 go mod download
 ```
 
+- How to use go modules from a Fork and branch
+
+  > To use a fork, e.g., `https://github.com/drnic/fatih-color`, and a branch `silly-changes`, You need to update `go.mod` to use the replace helper:
+
+  ```go
+  module github.com/starkandwayne/my-go-project
+
+  go 1.13
+
+  require (
+    github.com/fatih/color v1.7.0 // indirect
+    github.com/mattn/go-colorable v0.1.2 // indirect
+  )
+
+  replace github.com/fatih/color => github.com/drnic/fatih-color silly-change
+  ```
+  
 - How to update 3rd party dependencies?
 
-```bash
-go get -u # to use the latest minor or patch releases
-go get -u=patch # to use the latest patch releases
-go mod tidy
-# to find out why you have specific dependency
-go mod why -m github.com/DATA-DOG/go-sqlmock
-# if you want to get binaries into $GOHOME/bin or $GOBIN
-GO111MODULE=off go get whatever
-# list modules
-go list -m all
-```
+  ```bash
+  go get -u # to use the latest minor or patch releases
+  go get -u=patch # to use the latest patch releases
+  go mod tidy
+  # to find out why you have specific dependency
+  go mod why -m github.com/DATA-DOG/go-sqlmock
+  # if you want to get binaries into $GOHOME/bin or $GOBIN
+  GO111MODULE=off go get whatever
+  # list modules
+  go list -m all
+  ```
 
 - How to clean cached go modules?
 
-```bash
-rm go.sum
-go clean -modcache
-go mod download
-# this empties $GOPATH/pkg/mod/
-go clean -cache -modcache
-```
+  ```bash
+  rm go.sum
+  go clean -modcache
+  go mod download
+  # this empties $GOPATH/pkg/mod/
+  go clean -cache -modcache
+  ```
 
 - How to Prepare for a Release?
 
-```bash
-go mod tidy
-go test all
-```
+  ```bash
+  go mod tidy
+  go test all
+  ```
 
 - how to debug in VS Code?
 
