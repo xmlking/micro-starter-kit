@@ -21,6 +21,7 @@ configMapGenerator:
       - MICRO_API_NAMESPACE=""
       - MICRO_API_HANDLER=rpc
       - MICRO_API_ENABLE_RPC="true"
+      - MICRO_ENABLE_STATS="true"
       - MICRO_LOG_LEVEL=debug
       - CORS_ALLOWED_HEADERS="Authorization,Content-Type"
       - CORS_ALLOWED_ORIGINS="*"

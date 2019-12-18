@@ -1,5 +1,12 @@
 @jsonType = application/json
 
+
+# OPTIONS Request
+curl -H "Origin: http://localhost:8080" \
+  -H "Access-Control-Request-Method: POST" \
+  -H "Access-Control-Request-Headers: X-Requested-With" \
+  -X OPTIONS  http://localhost:8080/rpc
+
 ### Create User
 # @name CreateUser
 
