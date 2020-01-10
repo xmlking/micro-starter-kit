@@ -9,7 +9,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/infobloxopen/atlas-app-toolkit v0.19.1
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
-	github.com/jinzhu/gorm v1.9.11
+	github.com/jinzhu/gorm v1.9.12
 	github.com/markbates/pkger v0.14.0
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.18.0
