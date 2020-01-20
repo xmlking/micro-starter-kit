@@ -1,7 +1,6 @@
 # Table of Contents
 
-- [Introduction](../README.md)
-- [TODO](todo.md)
+- [Micro Starter Kit](../README.md)
 - Getting Started
   - [Why](introduction/why.md)
   - [Prerequisites](introduction/prerequisites.md)
@@ -60,3 +59,4 @@
   - [Contributing](community/contributing.md)
 - [Change Log](../CHANGELOG.md)
 - [FAQ](faq/howto.md)
+- [TODO](todo.md)
