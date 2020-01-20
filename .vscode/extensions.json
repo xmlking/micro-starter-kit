@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "googlecloudtools.cloudcode",
     "DavidAnson.vscode-markdownlint",
     "ms-vscode.Go",
     "ms-azuretools.vscode-docker",
