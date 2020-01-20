@@ -59,4 +59,4 @@
   - [Contributors](community/contributors.md)
   - [Contributing](community/contributing.md)
 - [Change Log](../CHANGELOG.md)
-- [FAQ](faq/faq.md)
+- [FAQ](faq/howto.md)

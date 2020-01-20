@@ -28,7 +28,7 @@ brew cask install --appdir=~/Applications bloomrpc
 
 3. Add Root CA cert.
 
-   ![Add CA Cert](../bloomrpc_certs.png)
+   ![Add CA Cert](../images/bloomrpc_certs.png)
 
 4. Call the service method
 
