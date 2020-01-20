@@ -35,7 +35,7 @@ openssl  req -new -key config/certs/micro.key -out config/certs/micro.csr
 > Prompts, Provide `empty` challenge password
 
 ```
-ountry Name (2 letter code) []:US
+Country Name (2 letter code) []:US
 State or Province Name (full name) []:CA
 Locality Name (eg, city) []:Riverside
 Organization Name (eg, company) []:Sumo

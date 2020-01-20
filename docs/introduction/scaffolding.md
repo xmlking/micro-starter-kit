@@ -16,5 +16,5 @@ micro new --fqdn="emailersrv" --type="srv" --gopath=false \
 --alias="emailer"  --plugin=client/selector=static:broker=nats srv/emailer
 
 micro new --fqdn="greetersrv" --type="srv" --gopath=false \
---alias="greeter"  ---plugin=client/selector=static srv/greeter
+--alias="greeter"  --plugin=client/selector=static srv/greeter
 ```

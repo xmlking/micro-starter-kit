@@ -2,7 +2,7 @@
 
 - go-micro service interactions
 
-  ![Image of micro-interactions](images/micro-interactions.png)
+  ![Image of micro-interactions](../images/micro-interactions.png)
 
 - How to download all dependencies after cloning the repo?
 
@@ -34,7 +34,7 @@ go mod download
 
   replace github.com/fatih/color => github.com/drnic/fatih-color silly-change
   ```
-  
+
 - How to update 3rd party dependencies?
 
   ```bash
@@ -223,7 +223,7 @@ go test -v -run Integration ./srv/emailer/service
   ```bash
   git config --global push.followTags true
   ```
-  
+
 - How to debug etcd?
 
   ```bash

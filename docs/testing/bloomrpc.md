@@ -18,7 +18,7 @@ brew cask install --appdir=~/Applications bloomrpc
 
 1. Import paths by clicking `Import paths` icon
 
-   ![Import paths](images/bloomrpc_import_paths.png)
+   ![Import paths](../images/bloomrpc_import_paths.png)
 
 2. Import protos by clicking `Import Protos` icon and adding `e2e/account.bloomrpc.proto`
 
@@ -28,8 +28,8 @@ brew cask install --appdir=~/Applications bloomrpc
 
 3. Add Root CA cert.
 
-   ![Add CA Cert](images/bloomrpc_certs.png)
+   ![Add CA Cert](../bloomrpc_certs.png)
 
 4. Call the service method
 
-   ![BloomRPC](images/bloomrpc.png)
+   ![BloomRPC](../images/bloomrpc.png)

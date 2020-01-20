@@ -24,7 +24,7 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 - [x] Customizable Logging
 - [x] CRUD Example using [GORM](https://gorm.io/), [benchmarks](https://github.com/kihamo/orm-benchmark), [XORM](https://xorm.io/) next?
 - [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm) or use [protoc-go-inject-tag](https://github.com/favadi/protoc-go-inject-tag)?
-- [x] Dependency injection [Container](https://github.com/sarulabs/di)
+- [x] Dependency injection [Container](https://github.com/sarulabs/di), Try [wire](https://itnext.io/mastering-wire-f1226717bbac) next?
 - [x] multi-stage-multi-target Dockerfile
 - [x] One Step _build/publish/deploy_ with [ko](https://github.com/google/ko)
 - [x] BuildInfo with [govvv](https://github.com/ahmetb/govvv)
@@ -155,12 +155,13 @@ kubectl delete -f build/deploy.yaml
 
 ### External Docs
 
-1. [examples](https://github.com/micro/examples) - example usage code for micro
-2. [microhq](https://github.com/microhq) - a place for prebuilt microservices
-3. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
-4. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins
-5. [step-by-step-guide-micro](https://github.com/micro-in-cn/tutorials/tree/master/microservice-in-micro)
-6. [micro-in-cn](https://github.com/micro-in-cn/tutorials/tree/master/examples)
-7. [Platform Web](https://github.com/micro-in-cn/platform-web)
-8. [grpc template](https://github.com/vtolstov/micro-template-grpc)
-9. [Simple API backed by PostgresQL, Golang and gRPC](https://medium.com/@vptech/complexity-is-the-bane-of-every-software-engineer-e2878d0ad45a)
+1. [Go-Micro Getting Started](https://itnext.io/micro-in-action-getting-started-a79916ae3cac)
+2. [examples](https://github.com/micro/examples) - example usage code for micro
+3. [microhq](https://github.com/microhq) - a place for prebuilt microservices
+4. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
+5. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins
+6. [step-by-step-guide-micro](https://github.com/micro-in-cn/tutorials/tree/master/microservice-in-micro)
+7. [micro-in-cn](https://github.com/micro-in-cn/tutorials/tree/master/examples)
+8. [Platform Web](https://github.com/micro-in-cn/platform-web)
+9. [grpc template](https://github.com/vtolstov/micro-template-grpc)
+10. [Simple API backed by PostgresQL, Golang and gRPC](https://medium.com/@vptech/complexity-is-the-bane-of-every-software-engineer-e2878d0ad45a)
