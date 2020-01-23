@@ -13,7 +13,7 @@ require (
 	github.com/markbates/pkger v0.14.0
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.18.0
-	github.com/onrik/logrus v0.4.1
+	github.com/onrik/logrus v0.5.1
 	github.com/rs/zerolog v1.17.2
 	github.com/sarulabs/di/v2 v2.3.0
 	github.com/satori/go.uuid v1.2.0
