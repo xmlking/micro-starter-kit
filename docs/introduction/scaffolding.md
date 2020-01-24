@@ -18,3 +18,17 @@ micro new --fqdn="emailersrv" --type="srv" --gopath=false \
 micro new --fqdn="greetersrv" --type="srv" --gopath=false \
 --alias="greeter"  --plugin=client/selector=static srv/greeter
 ```
+
+## Setup project
+
+### GitFlow setup
+
+```bash
+git flow init -D
+```
+
+### CHANGELOG generator setup
+
+```bash
+git-chglog --init
+```

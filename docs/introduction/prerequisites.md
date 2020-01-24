@@ -30,6 +30,9 @@ brew cask install --appdir=~/Applications bloomrpc
 yarn global add bloomrpc-mock
 # for etcdctl
 brew install etcd
+# CHANGELOG generator
+brew tap git-chglog/git-chglog
+brew install git-chglog
 ```
 
 ### third-party golang tools

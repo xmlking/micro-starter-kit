@@ -1,5 +1,7 @@
 # GitFlow
 
+we are using [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) for branch management
+
 ## Branches
 
 - Production branch: master
@@ -64,6 +66,17 @@ git push origin --tags
 
   That removes all local branches that have been deleted from remote (typically GitHub)<br/>
   Add --dry-run to merely see a list first to confirm.
+
+## Versioning
+
+## Changelog
+
+> generate changelog using [git-chglog](https://github.com/git-chglog/git-chglog)
+
+```bash
+git-chglog -c .github/chglog/config.yml -o CHANGELOG.md
+git-chglog -c .github/chglog/config.yml -o CHANGELOG.md --next-tag 2.0.0
+```
 
 ## Reference
 
