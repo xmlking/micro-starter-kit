@@ -15,7 +15,7 @@ require (
 	github.com/micro/go-micro v1.18.0
 	github.com/onrik/logrus v0.4.1
 	github.com/rs/zerolog v1.17.2
-	github.com/sarulabs/di/v2 v2.3.0
+	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0
