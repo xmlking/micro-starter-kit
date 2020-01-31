@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/client"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
 )
 

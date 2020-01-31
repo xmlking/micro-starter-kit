@@ -6,9 +6,9 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/google/uuid"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/metadata"
-	"github.com/micro/go-micro/server"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/metadata"
+	"github.com/micro/go-micro/v2/server"
 	log "github.com/sirupsen/logrus"
 	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
 )

@@ -5,8 +5,7 @@ import (
 	"context"
 	"testing"
 
-	// "github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/client/grpc"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/stretchr/testify/assert"
 
 	// "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
@@ -26,7 +25,7 @@ var (
 * You can also run this test againest your local running service with mDNS. i.e., `make run-greeter`
 **/
 func init() {
-	greeter = greeterPB.NewGreeterService("greetersrv", grpc.NewClient())
+	greeter = greeterPB.NewGreeterService("greetersrv", client.NewClient())
 }
 
 func TestGreeter_Hello_E2E(t *testing.T) {

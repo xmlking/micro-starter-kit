@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/micro/go-micro/errors"
+	"github.com/micro/go-micro/v2/errors"
 )
 
 // ErrorCode for app

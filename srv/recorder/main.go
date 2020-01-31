@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/service/grpc"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/transport"
 	log "github.com/sirupsen/logrus"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
@@ -26,22 +26,24 @@ var (
 
 func main() {
 	// New Service
-	service := grpc.NewService(
+	service := micro.NewService(
 		// optional cli flag to override config.
 		// comment out if you don't need to override any base config via CLI
 		micro.Flags(
-			cli.StringFlag{
-				Name:        "configDir, d",
+			&cli.StringFlag{
+				Name:        "configDir",
+				Aliases:     []string{"d"},
 				Value:       "/config",
 				Usage:       "Path to the config directory. Defaults to 'config'",
-				EnvVar:      "CONFIG_DIR",
+				EnvVars:     []string{"CONFIG_DIR"},
 				Destination: &configDir,
 			},
-			cli.StringFlag{
-				Name:        "configFile, f",
+			&cli.StringFlag{
+				Name:        "configFile",
+				Aliases:     []string{"f"},
 				Value:       "config.yaml",
 				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
-				EnvVar:      "CONFIG_FILE",
+				EnvVars:     []string{"CONFIG_FILE"},
 				Destination: &configFile,
 			}),
 		micro.Name(serviceName),
@@ -51,11 +53,12 @@ func main() {
 	// Initialize service
 	service.Init(
 		// TODO : implement graceful shutdown
-		micro.Action(func(c *cli.Context) {
+		micro.Action(func(c *cli.Context) (err error) {
 			// load config
 			myConfig.InitConfig(configDir, configFile)
-			_ = config.Scan(&cfg)
+			err = config.Scan(&cfg)
 			logger.InitLogger(cfg.Log)
+			return
 		}),
 	)
 	// Initialize Features
@@ -66,7 +69,9 @@ func main() {
 		} else {
 			options = append(options,
 				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
-				grpc.WithTLS(tlsConf),
+				// grpc.WithTLS(tlsConf),
+				micro.Transport(transport.NewTransport(transport.Secure(true))),
+				micro.Transport(transport.NewTransport(transport.TLSConfig(tlsConf))),
 			)
 		}
 	}

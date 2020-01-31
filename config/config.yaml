@@ -10,10 +10,11 @@ database:
   port: 9999
   Username: sumo
   Password: demo
-  database: 'file:foobar?mode=memory&cache=shared'
+  database: "file:foobar?mode=memory&cache=shared"
   maxOpenConns: 1
   maxIdleConns: 1
-  connMaxLifetime: 1hr
+  # connMaxLifetime: 1hr
+  connMaxLifetime: 60000000
   logging: true
 email:
   username: yourGmailUsername
@@ -50,8 +51,8 @@ features:
     certfile: certs/micro.crt
     keyfile: certs/micro.key
     cafile: certs/ca.crt
-    servername: '*'
-    enabled: false
+    servername: "*"
+    enabled: true
   validator:
     enabled: true
   reqlogs:

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/micro/go-micro/store"
+	"github.com/micro/go-micro/v2/store"
 	log "github.com/sirupsen/logrus"
 	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
 )

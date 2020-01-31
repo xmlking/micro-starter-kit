@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/micro/go-micro/config"
+	"github.com/micro/go-micro/v2/config"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 )
 

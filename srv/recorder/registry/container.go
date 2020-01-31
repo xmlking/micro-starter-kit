@@ -1,8 +1,8 @@
 package registry
 
 import (
-	"github.com/micro/go-micro/store"
-	mstore "github.com/micro/go-micro/store/memory"
+	"github.com/micro/go-micro/v2/store"
+	mstore "github.com/micro/go-micro/v2/store/memory"
 	"github.com/sarulabs/di/v2"
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"

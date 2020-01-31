@@ -55,7 +55,7 @@ go install github.com/markbates/pkger/cmd/pkger
 
 # fetch protoc plugins into $GOPATH
 GO111MODULE=off go get github.com/golang/protobuf/{proto,protoc-gen-go}
-GO111MODULE=off go get github.com/micro/protoc-gen-micro
+GO111MODULE=off go get github.com/micro/protoc-gen-micro/v2@v2.0.0
 # GO111MODULE=off go get -u github.com/envoyproxy/protoc-gen-validate
 # GO111MODULE=off go get -u github.com/infobloxopen/protoc-gen-gorm
 ```
@@ -81,6 +81,7 @@ make install
 
 ```bash
 # getting official micro cli
+GO111MODULE=on go get github.com/micro/micro/v2@v2.0.0
 ## GO111MODULE=on go get github.com/micro/micro
 # lets use custom made micro with gRPC enabled by default...
 # GO111MODULE=on go get github.com/xmlking/micro@master

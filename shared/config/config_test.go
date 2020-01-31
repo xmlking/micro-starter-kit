@@ -3,7 +3,7 @@ package config
 import (
 	"testing"
 
-	microConfig "github.com/micro/go-micro/config"
+	microConfig "github.com/micro/go-micro/v2/config"
 )
 
 func TestConfig(t *testing.T) {

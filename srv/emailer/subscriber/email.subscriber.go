@@ -3,7 +3,7 @@ package subscriber
 import (
 	"context"
 
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/metadata"
 	log "github.com/sirupsen/logrus"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
 	"github.com/xmlking/micro-starter-kit/srv/emailer/service"

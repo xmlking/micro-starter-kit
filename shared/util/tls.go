@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"net"
 
-	maddr "github.com/micro/go-micro/util/addr"
-	mls "github.com/micro/go-micro/util/tls"
+	maddr "github.com/micro/go-micro/v2/util/addr"
+	mls "github.com/micro/go-micro/v2/util/tls"
 )
 
 func GetSelfSignedTLSConfig(address string) (*tls.Config, error) {

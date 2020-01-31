@@ -1,14 +1,11 @@
 package main
 
 // import (
-// 	_ "github.com/micro/go-plugins/broker/nats"
-// 	_ "github.com/micro/go-plugins/transport/nats"
 // 	_ "go.uber.org/automaxprocs"
 
-// 	_ "github.com/micro/go-plugins/broker/googlepubsub"
-// 	_ "github.com/micro/go-plugins/client/selector/static"
+// 	_ "github.com/micro/go-plugins/v2/broker/googlepubsub"
 // "os"
-// "github.com/micro/go-micro/broker"
+// "github.com/micro/go-micro/v2/broker"
 // )
 
 // func init() {

@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-micro/v2/util/log"
 
 	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )

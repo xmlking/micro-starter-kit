@@ -3,10 +3,10 @@ package log
 import (
 	"os"
 
-	microlog "github.com/micro/go-micro/util/log"
+	microlog "github.com/micro/go-micro/v2/util/log"
 	"github.com/sirupsen/logrus"
-	micrologrus "github.com/tudurom/micro-logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
+	micrologrus "github.com/xmlking/micro-starter-kit/shared/log/micro/logrus"
 )
 
 func InitLogger(cfg config.LogConfiguration) {

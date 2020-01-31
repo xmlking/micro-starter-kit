@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/jinzhu/gorm"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/errors"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/thoas/go-funk"
 

@@ -10,8 +10,8 @@ require (
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/markbates/pkger v0.14.0
-	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.18.0
+	github.com/micro/cli/v2 v2.1.1
+	github.com/micro/go-micro/v2 v2.0.0
 	github.com/onrik/logrus v0.5.1
 	github.com/rs/zerolog v1.17.2
 	github.com/sarulabs/di/v2 v2.4.0
@@ -19,6 +19,5 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0
 	github.com/thoas/go-funk v0.5.0
-	github.com/tudurom/micro-logrus v0.0.0-20171007082012-3704f28fa9d1
-	google.golang.org/genproto v0.0.0-20191108220845-16a3f7862a1a
+	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
 )

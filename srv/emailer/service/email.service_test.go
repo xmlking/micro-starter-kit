@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"github.com/micro/go-micro/config"
+	"github.com/micro/go-micro/v2/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"

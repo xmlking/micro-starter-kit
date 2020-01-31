@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/metadata"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/xmlking/micro-starter-kit/shared/constants"

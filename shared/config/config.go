@@ -7,12 +7,13 @@ import (
 	"runtime"
 	"strings"
 
-	microConfig "github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/config/source/cli"
-	"github.com/micro/go-micro/config/source/env"
-	log "github.com/sirupsen/logrus"
-	"github.com/xmlking/micro-starter-kit/shared/micro/config/source/pkger"
-	// "github.com/micro/go-plugins/config/source/configmap"
+	microConfig "github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/config/source/cli"
+	"github.com/micro/go-micro/v2/config/source/env"
+    log "github.com/sirupsen/logrus"
+    "github.com/xmlking/micro-starter-kit/shared/micro/config/source/pkger"
+    // "github.com/micro/go-plugins/v2/config/source/pkger"
+	// "github.com/micro/go-plugins/v2/config/source/configmap"
 )
 
 var (

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/ptypes/wrappers"
-	"github.com/micro/go-micro/client/grpc"
+	"github.com/micro/go-micro/v2/client"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -36,8 +36,8 @@ type AccountTestSuite struct {
 // SetupSuite implements suite.SetupAllSuite
 func (suite *AccountTestSuite) SetupSuite() {
 	suite.T().Log("in SetupSuite")
-	suite.user = accountPB.NewUserService("accountsrv", grpc.NewClient())
-	suite.profile = accountPB.NewProfileService("accountsrv", grpc.NewClient())
+	suite.user = accountPB.NewUserService("accountsrv", client.NewClient())
+	suite.profile = accountPB.NewProfileService("accountsrv", client.NewClient())
 }
 
 // TearDownSuite implements suite.TearDownAllSuite
