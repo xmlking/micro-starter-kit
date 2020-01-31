@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
-	github.com/golang/protobuf v1.3.2
+	github.com/golang/protobuf v1.3.3
 	github.com/google/uuid v1.1.1
 	github.com/infobloxopen/atlas-app-toolkit v0.19.1
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
