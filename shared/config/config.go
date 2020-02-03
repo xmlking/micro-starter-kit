@@ -10,10 +10,9 @@ import (
 	microConfig "github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/config/source/cli"
 	"github.com/micro/go-micro/v2/config/source/env"
-    log "github.com/sirupsen/logrus"
-    "github.com/xmlking/micro-starter-kit/shared/micro/config/source/pkger"
-    // "github.com/micro/go-plugins/v2/config/source/pkger"
-	// "github.com/micro/go-plugins/v2/config/source/configmap"
+	"github.com/micro/go-plugins/config/source/pkger/v2"
+	// "github.com/micro/go-plugins/config/source/configmap/v2"
+	log "github.com/sirupsen/logrus"
 )
 
 var (

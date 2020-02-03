@@ -1,10 +1,14 @@
 package main
 
 import (
+	"crypto/tls"
+
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"
+	gc "github.com/micro/go-micro/v2/client/grpc"
 	"github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/transport"
+	gs "github.com/micro/go-micro/v2/server/grpc"
+	// "github.com/micro/go-micro/v2/service/grpc"
 	log "github.com/sirupsen/logrus"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
@@ -70,9 +74,7 @@ func main() {
 		} else {
 			options = append(options,
 				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
-				// grpc.WithTLS(tlsConf),
-				micro.Transport(transport.NewTransport(transport.Secure(true))),
-				micro.Transport(transport.NewTransport(transport.TLSConfig(tlsConf))),
+				WithTLS(tlsConf),
 			)
 		}
 	}
@@ -97,5 +99,15 @@ func main() {
 	// Run service
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
+	}
+}
+func WithTLS(t *tls.Config) micro.Option {
+	return func(o *micro.Options) {
+		o.Client.Init(
+			gc.AuthTLS(t),
+		)
+		o.Server.Init(
+			gs.AuthTLS(t),
+		)
 	}
 }
