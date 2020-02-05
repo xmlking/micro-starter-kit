@@ -105,7 +105,7 @@ func main() {
 	}
 	if cfg.Features["translogs"].Enabled {
 		topic := config.Get("features", "translogs", "topic").String("recordersrv")
-		publisher := micro.NewPublisher(topic, service.Client())
+		publisher := micro.NewEvent(topic, service.Client())
 		options = append(options,
 			micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)),
 		)
@@ -127,7 +127,7 @@ func main() {
 
 	// Publisher publish to "emailersrv"
 	emailerSrvEp := config.Get("services", constants.EMAILERSRV, "endpoint").String(constants.EMAILERSRV)
-	publisher := micro.NewPublisher(emailerSrvEp, service.Client())
+	publisher := micro.NewEvent(emailerSrvEp, service.Client())
 	// greeterSrv Client to call "greetersrv"
 	greeterSrvEp := config.Get("services", constants.GREETERSRV, "endpoint").String(constants.GREETERSRV)
 	greeterSrvClient := greeterPB.NewGreeterService(greeterSrvEp, service.Client())

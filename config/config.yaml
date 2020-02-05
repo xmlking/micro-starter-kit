@@ -10,7 +10,9 @@ database:
   port: 9999
   Username: sumo
   Password: demo
-  database: "file:foobar?mode=memory&cache=shared"
+  # FIXME: https://github.com/jinzhu/gorm/issues/2875
+  # database: "file:foobar?mode=memory&cache=shared"
+  database: "file:./build/gorm.db"
   maxOpenConns: 1
   maxIdleConns: 1
   # connMaxLifetime: 1hr

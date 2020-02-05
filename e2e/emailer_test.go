@@ -17,7 +17,7 @@ var (
 )
 
 func init() {
-	publisher = micro.NewPublisher(topic, client.DefaultClient)
+	publisher = micro.NewEvent(topic, client.DefaultClient)
 }
 
 func TestEmailSubscriber_Handle_E2E(t *testing.T) {
