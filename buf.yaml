@@ -2,8 +2,7 @@ build:
   roots:
     - srv
     - shared
-    - vendor/github.com/envoyproxy/protoc-gen-validate
-    - vendor/github.com/infobloxopen
+    - third_party/proto
 
 lint:
   use:

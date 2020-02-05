@@ -71,7 +71,8 @@
   "clang-format.style": "google",
   "protoc": {
     "options": [
-      "--proto_path=${workspaceRoot}/proto",
+      "--proto_path=${workspaceRoot}",
+      "--proto_path=${workspaceRoot}/third_party/proto",
       "--proto_path=${env.GOPATH}/src"
     ]
   },

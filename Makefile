@@ -58,7 +58,7 @@ tools:
 	# go install github.com/ahmetb/govvv
 	# go install github.com/markbates/pkger/cmd/pkger
 	# GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint
-	# GO111MODULE=on go get github.com/uber/prototool/cmd/prototool@dev
+	# GO111MODULE=on go get github.com/bufbuild/buf/cmd/buf
 
 check_dirty:
 ifdef GIT_DIRTY
@@ -83,7 +83,7 @@ proto proto-%:
 	@if [ -z $(TARGET) ]; then \
 		for d in $(TYPES); do \
 			for f in $$d/**/proto/**/*.proto; do \
-				protoc --proto_path=.:${GOPATH}/src/github.com/infobloxopen:${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate:${GOPATH}/src \
+				protoc --proto_path=.:./third_party/proto:${GOPATH}/src \
 				--go_out=paths=source_relative:. \
 				--micro_out=paths=source_relative:. \
 				--gorm_out=paths=source_relative:. \
@@ -93,7 +93,7 @@ proto proto-%:
 		done \
 	else \
 		for f in ${TYPE}/${TARGET}/proto/**/*.proto; do \
-			protoc --proto_path=.:${GOPATH}/src/github.com/infobloxopen:${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate:${GOPATH}/src \
+			protoc --proto_path=.:./third_party/proto:${GOPATH}/src \
 			--go_out=paths=source_relative:. \
 			--micro_out=paths=source_relative:. \
 			--gorm_out=paths=source_relative:. \
@@ -106,11 +106,13 @@ lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all"; \
 		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
-		echo ${GOPATH}/bin/prototool lint; \
+		${GOPATH}/bin/buf check lint; \
+		${GOPATH}/bin/buf check breaking --against-input '.git#branch=master'; \
 	else \
 		echo "Linting ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
-		echo ${GOPATH}/bin/prototool lint ./${TYPE}/${TARGET}/ ; \
+		${GOPATH}/bin/buf check lint; \
+		${GOPATH}/bin/buf check breaking --against-input '.git#branch=master'; \
 	fi
 
 pkger pkger-%:

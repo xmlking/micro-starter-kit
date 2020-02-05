@@ -14,7 +14,7 @@
 - [x] One Step _build/publish/deploy_ with [ko](https://github.com/google/ko)
 - [x] BuildInfo with [govvv](https://github.com/ahmetb/govvv)
 - [x] Linting with [GolangCI](https://github.com/golangci/golangci-lint) linters aggregator
-- [x] Linting Protos with [prototool](https://github.com/uber/prototool)
+- [x] Linting Protos with [Buf](https://buf.build/docs/introduction)
 - [x] CICD Pipelines with [GitHub Actions](https://github.com/features/actions)
 - [x] Kubernetes _Matrix Deployment_ with [Kustomize](https://kustomize.io/)
 - [ ] Add k8s [healthchecks](https://github.com/heptiolabs/healthcheck) with [cmux](https://medium.com/@drgarcia1986/listen-grpc-and-http-requests-on-the-same-port-263c40cb45ff)
