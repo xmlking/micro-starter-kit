@@ -33,6 +33,9 @@ brew install etcd
 # CHANGELOG generator
 brew tap git-chglog/git-chglog
 brew install git-chglog
+# buf: proto tool https://buf.build/docs/tour-1
+brew tap bufbuild/buf
+brew install buf
 ```
 
 ### third-party golang tools

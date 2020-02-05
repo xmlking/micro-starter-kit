@@ -2,15 +2,15 @@
 protoc:
   version: 3.8.0
   includes:
-  #   - ../..
-  #   - ./proto
-    - /Users/schintha/go/src
-    # - $GOPATH/src
+    - srv
+    - shared
+    - vendor
 
 # LINT
 
 excludes:
   - e2e
+  - vendor
 
 lint:
   group: uber2

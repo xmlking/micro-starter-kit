@@ -1,0 +1,20 @@
+build:
+  roots:
+    - srv
+    - shared
+    - vendor
+lint:
+  use:
+    # - BASIC
+    - DEFAULT
+    - FILE_LOWER_SNAKE_CASE
+  except:
+    - ENUM_NO_ALLOW_ALIAS
+    - PACKAGE_AFFINITY
+    - PACKAGE_DIRECTORY_MATCH
+    - PACKAGE_SAME_DIRECTORY
+  ignore:
+    - github.com/infobloxopen/protoc-gen-gorm/options/gorm.proto
+breaking:
+  use:
+    - WIRE_JSON

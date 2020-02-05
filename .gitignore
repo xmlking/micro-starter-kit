@@ -13,7 +13,7 @@
 *.out
 
 ### Go Patch ###
-/vendor/
+# /vendor/
 /Godeps/
 
 # OS generated files #

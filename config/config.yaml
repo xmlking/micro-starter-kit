@@ -52,7 +52,7 @@ features:
     keyfile: certs/micro.key
     cafile: certs/ca.crt
     servername: "*"
-    enabled: true
+    enabled: false
   validator:
     enabled: true
   reqlogs:

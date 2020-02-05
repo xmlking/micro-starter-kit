@@ -39,19 +39,18 @@ message User {
   // "uuid", primary_key: true, default: "uuid_generate_v4()" }]; // primary key
 
   // primary key
-  string id = 1
-      [(gorm.field).tag = { type: "uuid", primary_key: true }];
-  google.protobuf.Timestamp createdAt = 2
+  string id = 1 [(gorm.field).tag = { type: "uuid", primary_key: true }];
+  google.protobuf.Timestamp created_at = 2
       [(gorm.field).tag = { not_null: true }];
-  google.protobuf.Timestamp updatedAt = 3
+  google.protobuf.Timestamp updated_at = 3
       [(gorm.field).tag = { not_null: true }];
-  google.protobuf.Timestamp deletedAt = 4
+  google.protobuf.Timestamp deleted_at = 4
       [(gorm.field).tag = { index: "idx_users_deleted_at" }];
   string username = 7 [(gorm.field).tag = { size: 100, not_null: true }];
-  string firstName = 8 [(gorm.field).tag = { size: 255, not_null: true }];
-  string lastName = 9 [(gorm.field).tag = { not_null: true }];
+  string first_name = 8 [(gorm.field).tag = { size: 255, not_null: true }];
+  string last_name = 9 [(gorm.field).tag = { not_null: true }];
   string email = 10 [(gorm.field).tag = { not_null: true }];
-  Profile Profile = 11;
+  Profile profile = 11;
 }
 
 // FIXME: https://github.com/envoyproxy/protoc-gen-validate/issues/223
@@ -65,9 +64,9 @@ message UserRequest {
     pattern: "^[a-z0-9_-]{3,15}$",
     max_bytes: 256,
   }];
-  google.protobuf.StringValue firstName = 3
+  google.protobuf.StringValue first_name = 3
       [(validate.rules).string.min_len = 3];
-  google.protobuf.StringValue lastName = 4
+  google.protobuf.StringValue last_name = 4
       [(validate.rules).string.min_len = 3];
   google.protobuf.StringValue email = 5
       [(validate.rules).string.email = true];  // Not Working
@@ -97,9 +96,9 @@ message UserListQuery {
     pattern: "^[a-z0-9_-]{3,15}$",
     max_bytes: 256,
   }];
-  google.protobuf.StringValue firstName = 5
+  google.protobuf.StringValue first_name = 5
       [(validate.rules).string.min_len = 3];
-  google.protobuf.StringValue lastName = 6
+  google.protobuf.StringValue last_name = 6
       [(validate.rules).string.min_len = 3];
   google.protobuf.StringValue email = 7
       [(validate.rules).string.email = true];  // Not Working
@@ -129,11 +128,11 @@ message Profile {
   // "uuid", primary_key: true, default: "uuid_generate_v4()" }]; // primary key
   string id = 1
       [(gorm.field).tag = { type: "uuid", primary_key: true }];  // primary key
-  google.protobuf.Timestamp createdAt = 2
+  google.protobuf.Timestamp created_at = 2
       [(gorm.field).tag = { not_null: true }];
-  google.protobuf.Timestamp updatedAt = 3
+  google.protobuf.Timestamp updated_at = 3
       [(gorm.field).tag = { not_null: true }];
-  google.protobuf.Timestamp deletedAt = 4
+  google.protobuf.Timestamp deleted_at = 4
       [(gorm.field).tag = { index: "idx_profiles_deleted_at" }];
   string tz = 5;  // *time.Location?
   string avatar = 6;
@@ -151,7 +150,7 @@ message Profile {
 message ProfileRequest {
   google.protobuf.StringValue id = 1
       [(validate.rules).string.uuid = true];  // Not Working
-  google.protobuf.StringValue userId = 2
+  google.protobuf.StringValue user_id = 2
       [(validate.rules).string.uuid = true];  // Not Working
   google.protobuf.StringValue tz = 3;
   google.protobuf.StringValue avatar = 4
@@ -175,7 +174,7 @@ message ProfileListQuery {
       [(validate.rules).uint32 = { gte: 1, lte: 100 }];
   google.protobuf.UInt32Value page = 2 [(validate.rules).uint32.gte = 1];
   google.protobuf.StringValue sort = 3;
-  google.protobuf.StringValue userId = 4 [(validate.rules).string.uuid = true];
+  google.protobuf.StringValue user_id = 4 [(validate.rules).string.uuid = true];
   google.protobuf.StringValue gender = 5
       [(validate.rules).string = { in: [ "M", "F" ] }];
   // GenderType gender = 5; // FIXME
