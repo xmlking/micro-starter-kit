@@ -1,10 +1,10 @@
 # keep this at proto/prototool.yaml
 protoc:
-  version: 3.8.0
+  version: 3.11.3
   includes:
     - srv
     - shared
-    - vendor
+    - vendor/github.com/envoyproxy/protoc-gen-validate
 
 # LINT
 

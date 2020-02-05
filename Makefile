@@ -83,7 +83,7 @@ proto proto-%:
 	@if [ -z $(TARGET) ]; then \
 		for d in $(TYPES); do \
 			for f in $$d/**/proto/**/*.proto; do \
-				protoc --proto_path=.:${GOPATH}/src \
+				protoc --proto_path=.:${GOPATH}/src/github.com/infobloxopen:${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate:${GOPATH}/src \
 				--go_out=paths=source_relative:. \
 				--micro_out=paths=source_relative:. \
 				--gorm_out=paths=source_relative:. \
@@ -93,7 +93,7 @@ proto proto-%:
 		done \
 	else \
 		for f in ${TYPE}/${TARGET}/proto/**/*.proto; do \
-			protoc --proto_path=.:${GOPATH}/src \
+			protoc --proto_path=.:${GOPATH}/src/github.com/infobloxopen:${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate:${GOPATH}/src \
 			--go_out=paths=source_relative:. \
 			--micro_out=paths=source_relative:. \
 			--gorm_out=paths=source_relative:. \

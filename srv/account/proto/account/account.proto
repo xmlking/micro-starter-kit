@@ -5,9 +5,9 @@ package accountsrv;
 // import "shared/proto/basic/error.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
-import "github.com/infobloxopen/protoc-gen-gorm/options/gorm.proto";
-// import "github.com/infobloxopen/protoc-gen-gorm/types/types.proto";
-import "github.com/envoyproxy/protoc-gen-validate/validate/validate.proto";
+import "protoc-gen-gorm/options/gorm.proto";
+// import "protoc-gen-gorm/types/types.proto";
+import "validate/validate.proto";
 
 // Ref:
 // https://github.com/seizadi/atlas-template/blob/master/resolved/pkg/pb/cmdb.proto

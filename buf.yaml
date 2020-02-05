@@ -2,19 +2,20 @@ build:
   roots:
     - srv
     - shared
-    - vendor
+    - vendor/github.com/envoyproxy/protoc-gen-validate
+    - vendor/github.com/infobloxopen
+
 lint:
   use:
-    # - BASIC
     - DEFAULT
     - FILE_LOWER_SNAKE_CASE
   except:
-    - ENUM_NO_ALLOW_ALIAS
-    - PACKAGE_AFFINITY
-    - PACKAGE_DIRECTORY_MATCH
-    - PACKAGE_SAME_DIRECTORY
+    # - PACKAGE_AFFINITY
   ignore:
-    - github.com/infobloxopen/protoc-gen-gorm/options/gorm.proto
+    - protoc-gen-gorm
+    - validate
+  service_suffix: Service
+
 breaking:
   use:
     - WIRE_JSON
