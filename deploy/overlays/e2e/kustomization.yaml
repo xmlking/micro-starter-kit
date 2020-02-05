@@ -49,6 +49,10 @@ secretGenerator:
     behavior: replace
     literals:
       - DATABASE_PASSWORD=e2e-real-pass
+  # - name: registry-credentials
+  #   files:
+  #       - ".dockerconfigjson=docker.secret.json"
+  #   type: kubernetes.io/dockerconfigjson
 
 replicas:
   - name: srv
