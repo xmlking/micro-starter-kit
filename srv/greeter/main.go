@@ -94,7 +94,7 @@ func main() {
 	)
 
 	// Register Handler
-	_ = greeterPB.RegisterGreeterHandler(service.Server(), handler.NewGreeterHandler())
+	_ = greeterPB.RegisterGreeterServiceHandler(service.Server(), handler.NewGreeterHandler())
 	myConfig.PrintBuildInfo()
 	// Run service
 	if err := service.Run(); err != nil {

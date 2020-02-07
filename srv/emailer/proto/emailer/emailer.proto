@@ -1,6 +1,10 @@
 syntax = "proto3";
 
-package emailersrv;
+package micro.emailer.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer";
+option java_multiple_files = true;
+option java_package = "micro.emailer.v1";
 
 message Message {
   string to = 1;

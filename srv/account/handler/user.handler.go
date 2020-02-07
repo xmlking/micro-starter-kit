@@ -11,7 +11,7 @@ import (
 
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 
-	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
 	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
@@ -25,7 +25,7 @@ type userHandler struct {
 }
 
 // NewUserHandler returns an instance of `UserServiceHandler`.
-func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeterClient greeterPB.GreeterService) pb.UserServiceHandler {
+func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeterClient greeterPB.GreeterService) userPB.UserServiceHandler {
 	return &userHandler{
 		userRepository:   repo,
 		Publisher:        pub,
@@ -33,9 +33,9 @@ func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeter
 	}
 }
 
-func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.UserExistResponse) error {
+func (h *userHandler) Exist(ctx context.Context, req *userPB.ExistRequest, rsp *userPB.ExistResponse) error {
 	log.Info("Received UserHandler.Exist request")
-	model := pb.UserORM{}
+	model := userPB.UserORM{}
 	model.Id = req.Id.GetValue()
 	model.Username = req.Username.GetValue()
 	model.Email = req.Email.GetValue()
@@ -46,9 +46,9 @@ func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.Us
 	return nil
 }
 
-func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.UserListResponse) error {
+func (h *userHandler) List(ctx context.Context, req *userPB.ListRequest, rsp *userPB.ListResponse) error {
 	log.Info("Received UserHandler.List request")
-	model := pb.UserORM{}
+	model := userPB.UserORM{}
 	model.Username = req.Username.GetValue()
 	model.FirstName = req.FirstName.GetValue()
 	model.Email = req.Email.GetValue()
@@ -59,22 +59,22 @@ func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.U
 	}
 	rsp.Total = total
 
-	// newUsers := make([]*pb.User, len(users))
+	// newUsers := make([]*accountPB.User, len(users))
 	// for index, user := range users {
 	// 	tmpUser, _ := user.ToPB(ctx)
 	// 	newUsers[index] = &tmpUser
 	// 	// *newUsers[index], _ = user.ToPB(ctx) ???
 	// }
-	newUsers := funk.Map(users, func(user *pb.UserORM) *pb.User {
+	newUsers := funk.Map(users, func(user *userPB.UserORM) *userPB.User {
 		tmpUser, _ := user.ToPB(ctx)
 		return &tmpUser
-	}).([]*pb.User)
+	}).([]*userPB.User)
 
 	rsp.Results = newUsers
 	return nil
 }
 
-func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Get(ctx context.Context, req *userPB.GetRequest, rsp *userPB.GetResponse) error {
 	log.Info("Received UserHandler.Get request")
 	id := req.Id.GetValue()
 	if id == "" {
@@ -95,10 +95,10 @@ func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.User
 	return nil
 }
 
-func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp *userPB.CreateResponse) error {
 	log.Info("Received UserHandler.Create request")
 
-	model := pb.UserORM{}
+	model := userPB.UserORM{}
 	model.Username = req.Username.GetValue()
 	model.FirstName = req.FirstName.GetValue()
 	model.LastName = req.LastName.GetValue()
@@ -126,7 +126,7 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	return nil
 }
 
-func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Update(ctx context.Context, req *userPB.UpdateRequest, rsp *userPB.UpdateResponse) error {
 	log.Info("Received UserHandler.Update request")
 
 	id := req.Id.GetValue()
@@ -134,7 +134,7 @@ func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
-	model := pb.UserORM{}
+	model := userPB.UserORM{}
 	model.Username = req.Username.GetValue()
 	model.FirstName = req.FirstName.GetValue()
 	model.LastName = req.LastName.GetValue()
@@ -147,7 +147,7 @@ func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	return nil
 }
 
-func (h *userHandler) Delete(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Delete(ctx context.Context, req *userPB.DeleteRequest, rsp *userPB.DeleteResponse) error {
 	log.Info("Received UserHandler.Delete request")
 
 	id := req.Id.GetValue()
@@ -155,7 +155,7 @@ func (h *userHandler) Delete(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
-	model := pb.UserORM{}
+	model := userPB.UserORM{}
 	model.Id = id
 
 	if err := h.userRepository.Delete(&model); err != nil {

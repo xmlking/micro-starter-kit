@@ -1,16 +1,16 @@
 syntax = "proto3";
 
-package greetersrv;
+package micro.greeter.v1;
 
-service Greeter {
+option go_package = "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter";
+option java_multiple_files = true;
+option java_package = "micro.greeter.v1";
+
+service GreeterService {
   // Hello is echo method
   rpc Hello(HelloRequest) returns (HelloResponse) {}
 }
 
-message HelloRequest {
-  string name = 1;
-}
+message HelloRequest { string name = 1; }
 
-message HelloResponse {
-  string msg = 1;
-}
+message HelloResponse { string msg = 1; }

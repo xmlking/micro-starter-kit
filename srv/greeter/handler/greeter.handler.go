@@ -12,7 +12,7 @@ import (
 type greeterHandler struct{}
 
 // NewUserHandler returns an instance of `UserServiceHandler`.
-func NewGreeterHandler() greeterPB.GreeterHandler {
+func NewGreeterHandler() greeterPB.GreeterServiceHandler {
 	return &greeterHandler{}
 }
 

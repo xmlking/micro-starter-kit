@@ -5,17 +5,17 @@ import (
 
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
-	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 )
 
 // UserRepository interface
 type UserRepository interface {
-	Exist(model *pb.UserORM) bool
-	List(limit, page uint32, sort string, model *pb.UserORM) (total uint32, users []*pb.UserORM, err error)
-	Get(id string) (*pb.UserORM, error)
-	Create(model *pb.UserORM) error
-	Update(id string, model *pb.UserORM) error
-	Delete(model *pb.UserORM) error
+	Exist(model *userPB.UserORM) bool
+	List(limit, page uint32, sort string, model *userPB.UserORM) (total uint32, users []*userPB.UserORM, err error)
+	Get(id string) (*userPB.UserORM, error)
+	Create(model *userPB.UserORM) error
+	Update(id string, model *userPB.UserORM) error
+	Delete(model *userPB.UserORM) error
 }
 
 // userRepository struct
@@ -31,23 +31,23 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 }
 
 // Exist
-func (repo *userRepository) Exist(model *pb.UserORM) bool {
+func (repo *userRepository) Exist(model *userPB.UserORM) bool {
 	log.Infof("Received userRepository.Exist request %v", *model)
 	var count int
 	if model.Username != "" {
-		repo.db.Model(&pb.UserORM{}).Where("username = ?", model.Username).Count(&count)
+		repo.db.Model(&userPB.UserORM{}).Where("username = ?", model.Username).Count(&count)
 		if count > 0 {
 			return true
 		}
 	}
 	if model.Id != "" {
-		repo.db.Model(&pb.UserORM{}).Where("id = ?", model.Id).Count(&count)
+		repo.db.Model(&userPB.UserORM{}).Where("id = ?", model.Id).Count(&count)
 		if count > 0 {
 			return true
 		}
 	}
 	if model.Email != "" {
-		repo.db.Model(&pb.UserORM{}).Where("email = ?", model.Email).Count(&count)
+		repo.db.Model(&userPB.UserORM{}).Where("email = ?", model.Email).Count(&count)
 		if count > 0 {
 			return true
 		}
@@ -56,7 +56,7 @@ func (repo *userRepository) Exist(model *pb.UserORM) bool {
 }
 
 // List
-func (repo *userRepository) List(limit, page uint32, sort string, model *pb.UserORM) (total uint32, users []*pb.UserORM, err error) {
+func (repo *userRepository) List(limit, page uint32, sort string, model *userPB.UserORM) (total uint32, users []*userPB.UserORM, err error) {
 	db := repo.db
 
 	if limit == 0 {
@@ -90,8 +90,8 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *pb.User
 }
 
 // Find by ID
-func (repo *userRepository) Get(id string) (user *pb.UserORM, err error) {
-	user = &pb.UserORM{Id: id}
+func (repo *userRepository) Get(id string) (user *userPB.UserORM, err error) {
+	user = &userPB.UserORM{Id: id}
 	// enable auto preloading for `Profile`
 	if err = repo.db.Set("gorm:auto_preload", true).First(user).Error; err != nil && err != gorm.ErrRecordNotFound {
 		log.WithError(err).Error("Error in UserRepository.Get")
@@ -100,7 +100,7 @@ func (repo *userRepository) Get(id string) (user *pb.UserORM, err error) {
 }
 
 // Create
-func (repo *userRepository) Create(model *pb.UserORM) error {
+func (repo *userRepository) Create(model *userPB.UserORM) error {
 	if exist := repo.Exist(model); exist {
 		return errors.New("user already exist")
 	}
@@ -113,8 +113,8 @@ func (repo *userRepository) Create(model *pb.UserORM) error {
 }
 
 // Update TODO: Translation
-func (repo *userRepository) Update(id string, model *pb.UserORM) error {
-	user := &pb.UserORM{
+func (repo *userRepository) Update(id string, model *userPB.UserORM) error {
+	user := &userPB.UserORM{
 		Id: id,
 	}
 	// result := repo.db.Set("gorm:association_autoupdate", false).Save(model)
@@ -131,7 +131,7 @@ func (repo *userRepository) Update(id string, model *pb.UserORM) error {
 }
 
 // Delete
-func (repo *userRepository) Delete(model *pb.UserORM) error {
+func (repo *userRepository) Delete(model *userPB.UserORM) error {
 	result := repo.db.Delete(model)
 	if err := result.Error; err != nil {
 		log.WithError(err).Error("Error in UserRepository.Delete")

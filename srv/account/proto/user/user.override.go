@@ -1,12 +1,12 @@
-package accountsrv
+package user
 
 import (
-	"context"
+	context "context"
 	"errors"
 	fmt "fmt"
 	"net/mail"
 	strings "strings"
-	"time"
+	time "time"
 
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
@@ -15,15 +15,6 @@ import (
 /**
  * GORM
 **/
-
-// AfterToPB implements the posthook interface for the Profile type. This allows
-// us to customize conversion behavior. In this example, we set the User's Age
-// based on the Birthday, instead of storing it separately in the DB
-func (m *ProfileORM) AfterToPB(ctx context.Context, profile *Profile) error {
-	profile.Age = uint32(time.Now().Sub(*m.Birthday).Hours() / 24 / 365)
-	return nil
-}
-
 // BeforeCreate implements the GORM BeforeCreate interface for the UserORM type.
 // you can use this method to generate new UUID for CREATE operation or let database create it with this annotation:
 // {type: "uuid", primary_key: true, not_null:true, default: "uuid_generate_v4()"}];
@@ -31,6 +22,14 @@ func (m *ProfileORM) AfterToPB(ctx context.Context, profile *Profile) error {
 func (m *UserORM) BeforeCreate(scope *gorm.Scope) error {
 	uuid := uuid.NewV4()
 	return scope.SetColumn("Id", uuid.String())
+}
+
+// AfterToPB implements the posthook interface for the Profile type. This allows
+// us to customize conversion behavior. In this example, we set the User's Age
+// based on the Birthday, instead of storing it separately in the DB
+func (m *ProfileORM) AfterToPB(ctx context.Context, profile *Profile) error {
+	profile.Age = uint32(time.Now().Sub(*m.Birthday).Hours() / 24 / 365)
+	return nil
 }
 
 // BeforeCreate implements the GORM BeforeCreate interface for the ProfileORM type.
@@ -44,36 +43,53 @@ func (m *ProfileORM) BeforeCreate(scope *gorm.Scope) error {
 **/
 // PATCH for FIXME: https://github.com/envoyproxy/protoc-gen-validate/issues/223
 
-func (m *UserRequest) _validateEmail(addr string) error {
+func (m *GetRequest) _validateEmail(addr string) error {
 	return _validateEmail(addr)
 }
-func (m *UserRequest) _validateHostname(host string) error {
+func (m *GetRequest) _validateHostname(host string) error {
 	return _validateHostname(host)
 }
-func (m *UserRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
-func (m *ProfileRequest) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *ProfileRequest) _validateHostname(host string) error {
-	return _validateHostname(host)
-}
-func (m *ProfileRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
-func (m *UserListQuery) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *UserListQuery) _validateHostname(host string) error {
-	return _validateHostname(host)
-}
-func (m *ProfileListQuery) _validateUuid(uuid string) error {
+func (m *GetRequest) _validateUuid(uuid string) error {
 	return _validateUuid(uuid)
 }
 
+func (m *ExistRequest) _validateEmail(addr string) error {
+	return _validateEmail(addr)
+}
+func (m *ExistRequest) _validateUuid(uuid string) error {
+	return _validateUuid(uuid)
+}
+
+func (m *CreateRequest) _validateEmail(addr string) error {
+	return _validateEmail(addr)
+}
+func (m *CreateRequest) _validateUuid(uuid string) error {
+	return _validateUuid(uuid)
+}
+
+func (m *UpdateRequest) _validateEmail(addr string) error {
+	return _validateEmail(addr)
+}
+func (m *UpdateRequest) _validateUuid(uuid string) error {
+	return _validateUuid(uuid)
+}
+
+func (m *DeleteRequest) _validateEmail(addr string) error {
+	return _validateEmail(addr)
+}
+func (m *DeleteRequest) _validateUuid(uuid string) error {
+	return _validateUuid(uuid)
+}
+
+func (m *ListRequest) _validateEmail(addr string) error {
+	return _validateEmail(addr)
+}
+func (m *ListRequest) _validateHostname(host string) error {
+	return _validateHostname(host)
+}
+
 func _validateUuid(uuid string) error {
-	if matched := _account_uuidPattern.MatchString(uuid); !matched {
+	if matched := _user_uuidPattern.MatchString(uuid); !matched {
 		return errors.New("invalid uuid format")
 	}
 

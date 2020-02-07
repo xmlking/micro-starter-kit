@@ -5,15 +5,15 @@ import (
 
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
-	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 )
 
 // ProfileRepository interface
 type ProfileRepository interface {
-	Exist(model *pb.ProfileORM) bool
-	List(limit, page uint32, sort string, model *pb.ProfileORM) (total uint32, profiles []*pb.ProfileORM, err error)
-	Get(id string) (*pb.ProfileORM, error)
-	Create(model *pb.ProfileORM) error
+	Exist(model *userPB.ProfileORM) bool
+	List(limit, page uint32, sort string, model *userPB.ProfileORM) (total uint32, profiles []*userPB.ProfileORM, err error)
+	Get(id string) (*userPB.ProfileORM, error)
+	Create(model *userPB.ProfileORM) error
 }
 
 // profileRepository struct
@@ -29,11 +29,11 @@ func NewProfileRepository(db *gorm.DB) ProfileRepository {
 }
 
 // Exist
-func (repo *profileRepository) Exist(model *pb.ProfileORM) bool {
+func (repo *profileRepository) Exist(model *userPB.ProfileORM) bool {
 	var count int
 	userID := model.UserId
 	if userID != nil && *userID != "" {
-		repo.db.Model(&pb.ProfileORM{}).Where("user_id = ?", *userID).Count(&count)
+		repo.db.Model(&userPB.ProfileORM{}).Where("user_id = ?", *userID).Count(&count)
 		if count > 0 {
 			return true
 		}
@@ -42,7 +42,7 @@ func (repo *profileRepository) Exist(model *pb.ProfileORM) bool {
 }
 
 // List
-func (repo *profileRepository) List(limit, page uint32, sort string, model *pb.ProfileORM) (total uint32, profiles []*pb.ProfileORM, err error) {
+func (repo *profileRepository) List(limit, page uint32, sort string, model *userPB.ProfileORM) (total uint32, profiles []*userPB.ProfileORM, err error) {
 	db := repo.db
 
 	if limit == 0 {
@@ -74,8 +74,8 @@ func (repo *profileRepository) List(limit, page uint32, sort string, model *pb.P
 }
 
 // Find by ID
-func (repo *profileRepository) Get(id string) (profile *pb.ProfileORM, err error) {
-	profile = &pb.ProfileORM{Id: id}
+func (repo *profileRepository) Get(id string) (profile *userPB.ProfileORM, err error) {
+	profile = &userPB.ProfileORM{Id: id}
 	if err = repo.db.First(profile).Error; err != nil && err != gorm.ErrRecordNotFound {
 		log.WithError(err).Error("Error in ProfileRepository.Get")
 	}
@@ -83,7 +83,7 @@ func (repo *profileRepository) Get(id string) (profile *pb.ProfileORM, err error
 }
 
 // Create
-func (repo *profileRepository) Create(model *pb.ProfileORM) error {
+func (repo *profileRepository) Create(model *userPB.ProfileORM) error {
 	if exist := repo.Exist(model); exist {
 		return fmt.Errorf("profile already exist")
 	}

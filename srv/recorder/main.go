@@ -10,7 +10,7 @@ import (
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/xmlking/micro-starter-kit/shared/util"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
-	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
+	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/registry"
 )
 
@@ -102,8 +102,8 @@ func main() {
 	// register subscriber with queue, each message is delivered to a unique subscriber
 	// _ = micro.RegisterSubscriber(recorderTopic, service.Server(), transactionSubscriber, server.SubscriberQueue("queue.pubsub"))
 
-	transactionHandler := ctn.Resolve("transaction-handler").(recorderPB.TransactionHandler)
-	recorderPB.RegisterTransactionHandler(service.Server(), transactionHandler)
+	transactionHandler := ctn.Resolve("transaction-handler").(transactionPB.TransactionServiceHandler)
+	transactionPB.RegisterTransactionServiceHandler(service.Server(), transactionHandler)
 
 	myConfig.PrintBuildInfo()
 	// Run service

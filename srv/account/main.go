@@ -16,7 +16,8 @@ import (
 	transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
 	validatorWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/validator"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
-	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	profilePB "github.com/xmlking/micro-starter-kit/srv/account/proto/profile"
+	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 	"github.com/xmlking/micro-starter-kit/srv/account/registry"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
@@ -134,11 +135,11 @@ func main() {
 
 	// // Handlers
 	userHandler := handler.NewUserHandler(ctn.Resolve("user-repository").(repository.UserRepository), publisher, greeterSrvClient)
-	profileHandler := ctn.Resolve("profile-handler").(accountPB.ProfileServiceHandler)
+	profileHandler := ctn.Resolve("profile-handler").(profilePB.ProfileServiceHandler)
 
 	// Register Handlers
-	accountPB.RegisterUserServiceHandler(service.Server(), userHandler)
-	accountPB.RegisterProfileServiceHandler(service.Server(), profileHandler)
+	userPB.RegisterUserServiceHandler(service.Server(), userHandler)
+	profilePB.RegisterProfileServiceHandler(service.Server(), profileHandler)
 
 	myConfig.PrintBuildInfo()
 	// Run service

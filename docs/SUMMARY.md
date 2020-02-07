@@ -1,28 +1,24 @@
 # Table of Contents
 
 - [Micro Starter Kit](../README.md)
+- [Features](features.md)
 - Getting Started
   - [Why](introduction/why.md)
   - [Prerequisites](introduction/prerequisites.md)
   - [Installation](introduction/installation.md)
+  - [Makefile](introduction/makefile.md)
 - Concepts
   - [Introduction](concepts/intro.md)
-  - [Makefile](concepts/makefile.md)
   - [Configuration](concepts/actions.md)
   - [State](concepts/state.md)
   - [Select](concepts/select.md)
 - Advanced
-  - [Action Handlers](advanced/action-handlers.md)
-  - [Actions Life Cycle](advanced/actions-life-cycle.md)
-  - [Cancellation](advanced/cancellation.md)
-  - [Composition](advanced/composition.md)
+  - [Dependency Injection](advanced/dependency-injection.md)
+  - [Logging](advanced/logging.md)
   - [Error Handling](advanced/errors.md)
-  - [Plugins](advanced/ivy-migration-guide.md)
-  - [Lazy Loading](advanced/lazy.md)
   - [Life-cycle](advanced/life-cycle.md)
   - [Git Flow](advanced/gitflow.md)
   - [Git Ops](advanced/gitops.md)
-  - [Options](advanced/options.md)
   - [mTLS](advanced/mtls.md)
   - [Release](advanced/release.md)
   - [Release Process](advanced/release-process.md)
@@ -59,4 +55,3 @@
   - [Contributing](community/contributing.md)
 - [Change Log](../CHANGELOG.md)
 - [FAQ](faq/howto.md)
-- [TODO](todo.md)

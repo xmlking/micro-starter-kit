@@ -6,7 +6,7 @@ import (
 	empty "github.com/golang/protobuf/ptypes/empty"
 	log "github.com/sirupsen/logrus"
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
-	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
+	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/repository"
 )
 
@@ -14,13 +14,13 @@ type recorderHandler struct {
 	repo repository.TransactionRepository
 }
 
-func NewTransactionHandler(repo repository.TransactionRepository) recorderPB.TransactionHandler {
+func NewTransactionHandler(repo repository.TransactionRepository) transactionPB.TransactionServiceHandler {
 	return &recorderHandler{
 		repo: repo,
 	}
 }
 
-func (h *recorderHandler) Read(ctx context.Context, req *recorderPB.TransactionReadRequest, rsp *recorderPB.TransactionEvent) error {
+func (h *recorderHandler) Read(ctx context.Context, req *transactionPB.ReadRequest, rsp *transactionPB.TransactionEvent) error {
 	if rsp, err := h.repo.Read(ctx, req.GetKey()); err != nil {
 		log.WithError(err).Error("Received transactionService.Read request error")
 		return myErrors.AppError(myErrors.DBE, err)
@@ -29,7 +29,7 @@ func (h *recorderHandler) Read(ctx context.Context, req *recorderPB.TransactionR
 	}
 	return nil
 }
-func (h *recorderHandler) Write(ctx context.Context, req *recorderPB.TransactionWriteRequest, rsp *empty.Empty) (err error) {
+func (h *recorderHandler) Write(ctx context.Context, req *transactionPB.WriteRequest, rsp *empty.Empty) (err error) {
 	if err := h.repo.Write(ctx, req.GetKey(), req.GetEvent()); err != nil {
 		log.WithError(err).Error("Received TransactionHandler.Write request error")
 		return myErrors.AppError(myErrors.DBE, err)

@@ -11,7 +11,8 @@ import (
 	ptypes1 "github.com/golang/protobuf/ptypes"
 	log "github.com/sirupsen/logrus"
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
-	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	profilePB "github.com/xmlking/micro-starter-kit/srv/account/proto/profile"
+	entityPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 )
 
@@ -22,16 +23,16 @@ type profileHandler struct {
 }
 
 // NewProfileHandler returns an instance of `ProfileServiceHandler`.
-func NewProfileHandler(repo repository.ProfileRepository, logger log.FieldLogger) pb.ProfileServiceHandler {
+func NewProfileHandler(repo repository.ProfileRepository, logger log.FieldLogger) profilePB.ProfileServiceHandler {
 	return &profileHandler{
 		profileRepository: repo,
 		contextLogger:     logger,
 	}
 }
 
-func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rsp *pb.ProfileListResponse) error {
+func (ph *profileHandler) List(ctx context.Context, req *profilePB.ListRequest, rsp *profilePB.ListResponse) error {
 	ph.contextLogger.Info("Received ProfileHandler.List request")
-	model := pb.ProfileORM{
+	model := entityPB.ProfileORM{
 		Id:     req.UserId.GetValue(),
 		Gender: req.Gender.GetValue(),
 	}
@@ -46,16 +47,16 @@ func (ph *profileHandler) List(ctx context.Context, req *pb.ProfileListQuery, rs
 	// 	tempProfile, _ := profile.ToPB(ctx)
 	// 	newProfiles[index] = &tempProfile
 	// }
-	newProfiles := funk.Map(profiles, func(profile *pb.ProfileORM) *pb.Profile {
+	newProfiles := funk.Map(profiles, func(profile *entityPB.ProfileORM) *entityPB.Profile {
 		tempProfile, _ := profile.ToPB(ctx)
 		return &tempProfile
-	}).([]*pb.Profile)
+	}).([]*entityPB.Profile)
 
 	rsp.Results = newProfiles
 	return nil
 }
 
-func (ph *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *pb.ProfileResponse) error {
+func (ph *profileHandler) Get(ctx context.Context, req *profilePB.GetRequest, rsp *profilePB.GetResponse) error {
 	ph.contextLogger.Info("Received ProfileHandler.Get request")
 	id := req.Id.GetValue()
 	if id == "" {
@@ -76,9 +77,9 @@ func (ph *profileHandler) Get(ctx context.Context, req *pb.ProfileRequest, rsp *
 	return nil
 }
 
-func (ph *profileHandler) Create(ctx context.Context, req *pb.ProfileRequest, rsp *pb.ProfileResponse) error {
+func (ph *profileHandler) Create(ctx context.Context, req *profilePB.CreateRequest, rsp *profilePB.CreateResponse) error {
 	ph.contextLogger.Debug("Received ProfileHandler.Create request")
-	model := pb.ProfileORM{}
+	model := entityPB.ProfileORM{}
 	userID := req.UserId.GetValue()
 	model.UserId = &userID
 	model.Tz = req.Tz.GetValue()

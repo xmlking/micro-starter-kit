@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 
 	"github.com/xmlking/micro-starter-kit/shared/constants"
-	recorderPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/recorder"
+	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/repository"
 )
 
@@ -31,7 +31,7 @@ func NewTransactionSubscriber(repo repository.TransactionRepository) *Transactio
 }
 
 // Handle is a method to record transaction event, Method can be of any name
-func (s *TransactionSubscriber) Handle(ctx context.Context, event *recorderPB.TransactionEvent) (err error) {
+func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB.TransactionEvent) (err error) {
 	md, _ := metadata.FromContext(ctx)
 	tranId := md[constants.TransID]
 

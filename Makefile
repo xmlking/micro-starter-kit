@@ -41,7 +41,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
 .PHONY: all tools, check_dirty, clean, update_deps
-.PHONY: proto proto-%
+.PHONY: proto proto-% proto_format
 .PHONY: lint lint-%
 .PHONY: pkger pkger-%
 .PHONY: build build-%
@@ -79,28 +79,34 @@ update_deps:
 	go mod verify
 	go mod tidy
 
+# FIXME: protoc-gen-gorm is dumb. it creates github.com dir
+
 proto proto-%:
 	@if [ -z $(TARGET) ]; then \
 		for d in $(TYPES); do \
 			for f in $$d/**/proto/**/*.proto; do \
-				protoc --proto_path=.:./third_party/proto:${GOPATH}/src \
+				protoc --proto_path=.:${GOPATH}/src \
 				--go_out=paths=source_relative:. \
 				--micro_out=paths=source_relative:. \
-				--gorm_out=paths=source_relative:. \
+				--gorm_out=engine=postgres,enums=string,paths=source_relative:. \
 				--validate_out=lang=go,paths=source_relative:. $$f; \
-				echo compiled: $$f; \
+				echo ✓ compiled: $$f; \
 			done \
 		done \
 	else \
 		for f in ${TYPE}/${TARGET}/proto/**/*.proto; do \
-			protoc --proto_path=.:./third_party/proto:${GOPATH}/src \
+			protoc --proto_path=.:${GOPATH}/src \
 			--go_out=paths=source_relative:. \
 			--micro_out=paths=source_relative:. \
-			--gorm_out=paths=source_relative:. \
+			--gorm_out=engine=postgres,enums=string,paths=source_relative:. \
 			--validate_out=lang=go,paths=source_relative:. $$f; \
-			echo compiled: $$f; \
+			echo ✓ compiled: $$f; \
 		done \
 	fi
+	@rsync -a github.com/xmlking/micro-starter-kit/srv/account/proto/ srv/account/proto && rm -Rf github.com
+
+proto_format:
+	@clang-format -i $(shell find . -type f -name '*.proto')
 
 lint lint-%:
 	@if [ -z $(TARGET) ]; then \
