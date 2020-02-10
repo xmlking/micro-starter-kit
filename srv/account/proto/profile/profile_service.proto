@@ -21,33 +21,15 @@ service ProfileService {
 // FIXME: https://github.com/envoyproxy/protoc-gen-validate/issues/223
 // Workaround in .override.go
 message ListRequest {
-  google.protobuf.UInt32Value limit = 1 [
-    (validate.rules).uint32 = {
-      gte: 1
-      lte: 100
-    }
-  ];
+  google.protobuf.UInt32Value limit = 1
+      [(validate.rules).uint32 = { gte: 1 lte: 100 }];
   google.protobuf.UInt32Value page = 2 [(validate.rules).uint32.gte = 1];
   google.protobuf.StringValue sort = 3;
   google.protobuf.StringValue preferred_theme = 4 [
-    (validate.rules).string = {
-      in: [
-        "dark",
-        "light",
-        "cosmic",
-        "corporate"
-      ]
-    }
+    (validate.rules).string = { in: [ "dark", "light", "cosmic", "corporate" ] }
   ];
-  micro.account.entities.v1.Profile.GenderType gender = 5 [
-    (validate.rules).enum = {
-      in: [
-        0,
-        1,
-        2
-      ]
-    }
-  ];
+  micro.account.entities.v1.Profile.GenderType gender = 5
+      [(validate.rules).enum = { in: [ 0, 1, 2 ] }];
 }
 
 message ListResponse {
@@ -58,8 +40,10 @@ message ListResponse {
 
 message GetRequest {
   oneof id {
-    google.protobuf.StringValue profile_id = 1 [(validate.rules).string.uuid = true]; // Not Working
-    google.protobuf.StringValue user_id = 2 [(validate.rules).string.uuid = true]; // Not Working
+    google.protobuf.StringValue profile_id = 1
+        [(validate.rules).string.uuid = true];  // Not Working
+    google.protobuf.StringValue user_id = 2
+        [(validate.rules).string.uuid = true];  // Not Working
   }
 }
 
@@ -69,28 +53,17 @@ message GetResponse {
 }
 
 message CreateRequest {
-  google.protobuf.StringValue user_id = 2 [(validate.rules).string.uuid = true]; // Not Working
+  google.protobuf.StringValue user_id = 2
+      [(validate.rules).string.uuid = true];  // Not Working
   google.protobuf.StringValue tz = 3;
-  google.protobuf.StringValue avatar = 4 [(validate.rules).string.uri_ref = true];
-  micro.account.entities.v1.Profile.GenderType gender = 5 [
-    (validate.rules).enum = {
-      in: [
-        0,
-        1,
-        2
-      ]
-    }
-  ];
-  google.protobuf.Timestamp birthday = 6 [(validate.rules).timestamp.lt_now = true];
+  google.protobuf.StringValue avatar = 4
+      [(validate.rules).string.uri_ref = true];
+  micro.account.entities.v1.Profile.GenderType gender = 5
+      [(validate.rules).enum = { in: [ 0, 1, 2 ] }];
+  google.protobuf.Timestamp birthday = 6
+      [(validate.rules).timestamp.lt_now = true];
   google.protobuf.StringValue preferred_theme = 7 [
-    (validate.rules).string = {
-      in: [
-        "dark",
-        "light",
-        "cosmic",
-        "corporate"
-      ]
-    }
+    (validate.rules).string = { in: [ "dark", "light", "cosmic", "corporate" ] }
   ];
 }
 
