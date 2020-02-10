@@ -19,13 +19,9 @@ message User {
   option (gorm.opts) = {
     ormable: true
   };
-  // gorm.types.UUID id                      = 1  [(gorm.field).tag = { type:
-  // "uuid", primary_key: true, not_null: true, unique: true }]; // primary key
-  // string id                               = 1  [(gorm.field).tag = { type:
-  // "uuid", primary_key: true, default: "uuid_generate_v4()" }]; // primary key
-  // string id = 1
-  //     [(gorm.field).tag = { type: "uuid", primary_key: true }];  // primary
-  //     key
+  // gorm.types.UUID id                      = 1  [(gorm.field).tag = {
+  // type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; //
+  // primary key
 
   gorm.types.UUID id = 1 [
     (gorm.field).tag = {
@@ -79,22 +75,14 @@ message User {
   ];
 }
 
-enum GenderType {
-  GENDER_TYPE_UNSPECIFIED = 0;
-  GENDER_TYPE_MALE = 1;
-  GENDER_TYPE_FEMALE = 2;
-}
-
 // Profile Entity
 message Profile {
   option (validate.disabled) = true;
   option (gorm.opts) = {
     ormable: true
   };
-  // gorm.types.UUID id                      = 1  [(gorm.field).tag = { type:
-  // "uuid", primary_key: true, not_null: true, unique: true }]; // primary key
-  // string id                               = 1  [(gorm.field).tag = { type:
-  // "uuid", primary_key: true, default: "uuid_generate_v4()" }]; // primary key
+  // gorm.types.UUID id                      = 1  [(gorm.field).tag = {
+  // type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; primary key
   gorm.types.UUID id = 1 [
     (gorm.field).tag = {
       type: "uuid"
@@ -120,10 +108,13 @@ message Profile {
   ];
   string tz = 5; // *time.Location?
   string avatar = 6;
+  enum GenderType {
+    GENDER_TYPE_UNSPECIFIED = 0;
+    GENDER_TYPE_MALE = 1;
+    GENDER_TYPE_FEMALE = 2;
+  }
   // FIXME: https://github.com/jinzhu/gorm/issues/1978
-  string gender = 7; //    GenderType `gorm:"not null;type:ENUM('M', 'F')"`
-  // GenderType gender                       = 7; //    GenderType `gorm:"not
-  // null;type:ENUM('M', 'F')"`
+  GenderType gender = 7; //  GenderType `gorm:"not null;type:ENUM('M', 'F')"`
   google.protobuf.Timestamp birthday = 8 [
     (gorm.field).tag = {
       not_null: true

@@ -29,8 +29,8 @@ message ListRequest {
   ];
   google.protobuf.UInt32Value page = 2 [(validate.rules).uint32.gte = 1];
   google.protobuf.StringValue sort = 3;
-  google.protobuf.StringValue user_id = 4 [(validate.rules).string.uuid = true];
-  google.protobuf.StringValue gender = 5;
+  google.protobuf.StringValue preferred_theme = 4;
+  micro.account.entities.v1.Profile.GenderType gender = 5;
 }
 
 message ListResponse {
@@ -52,12 +52,12 @@ message GetResponse {
 }
 
 message CreateRequest {
-  google.protobuf.StringValue id = 1 [(validate.rules).string.uuid = true]; // Not Working
   google.protobuf.StringValue user_id = 2 [(validate.rules).string.uuid = true]; // Not Working
   google.protobuf.StringValue tz = 3;
   google.protobuf.StringValue avatar = 4 [(validate.rules).string.uri_ref = true];
-  google.protobuf.StringValue gender = 5;
+  micro.account.entities.v1.Profile.GenderType gender = 5;
   google.protobuf.Timestamp birthday = 6 [(validate.rules).timestamp.lt_now = true];
+  google.protobuf.StringValue preferred_theme = 7;
 }
 
 message CreateResponse {

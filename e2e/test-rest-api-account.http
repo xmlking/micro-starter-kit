@@ -183,8 +183,9 @@ Accept: {{jsonType}}
         "user_id":  "{{firstUserId}}",
         "tz" : "PST",
         "avatar": "sumo1.jpg",
-        "gender": "F",
-        "birthday": "2017-01-15T01:30:15.01Z"
+        "gender": 2,
+        "birthday": "2017-01-15T01:30:15.01Z",
+        "preferred_theme": "cosmic"
     }
 }
 
@@ -214,8 +215,8 @@ Accept: {{jsonType}}
         "limit": 10,
         "page": 1,
         "sort" : "gender",
-        "user_id": "{{firstUserId}}",
-        "gender": "F"
+        "preferred_theme": "cosmic",
+        "gender": 2
     }
 }
 

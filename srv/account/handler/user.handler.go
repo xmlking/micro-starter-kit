@@ -55,6 +55,7 @@ func (h *userHandler) List(ctx context.Context, req *userPB.ListRequest, rsp *us
 	username := req.Username.GetValue()
 	model.Username = &username
 	model.FirstName = req.FirstName.GetValue()
+	model.LastName = req.LastName.GetValue()
 	model.Email = req.Email.GetValue()
 
 	total, users, err := h.userRepository.List(req.Limit.GetValue(), req.Page.GetValue(), req.Sort.GetValue(), &model)

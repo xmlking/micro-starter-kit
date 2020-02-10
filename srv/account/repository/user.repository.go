@@ -76,6 +76,9 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *account
 	if model.Username != nil && len(*model.Username) > 0 {
 		db = db.Where("username like ?", "%"+*model.Username+"%")
 	}
+	if model.FirstName != "" {
+		db = db.Where("first_name like ?", "%"+model.FirstName+"%")
+	}
 	if model.LastName != "" {
 		db = db.Where("last_name like ?", "%"+model.LastName+"%")
 	}

@@ -16,6 +16,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/golang/protobuf/ptypes"
+
+	entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 )
 
 // ensure the imports are used
@@ -31,6 +33,10 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = ptypes.DynamicAny{}
+
+	_ = entities.Profile_GenderType(0)
+
+	_ = entities.Profile_GenderType(0)
 )
 
 // define the regex for a UUID once up-front
@@ -76,27 +82,22 @@ func (m *ListRequest) Validate() error {
 		}
 	}
 
-	if wrapper := m.GetUserId(); wrapper != nil {
+	if wrapper := m.GetPreferredTheme(); wrapper != nil {
 
-		if err := m._validateUuid(wrapper.GetValue()); err != nil {
+		if _, ok := _ListRequest_PreferredTheme_InLookup[wrapper.GetValue()]; !ok {
 			return ListRequestValidationError{
-				field:  "UserId",
-				reason: "value must be a valid UUID",
-				cause:  err,
+				field:  "PreferredTheme",
+				reason: "value must be in list [dark light cosmic corporate]",
 			}
 		}
 
 	}
 
-	if wrapper := m.GetGender(); wrapper != nil {
-
-		if _, ok := _ListRequest_Gender_InLookup[wrapper.GetValue()]; !ok {
-			return ListRequestValidationError{
-				field:  "Gender",
-				reason: "value must be in list [M F]",
-			}
+	if _, ok := _ListRequest_Gender_InLookup[m.GetGender()]; !ok {
+		return ListRequestValidationError{
+			field:  "Gender",
+			reason: "value must be in list [0 1 2]",
 		}
-
 	}
 
 	return nil
@@ -156,9 +157,17 @@ var _ interface {
 	ErrorName() string
 } = ListRequestValidationError{}
 
-var _ListRequest_Gender_InLookup = map[string]struct{}{
-	"M": {},
-	"F": {},
+var _ListRequest_PreferredTheme_InLookup = map[string]struct{}{
+	"dark":      {},
+	"light":     {},
+	"cosmic":    {},
+	"corporate": {},
+}
+
+var _ListRequest_Gender_InLookup = map[entities.Profile_GenderType]struct{}{
+	0: {},
+	1: {},
+	2: {},
 }
 
 // Validate is disabled for ListResponse. This method will always return nil.
@@ -383,18 +392,6 @@ func (m *CreateRequest) Validate() error {
 		return nil
 	}
 
-	if wrapper := m.GetId(); wrapper != nil {
-
-		if err := m._validateUuid(wrapper.GetValue()); err != nil {
-			return CreateRequestValidationError{
-				field:  "Id",
-				reason: "value must be a valid UUID",
-				cause:  err,
-			}
-		}
-
-	}
-
 	if wrapper := m.GetUserId(); wrapper != nil {
 
 		if err := m._validateUuid(wrapper.GetValue()); err != nil {
@@ -429,15 +426,11 @@ func (m *CreateRequest) Validate() error {
 
 	}
 
-	if wrapper := m.GetGender(); wrapper != nil {
-
-		if _, ok := _CreateRequest_Gender_InLookup[wrapper.GetValue()]; !ok {
-			return CreateRequestValidationError{
-				field:  "Gender",
-				reason: "value must be in list [M F]",
-			}
+	if _, ok := _CreateRequest_Gender_InLookup[m.GetGender()]; !ok {
+		return CreateRequestValidationError{
+			field:  "Gender",
+			reason: "value must be in list [0 1 2]",
 		}
-
 	}
 
 	if t := m.GetBirthday(); t != nil {
@@ -456,6 +449,17 @@ func (m *CreateRequest) Validate() error {
 			return CreateRequestValidationError{
 				field:  "Birthday",
 				reason: "value must be less than now",
+			}
+		}
+
+	}
+
+	if wrapper := m.GetPreferredTheme(); wrapper != nil {
+
+		if _, ok := _CreateRequest_PreferredTheme_InLookup[wrapper.GetValue()]; !ok {
+			return CreateRequestValidationError{
+				field:  "PreferredTheme",
+				reason: "value must be in list [dark light cosmic corporate]",
 			}
 		}
 
@@ -518,9 +522,17 @@ var _ interface {
 	ErrorName() string
 } = CreateRequestValidationError{}
 
-var _CreateRequest_Gender_InLookup = map[string]struct{}{
-	"M": {},
-	"F": {},
+var _CreateRequest_Gender_InLookup = map[entities.Profile_GenderType]struct{}{
+	0: {},
+	1: {},
+	2: {},
+}
+
+var _CreateRequest_PreferredTheme_InLookup = map[string]struct{}{
+	"dark":      {},
+	"light":     {},
+	"cosmic":    {},
+	"corporate": {},
 }
 
 // Validate is disabled for CreateResponse. This method will always return nil.

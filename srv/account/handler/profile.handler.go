@@ -34,9 +34,11 @@ func NewProfileHandler(repo repository.ProfileRepository, logger log.FieldLogger
 
 func (ph *profileHandler) List(ctx context.Context, req *profilePB.ListRequest, rsp *profilePB.ListResponse) error {
 	ph.contextLogger.Info("Received ProfileHandler.List request")
+	preferredTheme := req.PreferredTheme.GetValue()
 	model := account_entities.ProfileORM{
-		Id:     uuid.FromStringOrNil(req.UserId.GetValue()),
-		Gender: req.Gender.GetValue(),
+		// UserID:     uuid.FromStringOrNil(req.UserId.GetValue()),
+		PreferredTheme: &preferredTheme,
+		Gender:         account_entities.Profile_GenderType_name[int32(req.Gender)],
 	}
 
 	total, profiles, err := ph.profileRepository.List(req.Limit.GetValue(), req.Page.GetValue(), req.Sort.GetValue(), &model)
@@ -95,7 +97,7 @@ func (ph *profileHandler) Create(ctx context.Context, req *profilePB.CreateReque
 	userId := uuid.FromStringOrNil(req.UserId.GetValue())
 	model.UserId = &userId
 	model.Tz = req.Tz.GetValue()
-	model.Gender = req.Gender.GetValue()
+	model.Gender = account_entities.Profile_GenderType_name[int32(req.Gender)]
 	model.Avatar = req.Avatar.GetValue()
 	if req.Birthday != nil {
 		var t time.Time
@@ -105,6 +107,8 @@ func (ph *profileHandler) Create(ctx context.Context, req *profilePB.CreateReque
 		}
 		model.Birthday = &t
 	}
+	preferredTheme := req.PreferredTheme.GetValue()
+	model.PreferredTheme = &preferredTheme
 
 	if err := ph.profileRepository.Create(&model); err != nil {
 		return myErrors.AppError(myErrors.DBE, err)

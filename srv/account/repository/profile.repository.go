@@ -63,7 +63,10 @@ func (repo *profileRepository) List(limit, page uint32, sort string, model *acco
 	if userID != nil && len(*userID) > 0 {
 		db = db.Where("user_id = ?", *userID)
 	}
-	if model.Gender != "" {
+	if model.PreferredTheme != nil && len(*model.PreferredTheme) > 0 {
+		db = db.Where("preferred_theme = ?", *model.PreferredTheme)
+	}
+	if model.Gender != account_entities.Profile_GenderType_name[0] {
 		db = db.Where("gender = ?", model.Gender)
 	}
 

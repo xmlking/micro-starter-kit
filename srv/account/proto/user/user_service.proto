@@ -97,7 +97,6 @@ message GetResponse {
 }
 
 message CreateRequest {
-  google.protobuf.StringValue id = 1 [(validate.rules).string.uuid = true]; // Not Working
   google.protobuf.StringValue username = 2 [
     (validate.rules).string = {
       min_len: 4

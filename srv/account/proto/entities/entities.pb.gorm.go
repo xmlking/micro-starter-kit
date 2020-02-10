@@ -238,7 +238,7 @@ func (m *Profile) ToORM(ctx context.Context) (ProfileORM, error) {
 	}
 	to.Tz = m.Tz
 	to.Avatar = m.Avatar
-	to.Gender = m.Gender
+	to.Gender = Profile_GenderType_name[int32(m.Gender)]
 	if m.Birthday != nil {
 		var t time.Time
 		if t, err = ptypes1.Timestamp(m.Birthday); err != nil {
@@ -284,7 +284,7 @@ func (m *ProfileORM) ToPB(ctx context.Context) (Profile, error) {
 	}
 	to.Tz = m.Tz
 	to.Avatar = m.Avatar
-	to.Gender = m.Gender
+	to.Gender = Profile_GenderType(Profile_GenderType_value[m.Gender])
 	if m.Birthday != nil {
 		if to.Birthday, err = ptypes1.TimestampProto(*m.Birthday); err != nil {
 			return to, err

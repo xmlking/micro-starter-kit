@@ -654,18 +654,6 @@ func (m *CreateRequest) Validate() error {
 		return nil
 	}
 
-	if wrapper := m.GetId(); wrapper != nil {
-
-		if err := m._validateUuid(wrapper.GetValue()); err != nil {
-			return CreateRequestValidationError{
-				field:  "Id",
-				reason: "value must be a valid UUID",
-				cause:  err,
-			}
-		}
-
-	}
-
 	if wrapper := m.GetUsername(); wrapper != nil {
 
 		if l := utf8.RuneCountInString(wrapper.GetValue()); l < 4 || l > 16 {
