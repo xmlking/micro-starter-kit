@@ -2,18 +2,19 @@ package repository
 
 import (
 	"fmt"
-
 	"github.com/jinzhu/gorm"
+	go_uuid1 "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
-	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
+	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 )
 
 // ProfileRepository interface
 type ProfileRepository interface {
-	Exist(model *userPB.ProfileORM) bool
-	List(limit, page uint32, sort string, model *userPB.ProfileORM) (total uint32, profiles []*userPB.ProfileORM, err error)
-	Get(id string) (*userPB.ProfileORM, error)
-	Create(model *userPB.ProfileORM) error
+	Exist(model *account_entities.ProfileORM) bool
+	List(limit, page uint32, sort string, model *account_entities.ProfileORM) (total uint32, profiles []*account_entities.ProfileORM, err error)
+	Get(id string) (*account_entities.ProfileORM, error)
+	GetByUserID(userId string) (*account_entities.ProfileORM, error)
+	Create(model *account_entities.ProfileORM) error
 }
 
 // profileRepository struct
@@ -29,11 +30,11 @@ func NewProfileRepository(db *gorm.DB) ProfileRepository {
 }
 
 // Exist
-func (repo *profileRepository) Exist(model *userPB.ProfileORM) bool {
+func (repo *profileRepository) Exist(model *account_entities.ProfileORM) bool {
 	var count int
 	userID := model.UserId
-	if userID != nil && *userID != "" {
-		repo.db.Model(&userPB.ProfileORM{}).Where("user_id = ?", *userID).Count(&count)
+	if userID != nil && len(*userID) > 0 {
+		repo.db.Model(&account_entities.ProfileORM{}).Where("user_id = ?", *userID).Count(&count)
 		if count > 0 {
 			return true
 		}
@@ -42,7 +43,7 @@ func (repo *profileRepository) Exist(model *userPB.ProfileORM) bool {
 }
 
 // List
-func (repo *profileRepository) List(limit, page uint32, sort string, model *userPB.ProfileORM) (total uint32, profiles []*userPB.ProfileORM, err error) {
+func (repo *profileRepository) List(limit, page uint32, sort string, model *account_entities.ProfileORM) (total uint32, profiles []*account_entities.ProfileORM, err error) {
 	db := repo.db
 
 	if limit == 0 {
@@ -59,7 +60,7 @@ func (repo *profileRepository) List(limit, page uint32, sort string, model *user
 	}
 
 	userID := model.UserId
-	if userID != nil && *userID != "" {
+	if userID != nil && len(*userID) > 0 {
 		db = db.Where("user_id = ?", *userID)
 	}
 	if model.Gender != "" {
@@ -74,16 +75,36 @@ func (repo *profileRepository) List(limit, page uint32, sort string, model *user
 }
 
 // Find by ID
-func (repo *profileRepository) Get(id string) (profile *userPB.ProfileORM, err error) {
-	profile = &userPB.ProfileORM{Id: id}
+func (repo *profileRepository) Get(id string) (profile *account_entities.ProfileORM, err error) {
+	println("Get")
+	println("id")
+	profile = &account_entities.ProfileORM{Id: go_uuid1.FromStringOrNil(id)}
+
 	if err = repo.db.First(profile).Error; err != nil && err != gorm.ErrRecordNotFound {
 		log.WithError(err).Error("Error in ProfileRepository.Get")
 	}
+	println(profile.Id.String())
+	println(profile.UserId.String())
+	return
+}
+
+// Find by UserID
+func (repo *profileRepository) GetByUserID(userId string) (profile *account_entities.ProfileORM, err error) {
+	println("GetByUserID")
+	println("userId")
+	user_uuid := go_uuid1.FromStringOrNil(userId)
+	profile = &account_entities.ProfileORM{UserId: &user_uuid}
+	if err = repo.db.Where(&profile).First(&profile).Error; err != nil && err != gorm.ErrRecordNotFound {
+		// if err = repo.db.First(profile).Error; err != nil && err != gorm.ErrRecordNotFound {
+		log.WithError(err).Error("Error in ProfileRepository.GetByUserID")
+	}
+	println(profile.Id.String())
+	println(profile.UserId.String())
 	return
 }
 
 // Create
-func (repo *profileRepository) Create(model *userPB.ProfileORM) error {
+func (repo *profileRepository) Create(model *account_entities.ProfileORM) error {
 	if exist := repo.Exist(model); exist {
 		return fmt.Errorf("profile already exist")
 	}

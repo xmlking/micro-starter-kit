@@ -180,7 +180,7 @@ Accept: {{jsonType}}
     "service": "accountsrv",
     "method": "ProfileService.Create",
     "request": {
-        "userId": "{{firstUserId}}",
+        "user_id":  "{{firstUserId}}",
         "tz" : "PST",
         "avatar": "sumo1.jpg",
         "gender": "F",
@@ -214,15 +214,15 @@ Accept: {{jsonType}}
         "limit": 10,
         "page": 1,
         "sort" : "gender",
-        "userId": "{{firstUserId}}",
+        "user_id": "{{firstUserId}}",
         "gender": "F"
     }
 }
 
 @firstProfileId = {{ListProfile.response.body.results[0].id}}
 
-### Get Profile
-# @name GetProfile
+### Get GetProfileByID
+# @name GetProfileByID
 POST {{api-gateway-url}}/rpc
 content-type: {{jsonType}}
 Accept: {{jsonType}}
@@ -231,6 +231,21 @@ Accept: {{jsonType}}
     "service": "accountsrv",
     "method": "ProfileService.Get",
     "request": {
-       "id": "{{firstProfileId}}"
+       "profile_id": "{{firstProfileId}}"
+    }
+}
+
+
+### Get GetProfileByUserID
+# @name GetProfileByUserID
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "ProfileService.Get",
+    "request": {
+       "user_id": "{{firstUserId}}"
     }
 }

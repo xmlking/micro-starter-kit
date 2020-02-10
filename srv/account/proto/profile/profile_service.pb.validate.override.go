@@ -37,7 +37,7 @@ func (m *ListRequest) _validateUuid(uuid string) error {
 }
 
 func _validateUuid(uuid string) error {
-	if matched := _profile_uuidPattern.MatchString(uuid); !matched {
+	if matched := _profile_service_uuidPattern.MatchString(uuid); !matched {
 		return errors.New("invalid uuid format")
 	}
 

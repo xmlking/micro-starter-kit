@@ -1,9 +1,11 @@
 syntax = "proto2";
+
 package gorm;
 
 option go_package = "github.com/infobloxopen/protoc-gen-gorm/options;gorm";
 
 import "google/protobuf/descriptor.proto";
+
 // TODO: The option number 52119 lies within the internally reserved extension
 // range. I believe a publicly unique number should be requested.
 
@@ -35,7 +37,9 @@ message ExtraField {
 }
 
 // Field level specifications
-extend google.protobuf.FieldOptions { optional GormFieldOptions field = 52119; }
+extend google.protobuf.FieldOptions {
+  optional GormFieldOptions field = 52119;
+}
 
 message GormFieldOptions {
   optional GormTag tag = 1;
@@ -129,6 +133,10 @@ message AutoServerOptions {
   optional bool txn_middleware = 2;
 }
 
-extend google.protobuf.MethodOptions { optional MethodOptions method = 52119; }
+extend google.protobuf.MethodOptions {
+  optional MethodOptions method = 52119;
+}
 
-message MethodOptions { optional string object_type = 1; }
+message MethodOptions {
+  optional string object_type = 1;
+}

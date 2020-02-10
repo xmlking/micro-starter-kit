@@ -2,22 +2,23 @@ syntax = "proto3";
 
 package micro.recorder.v1;
 
-import "google/protobuf/empty.proto";
-import "third_party/proto/validate/validate.proto";
-
 option go_package = "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction";
 option java_multiple_files = true;
 option java_package = "micro.recorder.v1";
 
+import "google/protobuf/empty.proto";
+import "third_party/proto/validate/validate.proto";
+
 service TransactionService {
-  rpc Read(ReadRequest) returns (TransactionEvent) {}
-  rpc Write(WriteRequest) returns (google.protobuf.Empty) {}
+  rpc Read(ReadRequest) returns (TransactionEvent);
+  rpc Write(WriteRequest) returns (google.protobuf.Empty);
 }
 
 message ReadRequest {
   option (validate.disabled) = true;
   string key = 1;
 }
+
 message WriteRequest {
   option (validate.disabled) = true;
   string key = 1;

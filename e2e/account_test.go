@@ -12,7 +12,8 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	// "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
-	accountPB "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	profilePB "github.com/xmlking/micro-starter-kit/srv/account/proto/profile"
+	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 )
 
 /**
@@ -29,15 +30,15 @@ import (
 // returns the current testing context
 type AccountTestSuite struct {
 	suite.Suite
-	user    accountPB.UserService
-	profile accountPB.ProfileService
+	user    userPB.UserService
+	profile profilePB.ProfileService
 }
 
 // SetupSuite implements suite.SetupAllSuite
 func (suite *AccountTestSuite) SetupSuite() {
 	suite.T().Log("in SetupSuite")
-	suite.user = accountPB.NewUserService("accountsrv", client.NewClient())
-	suite.profile = accountPB.NewProfileService("accountsrv", client.NewClient())
+	suite.user = userPB.NewUserService("accountsrv", client.NewClient())
+	suite.profile = profilePB.NewProfileService("accountsrv", client.NewClient())
 }
 
 // TearDownSuite implements suite.TearDownAllSuite
@@ -49,7 +50,7 @@ func (suite *AccountTestSuite) TearDownSuite() {
 func (suite *AccountTestSuite) SetupTest() {
 	t := suite.T()
 	t.Log("in SetupTest - creating user")
-	_, err := suite.user.Create(context.TODO(), &accountPB.UserRequest{
+	_, err := suite.user.Create(context.TODO(), &userPB.CreateRequest{
 		Username:  &wrappers.StringValue{Value: "sumo"},
 		FirstName: &wrappers.StringValue{Value: "sumo"},
 		LastName:  &wrappers.StringValue{Value: "demo"},
@@ -68,7 +69,7 @@ func (suite *AccountTestSuite) TestUserHandler_Exist_E2E() {
 	t := suite.T()
 	t.Log("in TestUserHandler_Exist_E2E, checking if user Exist")
 
-	rsp, err := suite.user.Exist(context.TODO(), &accountPB.UserRequest{
+	rsp, err := suite.user.Exist(context.TODO(), &userPB.ExistRequest{
 		Username: &wrappers.StringValue{Value: "sumo"},
 	})
 	require.Nil(t, err)

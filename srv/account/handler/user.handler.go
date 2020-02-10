@@ -6,11 +6,13 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/errors"
+	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/thoas/go-funk"
 
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 
+	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
@@ -35,9 +37,10 @@ func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeter
 
 func (h *userHandler) Exist(ctx context.Context, req *userPB.ExistRequest, rsp *userPB.ExistResponse) error {
 	log.Info("Received UserHandler.Exist request")
-	model := userPB.UserORM{}
-	model.Id = req.Id.GetValue()
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	model.Id = uuid.FromStringOrNil(req.Id.GetValue())
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.Email = req.Email.GetValue()
 
 	exists := h.userRepository.Exist(&model)
@@ -48,8 +51,9 @@ func (h *userHandler) Exist(ctx context.Context, req *userPB.ExistRequest, rsp *
 
 func (h *userHandler) List(ctx context.Context, req *userPB.ListRequest, rsp *userPB.ListResponse) error {
 	log.Info("Received UserHandler.List request")
-	model := userPB.UserORM{}
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.FirstName = req.FirstName.GetValue()
 	model.Email = req.Email.GetValue()
 
@@ -65,10 +69,10 @@ func (h *userHandler) List(ctx context.Context, req *userPB.ListRequest, rsp *us
 	// 	newUsers[index] = &tmpUser
 	// 	// *newUsers[index], _ = user.ToPB(ctx) ???
 	// }
-	newUsers := funk.Map(users, func(user *userPB.UserORM) *userPB.User {
+	newUsers := funk.Map(users, func(user *account_entities.UserORM) *account_entities.User {
 		tmpUser, _ := user.ToPB(ctx)
 		return &tmpUser
-	}).([]*userPB.User)
+	}).([]*account_entities.User)
 
 	rsp.Results = newUsers
 	return nil
@@ -98,8 +102,9 @@ func (h *userHandler) Get(ctx context.Context, req *userPB.GetRequest, rsp *user
 func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp *userPB.CreateResponse) error {
 	log.Info("Received UserHandler.Create request")
 
-	model := userPB.UserORM{}
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.FirstName = req.FirstName.GetValue()
 	model.LastName = req.LastName.GetValue()
 	model.Email = req.Email.GetValue()
@@ -134,8 +139,9 @@ func (h *userHandler) Update(ctx context.Context, req *userPB.UpdateRequest, rsp
 		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
-	model := userPB.UserORM{}
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.FirstName = req.FirstName.GetValue()
 	model.LastName = req.LastName.GetValue()
 	model.Email = req.Email.GetValue()
@@ -155,8 +161,8 @@ func (h *userHandler) Delete(ctx context.Context, req *userPB.DeleteRequest, rsp
 		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
-	model := userPB.UserORM{}
-	model.Id = id
+	model := account_entities.UserORM{}
+	model.Id = uuid.FromStringOrNil(id)
 
 	if err := h.userRepository.Delete(&model); err != nil {
 		return myErrors.AppError(myErrors.DBE, err)

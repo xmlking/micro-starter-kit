@@ -5,14 +5,16 @@ import (
 	"time"
 
 	// "github.com/golang/protobuf/ptypes"
+
 	"github.com/jinzhu/gorm"
 	"github.com/thoas/go-funk"
 
 	ptypes1 "github.com/golang/protobuf/ptypes"
+	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
+	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 	profilePB "github.com/xmlking/micro-starter-kit/srv/account/proto/profile"
-	entityPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 )
 
@@ -32,8 +34,8 @@ func NewProfileHandler(repo repository.ProfileRepository, logger log.FieldLogger
 
 func (ph *profileHandler) List(ctx context.Context, req *profilePB.ListRequest, rsp *profilePB.ListResponse) error {
 	ph.contextLogger.Info("Received ProfileHandler.List request")
-	model := entityPB.ProfileORM{
-		Id:     req.UserId.GetValue(),
+	model := account_entities.ProfileORM{
+		Id:     uuid.FromStringOrNil(req.UserId.GetValue()),
 		Gender: req.Gender.GetValue(),
 	}
 
@@ -47,10 +49,10 @@ func (ph *profileHandler) List(ctx context.Context, req *profilePB.ListRequest, 
 	// 	tempProfile, _ := profile.ToPB(ctx)
 	// 	newProfiles[index] = &tempProfile
 	// }
-	newProfiles := funk.Map(profiles, func(profile *entityPB.ProfileORM) *entityPB.Profile {
+	newProfiles := funk.Map(profiles, func(profile *account_entities.ProfileORM) *account_entities.Profile {
 		tempProfile, _ := profile.ToPB(ctx)
 		return &tempProfile
-	}).([]*entityPB.Profile)
+	}).([]*account_entities.Profile)
 
 	rsp.Results = newProfiles
 	return nil
@@ -58,12 +60,22 @@ func (ph *profileHandler) List(ctx context.Context, req *profilePB.ListRequest, 
 
 func (ph *profileHandler) Get(ctx context.Context, req *profilePB.GetRequest, rsp *profilePB.GetResponse) error {
 	ph.contextLogger.Info("Received ProfileHandler.Get request")
-	id := req.Id.GetValue()
-	if id == "" {
+	var profile *account_entities.ProfileORM
+	var err error
+	switch id := req.Id.(type) {
+	case *profilePB.GetRequest_UserId:
+		println("GetRequest_UserId")
+		println(req.GetId())
+		profile, err = ph.profileRepository.GetByUserID(id.UserId.GetValue())
+	case *profilePB.GetRequest_ProfileId:
+		println("GetRequest_ProfileId")
+		println(req.GetId())
+		profile, err = ph.profileRepository.Get(id.ProfileId.GetValue())
+	case nil:
 		return myErrors.ValidationError("account-srv.profile.get", "validation error: Missing Id")
+	default:
+		return myErrors.ValidationError("account-srv.profile.get", "validation error: Profile.Id has unexpected type %T", id)
 	}
-
-	profile, err := ph.profileRepository.Get(id)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			rsp.Result = nil
@@ -79,9 +91,9 @@ func (ph *profileHandler) Get(ctx context.Context, req *profilePB.GetRequest, rs
 
 func (ph *profileHandler) Create(ctx context.Context, req *profilePB.CreateRequest, rsp *profilePB.CreateResponse) error {
 	ph.contextLogger.Debug("Received ProfileHandler.Create request")
-	model := entityPB.ProfileORM{}
-	userID := req.UserId.GetValue()
-	model.UserId = &userID
+	model := account_entities.ProfileORM{}
+	userId := uuid.FromStringOrNil(req.UserId.GetValue())
+	model.UserId = &userId
 	model.Tz = req.Tz.GetValue()
 	model.Gender = req.Gender.GetValue()
 	model.Avatar = req.Avatar.GetValue()

@@ -9,7 +9,7 @@ import (
 	"github.com/xmlking/micro-starter-kit/shared/database"
 	logger "github.com/xmlking/micro-starter-kit/shared/log"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
-	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
+	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 )
 
@@ -94,13 +94,13 @@ func (c *Container) Delete() error {
 
 func buildUserRepository(ctn di.Container) (interface{}, error) {
 	db := ctn.Get("database").(*gorm.DB)
-	db.AutoMigrate(&userPB.UserORM{})
+	db.AutoMigrate(&account_entities.UserORM{})
 	return repository.NewUserRepository(db), nil
 }
 
 func buildProfileRepository(ctn di.Container) (interface{}, error) {
 	db := ctn.Get("database").(*gorm.DB)
-	db.AutoMigrate(&userPB.ProfileORM{})
+	db.AutoMigrate(&account_entities.ProfileORM{})
 	return repository.NewProfileRepository(db), nil
 }
 
