@@ -57,6 +57,8 @@ func TestWithLevelFieldName(t *testing.T) {
 	l := NewLogger(WithLevelFieldName("severity"))
 
 	l.Logf(logger.InfoLevel, "testing: %s", "WithLevelFieldName")
+	// reset `LevelFieldName` to make other tests pass.
+	NewLogger(WithLevelFieldName("level"))
 }
 
 func TestWithFields(t *testing.T) {
