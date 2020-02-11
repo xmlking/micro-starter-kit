@@ -1,8 +1,10 @@
 {
   "window.zoomLevel": 1,
   "explorer.sortOrder": "type",
+  // scm
+  "scm.defaultViewMode": "tree",
   // Editor
-  "editor.autoIndent": true,
+  "editor.autoIndent": "full",
   "editor.codeActionsOnSave": {
     "source.organizeImports": true
   },
@@ -10,7 +12,7 @@
   "editor.cursorSmoothCaretAnimation": true,
   "editor.cursorStyle": "line",
   // "editor.fontSize": 16,
-  "editor.fontFamily": "SourceCodePro-Regular, FiraCode-Retina, Menlo",
+  "editor.fontFamily": "FiraCode-Retina, SourceCodePro-Regular, Menlo",
   "editor.fontLigatures": true,
   "editor.formatOnPaste": true,
   "editor.formatOnType": false,
@@ -23,14 +25,15 @@
   "editor.tabSize": 2,
   "editor.wordWrap": "off",
   // Terminal
-  "terminal.integrated.fontFamily": "'SourceCodePro+Powerline+Awesome Regular', Source Code Pro for Powerline, monospace, Meslo LG M for Powerline",
+  "terminal.integrated.fontFamily": "MesloLGS NF, 'SourceCodePro+Powerline+Awesome Regular', Source Code Pro for Powerline, monospace, Meslo LG M for Powerline",
   // "terminal.integrated.fontSize": 16,
   // Workbench
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.value": 8,
   "workbench.editor.highlightModifiedTabs": true,
   "workbench.colorCustomizations": {
-    "terminal.foreground": "#839496",
-    "terminal.background": "#121a21",
     "activityBar.background": "#88d7ea",
+    "activityBar.activeBorder": "#de41bf",
     "activityBar.foreground": "#15202b",
     "activityBar.inactiveForeground": "#15202b99",
     "activityBarBadge.background": "#de41bf",
@@ -56,14 +59,32 @@
       "when": "$(basename)"
     }
   },
+  "files.associations": {
+    "Makefile*": "makefile"
+  },
   // "files.hotExit": "onExit",
-  "files.defaultLanguage": "typescript",
+  "files.defaultLanguage": "go",
   "files.trimTrailingWhitespace": true,
   // Peacock Settings
   "peacock.color": "#5dc9e2",
   // GoLang
-  "go.testFlags": ["-v"],
+  "go.testFlags": [
+    "-v",
+    "-count=1"
+  ],
   "go.useLanguageServer": true,
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": [
+    "--fast"
+  ],
+  // Proto
+  "clang-format.style": "google",
+  "protoc": {
+    "options": [
+      "--proto_path=${workspaceRoot}",
+      "--proto_path=${env.GOPATH}/src"
+    ]
+  },
   // REST client
   "rest-client.environmentVariables": {
     "$shared": {

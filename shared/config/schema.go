@@ -1,6 +1,9 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 const (
 	// Development environment
@@ -14,6 +17,7 @@ const (
 // Environment represents an application environment.
 type Environment string
 
+// TODO: use proto to define config.yaml schema
 // ServiceConfiguration is the top level configuration struct which is loaded from the defined source(s)
 type ServiceConfiguration struct {
 	ServiceName string      `json:"name"`
@@ -22,6 +26,8 @@ type ServiceConfiguration struct {
 	Log         LogConfiguration
 	Database    DatabaseConfiguration
 	Email       EmailConfiguration
+	Services    map[string]Service
+	Features    map[string]Feature
 }
 
 // LogConfiguration holds log config
@@ -44,17 +50,21 @@ type DatabaseDialect string
 
 // DatabaseConfiguration holds db config
 type DatabaseConfiguration struct {
-	Dialect     DatabaseDialect `json:"dialect" default:"postgres"`
-	Host        string          `json:"host"`
-	Port        int             `json:"port"`
-	Username    string          `json:"username"`
-	Password    string          `json:"password"`
-	Database    string          `json:"database"`
-	Charset     string          `json:"charset" default:"utf8"`
-	UTC         bool            `default:"true"`
-	Logging     bool            `default:"false"`
-	Singularize bool            `default:"false"`
-	Params      map[string]interface{}
+	Dialect         DatabaseDialect `json:"dialect" default:"postgres"`
+	Host            string          `json:"host"`
+	Port            int             `json:"port"`
+	Username        string          `json:"username"`
+	Password        string          `json:"password"`
+	Database        string          `json:"database"`
+	Charset         string          `json:"charset" default:"utf8"`
+	UTC             bool            `default:"true"`
+	Logging         bool            `default:"false"`
+	Singularize     bool            `default:"false"`
+	MaxOpenConns    int             `json:"maxOpenConns" default:"1"`
+	MaxIdleConns    int             `json:"maxIdleConns" default:"1"`
+	ConnMaxLifetime time.Duration   `json:"connMaxLifetime" default:"1hr"`
+
+	Params map[string]interface{}
 }
 
 // URL returns a connection string for the database.
@@ -88,4 +98,13 @@ type EmailConfiguration struct {
 	EmailServer string
 	Port        int
 	From        string
+}
+
+type Service struct {
+	Endpoint string `json:"endpoint"`
+	Version  string `json:"version" default:"v0.1.0"`
+}
+
+type Feature struct {
+	Enabled bool `default:"false"`
 }

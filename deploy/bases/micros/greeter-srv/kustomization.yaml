@@ -1,0 +1,28 @@
+commonLabels:
+  app.kubernetes.io/name: greeter-srv
+  app.kubernetes.io/instance: greeter-srv-abcxzy
+  app.kubernetes.io/component: microservice
+
+namePrefix: greeter
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: config
+    files:
+      - config/config.yaml
+  - name: env-vars
+    literals:
+      - MICRO_SERVER_NAME=greetersrv
+      # - MICRO_SERVER_ADVERTISE="$(GREETER_SRV_ENDPOINT):8080"
+
+vars:
+  - name: GREETER_SRV_ENDPOINT
+    objref:
+      kind: Service
+      name: srv
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

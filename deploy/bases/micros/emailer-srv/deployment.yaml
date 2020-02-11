@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srv
+spec:
+  template:
+    spec:
+      containers:
+        - name: srv
+          image: xmlking/emailer-srv:latest
+          imagePullPolicy: Always
+          ports:
+            - name: grpc-port
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config/config.yaml
+              subPath: config.yaml
+              readOnly: true
+          envFrom:
+            - configMapRef:
+                name: env-vars
+            - configMapRef:
+                name: env-vars-common
+            - secretRef:
+                name: secrets
+      volumes:
+        - name: config
+          configMap:
+            name: config

@@ -1,0 +1,16 @@
+@jsonType = application/json
+
+### Say Hello
+# @name Hello
+
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "greetersrv",
+    "method": "Greeter.Hello",
+    "request": {
+        "name": "sumo"
+    }
+}

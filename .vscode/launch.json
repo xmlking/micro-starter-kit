@@ -7,8 +7,14 @@
       "request": "launch",
       "mode": "auto",
       "program": "${fileDirname}",
-      "env": {},
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PUBSUB_EMULATOR_HOST": "localhost:8085",
+        "GOOGLEPUBSUB_PROJECT_ID": "my-project-id",
+        "MICRO_BROKER": "googlepubsub"
+      },
       "args": []
+      // "args": ["--selector=static", "--server_address=accountsrv:8080"]
     }
   ]
 }

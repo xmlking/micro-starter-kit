@@ -1,0 +1,38 @@
+# https://github.com/ludwig125/gke-trade-derby/blob/master/.circleci/config.yml
+name: Cloud Deployment
+on: ["deployment"]
+jobs:
+  deploy:
+    # Deploy application to Google Kubernetes Engine
+    name: Deploy to GKE
+    runs-on: "ubuntu-latest"
+    if: github.event.deployment.environment == 'production'
+    steps:
+      - name: Check out Code
+        uses: actions/checkout@v1
+      - name: "Deployment pending"
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "pending"
+          token: "${{ github.token }}"
+
+      # do your deployment here, using whatever tooling you like:
+      - name: "Deploy ${{ github.event.deployment.environment }}"
+        run: |
+          echo "task - ${{ github.event.deployment.task }}"
+          echo "environment - ${{ github.event.deployment.environment }}"
+          echo "payload - ${{ toJson(github.event.deployment.payload) }}"
+
+      - name: "Deployment success"
+        if: success()
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "success"
+          token: "${{ github.token }}"
+
+      - name: "Deployment failure"
+        if: failure()
+        uses: "deliverybot/deployment-status@master"
+        with:
+          state: "failure"
+          token: "${{ github.token }}"

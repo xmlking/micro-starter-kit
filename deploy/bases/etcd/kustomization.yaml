@@ -1,0 +1,20 @@
+commonLabels:
+  app.kubernetes.io/name: etcd
+  app.kubernetes.io/instance: etcd-abcxzy
+  app.kubernetes.io/component: infra
+  app.kubernetes.io/part-of: micro-starter-kit
+  app.kubernetes.io/managed-by: kustomize
+commonAnnotations:
+  org: acmeCorporation
+
+resources:
+  - deployment.yaml
+
+vars:
+  - name: ETCD_SRV_ENDPOINT
+    objref:
+      kind: EtcdCluster
+      name: etcd-cluster
+      apiVersion: etcd.database.coreos.com/v1beta2
+    fieldref:
+      fieldpath: metadata.name

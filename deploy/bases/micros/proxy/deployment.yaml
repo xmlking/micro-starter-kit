@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srv
+spec:
+  template:
+    # metadata:
+    #   annotations:
+    #     sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+        - name: srv
+          image: micro/micro:latest
+          imagePullPolicy: Always
+          args:
+            - "proxy"
+            - "--protocol=grpc"
+            - "--address=0.0.0.0:8080"
+          ports:
+            - name: grpc-port
+              containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: env-vars
+            - configMapRef:
+                name: env-vars-common

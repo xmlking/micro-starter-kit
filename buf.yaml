@@ -1,0 +1,24 @@
+build:
+  roots:
+    - .
+  excludes:
+    - e2e
+lint:
+  use:
+    - DEFAULT
+    - FILE_LOWER_SNAKE_CASE
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+  ignore:
+    - third_party
+    - e2e
+  ignore_only:
+    RPC_RESPONSE_STANDARD_NAME:
+      - srv/recorder/proto/transaction/transaction.proto
+  rpc_allow_google_protobuf_empty_responses: true
+breaking:
+  use:
+    - FILE
+  ignore:
+    - third_party
+    - e2e

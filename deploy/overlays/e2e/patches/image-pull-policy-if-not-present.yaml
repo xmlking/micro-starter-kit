@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srv
+spec:
+  template:
+    spec:
+      containers:
+        - name: srv
+          imagePullPolicy: IfNotPresent

@@ -1,0 +1,252 @@
+@jsonType = application/json
+
+
+# OPTIONS Request
+curl -H "Origin: http://localhost:8080" \
+  -H "Access-Control-Request-Method: POST" \
+  -H "Access-Control-Request-Headers: X-Requested-With" \
+  -X OPTIONS  http://localhost:8080/rpc
+
+### Create User
+# @name CreateUser
+
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.Create",
+    "request": {
+        "username": "sumo",
+        "firstName": "sumo",
+        "lastName": "demo",
+        "email": "sumo@demo.com"
+    }
+}
+
+### Create User 2
+# @name CreateUser2
+
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.Create",
+    "request": {
+        "username": "sumo1",
+        "firstName": "sumo1",
+        "lastName": "demo1",
+        "email": "sumo1@demo.com"
+    }
+}
+
+### List User
+# @name ListUser
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.List",
+    "request": {
+    }
+}
+
+### List User 2
+# @name ListUser2
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.List",
+    "request": {
+        "limit": 10,
+        "page": 1
+    }
+}
+
+### List User 3
+# @name ListUser3
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.List",
+    "request": {
+        "limit": 10,
+        "page": 1,
+        "sort" : "username",
+        "lastName": "demo",
+        "email": "sumo@demo.com"
+    }
+}
+
+@firstUserId = {{ListUser.response.body.results[0].id}}
+
+### Get User
+# @name GetUser
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.Get",
+    "request": {
+        "id":  "{{firstUserId}}"
+    }
+}
+
+### Exist User
+# @name ExistUser
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.Exist",
+    "request": {
+        "id": "{{firstUserId}}"
+    }
+}
+
+### Exist User
+# @name ExistUser
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.Exist",
+    "request": {
+        "username": "sumo",
+        "id": "{{firstUserId}}",
+        "email": "sumo1@demo.com"
+    }
+}
+
+### Update User
+# @name UpdateUser
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.Update",
+    "request": {
+        "id":  "{{firstUserId}}",
+        "username": "sumo222",
+        "firstName": "sumoto222",
+        "lastName": "demo222",
+        "email": "sumo222@demo.com"
+    }
+}
+
+
+### Delete User
+# @name DeleteUser
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "UserService.Delete",
+    "request": {
+        "id":  "{{firstUserId}}"
+    }
+}
+
+### Profile Test
+
+### Create Profile
+# @name CreateProfile
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "ProfileService.Create",
+    "request": {
+        "user_id":  "{{firstUserId}}",
+        "tz" : "PST",
+        "avatar": "sumo1.jpg",
+        "gender": 2,
+        "birthday": "2017-01-15T01:30:15.01Z",
+        "preferred_theme": "cosmic"
+    }
+}
+
+### List Profiles
+# @name ListProfile
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "ProfileService.List",
+    "request": {
+    }
+}
+
+### List Profiles 2
+# @name ListProfile2
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "ProfileService.List",
+    "request": {
+        "limit": 10,
+        "page": 1,
+        "sort" : "gender",
+        "preferred_theme": "cosmic",
+        "gender": 2
+    }
+}
+
+@firstProfileId = {{ListProfile.response.body.results[0].id}}
+
+### Get GetProfileByID
+# @name GetProfileByID
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "ProfileService.Get",
+    "request": {
+       "profile_id": "{{firstProfileId}}"
+    }
+}
+
+
+### Get GetProfileByUserID
+# @name GetProfileByUserID
+POST {{api-gateway-url}}/rpc
+content-type: {{jsonType}}
+Accept: {{jsonType}}
+
+{
+    "service": "accountsrv",
+    "method": "ProfileService.Get",
+    "request": {
+       "user_id": "{{firstUserId}}"
+    }
+}

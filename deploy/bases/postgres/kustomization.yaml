@@ -7,10 +7,6 @@ resources:
   - postgres.yaml
   - service.yaml
 
-images:
-  - name: postgres
-    newTag: 11.5-alpine
-
 secretGenerator:
   - name: postgres-secrets
     literals:
@@ -22,3 +18,12 @@ generatorOptions:
     app.kubernetes.io/name: postgres-secrets
     app.kubernetes.io/instance: postgres-secrets-abcxzy
     app.kubernetes.io/component: secrets
+
+vars:
+  - name: DATABASE_ENDPOINT
+    objref:
+      kind: Service
+      name: postgres
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

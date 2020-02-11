@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/config"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/config"
 	log "github.com/sirupsen/logrus"
 
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	_ "github.com/xmlking/micro-starter-kit/shared/log"
-	"github.com/xmlking/micro-starter-kit/shared/wrapper"
+	logger "github.com/xmlking/micro-starter-kit/shared/log"
+	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 )
 
 const (
-	serviceName = "go.micro.cli.account"
+	serviceName = "account-cmd"
 )
 
 var (
@@ -32,44 +32,50 @@ func main() {
 		// optional cli flag to override config.
 		// comment out if you don't need to override any base config via CLI
 		micro.Flags(
-			cli.StringFlag{
-				Name:        "configDir, d",
-				Value:       "config",
+			&cli.StringFlag{
+				Name:        "configDir",
+				Aliases:     []string{"d"},
+				Value:       "/config",
 				Usage:       "Path to the config directory. Defaults to 'config'",
-				EnvVar:      "CONFIG_DIR",
+				EnvVars:     []string{"CONFIG_DIR"},
 				Destination: &configDir,
 			},
-			cli.StringFlag{
-				Name:        "configFile, c",
+			&cli.StringFlag{
+				Name:        "configFile",
+				Aliases:     []string{"f"},
 				Value:       "config.yaml",
 				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
-				EnvVar:      "CONFIG_FILE",
+				EnvVars:     []string{"CONFIG_FILE"},
 				Destination: &configFile,
 			},
-			cli.StringFlag{
-				Name:   "database_host, dh",
-				Value:  "127.0.0.1",
-				Usage:  "Database hostname. Defaults to 127.0.0.1",
-				EnvVar: "DATABASE_HOST",
+			&cli.StringFlag{
+				Name:    "database_host",
+				Aliases: []string{"dh"},
+				Value:   "127.0.0.1",
+				Usage:   "Database hostname. Defaults to 127.0.0.1",
+				EnvVars: []string{"DATABASE_HOST"},
 			},
-			cli.IntFlag{
-				Name:   "database_port, dp",
-				Value:  5432,
-				Usage:  "Database port. Defaults to 5432",
-				EnvVar: "DATABASE_PORT",
+			&cli.IntFlag{
+				Name:    "database_port",
+				Aliases: []string{"dp"},
+				Value:   5432,
+				Usage:   "Database port. Defaults to 5432",
+				EnvVars: []string{"DATABASE_PORT"},
 			},
 		),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-		micro.WrapHandler(wrapper.LogWrapper),
+		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
 	)
 
-	// Initialise service
+	// Initialize service
 	service.Init(
-		micro.Action(func(c *cli.Context) {
+		micro.Action(func(c *cli.Context) (err error) {
 			// load config
 			myConfig.InitConfig(configDir, configFile)
-			config.Scan(&cfg)
+			err = config.Scan(&cfg)
+			logger.InitLogger(cfg.Log)
+			return
 		}),
 	)
 

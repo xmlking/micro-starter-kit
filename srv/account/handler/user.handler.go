@@ -4,40 +4,43 @@ import (
 	"context"
 
 	"github.com/jinzhu/gorm"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/errors"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/errors"
+	uuid "github.com/satori/go.uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/thoas/go-funk"
 
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 
-	pb "github.com/xmlking/micro-starter-kit/srv/account/proto/account"
+	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
+	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
+	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
 
 // UserHandler struct
 type userHandler struct {
-	userRepository repository.UserRepository
-	Publisher      micro.Publisher
+	userRepository   repository.UserRepository
+	Publisher        micro.Publisher
+	greeterSrvClient greeterPB.GreeterService
 }
 
 // NewUserHandler returns an instance of `UserServiceHandler`.
-func NewUserHandler(repo repository.UserRepository, pub micro.Publisher) pb.UserServiceHandler {
+func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeterClient greeterPB.GreeterService) userPB.UserServiceHandler {
 	return &userHandler{
-		userRepository: repo,
-		Publisher:      pub,
+		userRepository:   repo,
+		Publisher:        pub,
+		greeterSrvClient: greeterClient,
 	}
 }
 
-func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.UserExistResponse) error {
+func (h *userHandler) Exist(ctx context.Context, req *userPB.ExistRequest, rsp *userPB.ExistResponse) error {
 	log.Info("Received UserHandler.Exist request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.exist", "validation error: %v", err)
-	}
-	model := pb.UserORM{}
-	model.Id = req.Id.GetValue()
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	model.Id = uuid.FromStringOrNil(req.Id.GetValue())
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.Email = req.Email.GetValue()
 
 	exists := h.userRepository.Exist(&model)
@@ -46,45 +49,41 @@ func (h *userHandler) Exist(ctx context.Context, req *pb.UserRequest, rsp *pb.Us
 	return nil
 }
 
-func (h *userHandler) List(ctx context.Context, req *pb.UserListQuery, rsp *pb.UserListResponse) error {
+func (h *userHandler) List(ctx context.Context, req *userPB.ListRequest, rsp *userPB.ListResponse) error {
 	log.Info("Received UserHandler.List request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.list", "validation error: %v", err)
-	}
-	model := pb.UserORM{}
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.FirstName = req.FirstName.GetValue()
+	model.LastName = req.LastName.GetValue()
 	model.Email = req.Email.GetValue()
 
 	total, users, err := h.userRepository.List(req.Limit.GetValue(), req.Page.GetValue(), req.Sort.GetValue(), &model)
 	if err != nil {
-		return errors.NotFound("go.micro.srv.account.user.list", "Error %v", err.Error())
+		return errors.NotFound("account-srv.user.list", "Error %v", err.Error())
 	}
 	rsp.Total = total
 
-	newUsers := make([]*pb.User, len(users))
+	// newUsers := make([]*accountPB.User, len(users))
 	// for index, user := range users {
 	// 	tmpUser, _ := user.ToPB(ctx)
 	// 	newUsers[index] = &tmpUser
 	// 	// *newUsers[index], _ = user.ToPB(ctx) ???
 	// }
-	newUsers = funk.Map(users, func(user *pb.UserORM) *pb.User {
+	newUsers := funk.Map(users, func(user *account_entities.UserORM) *account_entities.User {
 		tmpUser, _ := user.ToPB(ctx)
 		return &tmpUser
-	}).([]*pb.User)
+	}).([]*account_entities.User)
 
 	rsp.Results = newUsers
 	return nil
 }
 
-func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Get(ctx context.Context, req *userPB.GetRequest, rsp *userPB.GetResponse) error {
 	log.Info("Received UserHandler.Get request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.get", "validation error: %v", err)
-	}
 	id := req.Id.GetValue()
 	if id == "" {
-		return myErrors.ValidationError("go.micro.srv.account.user.get", "validation error: Missing Id")
+		return myErrors.ValidationError("account-srv.user.get", "validation error: Missing Id")
 	}
 	user, err := h.userRepository.Get(id)
 	if err != nil {
@@ -101,14 +100,12 @@ func (h *userHandler) Get(ctx context.Context, req *pb.UserRequest, rsp *pb.User
 	return nil
 }
 
-func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp *userPB.CreateResponse) error {
 	log.Info("Received UserHandler.Create request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.create", "validation error: %v", err)
-	}
 
-	model := pb.UserORM{}
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.FirstName = req.FirstName.GetValue()
 	model.LastName = req.LastName.GetValue()
 	model.Email = req.Email.GetValue()
@@ -123,22 +120,29 @@ func (h *userHandler) Create(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 		return myErrors.AppError(myErrors.PSE, err)
 	}
 
+	// call greeter
+	// if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
+	if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.HelloRequest{Name: req.GetFirstName().GetValue()}); err != nil {
+		log.WithError(err).Error("Received greeterService.Hello request error")
+		return myErrors.AppError(myErrors.PSE, err)
+	} else {
+		log.Infof("Got greeterService responce %s", res.Msg)
+	}
+
 	return nil
 }
 
-func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Update(ctx context.Context, req *userPB.UpdateRequest, rsp *userPB.UpdateResponse) error {
 	log.Info("Received UserHandler.Update request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: %v", err)
-	}
 
 	id := req.Id.GetValue()
 	if id == "" {
-		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: Missing Id")
+		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
-	model := pb.UserORM{}
-	model.Username = req.Username.GetValue()
+	model := account_entities.UserORM{}
+	username := req.Username.GetValue()
+	model.Username = &username
 	model.FirstName = req.FirstName.GetValue()
 	model.LastName = req.LastName.GetValue()
 	model.Email = req.Email.GetValue()
@@ -150,19 +154,16 @@ func (h *userHandler) Update(ctx context.Context, req *pb.UserRequest, rsp *pb.U
 	return nil
 }
 
-func (h *userHandler) Delete(ctx context.Context, req *pb.UserRequest, rsp *pb.UserResponse) error {
+func (h *userHandler) Delete(ctx context.Context, req *userPB.DeleteRequest, rsp *userPB.DeleteResponse) error {
 	log.Info("Received UserHandler.Delete request")
-	if err := req.Validate(); err != nil {
-		return myErrors.ValidationError("go.micro.srv.account.user.delete", "validation error: %v", err)
-	}
 
 	id := req.Id.GetValue()
 	if id == "" {
-		return myErrors.ValidationError("go.micro.srv.account.user.update", "validation error: Missing Id")
+		return myErrors.ValidationError("account-srv.user.update", "validation error: Missing Id")
 	}
 
-	model := pb.UserORM{}
-	model.Id = id
+	model := account_entities.UserORM{}
+	model.Id = uuid.FromStringOrNil(id)
 
 	if err := h.userRepository.Delete(&model); err != nil {
 		return myErrors.AppError(myErrors.DBE, err)

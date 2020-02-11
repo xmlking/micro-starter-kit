@@ -1,0 +1,57 @@
+# Table of Contents
+
+- [Micro Starter Kit](../README.md)
+- [Features](features.md)
+- Getting Started
+  - [Why](introduction/why.md)
+  - [Prerequisites](introduction/prerequisites.md)
+  - [Installation](introduction/installation.md)
+  - [Makefile](introduction/makefile.md)
+- Concepts
+  - [Introduction](concepts/intro.md)
+  - [Configuration](concepts/actions.md)
+  - [State](concepts/state.md)
+  - [Select](concepts/select.md)
+- Advanced
+  - [Dependency Injection](advanced/dependency-injection.md)
+  - [Logging](advanced/logging.md)
+  - [Error Handling](advanced/errors.md)
+  - [Life-cycle](advanced/life-cycle.md)
+  - [Git Flow](advanced/gitflow.md)
+  - [Git Ops](advanced/gitops.md)
+  - [mTLS](advanced/mtls.md)
+  - [Release](advanced/release.md)
+  - [Release Process](advanced/release-process.md)
+  - [Pub Sub](advanced/pubsub.md)
+  - [Troubleshooting](advanced/troubleshooting.md)
+- Modules
+  - Commands
+    - [Demo](../cmd/demo/README.md)
+  - Services
+    - [Account](../srv/account/README.md)
+    - [Emailer](../srv/emailer/README.md)
+    - [Greeter](../srv/greeter/README.md)
+    - [Recorder](../srv/recorder/README.md)
+- DevOps
+  - [Docker](devops/docker.md)
+  - [KinD](devops/kind.md)
+  - [Istio](devops/istio.md)
+- Testing
+  - [Intro](testing/testing.md)
+  - [Mock](testing/mock.md)
+  - [Bloom RPC](testing/bloomrpc.md)
+- Recipes
+  - [Authentication](recipes/authentication.md)
+  - [Caching](recipes/cache.md)
+  - [Health Checks](recipes/component-events-from-ngxs.md)
+  - [Performance Testing](recipes/debouncing-actions.md)
+  - [Dynamic Plugins](recipes/dynamic-plugins.md)
+  - [Immutability Helpers](recipes/immutability-helpers.md)
+  - [Style Guide](recipes/style-guide.md)
+  - [Unit Testing](recipes/unit-testing.md)
+- Community
+  - [Resources](community/awesome.md)
+  - [Contributors](community/contributors.md)
+  - [Contributing](community/contributing.md)
+- [Change Log](../CHANGELOG.md)
+- [FAQ](faq/howto.md)

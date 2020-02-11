@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"github.com/micro/go-micro/config"
+	"github.com/micro/go-micro/v2/config"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
@@ -19,7 +19,7 @@ func (mock *FakeEmailSender) Send(subject, body string, to []string) error {
 	return args.Error(0)
 }
 func TestEmailService_Welcome(t *testing.T) {
-	myConfig.InitConfig("../../../config", "config.yaml")
+	myConfig.InitConfig("/config", "config.yaml")
 	emailer := &FakeEmailSender{}
 	emailer.On("Send",
 		"Welcome", "Hi Bob!", []string{"bob@smith.com"}).Return(nil)
@@ -39,7 +39,7 @@ func TestEmailService_Welcome_Integration(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping long integration test")
 	}
-	myConfig.InitConfig("../../../config", "config.test.yaml")
+	myConfig.InitConfig("/config", "config.prod.yaml")
 	config.Scan(&cfg)
 	emailer := email.NewSendEmail(&cfg.Email)
 	emailService := NewEmailService(emailer)
@@ -48,4 +48,11 @@ func TestEmailService_Welcome_Integration(t *testing.T) {
 	if err2 != nil {
 		t.Errorf("Send Welcome Email Failed: %v", err2)
 	}
+}
+
+func TestEmailService_Welcome_E2E(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping e2e test")
+	}
+	t.Log("my first E2E test")
 }

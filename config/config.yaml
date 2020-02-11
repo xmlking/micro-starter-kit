@@ -1,27 +1,64 @@
 environment: development
-name: go.micro.srv.account
-version: 0.1.0
+name: accountsrv
+version: v0.1.0
 log:
   level: debug
   format: text
 database:
   dialect: sqlite3
-  host: 11.11.11.11
+  host: 0.0.0.0
   port: 9999
   Username: sumo
   Password: demo
-  database: ":memory:"
+  # FIXME: https://github.com/jinzhu/gorm/issues/2875
+  # database: "file:foobar?mode=memory&cache=shared"
+  database: "file:./build/gorm.db"
+  maxOpenConns: 1
+  maxIdleConns: 1
+  # connMaxLifetime: 1hr
+  connMaxLifetime: 60000000
   logging: true
-observability:
+email:
+  username: yourGmailUsername
+  password: yourGmailAppPassword
+  emailServer: smtp.gmail.com
+  port: 587
+  from: xmlking@gmail.com
+
+services:
+  accountsrv:
+    endpoint: accountsrv
+    version: v0.1.0
+  greetersrv:
+    endpoint: greetersrv
+    version: v0.1.0
+  emailersrv:
+    endpoint: emailersrv
+    version: v0.1.0
+  recordersrv:
+    endpoint: recordersrv
+    version: v0.1.0
+
+# Feature Flags (enabled/disabled)
+features:
   metrics:
-    address: localhost:8125
+    address: prometheus:8125
     flushInterval: 1000000000
+    enabled: false
   tracing:
     address: jaeger:6831
     flushInterval: 5000000000
-email:
-  username: yourGmailUsername
-  password: password
-  emailServer: smtp.gmail.com
-  port: 587
-  from: sumo@demo.com
+    enabled: false
+  mtls:
+    certfile: certs/micro.crt
+    keyfile: certs/micro.key
+    cafile: certs/ca.crt
+    servername: "*"
+    enabled: false
+  validator:
+    enabled: true
+  reqlogs:
+    enabled: true
+  translogs:
+    topic: recordersrv
+    enabled: true

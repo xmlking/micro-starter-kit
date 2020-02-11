@@ -6,37 +6,11 @@ Showcase
 
 1. Async service
 
-Generated with
-
-```bash
-micro new srv/emailer --namespace=go.micro --alias=emailer --type=srv --gopath=false --plugin=registry=mdns:broker=nats
-```
-
-## Getting Started
-
-- [Configuration](#configuration)
-- [Dependencies](#dependencies)
-- [Usage](#usage)
-
 ## Configuration
 
-- FQDN: go.micro.srv.emailer
+- FQDN: emailer_srv
 - Type: srv
 - Alias: emailer
-
-## Dependencies
-
-Micro services depend on service discovery. The default is multicast DNS, a zeroconf system.
-
-In the event you need a resilient multi-host setup we recommend consul.
-
-```bash
-# install consul
-brew install consul
-
-# run consul
-consul agent -dev
-```
 
 ## Usage
 
@@ -51,11 +25,19 @@ make build TARGET=emailer TYPE=srv VERSION=v0.1.1
 Run the service
 
 ```bash
-go run srv/emailer/main.go srv/emailer/plugin.go
+make run-emailer
+# or
+go run srv/emailer/main.go srv/emailer/plugin.go --configDir deploy/bases/emailer-srv/config
 ```
 
 Build a docker image
 
 ```bash
 make docker TARGET=emailer TYPE=srv VERSION=v0.1.1
+```
+
+Test the service
+
+```bash
+micro publish emailersrv  '{ "to" : "sumo@demo.com", "from": "demo@sumo.com", "subject": "sub", "body": "mybody"  }'
 ```

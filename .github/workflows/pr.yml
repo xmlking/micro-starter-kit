@@ -1,0 +1,86 @@
+name: Test on PR
+on:
+  pull_request:
+    types: [assigned]
+jobs:
+  lint-test:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.commits[0].message, '[skip ci]') == false &&
+      contains(github.event.commits[0].message, '[ci skip]') == false
+    steps:
+      - name: Set up Go 1.13
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+        id: go
+      - name: Setup Tools
+        env:
+          GO111MODULE: off
+        run: |
+          go get github.com/golangci/golangci-lint/cmd/golangci-lint
+          GO111MODULE=on go get github.com/bufbuild/buf/cmd/buf
+      - name: Check out Code
+        uses: actions/checkout@v1
+      - name: Cache go modules
+        id: cache
+        uses: actions/cache@preview
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: go mod download
+      - name: Lint
+        run: |
+          make lint
+          # export PATH=$PATH:$(go env GOPATH)/bin
+          # golangci-lint run
+          # buf check lint
+      - name: Unit Test
+        run: make test-unit
+      - name: Integration Test
+        run: make test-inte
+        continue-on-error: true
+      - name: Coverage Test
+        run: make test-cover
+      - name: Upload coverage to Codecov
+        # -U "--proxy http://http-proxy"
+        run: bash <(curl -s https://codecov.io/bash)
+          -F unittests
+          -n codecov-micros
+          -f ./build/coverage.txt
+          -B "${GITHUB_REF//refs\/heads\//}"
+          -T "${GITHUB_REF//refs\/tags\//}"
+          -C "${GITHUB_SHA}"
+          -Z || echo 'Codecov upload failed'
+        env:
+          CI: true
+          CODECOV_ENV: github-action
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          CODECOV_PR: ${{ github.event.after }}
+          CODECOV_SHA: ${{ github.sha }}
+  # fuzzing:
+  #   name: Run fuzzing
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set up Go 1.13
+  #       uses: actions/setup-go@v1
+  #       with:
+  #         go-version: 1.13
+  #     - name: Checkout code
+  #       uses: actions/checkout@v1
+  #     - name: fuzz regression tests
+  #       run: ./scripts/fuzzit.sh
+  #       env:
+  #         FUZZIT_API_KEY: ${{ secrets.FUZZIT_API_KEY }}
+  #         TYPE: local-regression
+  #     - name: fuzz continuous job
+  #       run: ./scripts/fuzzit.sh
+  #       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+  #       env:
+  #         FUZZIT_API_KEY: ${{ secrets.FUZZIT_API_KEY }}
+  #         TYPE: fuzzing

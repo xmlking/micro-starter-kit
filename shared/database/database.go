@@ -9,11 +9,10 @@ import (
 	"github.com/xmlking/micro-starter-kit/shared/config"
 
 	gormlog "github.com/onrik/logrus/gorm"
-	// gormlog "github.com/xmlking/micro-starter-kit/shared/log/gorm"
 )
 
 // GetDatabaseConnection return (gorm.DB or error)
-func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, err error) {
+func GetDatabaseConnection(dbConf config.DatabaseConfiguration) (db *gorm.DB, err error) {
 	var timezoneCommand string
 
 	switch dbConf.Dialect {
@@ -43,20 +42,20 @@ func GetDatabaseConnection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, e
 
 	db.LogMode(dbConf.Logging)
 	db.SingularTable(dbConf.Singularize)
-	// db.DB().SetMaxOpenConns(400)
-	// db.DB().SetMaxIdleConns(0)
-	// db.DB().SetConnMaxLifetime(100 * time.Second)
+	db.DB().SetMaxOpenConns(dbConf.MaxOpenConns)
+	db.DB().SetMaxIdleConns(dbConf.MaxIdleConns)
+	db.DB().SetConnMaxLifetime(dbConf.ConnMaxLifetime)
 
 	if dbConf.UTC {
 		if _, err = db.DB().Exec(timezoneCommand); err != nil {
-			return nil, fmt.Errorf("error setting UTC timezone: %v", err)
+			return nil, fmt.Errorf("error setting UTC timezone: %w", err)
 		}
 	}
 
 	return
 }
 
-func connection(dbConf *config.DatabaseConfiguration) (db *gorm.DB, err error) {
+func connection(dbConf config.DatabaseConfiguration) (db *gorm.DB, err error) {
 	url, err := dbConf.URL()
 	if err != nil {
 		return nil, err

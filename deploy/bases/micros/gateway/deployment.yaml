@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srv
+spec:
+  template:
+    # metadata:
+    #   annotations:
+    #     sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+        - name: srv
+          image: micro/micro:latest
+          imagePullPolicy: Always
+          args:
+            - "api"
+            - "--handler=rpc"
+            - "--enable_rpc=true"
+            - "--address=0.0.0.0:8090"
+          ports:
+            - name: http-gateway
+              containerPort: 8090
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: env-vars
+            - configMapRef:
+                name: env-vars-common
+          env:
+            - name: MICRO_API_ADDRESS
+              value: 0.0.0.0:8090

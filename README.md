@@ -2,86 +2,60 @@
 
 Microservices starter kit for **Golang**, aims to be developer friendly.
 
+[![Build Status](https://github.com/xmlking/micro-starter-kit/workflows/Test%20on%20Push/badge.svg?branch=develop)](https://github.com/xmlking/micro-starter-kit/actions?query=branch%3Adevelop+event%3Apush+workflow%3A%22Test+on+Push%22)
+[![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
-[![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
-[![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![fuzzit](https://app.fuzzit.dev/badge?org_id=xmlkinggithub&branch=develop)](https://app.fuzzit.dev/orgs/xmlkinggithub/dashboard)
 [![GoDoc](https://godoc.org/github.com/xmlking/micro-starter-kit?status.svg)](https://godoc.org/github.com/xmlking/micro-starter-kit)
+[![Go 1.13](https://img.shields.io/badge/go-1.13-9cf.svg)](https://golang.org/dl/)
+[![Renovate dependency Status](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+[![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
 
-![Image of Deployment](docs/deployment.png)
+![Image of Deployment](docs/images/deployment.png)
 
 ### What you get
 
 - [x] Monorepo - Sharing Code Between Microservices
 - [x] gRPC microservices with REST Gateway
-- [x] Input Validation
-- [x] Config Fallback
-- [x] Custom Logging
-- [x] CRUD via ORM
-- [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm)
-- [x] DI Container
-- [x] One Step _build/publish/deploy_ with `ko`
-- [x] BuildInfo with `govvv`
+- [x] Input Validation with [protoc-gen-validate (PGV)](https://github.com/envoyproxy/protoc-gen-validate)
+- [x] Config - Pluggable Sources, Mergeable Config, Safe Recovery
+- [x] Customizable Logging
+- [x] CRUD Example using [GORM](https://gorm.io/), [benchmarks](https://github.com/kihamo/orm-benchmark), [XORM](https://xorm.io/) next?
+- [x] GORM code gen via [protoc-gen-gorm](https://github.com/infobloxopen/protoc-gen-gorm) or use [protoc-go-inject-tag](https://github.com/favadi/protoc-go-inject-tag)?
+- [x] Dependency injection [Container](https://github.com/sarulabs/di), Try [wire](https://itnext.io/mastering-wire-f1226717bbac) next?
+- [x] multi-stage-multi-target Dockerfile
+- [x] One Step _build/publish/deploy_ with [ko](https://github.com/google/ko)
+- [x] BuildInfo with [govvv](https://github.com/ahmetb/govvv)
+- [x] Linting with [GolangCI](https://github.com/golangci/golangci-lint) linters aggregator
+- [x] Linting Protos with [Buf](https://buf.build/docs/introduction)
+- [x] CICD Pipelines with [GitHub Actions](https://github.com/features/actions)
+- [x] Kubernetes _Matrix Deployment_ with [Kustomize](https://kustomize.io/)
+- [ ] Add k8s [healthchecks](https://github.com/heptiolabs/healthcheck) with [cmux](https://medium.com/@drgarcia1986/listen-grpc-and-http-requests-on-the-same-port-263c40cb45ff)
+- [x] Feature Flags (enable/disable with zero cost)
 - [ ] Observability
-- [ ] Service Mesh
-- [ ] GraphQL Gateway with `gqlgen`
+- [ ] Service Mesh with [Istio](https://istio.io/)
+- [ ] GraphQL Gateway with [gqlgen](https://gqlgen.com/), [rejoiner](https://github.com/google/rejoiner),[gqlgen](https://github.com/Shpota/skmz)
+- [ ] Graph-Based ORM [ent](https://entgo.io/)
+- [ ] Switch to [Bazel Build](https://bazel.build/)
 
 ## Getting Started
 
 ### Prerequisite
 
-> run following `go get ...` commands outside **this project root** and `$GOPATH`<br/>
-> if you get error, try setting `export GO111MODULE=on` befor running `go get ...`
-
-```bash
-# fetch micro into $GOPATH
-go get -u github.com/micro/micro
-go get -u github.com/micro/go-micro
-# go lang  build/publish/deploy tool
-go get -u github.com/google/ko/cmd/ko
-go get sigs.k8s.io/kustomize
-# go better build tool
-go get github.com/ahmetb/govvv
-# for mac, use brew to install protobuf
-brew install protobuf
-
-# fetch protoc plugins into $GOPATH
-go get -u github.com/golang/protobuf/{proto,protoc-gen-go}
-go get -u github.com/micro/protoc-gen-micro
-go get -u github.com/envoyproxy/protoc-gen-validate
-go get -u github.com/infobloxopen/protoc-gen-gorm
-```
+Refer [prerequisites](docs/prerequisites.md) docs
 
 ### Initial Setup
 
-> (optional) setup your workspace from scratch
+Also Refer [scaffolding](docs/scaffolding.md) docs
+
+> clone the repo
 
 ```bash
-go mod init github.com/xmlking/micro-starter-kit
-mkdir srv api fnc
-
-# scaffold modules
-micro new --namespace="go.micro" --type="srv" --gopath=false --alias="account" srv/account
-
-micro new --namespace="go.micro" --type="srv" --gopath=false \
---alias="emailer"  --plugin=registry=mdns:broker=nats srv/emailer
-
-micro new --namespace="go.micro" --type="srv" --gopath=false \
---alias="greeter"  --plugin=registry=kubernetes:transport=grpc srv/greeter
-
-micro new --namespace="go.micro" --type="api" --gopath=false --alias="account" api/account
-```
-
-### Build
-
-```bash
-make proto
-# silence
-make -s proto
-
-# Prod build. This build command includes plugins.go
-go build -o build/account-srv ./srv/account
+git clone https://github.com/xmlking/micro-starter-kit ~/Developer/Work/go/micro-starter-kit
+# pull dependencies (when every time `go.mod` changed)
+go mod download
 ```
 
 ### Run
@@ -106,16 +80,26 @@ docker system prune --volumes
 
 #### Services
 
-> Node: `--server_address=<MY_VPN_IP>:5501x --broker_address=<MY_VPN_IP>:5502x` required only when you are behind VPN
+> Node: `--server_address=localhost:5501x --broker_address=localhost:5502x` required only when you are behind VPN a.k.a `Work From Home`
 
 ```bash
 # dev mode
 make run-account
-# MY_VPN_IP=$(ifconfig | grep 172 | awk '{print $2; exit}')
-# go run srv/account/main.go srv/account/plugin.go --server_address=${MY_VPN_IP}:55011 --broker_address=${MY_VPN_IP}:55021
-go run srv/account/main.go srv/account/plugin.go
-# go run srv/emailer/main.go srv/emailer/plugin.go --server_address=${MY_VPN_IP}:55012 --broker_address=${MY_VPN_IP}:55022
-go run srv/emailer/main.go srv/emailer/plugin.go
+# or
+make run-account ARGS="--server_address=localhost:55011 --broker_address=localhost:55021"
+# or
+go run srv/account/main.go srv/account/plugin.go \
+--configDir deploy/bases/account-srv/config \
+--server_address=localhost:55011 --broker_address=localhost:55021
+
+make run-greeter
+# or
+make run-emailer ARGS="--server_address=localhost:55012 --broker_address=localhost:55022"
+
+make run-emailer
+# or
+make run-emailer ARGS="--server_address=localhost:55013 --broker_address=localhost:55023"
+
 
 # integration tests for config module via CMD
 make run TARGET=demo TYPE=cmd
@@ -126,266 +110,63 @@ export APP_ENV=production
 go run cmd/demo/main.go
 ```
 
-#### Services with `gRPC` transport
-
-> go-micro by default use `transport=http` and `protocol=mucp`. If you want to switch to `gRPC`, do this
-
-```bash
-# run account micro with gRPC transport, NOTE: we also have to add --server_name as it will remove server_name
-go run srv/account/main.go srv/account/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.account
-go run srv/emailer/main.go srv/emailer/plugin.go --client=grpc --server=grpc --server_name=go.micro.srv.emailer
-# we also has to use grpc for gateway and `micro call` cli
-go run cmd/micro/main.go cmd/micro/plugin.go --api_address=0.0.0.0:8088 --client=grpc --server=grpc api
-micro --client=grpc call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
-```
-
 ### Test
 
-```bash
-# Run only Unit tests:
-make test-emailer
-go test -v -short
-go test -v -short ./srv/emailer/service
-# Run only Integration Tests: Useful for smoke testing canaries in production.
-make inte-emailer
-go test -v -run Integration ./srv/emailer/service
-```
-
-### UAT Test
-
-> using `micro` CLI
-
-```bash
-micro list services
-micro get service go.micro.srv.account
-micro get service go.micro.srv.emailer
-
-# Start API Gateway
-micro api --namespace=go.micro.srv
-# (or) Start Web UX for testing
-micro web --namespace=go.micro.srv
-```
-
-#### Test gRPC Directly
-
-> remember to use `micro --client=grpc` when microservices and gateway are using `grpc` transport
-
-```bash
-# micro --client=grpc call go.micro.srv.account UserService.Create \
-# '{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call  go.micro.srv.account UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call go.micro.srv.account UserService.Create \
-'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
-micro call go.micro.srv.account UserService.List '{}'
-micro call go.micro.srv.account UserService.List '{ "limit": 10, "page": 1}'
-micro call go.micro.srv.account UserService.Get '{"id": "UserIdFromList"}'
-micro call go.micro.srv.account UserService.Exist '{"username": "sumo", "email": "sumo@demo.com"}'
-micro call go.micro.srv.account UserService.Update \
-'{"id": "UserIdFromGet", "firstName": "sumoto222","email": "sumo222@demo.com"}'
-micro call go.micro.srv.account UserService.Delete '{ "id": "UserIdFromGet" }'
-```
-
-#### Test via Micro Web UI
-
-```bash
-open http://localhost:8082
-```
-
-> create new user from `Micro Web UI` and see if an email is send
-
-```json
-{
-  "username": "sumo",
-  "firstName": "sumo",
-  "lastName": "demo",
-  "email": "sumo@demo.com"
-}
-```
-
-#### Test via Micro API Gateway
-
-> Start `API Gateway` and run **REST Client** [tests](test/test-rest-api.http)
+Refer [testing](docs/testing.md) docs
 
 ## GitOps
 
-### Deploy
+### Make
 
-Use `ko`. If you are new to `ko` check out the [ko-demo](https://github.com/xmlking/ko-demo)
-
-Set a registry and make sure you can push to it:
-
-```bash
-export PROJECT_ID=ngx-starter-kit
-export KO_DOCKER_REPO=gcr.io/${PROJECT_ID}
-```
-
-> to publish locally set: `export KO_DOCKER_REPO=ko.local`
-
-Then `apply` like this:
-
-```bash
-ko apply -f deploy/
-```
-
-To deploy in a different namespace:
-
-```bash
-ko -n nondefault apply -f deploy/
-```
-
-### Release
-
-> This will publish all of the binary components as container images and create a release.yaml
-
-```bash
-# publish to  docker repo ar KO_DOCKER_REPO
-ko resolve -P -f deploy/ > release.yaml
-# publish to local docker repo
-ko resolve -P -L -f deploy/ > release.yaml
-```
-
-> run local image
-
-```bash
-docker run -it \
--e MICRO_SERVER_ADDRESS=0.0.0.0:8080 \
--e MICRO_BROKER_ADDRESS=0.0.0.0:10001 \
--e MICRO_REGISTRY=mdns \
--e CONFIG_DIR=/var/run/ko \
--e CONFIG_FILE=config.yaml \
--p 8080:8080 -p 10001:10001 ko.local/github.com/xmlking/micro-starter-kit/srv/account
-```
+Refer [makefile](docs/makefile.md) docs
 
 ### Docker
 
-#### Docker Build
+Refer [docker](docs/docker.md) docs
+
+### Release
+
+Refer [releasing](docs/releasing.md) docs
+
+### Deploy
 
 ```bash
-# build
-VERSION=0.0.5-SNAPSHOT
-BUILD_PKG=./srv/account
-IMANGE_NAME=xmlking/account-srv
-docker build --rm \
---build-arg VERSION=$VERSION \
---build-arg BUILD_PKG=$BUILD_PKG \
---build-arg IMANGE_NAME=$IMANGE_NAME \
---build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
--t $IMANGE_NAME .
+make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit
+docker rmi $(docker images -f "dangling=true" -q)
 
-# tag
-docker tag $IMANGE_NAME $IMANGE_NAME:$VERSION
+# make kustomize OVERLAY=e2e NS=default VERSION=v0.1.0-440-g6c7fb7a
+make kustomize
+kubectl apply -f build/deploy.yaml
 
-# push
-docker push $IMANGE_NAME:$VERSION
-docker push $IMANGE_NAME:"latest"
+POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
+kubectl logs -f -c srv $POD_NAME
 
-# check
-docker inspect  $IMANGE_NAME:$VERSION
-# remove temp images after build
-docker image prune -f
-# Remove all untagged images
-docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
-```
-
-#### Docker Run
-
-> run just for testing image...
-
-```bash
-docker run -it \
--e MICRO_SERVER_ADDRESS=0.0.0.0:8080 \
--e MICRO_BROKER_ADDRESS=0.0.0.0:10001 \
--e MICRO_REGISTRY=mdns \
--p 8080:8080 -p 10001:10001 $IMANGE_NAME
-```
-
-#### Docker Compose Run
-
-Run complete app suite with `docker-compose`
-
-```bash
-docker-compose up consul
-docker-compose up account-srv
-docker-compose up emailer-srv
-docker-compose up gateway
-docker-compose up account-api
-docker-compose up gateway-api
-curl "http://localhost:8081/account/AccountService/list?limit=10"
-```
-
-#### Kubernetes Run
-
-> run just for testing image in k8s...
-
-```bash
-# account-srv
-kubectl run --rm mytest --image=xmlking/account-srv:latest \
---env="MICRO_REGISTRY=kubernetes" \
---env="MICRO_SELECTOR=static" \
---env="MICRO_SERVER_ADDRESS=0.0.0.0:8080" \
---env="MICRO_BROKER_ADDRESS=0.0.0.0:10001" \
---restart=Never -it
-
-# gateway
-kubectl run --rm mygateway --image=microhq/micro:kubernetes \
---env="MICRO_REGISTRY=kubernetes" \
---env="MICRO_SELECTOR=static" \
---restart=Never -it \
---command ./micro api
-```
-
-### Make
-
-using Makefile
-
-> use `-n` flag for `dry-run`, `-s` or '--silent' flag to suppress echoing
-
-```bash
-# codegen from proto
-make proto
-make proto TARGET=account
-make proto TARGET=account TYPE=api
-make proto-account
-make proto-account-api
-## generate for protos in shared package
-make proto TARGET=shared TYPE=.
-
-# unit tests
-make test-account
-make test-emailer
-# integration tests
-make inte-account
-make inte-emailer
-
-# run
-make run-account
-make run-emailer
-
-# build
-make build VERSION=v0.1.1
-make build TARGET=account VERSION=v0.1.1
-make build TARGET=account TYPE=srv VERSION=v0.1.1
-make build TARGET=emailer TYPE=srv VERSION=v0.1.1
-make build TARGET=account TYPE=api VERSION=v0.1.1
-make build-account VERSION=v0.1.1
-make build-account-api VERSION=v0.1.1
-
-# push tag to git
-make release VERSION=v0.1.1
-
-# build docker image
-make docker TARGET=account VERSION=v0.1.1
-make docker TARGET=account TYPE=srv VERSION=v0.1.1
-make docker-account VERSION=v0.1.1
-make docker-account-srv VERSION=v0.1.1
-make docker-emailer-srv VERSION=v0.1.1
-make docker-account-api VERSION=v0.1.1
+kubectl delete -f build/deploy.yaml
 ```
 
 ## Reference
 
-1. [examples](https://github.com/micro/examples) - example usage code for micro
-2. [microhq](https://github.com/microhq) - a place for prebuilt microservices
-3. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
-4. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins
+### Project Docs
+
+1. [prerequisites](docs/prerequisites.md)
+2. [scaffolding](docs/scaffolding.md)
+3. [makefile](docs/makefile.md)
+4. [testing](docs/testing.md)
+5. [docker](docs/docker.md)
+6. [gitops](docs/gitops.md)
+7. [releasing](docs/releasing.md)
+8. [Protobuf Style Guide](https://buf.build/docs/style-guide)
+9. [Google Protobuf Style Guide](https://github.com/uber-go/guide/blob/master/style.md)
+
+### External Docs
+
+1. [Go-Micro Getting Started](https://itnext.io/micro-in-action-getting-started-a79916ae3cac)
+2. [examples](https://github.com/micro/examples) - example usage code for micro
+3. [microhq](https://github.com/microhq) - a place for prebuilt microservices
+4. [explorer](https://micro.mu/explore/) - which aggregates micro based open source projects
+5. [micro-plugins](https://github.com/micro/go-plugins) extensible micro plugins
+6. [step-by-step-guide-micro](https://github.com/micro-in-cn/tutorials/tree/master/microservice-in-micro)
+7. [micro-in-cn](https://github.com/micro-in-cn/tutorials/tree/master/examples)
+8. [Platform Web](https://github.com/micro-in-cn/platform-web)
+9. [grpc template](https://github.com/vtolstov/micro-template-grpc)
+10. [Simple API backed by PostgresQL, Golang and gRPC](https://medium.com/@vptech/complexity-is-the-bane-of-every-software-engineer-e2878d0ad45a)

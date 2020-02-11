@@ -1,6 +1,6 @@
 # Accept the Go version for the image to be set as a build argument.
-# Set default to Go v1.12
-ARG GO_VERSION=1.12
+# Set default to Go v1.13
+ARG GO_VERSION=1.13
 
 # First stage: build the executable.
 FROM golang:${GO_VERSION}-alpine AS builder
@@ -16,7 +16,8 @@ RUN mkdir /user && \
 # Install the Certificate-Authority certificates for the app to be able to make
 # calls to HTTPS endpoints.
 # Git is required for fetching the dependencies.
-RUN apk add --no-cache ca-certificates git
+RUN apk add --no-cache ca-certificates git && \
+    rm -rf /var/cache/apk/* /tmp/*
 
 # Set the environment variables for the go command:
 # * CGO_ENABLED=0 to build a statically-linked executable
@@ -32,24 +33,27 @@ WORKDIR /src
 COPY ./go.mod ./go.sum ./
 # Get dependancies - will also be cached if we won't change mod/sum
 RUN go mod download && \
-    cd / &&  go get github.com/ahmetb/govvv && cd /src
+    GO111MODULE=off go get github.com/ahmetb/govvv && \
+    go install github.com/markbates/pkger/cmd/pkger
 
 # COPY the source code as the last step
 COPY ./ ./
 
 # Build the executable to `/app`. Mark the build as statically linked.
 ARG VERSION=0.0.1
-ARG BUILD_PKG="./srv/account"
+ARG TYPE=srv
+ARG TARGET=account
 
+RUN pkger -o $TYPE/$TARGET -include /config
 RUN go build -a \
     -ldflags="-w -s -linkmode external -extldflags '-static' $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
-    -o /app $BUILD_PKG/main.go $BUILD_PKG/plugin.go
+    -o /app ./$TYPE/$TARGET/main.go ./$TYPE/$TARGET/plugin.go
 
 # Final stage: the running container.
 FROM scratch AS final
 
 # copy 1 MiB busybox executable
-COPY --from=busybox:1.31.0 /bin/busybox /bin/busybox
+COPY --from=busybox:1.31.1 /bin/busybox /bin/busybox
 
 # Import the user and group files from the first stage.
 COPY --from=builder /user/group /user/passwd /etc/
@@ -58,8 +62,11 @@ COPY --from=builder /user/group /user/passwd /etc/
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Import the compiled executable from the second stage.
+ARG VERSION=0.0.1
+ARG TYPE=srv
+ARG TARGET=account
 COPY --from=builder /app /app
-COPY --from=builder src/config /config
+COPY --from=builder src/deploy/bases/micros/${TARGET}-${TYPE}/config /config
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind
@@ -70,17 +77,16 @@ EXPOSE 8080
 USER nobody:nobody
 
 # Metadata params
-ARG VERSION=0.0.1
+ARG DOCKER_REGISTRY
+ARG DOCKER_CONTEXT_PATH=xmlking
 ARG BUILD_DATE
 ARG VCS_URL=micro-starter-kit
 ARG VCS_REF=1
-ARG NAME=app
 ARG VENDOR=sumo
-ARG IMANGE_NAME=xmlking/account-srv
 
 # Metadata
 LABEL org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name=$NAME \
+    org.label-schema.name="${TARGET}-${TYPE}" \
     org.label-schema.description="Example of multi-stage docker build" \
     org.label-schema.url="https://example.com" \
     org.label-schema.vcs-url=https://github.com/xmlking/$VCS_URL \
@@ -88,7 +94,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.vendor=$VENDOR \
     org.label-schema.version=$VERSION \
     org.label-schema.docker.schema-version="1.0" \
-    org.label-schema.docker.cmd=docker="run -it -p 8080:8080  ${IMANGE_NAME}"
+    org.label-schema.docker.cmd=docker="run -it -p 8080:8080  ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}"
 
 # Run the compiled binary.
 ENTRYPOINT ["/app"]

@@ -7,12 +7,12 @@ import (
 	"runtime"
 	"strings"
 
-	microConfig "github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/config/source/cli"
-	"github.com/micro/go-micro/config/source/env"
-	"github.com/micro/go-micro/config/source/file"
+	microConfig "github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/config/source/cli"
+	"github.com/micro/go-micro/v2/config/source/env"
+	"github.com/micro/go-plugins/config/source/pkger/v2"
+	// "github.com/micro/go-plugins/config/source/configmap/v2"
 	log "github.com/sirupsen/logrus"
-	// "github.com/micro/go-plugins/config/source/configmap"
 )
 
 var (
@@ -34,7 +34,8 @@ var (
 )
 
 // VersionMsg is the message that is shown after process started.
-const versionMsg = `version     : %s
+const versionMsg = `
+version     : %s
 build date  : %s
 go version  : %s
 go compiler : %s
@@ -46,9 +47,9 @@ git summary : %s
 `
 
 const (
-	// DefaultConfigDir if o ConfigDir supplied
-	DefaultConfigDir = "config"
-	// DefaultConfigFile if o ConfigFile supplied
+	// DefaultConfigDir if no ConfigDir supplied
+	DefaultConfigDir = "/config"
+	// DefaultConfigFile if no ConfigFile supplied
 	DefaultConfigFile = "config.yaml"
 )
 
@@ -63,18 +64,12 @@ func GetBuildInfo() string {
 		GitCommit, GitBranch, GitState, GitSummary)
 }
 
-// init tries to load and map the ServiceConfiguration struct
-// the sources are sequentially loaded: config-file, config-map, environment-variables
-func init() {
+// InitConfig loads the configuration from file then from environment variables and then from cli flags
+func InitConfig(configDir, configFile string) {
 	if _, found := os.LookupEnv("APP_ENV"); found {
 		IsProduction = true
 	}
 
-	InitConfig("", "")
-}
-
-// InitConfig loads the configuration from file then from environment variables and then from cli flags
-func InitConfig(configDir, configFile string) {
 	if configDir == "" {
 		configDir = DefaultConfigDir
 	}
@@ -86,7 +81,7 @@ func InitConfig(configDir, configFile string) {
 
 	if err := microConfig.Load(
 		// base config from file. Default: config/config.yaml
-		file.NewSource(file.WithPath(configPath)),
+		pkger.NewSource(pkger.WithPath(configPath)),
 		// override file from configmap
 		// configmap.NewSource(),
 		// override configmap from env
@@ -95,7 +90,7 @@ func InitConfig(configDir, configFile string) {
 		cli.NewSource(),
 	); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Errorf(`missing config file at %s, fallback to default config path.
+			log.WithError(err).Errorf(`missing config file at %s, fallback to default config path.
             you can set config path via: --configDir=path/to/my/configDir --configFile=config.yaml`, configPath)
 		} else {
 			log.Fatal(err.Error())
@@ -111,9 +106,9 @@ func LoadExtraConfig(configDir, configFile string) {
 	configPath := filepath.Join(configDir, configFile)
 	log.Infof("loading extra configuration from file: %s", configPath)
 
-	if err := microConfig.LoadFile(configPath); err != nil {
+	if err := microConfig.Load(pkger.NewSource(pkger.WithPath(configPath))); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Errorf(`missing config file at %s, fallback to default config path.
+			log.WithError(err).Errorf(`missing config file at %s, fallback to default config path.
             you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath)
 		} else {
 			log.Fatal(err.Error())

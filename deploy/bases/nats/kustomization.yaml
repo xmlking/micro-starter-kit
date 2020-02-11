@@ -1,0 +1,20 @@
+commonLabels:
+  app.kubernetes.io/name: nats
+  app.kubernetes.io/instance: nats-abcxzy
+  app.kubernetes.io/component: infra
+  app.kubernetes.io/part-of: micro-starter-kit
+  app.kubernetes.io/managed-by: kustomize
+commonAnnotations:
+  org: acmeCorporation
+
+resources:
+  - nats.yaml
+
+vars:
+  - name: NATS_SRV_ENDPOINT
+    objref:
+      kind: Service
+      name: nats
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

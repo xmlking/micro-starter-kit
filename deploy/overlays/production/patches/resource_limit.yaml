@@ -2,14 +2,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-srv
-  labels:
-    app: account-srv
+  name: srv
 spec:
   template:
     spec:
       containers:
-        - name: account-srv
+        - name: srv
           resources:
             requests:
               cpu: 250m

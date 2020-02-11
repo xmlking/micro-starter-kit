@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-option go_package = "github.com/xmlking/micro-starter-kit/shared/proto/basic";
-package basic;
-
-message Error {
-    string code = 1 [json_name = "code"];
-    string msg = 2 [json_name = "msg"];
-}

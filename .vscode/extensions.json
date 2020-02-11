@@ -1,10 +1,10 @@
 {
   "recommendations": [
-    "googlecloudtools.cloudcode",
     "DavidAnson.vscode-markdownlint",
     "ms-vscode.Go",
     "ms-azuretools.vscode-docker",
     "zxh404.vscode-proto3",
+    "xaver.clang-format",
     "EditorConfig.EditorConfig",
     "donjayamanne.githistory",
     "eamodio.gitlens",

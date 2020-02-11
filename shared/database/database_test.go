@@ -6,11 +6,12 @@ import (
 	"github.com/xmlking/micro-starter-kit/shared/config"
 
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	_ "github.com/xmlking/micro-starter-kit/shared/log"
+	logger "github.com/xmlking/micro-starter-kit/shared/log"
 )
 
 func TestDatabase(t *testing.T) {
-	_, err := GetDatabaseConnection(&config.DatabaseConfiguration{
+	logger.InitLogger(config.LogConfiguration{Level: "", Format: ""})
+	_, err := GetDatabaseConnection(config.DatabaseConfiguration{
 		Dialect:  "sqlite3",
 		Host:     "127.0.0.1",
 		Port:     3306,

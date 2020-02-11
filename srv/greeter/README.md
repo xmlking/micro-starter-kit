@@ -2,48 +2,57 @@
 
 This is the Greeter service
 
+## Configuration
+
+- FQDN: greeter_srv
+- Type: srv
+- Alias: greeter
+
+## Usage
+
+A Makefile is included for convenience
+
+Build the binary
+
+```bash
+make build TARGET=greeter TYPE=srv VERSION=v0.1.1
+```
+
+Run the service
+
+```bash
+make run-greeter
+# or
+go run srv/greeter/main.go srv/greeter/plugin.go --configDir deploy/bases/greeter_srv/config
+```
+
+Build a docker image
+
+```bash
+make docker TARGET=greeter TYPE=srv VERSION=v0.1.1
+```
+
 ### Test
 
 ```bash
-micro call go.micro.srv.greeter Greeter.Hello  '{"name": "John"}'
+# start the server on fixed port
+make run-greeter ARGS="--server_address=localhost:8080 --broker_address=localhost:10001"
+# make run-greeter ARGS="--server_address=greetersrv:8080 --broker_address=greetersrv:10001"
 
-# in k8s container
-./micro call greeter Greeter.Hello  '{"name": "John"}'
+# test with grpc cli
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto list
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto describe
+grpcurl -plaintext -proto srv/greeter/proto/greeter/greeter.proto -d '{"name": "sumo"}' localhost:8080  greetersrv.Greeter/Hello
+# testing via micro-cli
+micro --client=grpc call --metadata trans-id=1234 greetersrv Greeter.Hello  '{"name": "John"}'
 
+# start REST gateway
+micro api --enable_rpc=true
+
+# testing via rest proxy
 curl --request POST \
 --url http://localhost:8080/rpc \
 --header 'accept: application/json' \
 --header 'content-type: application/json' \
---data '{"service": "greeter", "method": "Greeter.Hello","request": {"name": "sumo"}}'
-```
-
-### Docker
-
-#### Docker Build
-
-```bash
-# build
-VERSION=0.0.4-SNAPSHOT
-BUILD_PKG=./srv/greeter
-IMANGE_NAME=xmlking/greeter-srv
-docker build --rm \
---build-arg VERSION=$VERSION \
---build-arg BUILD_PKG=$BUILD_PKG \
---build-arg IMANGE_NAME=$IMANGE_NAME \
---build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
--t $IMANGE_NAME .
-
-# tag
-docker tag $IMANGE_NAME $IMANGE_NAME:$VERSION
-
-# push
-docker push $IMANGE_NAME:$VERSION
-docker push $IMANGE_NAME:"latest"
-
-# check
-docker inspect  $IMANGE_NAME:$VERSION
-# remove temp images after build
-docker image prune -f
-# Remove all untagged images
-docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+--data '{"service": "greetersrv", "method": "Greeter.Hello","request": {"name": "sumo"}}'
 ```

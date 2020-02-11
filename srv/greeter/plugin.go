@@ -1,6 +1,4 @@
 package main
 
-import (
-	_ "github.com/micro/go-plugins/registry/kubernetes"
-	_ "github.com/micro/go-plugins/transport/grpc"
-)
+// _ "go.uber.org/automaxprocs"
+// _ "github.com/micro/go-plugins/v2/broker/googlepubsub"

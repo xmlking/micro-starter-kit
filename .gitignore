@@ -13,7 +13,7 @@
 *.out
 
 ### Go Patch ###
-/vendor/
+# /vendor/
 /Godeps/
 
 # OS generated files #
@@ -49,12 +49,17 @@ _test
 # Binaries
 build/*
 !build/.gitkeep
-release.yaml
-
-./srv/emailer/emailer-srv
-./srv/account/account-srv
-./api/account/account-api
 
 # Project
 TODO
+deploy/overlays/e2e/secrets/.dockerconfigjson
+deploy/overlays/production/secrets/.dockerconfigjson
+deploy/overlays/consul/secrets/.dockerconfigjson
 
+# pkger cli generated files
+pkged.go
+
+# certs
+ca.key
+ca.srl
+micro.csr

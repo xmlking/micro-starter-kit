@@ -1,36 +1,82 @@
-namespace: default
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: $(NS)
 namePrefix: prod-
+nameSuffix: -v1
 
 commonLabels:
   environment: production
+  app.kubernetes.io/version: v1
 commonAnnotations:
   note: Hello, I am production!
 
 bases:
-  - ../../bases
+  - ../../bases/micros
+  - ../../bases/etcd
 
-# resources:
-#   - resources/namespace.yaml
-#   - resources/hpa.yaml
-
-patchesStrategicMerge:
-  - patches/replica_count.yaml
-  - patches/resource_limit.yaml
+# enable mage-pull-policy and resource_limit as needed
+patches:
+  - path: patches/health-sidecar.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
+  # - path: patches/resource_limit.yaml
+  #   target:
+  #     kind: Deployment
+  #     labelSelector: app.kubernetes.io/component=microservice
+  - path: patches/image-pull-policy-if-not-present.yaml
+    target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=microservice
 
 configMapGenerator:
-  - behavior: merge
-    files:
-      - config/config.yaml
-    name: configs
+  # - name: env-vars
+  - name: env-vars-common
+    behavior: merge
+    literals:
+      - APP_ENV=production
+      - MICRO_LOG_LEVEL=info
+      # profile specific variables
+      - MICRO_REGISTRY=etcd
+      - MICRO_REGISTRY_ADDRESS="$(ETCD_SRV_ENDPOINT)-client"
+      - MICRO_REGISTER_TTL="60"
+      - MICRO_REGISTER_INTERVAL="30"
+      # - FEATURES_MTLS_ENABLED=true
+      # - INSECURE_SKIP_VERIFY=true
+      - FEATURES_REQLOGS_ENABLED=false
 
 secretGenerator:
-  - behavior: replace
+  - name: secrets
+    behavior: replace
     literals:
-      - postgres-password=postgres123
-    name: postgres-secrets
+      - DATABASE_PASSWORD=prod-real-pass
+  # - name: registry-credentials
+  #   files:
+  #       - ".dockerconfigjson=docker.secret.json"
+  #   type: kubernetes.io/dockerconfigjson
+
+replicas:
+  - name: srv
+    count: 1
 
 images:
+  - name: etcd
+    newTag: 3.3.15
+  - name: postgres
+    newTag: 11.5-alpine
+  - name: micro/micro
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
+    newTag: v1.17.2
   - name: xmlking/account-srv
-    newTag: v1.0.1
-  - name: docker.io/bitnami/postgresql
-    newTag: "10.7.0"
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
+    newTag: $(IMAGE_VERSION)
+  - name: xmlking/emailer-srv
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv
+    newTag: $(IMAGE_VERSION)
+  - name: xmlking/greeter-srv
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
+    newTag: $(IMAGE_VERSION)
+  - name: xmlking/recorder-srv
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/recorder-srv
+    newTag: $(IMAGE_VERSION)
