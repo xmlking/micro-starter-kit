@@ -18,7 +18,7 @@ require (
 	github.com/micro/go-micro/v2 v2.0.1-0.20200210153841-8ea84ac3ebca
 	github.com/micro/go-plugins/config/source/pkger/v2 v2.0.1
 	github.com/onrik/logrus v0.5.1
-	github.com/rs/zerolog v1.17.2
+	github.com/rs/zerolog v1.18.0
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
