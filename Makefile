@@ -41,7 +41,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 # $(warning VERSION_PACKAGE = $(VERSION_PACKAGE), BUILD_FLAGS = $(BUILD_FLAGS))
 
 .PHONY: all tools, check_dirty, clean, update_deps
-.PHONY: proto proto-%
+.PHONY: proto proto-% proto_lint proto_format
 .PHONY: lint lint-%
 .PHONY: format format-%
 .PHONY: pkger pkger-%
@@ -106,19 +106,23 @@ proto proto-%:
 	fi
 	@rsync -a github.com/xmlking/micro-starter-kit/srv/account/proto/ srv/account/proto && rm -Rf github.com
 
+proto_lint:
+	@${GOPATH}/bin/buf check lint
+	@${GOPATH}/bin/buf check breaking --against-input '.git#branch=master'
+
+# I prefer VS Code's proto plugin to format my code then prototool
+proto_format: proto_lint
+	@${GOPATH}/bin/prototool format -d .;
+
 lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all go"; \
 		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
 		echo "Linting all protos"; \
-		${GOPATH}/bin/buf check lint; \
-		${GOPATH}/bin/buf check breaking --against-input '.git#branch=master'; \
 	else \
 		echo "Linting go in ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
 		echo "Linting protos in ${TARGET}-${TYPE}..."; \
-		${GOPATH}/bin/buf check lint; \
-		${GOPATH}/bin/buf check breaking --against-input '.git#branch=master'; \
 	fi
 
 # @clang-format -i $(shell find . -type f -name '*.proto')
@@ -128,12 +132,10 @@ format format-%:
 		echo "Formating all go"; \
 		gofmt -l -w . ; \
 		echo "Formating all protos"; \
-		${GOPATH}/bin/prototool format -d .; \
 	else \
 		echo "Formating go in ${TARGET}/${TYPE}..."; \
 		gofmt -l -w ./${TYPE}/${TARGET}/ ; \
 		echo "Formating protos in ${TARGET}/${TYPE}..."; \
-		${GOPATH}/bin/prototool format -d ./${TYPE}/${TARGET}; \
 	fi
 
 pkger pkger-%:

@@ -59,16 +59,24 @@
       "when": "$(basename)"
     }
   },
+  "files.associations": {
+    "Makefile*": "makefile"
+  },
   // "files.hotExit": "onExit",
   "files.defaultLanguage": "go",
   "files.trimTrailingWhitespace": true,
   // Peacock Settings
   "peacock.color": "#5dc9e2",
   // GoLang
-  "go.testFlags": ["-v", "-count=1"],
+  "go.testFlags": [
+    "-v",
+    "-count=1"
+  ],
   "go.useLanguageServer": true,
   "go.lintTool": "golangci-lint",
-  "go.lintFlags": ["--fast"],
+  "go.lintFlags": [
+    "--fast"
+  ],
   // Proto
   "clang-format.style": "google",
   "protoc": {

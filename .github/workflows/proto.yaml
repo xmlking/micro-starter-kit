@@ -1,0 +1,19 @@
+name: Proto
+on:
+  push:
+    paths:
+      - 'proto/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+        with:
+          ref: master
+      - name: checkout-master
+        run: git checkout master
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: make local
+        run: make local
