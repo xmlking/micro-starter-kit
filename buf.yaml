@@ -1,6 +1,8 @@
 build:
   roots:
     - .
+  excludes:
+    - e2e
 lint:
   use:
     - DEFAULT
