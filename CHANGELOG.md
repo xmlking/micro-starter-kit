@@ -9,13 +9,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Docs
+
+<a name="v0.3.0"></a>
+
+## [v0.3.0] - 2020-02-11
+
+### Build
+
+- **changelog:** updated template
+  
+  ### Chore
+
+- **deps:** zerolog v1.18.0
+  - **deps:** upgrade micro v2
+  - **deps:** updated deps
+  - **docs:** kube tools
+  - **proto:** dedicated Makefile for proto and dedicated CI/CD for proto
+  - **proto:** excludes e2e dir from Buf
+  
+  ### Docs
 
 - **gitbook:** updated docs
   - **gitbook:** updated docs
   - **gitbook:** adding docs
   - **gitbook:** adding docs
   - **gitflow:** adding changelog
+  
+  ### Feat
+
+- **account:** using GenderType enum in proto
+  - **account:** refactor account protos
+  - **deps:** lock grpc v1.26.0
+  - **makefile:** adding zerolog plugin of go-micro logger  & GORM
+  - **makefile:** format proto with vscode plugin : zxh404.vscode-proto3
+  
+  ### Fix
+
+- **micro:** replace Deprecated: NewPublisher with NewEvent
+  - **proto:** refactor protobuf files. now using Buf instead of prototool
+  - **proto:** replace prototool with Buf
   
   
 <a name="v0.2.9"></a>
@@ -421,7 +453,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added steps when behind VPN
   
   
-[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.9...HEAD
+[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.0...HEAD
+[v0.3.0]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.9...v0.3.0
 [v0.2.9]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.8...v0.2.9
 [v0.2.8]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.7...v0.2.8
 [v0.2.7]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.6...v0.2.7
