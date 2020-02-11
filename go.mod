@@ -14,12 +14,11 @@ require (
 	github.com/infobloxopen/atlas-app-toolkit v0.19.2
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.12
-	github.com/markbates/pkger v0.14.0
 	github.com/micro/cli/v2 v2.1.1
 	github.com/micro/go-micro/v2 v2.0.0
 	github.com/micro/go-plugins/config/source/pkger/v2 v2.0.1
 	github.com/onrik/logrus v0.5.1
-	github.com/rs/zerolog v1.17.2
+	github.com/rs/zerolog v1.18.0
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
