@@ -1,61 +1,56 @@
 package log
 
 import (
-	"os"
-
-	microlog "github.com/micro/go-micro/v2/util/log"
-	"github.com/sirupsen/logrus"
+	ml "github.com/micro/go-micro/v2/logger"
 	"github.com/xmlking/micro-starter-kit/shared/config"
-	micrologrus "github.com/xmlking/micro-starter-kit/shared/log/micro/logrus"
+	zero "github.com/xmlking/micro-starter-kit/shared/micro/logger/zerolog"
 )
 
+var Logger ml.Logger
+
 func InitLogger(cfg config.LogConfiguration) {
-	logrusLogger := newLogger(cfg)
-	// also set same Formatter and Level for logrus's global logger
-	logrus.SetFormatter(logrusLogger.Formatter)
-	logrus.SetLevel(logrusLogger.Level)
-
-	microLogger := micrologrus.NewMicroLogrus(logrusLogger)
-	microlog.SetLogger(microLogger)
-	// also set same log_level for go-micro
-	// TODO: microlog.SetLevel(microlog.LevelDebug)
-	os.Setenv("MICRO_LOG_LEVEL", logrusLogger.GetLevel().String())
-
-	logrus.WithFields(logrus.Fields{
-		"logLevel": cfg.Level,
-		"format":   cfg.Format,
-	}).Info("Logger set to Logrus with:")
+	logger := newLogger(cfg)
+	ml.Register(logger)
+	logger.Fields([]ml.Field{
+		{Key: "logLevel", Value: cfg.Level},
+		{Key: "format", Value: cfg.Format},
+	}...).Log(ml.InfoLevel, "Logger set to Zerolog with:")
 }
 
-// newLogger create new logrus logger from config
+// newLogger create new logger from config
 // log level: panic, fatal, error, warn, info, debug, trace
-// log format: json, text
-func newLogger(cfg config.LogConfiguration) *logrus.Logger {
+func newLogger(cfg config.LogConfiguration) (mLogger ml.Logger) {
 	level := cfg.Level
-	format := cfg.Format
-	logger := logrus.New()
-
-	logLevel, err := logrus.ParseLevel(level)
+	logLevel, err := zero.ParseLevel(level)
 	if err != nil {
-		logLevel = logrus.InfoLevel
+		logLevel = ml.InfoLevel
 	}
-	logger.SetLevel(logLevel)
 
-	if format == "json" {
-		logger.SetFormatter(&logrus.JSONFormatter{})
+	if config.IsProduction {
+		mLogger = zero.NewLogger(
+			zero.WithLevel(logLevel),
+			zero.UseAsDefault(),
+			zero.WithProductionMode(),
+		)
 	} else {
-		logger.SetFormatter(&logrus.TextFormatter{
-			ForceColors:   true,
-			FullTimestamp: true,
-		})
+		mLogger = zero.NewLogger(
+			zero.WithLevel(logLevel),
+			zero.UseAsDefault(),
+			zero.WithDevelopmentMode(),
+		)
 	}
-
-	return logger
+	return
 }
 
-// NewLogger create new logrus logger from config and return FieldLogger interface
+// NewLogger create new logger from config and return Logger interface
 // log level: panic, fatal, error, warn, info, debug, trace
-// log format: json, text
-func NewLogger(cfg config.LogConfiguration) logrus.FieldLogger {
+func NewLogger(cfg config.LogConfiguration) ml.Logger {
 	return newLogger(cfg)
+}
+
+func Info(msg string) {
+	Logger.Log(ml.InfoLevel, msg)
+}
+func Infof(format string, args ...interface{}) {
+	Logger.Logf(ml.InfoLevel, format, args...)
 }

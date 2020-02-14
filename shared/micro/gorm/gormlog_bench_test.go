@@ -13,6 +13,7 @@ import (
 func BenchmarkLogger_Print(b *testing.B) {
 	mLogger := zero.NewLogger(zero.WithOut(os.Stdout), zero.WithLevel(ml.DebugLevel))
 	l := gormlog.NewGormLogger(mLogger)
+	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
 		l.Print(

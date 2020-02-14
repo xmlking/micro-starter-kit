@@ -6,6 +6,8 @@ go 1.13
 // FIXME : https://github.com/etcd-io/etcd/issues/11563
 replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
 
+// replace github.com/coreos/go-systemd => github.com/coreos/go-systemd/v22 v22.0.0
+
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
@@ -17,7 +19,6 @@ require (
 	github.com/micro/cli/v2 v2.1.2-0.20200204093551-dfdc8f23b971
 	github.com/micro/go-micro/v2 v2.0.1-0.20200210153841-8ea84ac3ebca
 	github.com/micro/go-plugins/config/source/pkger/v2 v2.0.1
-	github.com/onrik/logrus v0.5.1
 	github.com/rs/zerolog v1.18.0
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0

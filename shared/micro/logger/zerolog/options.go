@@ -8,50 +8,71 @@ import (
 	"github.com/rs/zerolog"
 )
 
-type formatterKey struct{}
-type levelKey struct{}
-type levelFieldKey struct{}
-type outKey struct{}
-type hooksKey struct{}
-type reportCallerKey struct{}
-type exitKey struct{}
-type prettyKey struct{}
-type useColorKey struct{}
-
 type Options struct {
 	logger.Options
 }
 
-func WithTimeFieldFormat(formatter zerolog.Formatter) logger.Option {
-	return setOption(formatterKey{}, formatter)
+type reportCallerKey struct{}
+
+func ReportCaller() logger.Option {
+	return setOption(reportCallerKey{}, true)
 }
 
-func WithLevelFieldName(levelFieldName string) logger.Option {
-	return setOption(levelFieldKey{}, levelFieldName)
+type useAsDefaultKey struct{}
+
+func UseAsDefault() logger.Option {
+	return setOption(useAsDefaultKey{}, true)
 }
 
-func WithPretty(pretty bool) logger.Option {
-	return setOption(prettyKey{}, pretty)
-}
-func WithColor(useColor bool) logger.Option {
-	return setOption(useColorKey{}, useColor)
+type developmentModeKey struct{}
+
+func WithDevelopmentMode() logger.Option {
+	return setOption(developmentModeKey{}, true)
 }
 
-func WithLevel(lvl logger.Level) logger.Option {
-	return setOption(levelKey{}, lvl)
+type productionModeKey struct{}
+
+func WithProductionMode() logger.Option {
+	return setOption(productionModeKey{}, true)
 }
+
+type gcpModeKey struct{}
+
+func WithGCPMode() logger.Option {
+	return setOption(gcpModeKey{}, true)
+}
+
+type outKey struct{}
 
 func WithOut(out io.Writer) logger.Option {
 	return setOption(outKey{}, out)
 }
 
+type fieldsKey struct{}
+
+func WithFields(fields ...logger.Field) logger.Option {
+	return setOption(fieldsKey{}, fields)
+}
+
+type levelKey struct{}
+
+func WithLevel(lvl logger.Level) logger.Option {
+	return setOption(levelKey{}, lvl)
+}
+
+type timeFormatKey struct{}
+
+func WithTimeFormat(timeFormat string) logger.Option {
+	return setOption(timeFormatKey{}, timeFormat)
+}
+
+type hooksKey struct{}
+
 func WithHooks(hooks []zerolog.Hook) logger.Option {
 	return setOption(hooksKey{}, hooks)
 }
 
-func WithReportCaller(reportCaller bool) logger.Option {
-	return setOption(reportCallerKey{}, reportCaller)
-}
+type exitKey struct{}
 
 func WithExitFunc(exit func(int)) logger.Option {
 	return setOption(exitKey{}, exit)

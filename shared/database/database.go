@@ -5,10 +5,10 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 
-	gormlog "github.com/onrik/logrus/gorm"
+	ml "github.com/micro/go-micro/v2/logger"
+	gormlog "github.com/xmlking/micro-starter-kit/shared/micro/gorm"
 )
 
 // GetDatabaseConnection return (gorm.DB or error)
@@ -34,8 +34,9 @@ func GetDatabaseConnection(dbConf config.DatabaseConfiguration) (db *gorm.DB, er
 
 	//db.SetLogger(logrus.WithFields(logrus.Fields{"module": "gorm"}))
 	//db.SetLogger(logrus.StandardLogger())
-	db.SetLogger(gormlog.New(logrus.WithFields(logrus.Fields{"module": "gorm"})))
-
+	// db.SetLogger(gormlog.New(logrus.WithFields(logrus.Fields{"module": "gorm"})))
+	mLogger, _ := ml.GetLogger("zerolog")
+	db.SetLogger(gormlog.NewGormLogger(mLogger))
 	if dbConf.Logging {
 		db.Debug()
 	}
