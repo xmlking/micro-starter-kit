@@ -4,7 +4,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/sarulabs/di/v2"
 
-	ml "github.com/micro/go-micro/v2/logger"
 	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/database"
@@ -55,7 +54,10 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
 				repo := ctn.Get("profile-repository").(repository.ProfileRepository)
-				logger := logger.NewLogger(cfg.Log).Fields([]ml.Field{{Key: "component", Value: "ProfileHandler"}}...)
+
+				logger := logger.NewLogger(cfg.Log).Fields(map[string]interface{}{
+					"component": "ProfileHandler",
+				})
 				return handler.NewProfileHandler(repo, logger), nil
 			},
 		},

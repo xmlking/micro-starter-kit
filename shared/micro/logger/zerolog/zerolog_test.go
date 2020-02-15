@@ -1,11 +1,14 @@
-package zero
+package zerolog
 
 import (
+	"errors"
 	"os"
 	"testing"
+	"time"
 
-	"github.com/micro/go-micro/v2/logger"
+	// "github.com/micro/go-micro/v2/logger"
 	"github.com/rs/zerolog"
+	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
 )
 
 func TestName(t *testing.T) {
@@ -48,10 +51,10 @@ func TestWithOut(t *testing.T) {
 	l.Logf(logger.InfoLevel, "testing: %s", "WithOut")
 }
 
-func TestWithPretty(t *testing.T) {
-	l := NewLogger(WithDevelopmentMode())
+func TestWithDevelopmentMode(t *testing.T) {
+	l := NewLogger(WithDevelopmentMode(), WithTimeFormat(time.Kitchen))
 
-	l.Logf(logger.InfoLevel, "testing: %s", "WithPretty")
+	l.Logf(logger.InfoLevel, "testing: %s", "DevelopmentMode")
 }
 func TestWithLevelFieldName(t *testing.T) {
 	l := NewLogger(WithGCPMode())
@@ -64,23 +67,17 @@ func TestWithLevelFieldName(t *testing.T) {
 func TestWithFields(t *testing.T) {
 	l := NewLogger()
 
-	l.Fields([]logger.Field{
-		{
-			Key:   "sumo",
-			Type:  logger.StringType,
-			Value: "demo",
-		},
-		{
-			Key:   "human",
-			Type:  logger.BoolType,
-			Value: true,
-		},
-		{
-			Key:   "age",
-			Type:  logger.Int32Type,
-			Value: 99,
-		},
-	}...).Logf(logger.InfoLevel, "testing: %s", "WithFields")
+	l.Fields(map[string]interface{}{
+		"sumo":  "demo",
+		"human": true,
+		"age":   99,
+	}).Logf(logger.InfoLevel, "testing: %s", "WithFields")
+}
+
+func TestWithError(t *testing.T) {
+	l := NewLogger()
+
+	l.Error(errors.New("I am Error")).Logf(logger.ErrorLevel, "testing: %s", "WithError")
 }
 
 func TestWithHooks(t *testing.T) {

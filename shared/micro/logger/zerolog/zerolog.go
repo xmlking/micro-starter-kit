@@ -1,4 +1,4 @@
-package zero
+package zerolog
 
 import (
 	"context"
@@ -8,10 +8,11 @@ import (
 	"runtime/debug"
 	"time"
 
-	"github.com/micro/go-micro/v2/logger"
+	// "github.com/micro/go-micro/v2/logger"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"github.com/rs/zerolog/pkgerrors"
+	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
 )
 
 type Mode uint8
@@ -34,7 +35,7 @@ var (
 	// The logging level the logger should log at.
 	// This defaults to 100 means not explicitly set by user
 	level      logger.Level = 100
-	fields     []logger.Field
+	fields     map[string]interface{}
 	hooks      []zerolog.Hook
 	timeFormat string
 	// default Production (1)
@@ -45,12 +46,8 @@ type zeroLogger struct {
 	nativelogger zerolog.Logger
 }
 
-func (l *zeroLogger) Fields(fields ...logger.Field) logger.Logger {
-	data := make(map[string]interface{}, len(fields))
-	for _, f := range fields {
-		data[f.Key] = f.GetValue()
-	}
-	return &zeroLogger{l.nativelogger.With().Fields(data).Logger()}
+func (l *zeroLogger) Fields(fields map[string]interface{}) logger.Logger {
+	return &zeroLogger{l.nativelogger.With().Fields(fields).Logger()}
 }
 
 func (l *zeroLogger) Error(err error) logger.Logger {
@@ -72,7 +69,7 @@ func (l *zeroLogger) Init(opts ...logger.Option) error {
 	if hs, ok := options.Context.Value(hooksKey{}).([]zerolog.Hook); ok {
 		hooks = hs
 	}
-	if flds, ok := options.Context.Value(fieldsKey{}).([]logger.Field); ok {
+	if flds, ok := options.Context.Value(fieldsKey{}).(map[string]interface{}); ok {
 		fields = flds
 	}
 	if lvl, ok := options.Context.Value(levelKey{}).(logger.Level); ok {
@@ -108,7 +105,9 @@ func (l *zeroLogger) Init(opts ...logger.Option) error {
 		}
 		consOut := zerolog.NewConsoleWriter(
 			func(w *zerolog.ConsoleWriter) {
-				w.TimeFormat = time.RFC3339
+				if len(timeFormat) > 0 {
+					w.TimeFormat = timeFormat
+				}
 				w.Out = out
 				w.NoColor = false
 			},
@@ -118,6 +117,7 @@ func (l *zeroLogger) Init(opts ...logger.Option) error {
 			Level(zerolog.DebugLevel).
 			With().Timestamp().Stack().Logger()
 	case GCP:
+		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
 		zerolog.LevelFieldName = "severity"
 		zerolog.TimestampFieldName = "timestamp"
 		timeFormat = time.RFC3339Nano
@@ -160,14 +160,10 @@ func (l *zeroLogger) Init(opts ...logger.Option) error {
 
 	// Adding seed fields if exist
 	if fields != nil {
-		data := make(map[string]interface{}, len(fields))
-		for _, f := range fields {
-			data[f.Key] = f.GetValue()
-		}
-		l.nativelogger = l.nativelogger.With().Fields(data).Logger()
+		l.nativelogger = l.nativelogger.With().Fields(fields).Logger()
 	}
 
-	// Also set it as Default zerolog logger
+	// Also set it as zerolog's Default logger
 	if useAsDefault {
 		zlog.Logger = l.nativelogger
 	}

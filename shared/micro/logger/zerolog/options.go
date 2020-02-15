@@ -1,11 +1,12 @@
-package zero
+package zerolog
 
 import (
 	"context"
 	"io"
 
-	"github.com/micro/go-micro/v2/logger"
+	// "github.com/micro/go-micro/v2/logger"
 	"github.com/rs/zerolog"
+	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
 )
 
 type Options struct {
@@ -50,7 +51,7 @@ func WithOut(out io.Writer) logger.Option {
 
 type fieldsKey struct{}
 
-func WithFields(fields ...logger.Field) logger.Option {
+func WithFields(fields map[string]interface{}) logger.Option {
 	return setOption(fieldsKey{}, fields)
 }
 

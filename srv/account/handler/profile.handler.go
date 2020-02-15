@@ -10,9 +10,10 @@ import (
 	"github.com/thoas/go-funk"
 
 	ptypes1 "github.com/golang/protobuf/ptypes"
-	ml "github.com/micro/go-micro/v2/logger"
+	// "github.com/micro/go-micro/v2/logger"
 	uuid "github.com/satori/go.uuid"
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
+	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 	profilePB "github.com/xmlking/micro-starter-kit/srv/account/proto/profile"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
@@ -21,11 +22,11 @@ import (
 // ProfileHandler struct
 type profileHandler struct {
 	profileRepository repository.ProfileRepository
-	contextLogger     ml.Logger
+	contextLogger     logger.Logger
 }
 
 // NewProfileHandler returns an instance of `ProfileServiceHandler`.
-func NewProfileHandler(repo repository.ProfileRepository, logger ml.Logger) profilePB.ProfileServiceHandler {
+func NewProfileHandler(repo repository.ProfileRepository, logger logger.Logger) profilePB.ProfileServiceHandler {
 	return &profileHandler{
 		profileRepository: repo,
 		contextLogger:     logger,
@@ -33,7 +34,7 @@ func NewProfileHandler(repo repository.ProfileRepository, logger ml.Logger) prof
 }
 
 func (ph *profileHandler) List(ctx context.Context, req *profilePB.ListRequest, rsp *profilePB.ListResponse) error {
-	ph.contextLogger.Logf(ml.InfoLevel, "Received ProfileHandler.List request")
+	ph.contextLogger.Logf(logger.InfoLevel, "Received ProfileHandler.List request")
 	preferredTheme := req.PreferredTheme.GetValue()
 	model := account_entities.ProfileORM{
 		// UserID:     uuid.FromStringOrNil(req.UserId.GetValue()),
@@ -61,7 +62,7 @@ func (ph *profileHandler) List(ctx context.Context, req *profilePB.ListRequest, 
 }
 
 func (ph *profileHandler) Get(ctx context.Context, req *profilePB.GetRequest, rsp *profilePB.GetResponse) error {
-	ph.contextLogger.Logf(ml.InfoLevel, "Received ProfileHandler.Get request")
+	ph.contextLogger.Logf(logger.InfoLevel, "Received ProfileHandler.Get request")
 	var profile *account_entities.ProfileORM
 	var err error
 	switch id := req.Id.(type) {
@@ -92,7 +93,7 @@ func (ph *profileHandler) Get(ctx context.Context, req *profilePB.GetRequest, rs
 }
 
 func (ph *profileHandler) Create(ctx context.Context, req *profilePB.CreateRequest, rsp *profilePB.CreateResponse) error {
-	ph.contextLogger.Logf(ml.DebugLevel, "Received ProfileHandler.Create request")
+	ph.contextLogger.Logf(logger.DebugLevel, "Received ProfileHandler.Create request")
 	model := account_entities.ProfileORM{}
 	userId := uuid.FromStringOrNil(req.UserId.GetValue())
 	model.UserId = &userId

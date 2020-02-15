@@ -3,9 +3,10 @@ package log_test
 import (
 	"testing"
 
-	ml "github.com/micro/go-micro/v2/logger"
+	// "github.com/micro/go-micro/v2/logger"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/log"
+	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
 )
 
 func TestName(t *testing.T) {
@@ -18,8 +19,8 @@ func TestName(t *testing.T) {
 
 func TestRegister(t *testing.T) {
 	log.InitLogger(config.LogConfiguration{Level: "debug", Format: "json"})
-	logr, _ := ml.GetLogger("zerolog")
-	logr.Log(ml.InfoLevel, "Hello World")
-	logr.Logf(ml.InfoLevel, "Hello %s", "Sumo")
+	logr, _ := logger.GetLogger("zerolog")
+	logr.Log(logger.InfoLevel, "Hello World")
+	logr.Logf(logger.InfoLevel, "Hello %s", "Sumo")
 	t.Logf("testing logger name: %s", logr.String())
 }

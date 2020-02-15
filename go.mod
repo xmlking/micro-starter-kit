@@ -6,8 +6,6 @@ go 1.13
 // FIXME : https://github.com/etcd-io/etcd/issues/11563
 replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
 
-// replace github.com/coreos/go-systemd => github.com/coreos/go-systemd/v22 v22.0.0
-
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0

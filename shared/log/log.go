@@ -1,29 +1,30 @@
 package log
 
 import (
-	ml "github.com/micro/go-micro/v2/logger"
+	// "github.com/micro/go-micro/v2/logger"
 	"github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	zero "github.com/xmlking/micro-starter-kit/shared/micro/logger/zerolog"
 )
 
-var Logger ml.Logger
+var Logger logger.Logger
 
 func InitLogger(cfg config.LogConfiguration) {
-	logger := newLogger(cfg)
-	ml.Register(logger)
-	logger.Fields([]ml.Field{
-		{Key: "logLevel", Value: cfg.Level},
-		{Key: "format", Value: cfg.Format},
-	}...).Log(ml.InfoLevel, "Logger set to Zerolog with:")
+	mLogger := newLogger(cfg)
+	logger.Register(mLogger)
+	mLogger.Fields(map[string]interface{}{
+		"logLevel": cfg.Level,
+		"format":   cfg.Format,
+	}).Log(logger.InfoLevel, "Logger set to Zerolog with:")
 }
 
 // newLogger create new logger from config
 // log level: panic, fatal, error, warn, info, debug, trace
-func newLogger(cfg config.LogConfiguration) (mLogger ml.Logger) {
+func newLogger(cfg config.LogConfiguration) (mLogger logger.Logger) {
 	level := cfg.Level
 	logLevel, err := zero.ParseLevel(level)
 	if err != nil {
-		logLevel = ml.InfoLevel
+		logLevel = logger.InfoLevel
 	}
 
 	if config.IsProduction {
@@ -44,13 +45,13 @@ func newLogger(cfg config.LogConfiguration) (mLogger ml.Logger) {
 
 // NewLogger create new logger from config and return Logger interface
 // log level: panic, fatal, error, warn, info, debug, trace
-func NewLogger(cfg config.LogConfiguration) ml.Logger {
+func NewLogger(cfg config.LogConfiguration) logger.Logger {
 	return newLogger(cfg)
 }
 
 func Info(msg string) {
-	Logger.Log(ml.InfoLevel, msg)
+	Logger.Log(logger.InfoLevel, msg)
 }
 func Infof(format string, args ...interface{}) {
-	Logger.Logf(ml.InfoLevel, format, args...)
+	Logger.Logf(logger.InfoLevel, format, args...)
 }
