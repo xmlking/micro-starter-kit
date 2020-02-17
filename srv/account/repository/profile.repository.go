@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
 	go_uuid1 "github.com/satori/go.uuid"
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 )
 
@@ -71,7 +71,7 @@ func (repo *profileRepository) List(limit, page uint32, sort string, model *acco
 	}
 
 	if err = db.Order(sort).Limit(limit).Offset(offset).Find(&profiles).Count(&total).Error; err != nil {
-		log.WithError(err).Error("Error in ProfileRepository.List")
+		log.WithError(err, "Error in ProfileRepository.List")
 		return
 	}
 	return
@@ -84,7 +84,7 @@ func (repo *profileRepository) Get(id string) (profile *account_entities.Profile
 	profile = &account_entities.ProfileORM{Id: go_uuid1.FromStringOrNil(id)}
 
 	if err = repo.db.First(profile).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.WithError(err).Error("Error in ProfileRepository.Get")
+		log.WithError(err, "Error in ProfileRepository.Get")
 	}
 	println(profile.Id.String())
 	println(profile.UserId.String())
@@ -99,7 +99,7 @@ func (repo *profileRepository) GetByUserID(userId string) (profile *account_enti
 	profile = &account_entities.ProfileORM{UserId: &user_uuid}
 	if err = repo.db.Where(&profile).First(&profile).Error; err != nil && err != gorm.ErrRecordNotFound {
 		// if err = repo.db.First(profile).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.WithError(err).Error("Error in ProfileRepository.GetByUserID")
+		log.WithError(err, "Error in ProfileRepository.GetByUserID")
 	}
 	println(profile.Id.String())
 	println(profile.UserId.String())
@@ -109,11 +109,11 @@ func (repo *profileRepository) GetByUserID(userId string) (profile *account_enti
 // Create
 func (repo *profileRepository) Create(model *account_entities.ProfileORM) error {
 	if exist := repo.Exist(model); exist {
-		return fmt.Errorf("profile already exist")
+		return errors.New("profile already exist")
 	}
 
 	if err := repo.db.Create(model).Error; err != nil {
-		log.WithError(err).Error("Error in ProfileRepository.Create")
+		log.WithError(err, "Error in ProfileRepository.Create")
 		return err
 	}
 	return nil

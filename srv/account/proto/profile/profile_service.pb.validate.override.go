@@ -2,7 +2,7 @@ package profile
 
 import (
 	"errors"
-	fmt "fmt"
+	"fmt"
 	"net/mail"
 	strings "strings"
 )

@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 )
@@ -52,7 +52,7 @@ func (sender *SendEmail) Send(subject, body string, to []string) error {
 	}
 	err1 := emailTmpl.Execute(&doc, context)
 	if err1 != nil {
-		log.Print("error trying to execute mail template")
+		log.Error("error trying to execute mail template")
 		return err1
 	}
 	log.Debugf("sending email to: %s from: %s, subject: %s, body: %s", to, sender.from, subject, doc.Bytes())

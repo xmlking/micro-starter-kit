@@ -5,14 +5,14 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 )
 
 // TimeToTimestamp returns a protobuf Timestamp from a Time object
 func TimeToTimestamp(t time.Time) *timestamp.Timestamp {
 	ts, err := ptypes.TimestampProto(t)
 	if nil != err {
-		log.WithError(err).Error("Time to Timestamp error")
+		log.WithError(err, "Time to Timestamp error")
 	}
 	return ts
 }
@@ -24,7 +24,7 @@ func TimestampToTime(ts *timestamp.Timestamp) time.Time {
 	}
 	t, err := ptypes.Timestamp(ts)
 	if nil != err {
-		log.WithError(err).Error("Timestamp to Times error")
+		log.WithError(err, "Timestamp to Times error")
 	}
 	return t
 }

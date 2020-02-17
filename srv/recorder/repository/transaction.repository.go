@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/micro/go-micro/v2/store"
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
 )
 

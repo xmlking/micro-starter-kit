@@ -1,11 +1,10 @@
 package repository
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 )
 
@@ -87,7 +86,7 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *account
 	}
 	// enable auto preloading for `Profile`
 	if err = db.Set("gorm:auto_preload", true).Order(sort).Limit(limit).Offset(offset).Find(&users).Count(&total).Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.List")
+		log.WithError(err, "Error in UserRepository.List")
 		return
 	}
 	return
@@ -102,7 +101,7 @@ func (repo *userRepository) Get(id string) (user *account_entities.UserORM, err 
 	user = &account_entities.UserORM{Id: u2}
 	// enable auto preloading for `Profile`
 	if err = repo.db.Set("gorm:auto_preload", true).First(user).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.WithError(err).Error("Error in UserRepository.Get")
+		log.WithError(err, "Error in UserRepository.Get")
 	}
 	return
 }
@@ -114,7 +113,7 @@ func (repo *userRepository) Create(model *account_entities.UserORM) error {
 	}
 	// if err := repo.db.Set("gorm:association_autoupdate", false).Create(model).Error; err != nil {
 	if err := repo.db.Create(model).Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.Create")
+		log.WithError(err, "Error in UserRepository.Create")
 		return err
 	}
 	return nil
@@ -132,7 +131,7 @@ func (repo *userRepository) Update(id string, model *account_entities.UserORM) e
 	// result := repo.db.Set("gorm:association_autoupdate", false).Save(model)
 	result := repo.db.Model(user).Updates(model)
 	if err := result.Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.Update")
+		log.WithError(err, "Error in UserRepository.Update")
 		return err
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {
@@ -146,7 +145,7 @@ func (repo *userRepository) Update(id string, model *account_entities.UserORM) e
 func (repo *userRepository) Delete(model *account_entities.UserORM) error {
 	result := repo.db.Delete(model)
 	if err := result.Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.Delete")
+		log.WithError(err, "Error in UserRepository.Delete")
 		return err
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {

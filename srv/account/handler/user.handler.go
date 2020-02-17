@@ -7,11 +7,9 @@ import (
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/errors"
 	uuid "github.com/satori/go.uuid"
-	log "github.com/sirupsen/logrus"
 	"github.com/thoas/go-funk"
-
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
-
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"
@@ -116,14 +114,14 @@ func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp
 
 	// send email
 	if err := h.Publisher.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue()}); err != nil {
-		log.WithError(err).Error("Received Publisher.Publish request error")
+		log.WithError(err, "Received Publisher.Publish request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	}
 
 	// call greeter
 	// if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
 	if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.HelloRequest{Name: req.GetFirstName().GetValue()}); err != nil {
-		log.WithError(err).Error("Received greeterService.Hello request error")
+		log.WithError(err, "Received greeterService.Hello request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	} else {
 		log.Infof("Got greeterService responce %s", res.Msg)

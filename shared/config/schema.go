@@ -32,8 +32,8 @@ type ServiceConfiguration struct {
 
 // LogConfiguration holds log config
 type LogConfiguration struct {
-	Level  string `json:"level"`
-	Format string `json:"format"` // json or text
+	Level   string `json:"level"`
+	Runtime string `json:"runtime"` // dev, prod, gcp, azure, aws
 }
 
 const (

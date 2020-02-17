@@ -26,7 +26,7 @@ extend google.protobuf.OneofOptions {
 // Validation rules applied at the field level
 extend google.protobuf.FieldOptions {
   // Rules specify the validations to be performed on this field. By default,
-  // no validation is performed against a field.
+  // no validation is performed against  a field.
   optional FieldRules rules = 1071;
 }
 

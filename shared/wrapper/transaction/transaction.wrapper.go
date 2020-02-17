@@ -9,24 +9,24 @@ import (
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/metadata"
 	"github.com/micro/go-micro/v2/server"
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
 )
 
 func publish(ctx context.Context, publisher micro.Publisher, req, rsp proto.Message) (err error) {
 	reqB, err := proto.Marshal(req)
 	if err != nil {
-		log.WithError(err).Errorf("marshaling error for req")
+		log.WithError(err, "marshaling error for req")
 		return
 	}
 	resB, err := proto.Marshal(rsp)
 	if err != nil {
-		log.WithError(err).Errorf("marshaling error for rsp")
+		log.WithError(err, "marshaling error for rsp")
 		return
 	}
 	event := &transactionPB.TransactionEvent{Req: reqB, Rsp: resB}
 	if err = publisher.Publish(ctx, event); err != nil {
-		log.WithError(err).Errorf("Publisher: Failed publishing transation")
+		log.WithError(err, "Publisher: Failed publishing transation")
 	}
 	return
 }

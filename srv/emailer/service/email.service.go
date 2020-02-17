@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"html/template"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 )
 
 var welcomeEmailTmpl *template.Template

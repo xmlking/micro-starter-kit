@@ -3,7 +3,7 @@ name: accountsrv
 version: v0.1.0
 log:
   level: debug
-  format: text
+  runtime: local
 database:
   dialect: sqlite3
   host: 0.0.0.0

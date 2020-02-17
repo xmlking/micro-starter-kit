@@ -8,9 +8,10 @@ metadata:
   #   etcd.database.coreos.com/scope: clusterwide
 spec:
   size: 3
-  version: "3.4.3"
+  version: "3.3.18"
   repository: "quay.io/coreos/etcd"
   pod:
     labels:
       application: micro
     busyboxImage: "busybox:1.28.0-glibc"
+    tmpfs: true

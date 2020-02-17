@@ -14,13 +14,13 @@ import (
 	"time"
 	"unicode"
 
-	ml "github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/v2/logger"
 )
 
 // Logger is a gorm logger implementation using zap.
 type GormLogger struct {
-	origin      ml.Logger
-	level       ml.Level
+	origin      logger.Logger
+	level       logger.Level
 	encoderFunc RecordToFields
 }
 
@@ -30,7 +30,7 @@ type GormLoggerOption func(*GormLogger)
 // WithLevel returns Logger option that sets level for gorm logs.
 // It affects only general logs, e.g. those that contain SQL queries.
 // Errors will be logged with error level independently of this option.
-func WithLevel(level ml.Level) GormLoggerOption {
+func WithLevel(level logger.Level) GormLoggerOption {
 	return func(l *GormLogger) {
 		l.level = level
 	}
@@ -48,10 +48,10 @@ func WithRecordToFields(f RecordToFields) GormLoggerOption {
 
 // New returns a new gorm logger implemented using zap.
 // By default it logs with debug level.
-func NewGormLogger(origin ml.Logger, opts ...GormLoggerOption) *GormLogger {
+func NewGormLogger(origin logger.Logger, opts ...GormLoggerOption) *GormLogger {
 	l := &GormLogger{
 		origin:      origin,
-		level:       ml.DebugLevel,
+		level:       logger.DebugLevel,
 		encoderFunc: DefaultRecordToFields,
 	}
 
@@ -65,7 +65,7 @@ func NewGormLogger(origin ml.Logger, opts ...GormLoggerOption) *GormLogger {
 // Print implements gorm's logger interface.
 func (l *GormLogger) Print(values ...interface{}) {
 	rec := l.newRecord(values...)
-	l.origin.Fields(l.encoderFunc(rec)...).Logf(rec.Level, rec.Message)
+	l.origin.Fields(l.encoderFunc(rec)).Logf(rec.Level, rec.Message)
 }
 
 func (l *GormLogger) newRecord(values ...interface{}) Record {
@@ -85,7 +85,7 @@ func (l *GormLogger) newRecord(values ...interface{}) Record {
 		return Record{
 			Message: fmt.Sprintf("%v", values[1]),
 			Source:  fmt.Sprintf("%v", values[0]),
-			Level:   ml.ErrorLevel,
+			Level:   logger.ErrorLevel,
 		}
 	}
 
@@ -99,7 +99,7 @@ func (l *GormLogger) newRecord(values ...interface{}) Record {
 		// See: https://github.com/jinzhu/gorm/blob/32455088f24d6b1e9a502fb8e40fdc16139dbea8/main.go#L718
 		logLevel := l.level
 		if _, ok := values[2].(error); ok {
-			logLevel = ml.ErrorLevel
+			logLevel = logger.ErrorLevel
 		}
 
 		return Record{
