@@ -20,15 +20,15 @@ import (
 // UserHandler struct
 type userHandler struct {
 	userRepository   repository.UserRepository
-	Publisher        micro.Publisher
+	Event            micro.Event
 	greeterSrvClient greeterPB.GreeterService
 }
 
 // NewUserHandler returns an instance of `UserServiceHandler`.
-func NewUserHandler(repo repository.UserRepository, pub micro.Publisher, greeterClient greeterPB.GreeterService) userPB.UserServiceHandler {
+func NewUserHandler(repo repository.UserRepository, eve micro.Event, greeterClient greeterPB.GreeterService) userPB.UserServiceHandler {
 	return &userHandler{
 		userRepository:   repo,
-		Publisher:        pub,
+		Event:            eve,
 		greeterSrvClient: greeterClient,
 	}
 }
@@ -112,9 +112,9 @@ func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp
 		return myErrors.AppError(myErrors.DBE, err)
 	}
 
-	// send email
-	if err := h.Publisher.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue()}); err != nil {
-		log.WithError(err, "Received Publisher.Publish request error")
+	// send email (TODO: async `go h.Event.Publish(...)`)
+	if err := h.Event.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue()}); err != nil {
+		log.WithError(err, "Received Event.Publish request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	}
 

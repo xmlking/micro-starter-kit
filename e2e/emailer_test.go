@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	publisher micro.Publisher
+	publisher micro.Event
 	topic     = "emailersrv"
 )
 
