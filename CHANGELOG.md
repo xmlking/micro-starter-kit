@@ -8,6 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="unreleased"></a>
 ## [Unreleased]
 
+
+<a name="v0.3.1"></a>
+## [v0.3.1] - 2020-02-16
+### Chore
+- **changelog:** fix changlog template
+- **deploy:** using cbws/etcd-operator image
+- **deps:** updated deps
+- **makefile:** testing proto specific Makefile
+
+### Docs
+- **commitizen:** adding docs for commitizen
+
+### Feat
+- **logger:** now using micro's logger with zerolog provider
+
+### Refactor
+- **logger:** loger fields changed to map[string]interface{}
+- **zerolog:** mode based config
+
 ### Test
 - **logger:** fix unit tests
 
@@ -367,7 +386,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added steps when behind VPN
 
 
-[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.1...HEAD
+[v0.3.1]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.9...v0.3.0
 [v0.2.9]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.8...v0.2.9
 [v0.2.8]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.7...v0.2.8
