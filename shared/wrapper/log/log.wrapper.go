@@ -35,9 +35,9 @@ func NewSubscriberWrapper() server.SubscriberWrapper {
 			md, _ := metadata.FromContext(ctx)
 			log.Logger.Fields(map[string]interface{}{
 				"category":    "LogWrapper",
-				"Topic":       p.Topic,
-				"ContentType": p.ContentType,
-				"Payload":     p.Payload,
+				"Topic":       p.Topic(),
+				"ContentType": p.ContentType(),
+				"Payload":     p.Payload(),
 				"ctx":         md,
 			}).Log(logger.DebugLevel, "Server-Side Subscriber")
 			err = fn(ctx, p)
@@ -66,9 +66,9 @@ func (l *clientWrapper) Publish(ctx context.Context, p client.Message, opts ...c
 	md, _ := metadata.FromContext(ctx)
 	log.Logger.Fields(map[string]interface{}{
 		"category":    "LogWrapper",
-		"Topic":       p.Topic,
-		"ContentType": p.ContentType,
-		"Payload":     p.Payload,
+		"Topic":       p.Topic(),
+		"ContentType": p.ContentType(),
+		"Payload":     p.Payload(),
 		"ctx":         md,
 	}).Log(logger.DebugLevel, "Client-Side Publish")
 	err = l.Client.Publish(ctx, p, opts...)
