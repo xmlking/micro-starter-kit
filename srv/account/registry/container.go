@@ -4,10 +4,10 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/sarulabs/di/v2"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/database"
-	logger "github.com/xmlking/micro-starter-kit/shared/log"
+	"github.com/xmlking/micro-starter-kit/shared/logger"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	"github.com/xmlking/micro-starter-kit/srv/account/handler"
 	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"

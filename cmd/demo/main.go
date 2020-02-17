@@ -4,10 +4,9 @@ import (
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/config"
-	log "github.com/sirupsen/logrus"
-
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	logger "github.com/xmlking/micro-starter-kit/shared/log"
+	"github.com/xmlking/micro-starter-kit/shared/logger"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 )
 

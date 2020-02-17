@@ -12,7 +12,7 @@ import (
 	"github.com/micro/go-micro/v2/config/source/env"
 	"github.com/micro/go-plugins/config/source/pkger/v2"
 	// "github.com/micro/go-plugins/config/source/configmap/v2"
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 )
 
 var (
@@ -90,7 +90,7 @@ func InitConfig(configDir, configFile string) {
 		cli.NewSource(),
 	); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.WithError(err).Errorf(`missing config file at %s, fallback to default config path.
+			log.WithErrorf(err, `missing config file at %s, fallback to default config path.
             you can set config path via: --configDir=path/to/my/configDir --configFile=config.yaml`, configPath)
 		} else {
 			log.Fatal(err.Error())
@@ -108,7 +108,7 @@ func LoadExtraConfig(configDir, configFile string) {
 
 	if err := microConfig.Load(pkger.NewSource(pkger.WithPath(configPath))); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.WithError(err).Errorf(`missing config file at %s, fallback to default config path.
+			log.WithErrorf(err, `missing config file at %s, fallback to default config path.
             you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath)
 		} else {
 			log.Fatal(err.Error())

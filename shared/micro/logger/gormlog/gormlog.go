@@ -14,8 +14,7 @@ import (
 	"time"
 	"unicode"
 
-	// "github.com/micro/go-micro/v2/logger"
-	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
+	"github.com/micro/go-micro/v2/logger"
 )
 
 // Logger is a gorm logger implementation using zap.

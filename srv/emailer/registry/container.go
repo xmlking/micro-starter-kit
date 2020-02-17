@@ -3,7 +3,7 @@ package registry
 import (
 	"github.com/sarulabs/di/v2"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/email"
 	"github.com/xmlking/micro-starter-kit/srv/emailer/service"

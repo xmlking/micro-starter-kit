@@ -6,9 +6,9 @@ import (
 
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/metadata"
-	log "github.com/sirupsen/logrus"
-
+	"github.com/pkg/errors"
 	"github.com/xmlking/micro-starter-kit/shared/constants"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
 	"github.com/xmlking/micro-starter-kit/srv/recorder/repository"
 )
@@ -37,7 +37,7 @@ func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB
 
 	if len(tranId) == 0 {
 		log.Errorf("TransactionSubscriber: missing  TranID")
-		return fmt.Errorf("TransactionSubscriber: missing  TranID")
+		return errors.New("TransactionSubscriber: missing  TranID")
 	}
 	switch from := md["Micro-From-Service"]; from {
 	case s.accountSrvEp:
@@ -51,7 +51,7 @@ func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB
 		return fmt.Errorf("TransactionSubscriber: unknown  from: %s", from)
 	}
 	if err != nil {
-		log.WithError(err).Error("TransactionSubscriber Error: Unable to save to database")
+		log.WithError(err, "TransactionSubscriber Error: Unable to save to database")
 	}
 	return err
 }

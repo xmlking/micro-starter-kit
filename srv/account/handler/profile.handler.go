@@ -10,10 +10,9 @@ import (
 	"github.com/thoas/go-funk"
 
 	ptypes1 "github.com/golang/protobuf/ptypes"
-	// "github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/v2/logger"
 	uuid "github.com/satori/go.uuid"
 	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
-	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	account_entities "github.com/xmlking/micro-starter-kit/srv/account/proto/entities"
 	profilePB "github.com/xmlking/micro-starter-kit/srv/account/proto/profile"
 	"github.com/xmlking/micro-starter-kit/srv/account/repository"

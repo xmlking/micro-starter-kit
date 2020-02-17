@@ -1,12 +1,12 @@
-package zerolog
+package stackdriver
 
 import (
 	"github.com/rs/zerolog"
 )
 
-type stackdriverSeverityHook struct{}
+type StackdriverSeverityHook struct{}
 
-func (h stackdriverSeverityHook) Run(e *zerolog.Event, level zerolog.Level, msg string) {
+func (h StackdriverSeverityHook) Run(e *zerolog.Event, level zerolog.Level, msg string) {
 	e.Str("severity", LevelToSeverity(level))
 }
 

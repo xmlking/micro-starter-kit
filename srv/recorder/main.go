@@ -5,9 +5,9 @@ import (
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/config"
 	"github.com/micro/go-micro/v2/transport"
-	log "github.com/sirupsen/logrus"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	logger "github.com/xmlking/micro-starter-kit/shared/log"
+	"github.com/xmlking/micro-starter-kit/shared/logger"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	"github.com/xmlking/micro-starter-kit/shared/util"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
@@ -65,7 +65,7 @@ func main() {
 	var options []micro.Option
 	if cfg.Features["mtls"].Enabled {
 		if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
-			log.WithError(err).Fatal("unable to load certs")
+			log.WithError(err, "unable to load certs")
 		} else {
 			options = append(options,
 				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go

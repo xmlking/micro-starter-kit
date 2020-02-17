@@ -3,7 +3,7 @@ name: accountsrv
 version: v0.1.0
 log:
   level: info
-  format: json
+  runtime: gcs
 database:
   dialect: postgres
   host: postgres

@@ -3,8 +3,7 @@ package gormlog
 import (
 	"time"
 
-	// "github.com/micro/go-micro/v2/logger"
-	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
+	"github.com/micro/go-micro/v2/logger"
 )
 
 // Record is gormlog log record.
@@ -28,12 +27,12 @@ func DefaultRecordToFields(r Record) map[string]interface{} {
 
 	if r.SQL != "" {
 		return map[string]interface{}{
-			"sql.source":        r.Source,
-			"sql.duration":      r.Duration,
-			"sql.query":         r.SQL,
-			"sql.rows_affected": r.RowsAffected,
+			"source":        r.Source,
+			"duration":      r.Duration,
+			"query":         r.SQL,
+			"rows_affected": r.RowsAffected,
 		}
 	}
 
-	return map[string]interface{}{"sql.source": r.Source}
+	return map[string]interface{}{"source": r.Source}
 }

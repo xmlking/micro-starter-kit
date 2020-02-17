@@ -5,10 +5,9 @@ import (
 	"testing"
 	"time"
 
-	// "github.com/micro/go-micro/v2/logger"
-	"github.com/xmlking/micro-starter-kit/shared/micro/logger"
+	"github.com/micro/go-micro/v2/logger"
 	glog "github.com/xmlking/micro-starter-kit/shared/micro/logger/gormlog"
-	zlog "github.com/xmlking/micro-starter-kit/shared/micro/logger/zerolog"
+    zlog "github.com/micro/go-plugins/logger/zerolog/v2"
 )
 
 func BenchmarkLogger_Print(b *testing.B) {

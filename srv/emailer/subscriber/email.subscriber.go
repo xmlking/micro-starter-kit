@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/micro/go-micro/v2/metadata"
-	log "github.com/sirupsen/logrus"
+	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
 	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
 	"github.com/xmlking/micro-starter-kit/srv/emailer/service"
 )
