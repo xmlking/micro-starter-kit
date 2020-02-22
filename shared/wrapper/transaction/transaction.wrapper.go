@@ -37,6 +37,7 @@ func NewHandlerWrapper(p micro.Event) server.HandlerWrapper {
 	return func(fn server.HandlerFunc) server.HandlerFunc {
 		return func(ctx context.Context, req server.Request, rsp interface{}) (err error) {
 			// add TranID to context if not present
+			// ctx = metadata.Set(ctx, constants.TransID, uuid.New().String())
 			ctx = metadata.MergeContext(ctx, map[string]string{constants.TransID: uuid.New().String()}, false)
 			err = fn(ctx, req, rsp)
 			// we already logged error in Publish. lets ignore error here. # Note: this is blocking call..

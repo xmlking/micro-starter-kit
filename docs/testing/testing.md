@@ -115,7 +115,7 @@ MICRO_PROXY_ADDRESS=localhost:8081 micro call greetersrv GreeterService.Hello  '
 MICRO_PROXY_ADDRESS=localhost:8081 micro call --metadata trans-id=1234 greetersrv GreeterService.Hello  '{"name": "John"}'
 MICRO_PROXY_ADDRESS=localhost:8081 micro call  accountsrv UserService.List '{}'
 MICRO_PROXY_ADDRESS=localhost:8081 micro health greetersrv
-MICRO_PROXY_ADDRESS=localhost:8081 micro publish --metadata trans-id=1234,from=pc emailersrv  '{ "to" : "sumo@demo.com", "from": "demo@sumo.com", "subject": "sub", "body": "mybody" }'
+MICRO_PROXY_ADDRESS=localhost:8081 micro publish  emailersrv  '{ "to" : "sumo@demo.com", "from": "demo@sumo.com", "subject": "sub", "body": "mybody" }'
 ```
 
 ### E2E tests via code
