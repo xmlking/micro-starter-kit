@@ -17,12 +17,13 @@ require (
 	github.com/micro/cli/v2 v2.1.2-0.20200204093551-dfdc8f23b971
 	github.com/micro/go-micro/v2 v2.1.1-0.20200222085642-ceed8942fc07
 	github.com/micro/go-plugins/config/source/pkger/v2 v2.0.1
-	github.com/micro/go-plugins/logger/zerolog/v2 v2.0.0-20200222162910-8bef1da58af1
 	github.com/pkg/errors v0.9.1
-	github.com/rs/zerolog v1.18.0
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.4.0
 	github.com/thoas/go-funk v0.5.0
+	github.com/xmlking/logger v0.1.2
+	github.com/xmlking/logger/gormlog v0.1.2
+	github.com/xmlking/logger/zerolog v0.1.2
 	google.golang.org/genproto v0.0.0-20200207204624-4f3edf09f4f6
 )

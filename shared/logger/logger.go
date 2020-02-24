@@ -1,69 +1,62 @@
 package logger
 
 import (
-	"time"
+    "github.com/xmlking/logger"
+    "github.com/xmlking/logger/log"
+    "github.com/xmlking/logger/zerolog"
 
-	"github.com/micro/go-micro/v2/logger"
-	zlog "github.com/micro/go-plugins/logger/zerolog/v2"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/pkgerrors"
-	"github.com/xmlking/micro-starter-kit/shared/config"
-	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
-	"github.com/xmlking/micro-starter-kit/shared/micro/logger/stackdriver"
+    "github.com/xmlking/micro-starter-kit/shared/config"
 )
 
-func InitLogger(cfg config.LogConfiguration) {
-	mLogger := newLogger(cfg)
-	// Register with micro logger
-	logger.Register(mLogger)
-	// set as default logger
-	log.Logger = mLogger
-	mLogger.Fields(map[string]interface{}{
-		"logLevel": cfg.Level,
-		"runtime":  cfg.Runtime,
-	}).Log(logger.InfoLevel, "Logger set to Zerolog with:")
+func InitLogger(logConf config.LogConfiguration) {
+    // set as default logger
+    logger.DefaultLogger = newLogger(logConf)
+    log.Infow("Logger set to Zerolog with:", map[string]interface{}{
+        "logLevel": logConf.Level,
+        "runtime":  logConf.Runtime,
+    })
 }
 
 // newLogger create new logger from config
 // log level: panic, fatal, error, warn, info, debug, trace
 func newLogger(cfg config.LogConfiguration) (mLogger logger.Logger) {
-	level := cfg.Level
-	runtime := cfg.Runtime
-	logLevel, err := logger.GetLevel(level)
-	if err != nil {
-		panic(err)
-	}
+    level := cfg.Level
+    runtime := cfg.Runtime
+    logLevel, err := logger.ParseLevel(level)
+    if err != nil {
+        panic(err)
+    }
 
-	if runtime == "gcp" {
-		zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
-		zerolog.LevelFieldName = "severity"
-		zerolog.TimestampFieldName = "timestamp"
-		mLogger = zlog.NewLogger(
-			zlog.WithLevel(logLevel),
-			zlog.UseAsDefault(),
-			zlog.WithProductionMode(),
-			zlog.WithHooks([]zerolog.Hook{stackdriver.StackdriverSeverityHook{}}),
-			zlog.WithTimeFormat(time.RFC3339Nano),
-		)
-	} else if config.IsProduction {
-		mLogger = zlog.NewLogger(
-			zlog.WithLevel(logLevel),
-			zlog.UseAsDefault(),
-			zlog.WithProductionMode(),
-		)
-	} else {
-		mLogger = zlog.NewLogger(
-			zlog.WithLevel(logLevel),
-			zlog.UseAsDefault(),
-			zlog.WithDevelopmentMode(),
-		)
-	}
-	return
+    if runtime == "gcp" {
+        mLogger = zerolog.NewLogger(
+            logger.WithLevel(logLevel),
+            zerolog.UseAsDefault(),
+            zerolog.WithGCPMode(),
+        )
+    } else if config.IsProduction {
+        mLogger = zerolog.NewLogger(
+            logger.WithLevel(logLevel),
+            zerolog.UseAsDefault(),
+            zerolog.WithProductionMode(),
+        )
+    } else {
+        mLogger = zerolog.NewLogger(
+            logger.WithLevel(logLevel),
+            zerolog.UseAsDefault(),
+            zerolog.WithDevelopmentMode(),
+        )
+    }
+    return
 }
 
 // NewLogger create new logger from config and return Logger interface
 // log level: panic, fatal, error, warn, info, debug, trace
 // log runtime: dev, prod, gcp, azure, aws
 func NewLogger(cfg config.LogConfiguration) logger.Logger {
-	return newLogger(cfg)
+    return newLogger(cfg)
+}
+func NewLoggerWithFields(cfg config.LogConfiguration, fields map[string]interface{}) logger.Logger {
+    logr := newLogger(cfg)
+    logr.Init(logger.WithFields(fields))
+    return logr
 }

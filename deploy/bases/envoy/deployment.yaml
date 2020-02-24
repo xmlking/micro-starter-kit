@@ -6,29 +6,29 @@ spec:
   template:
     spec:
       containers:
-      - name: envoy
-        image: envoyproxy/envoy:latest
-        command:
+        - name: envoy
+          image: envoyproxy/envoy:latest
+          command:
             - "envoy"
-        args:
+          args:
             - "-c"
             - "/etc/envoy/envoy.yaml"
-        volumeMounts:
-          - name: envoy-config
-            mountPath: /etc/envoy
-        readinessProbe:
-              httpGet:
-                  path: /server_info
-                  port: 9901
-        livenessProbe:
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+          readinessProbe:
             httpGet:
-                path: /server_info
-                port: 9901
-        ports:
-        - name: envoy-admin
-          containerPort: 9901
-        - name: http
-          containerPort: 9090
-        - name: https
-          containerPort: 9443
+              path: /server_info
+              port: 9901
+          livenessProbe:
+            httpGet:
+              path: /server_info
+              port: 9901
+          ports:
+            - name: envoy-admin
+              containerPort: 9901
+            - name: http
+              containerPort: 9090
+            - name: https
+              containerPort: 9443
 

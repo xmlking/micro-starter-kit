@@ -2,7 +2,9 @@
   "host": "localhost:8080",
   "insecure": true,
   "proto": "./srv/account/proto/account/account.proto",
-  "import-paths": ["/Users/schintha/go/src"],
+  "import-paths": [
+    "/Users/schintha/go/src"
+  ],
   "call": "accountsrv.UserService.Create",
   "data": {
     "username": "sumo{{.RequestNumber}}",

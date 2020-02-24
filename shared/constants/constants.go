@@ -1,7 +1,7 @@
 package constants
 
 const (
-	ACCOUNTSRV = "accountsrv"
-	GREETERSRV = "greetersrv"
-	EMAILERSRV = "emailersrv"
+    ACCOUNTSRV = "accountsrv"
+    GREETERSRV = "greetersrv"
+    EMAILERSRV = "emailersrv"
 )

@@ -10,7 +10,7 @@ spec:
   # We want the servers to become available even if they're not ready
   publishNotReadyAddresses: true
   ports:
-  - name: grpc-web
-    port: 9090
-    protocol: TCP
-    targetPort: envoy
+    - name: grpc-web
+      port: 9090
+      protocol: TCP
+      targetPort: envoy

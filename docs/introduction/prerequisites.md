@@ -9,6 +9,8 @@ You should have:
 ### third-party tools
 
 ```bash
+# github CLI
+brew install hub
 # for mac, use brew to install protobuf
 brew install protobuf
 # VS Code plugin `vscode-proto3` need clang-format
