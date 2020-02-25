@@ -11,11 +11,11 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/golang/protobuf v1.3.3
 	github.com/google/uuid v1.1.1
-	github.com/infobloxopen/atlas-app-toolkit v0.19.2
+	github.com/infobloxopen/atlas-app-toolkit v0.20.0
 	github.com/infobloxopen/protoc-gen-gorm v0.18.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/micro/cli/v2 v2.1.2
-	github.com/micro/go-micro/v2 v2.1.1
+	github.com/micro/go-micro/v2 v2.1.2
 	github.com/micro/go-plugins/config/source/pkger/v2 v2.0.2
 	github.com/pkg/errors v0.9.1
 	github.com/sarulabs/di/v2 v2.4.0
