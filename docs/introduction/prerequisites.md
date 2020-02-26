@@ -87,7 +87,7 @@ make install
 
 ```bash
 # getting official micro cli
-GO111MODULE=on go get github.com/micro/micro/v2@v2.0.0
+GO111MODULE=on go get github.com/micro/micro/v2
 ## GO111MODULE=on go get github.com/micro/micro
 # lets use custom made micro with gRPC enabled by default...
 # GO111MODULE=on go get github.com/xmlking/micro@master
