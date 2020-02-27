@@ -42,7 +42,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 
 .PHONY: all tools, check_dirty, clean, update_deps
 .PHONY: proto proto-% proto_lint proto_format
-.PHONY: lint lint-%
+.PHONY: lint lint-%, gomod_lint
 .PHONY: format format-%
 .PHONY: pkger pkger-%
 .PHONY: build build-%
@@ -60,6 +60,7 @@ tools:
 	# go install github.com/markbates/pkger/cmd/pkger
 	# GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint
 	# GO111MODULE=on go get github.com/bufbuild/buf/cmd/buf
+	# GO111MODULE=on go get github.com/rvflash/goup
 
 check_dirty:
 ifdef GIT_DIRTY
@@ -107,18 +108,22 @@ proto proto-%:
 	@rsync -a github.com/xmlking/micro-starter-kit/srv/account/proto/ srv/account/proto && rm -Rf github.com
 
 proto_lint:
+	@echo "Linting all protos"; \
 	@${GOPATH}/bin/buf check lint
 	@${GOPATH}/bin/buf check breaking --against-input '.git#branch=master'
 
 # I prefer VS Code's proto plugin to format my code then prototool
 proto_format: proto_lint
+	@echo "Formating all protos"; \
 	@${GOPATH}/bin/prototool format -d .;
+
+gomod_lint:
+	@goup -v -m ./...
 
 lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all go"; \
 		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
-		echo "Linting all protos"; \
 	else \
 		echo "Linting go in ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \

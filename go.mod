@@ -1,6 +1,6 @@
 module github.com/xmlking/micro-starter-kit
 
-go 1.13
+go 1.14
 
 // replace github.com/micro/go-micro/v2 => /Users/schintha/Developer/Work/go/3rd-party/go-micro
 // FIXME : https://github.com/etcd-io/etcd/issues/11563
@@ -22,8 +22,8 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.5.1
 	github.com/thoas/go-funk v0.5.0
-	github.com/xmlking/logger v0.1.2
-	github.com/xmlking/logger/gormlog v0.1.2
-	github.com/xmlking/logger/zerolog v0.1.2
+	github.com/xmlking/logger v0.1.3
+	github.com/xmlking/logger/gormlog v0.1.3
+	github.com/xmlking/logger/zerolog v0.1.3
 	google.golang.org/genproto v0.0.0-20200225123651-fc8f55426688
 )

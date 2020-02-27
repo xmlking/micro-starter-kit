@@ -64,6 +64,12 @@ GO111MODULE=off go get github.com/golang/protobuf/{proto,protoc-gen-go}
 GO111MODULE=on go get github.com/micro/protoc-gen-micro/v2@v2.0.0
 # GO111MODULE=off go get -u github.com/envoyproxy/protoc-gen-validate
 # GO111MODULE=off go get -u github.com/infobloxopen/protoc-gen-gorm
+# getting official micro cli
+GO111MODULE=on go get github.com/micro/micro/v2
+# goup checks if there are any updates for imports in your module.
+# the main purpose is using it as a linter in continuous integration or in development process.
+# Usage: goup -v -m ./...
+GO111MODULE=on go get github.com/rvflash/goup
 ```
 
 > Installing PGV can currently only be done from source:
@@ -82,18 +88,3 @@ cd ~/go/src/github.com/infobloxopen/protoc-gen-gorm
 make install
 ```
 
-> Installing `micro-cli`<br/>
-> instead of using default micro-cli, pull custom build `micro-cli` with `gRPC` and `CORS` enabled
-
-```bash
-# getting official micro cli
-GO111MODULE=on go get github.com/micro/micro/v2
-## GO111MODULE=on go get github.com/micro/micro
-# lets use custom made micro with gRPC enabled by default...
-# GO111MODULE=on go get github.com/xmlking/micro@master
-# Temp workaround...
-GO111MODULE=off go get -d github.com/xmlking/micro
-cd ~/go/src/github.com/xmlking/micro
-git pull --all
-go install ./...
-```

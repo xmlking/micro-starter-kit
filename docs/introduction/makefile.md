@@ -84,6 +84,9 @@ make lint
 # lint account srv
 make lint-account
 make lint-account-srv
+# goup checks if there are any updates for imports in your module.
+# the main purpose is using it as a linter in continuous integration or in development process.
+make gomod_lint
 ```
 
 ### Packager
