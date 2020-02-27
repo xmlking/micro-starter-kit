@@ -2,18 +2,18 @@
 package e2e
 
 import (
-    "context"
-    "testing"
+	"context"
+	"testing"
 
-    "github.com/micro/go-micro/v2/client"
-    "github.com/stretchr/testify/assert"
+	"github.com/micro/go-micro/v2/client"
+	"github.com/stretchr/testify/assert"
 
-    // "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
-    greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
+	// "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
+	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
 )
 
 var (
-    greeter greeterPB.GreeterService
+	greeter greeterPB.GreeterService
 )
 
 /**
@@ -25,18 +25,18 @@ var (
 * You can also run this test againest your local running service with mDNS. i.e., `make run-greeter`
 **/
 func init() {
-    greeter = greeterPB.NewGreeterService("greetersrv", client.NewClient())
+	greeter = greeterPB.NewGreeterService("greetersrv", client.NewClient())
 }
 
 func TestGreeter_Hello_E2E(t *testing.T) {
-    if testing.Short() {
-        t.Skip("skipping e2e test")
-    }
+	if testing.Short() {
+		t.Skip("skipping e2e test")
+	}
 
-    rsp, err := greeter.Hello(context.TODO(), &greeterPB.HelloRequest{Name: "Sumo"})
-    if err != nil {
-        t.Error(err)
-    }
+	rsp, err := greeter.Hello(context.TODO(), &greeterPB.HelloRequest{Name: "Sumo"})
+	if err != nil {
+		t.Error(err)
+	}
 
-    assert.Equal(t, rsp.Msg, "Hello Sumo")
+	assert.Equal(t, rsp.Msg, "Hello Sumo")
 }
