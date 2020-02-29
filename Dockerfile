@@ -40,6 +40,9 @@ FROM scratch AS final
 # copy 1 MiB busybox executable
 COPY --from=busybox:1.31.1 /bin/busybox /bin/busybox
 
+# copy 1 MiB busybox executable
+COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
+
 # Import the user and group files from the first stage.
 COPY --from=builder /user/group /user/passwd /etc/
 
@@ -82,4 +85,4 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.docker.cmd=docker="run -it -p 8080:8080  ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}"
 
 # Run the compiled binary.
-ENTRYPOINT ["/app"]
+ENTRYPOINT ["/usr/bin/dumb-init", "/app"]

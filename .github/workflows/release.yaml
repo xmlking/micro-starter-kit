@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 1
       - name: Install kustomize
         run: |
-          curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.3.0/kustomize_v3.3.0_linux_amd64.tar.gz | tar zxv
+          curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.5.4/kustomize_v3.5.4_linux_amd64.tar.gz | tar zxv
           chmod u+x kustomize
           sudo mv kustomize /usr/local/bin/
       - name: Build kustomize
