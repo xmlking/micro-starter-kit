@@ -40,7 +40,7 @@ FROM scratch AS final
 # copy 1 MiB busybox executable
 COPY --from=busybox:1.31.1 /bin/busybox /bin/busybox
 
-# copy 1 MiB busybox executable
+# copy dumb-ini from micro
 COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
 
 # Import the user and group files from the first stage.
