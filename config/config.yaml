@@ -10,13 +10,11 @@ database:
   port: 9999
   Username: sumo
   Password: demo
-  # FIXME: https://github.com/jinzhu/gorm/issues/2875
-  # database: "file:foobar?mode=memory&cache=shared"
-  database: "file:./build/gorm.db"
+  database: "file:foobar?mode=memory&cache=shared"
   maxOpenConns: 1
   maxIdleConns: 1
   # connMaxLifetime: 1hr
-  connMaxLifetime: 60000000
+  connMaxLifetime: 3600000000000
   logging: true
 email:
   username: yourGmailUsername
@@ -53,7 +51,7 @@ features:
     certfile: certs/micro.crt
     keyfile: certs/micro.key
     cafile: certs/ca.crt
-    servername: "*"
+    servername: '*'
     enabled: false
   validator:
     enabled: true

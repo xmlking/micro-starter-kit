@@ -3,7 +3,7 @@ name: accountsrv
 version: v0.1.0
 log:
   level: info
-  format: json
+  runtime: prod
 database:
   dialect: sqlite3
   host: 0.0.0.0
@@ -13,7 +13,8 @@ database:
   database: "file:foobar?mode=memory&cache=shared"
   maxOpenConns: 1
   maxIdleConns: 1
-  connMaxLifetime: 1hr
+  # connMaxLifetime: 1hr
+  connMaxLifetime: 3600000000000
   logging: true
 
 services:

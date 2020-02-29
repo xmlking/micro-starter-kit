@@ -3,7 +3,7 @@ name: recordersrv
 version: v0.1.0
 log:
   level: info
-  format: json
+  runtime: prod
 
 services:
   accountsrv:

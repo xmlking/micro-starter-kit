@@ -57,6 +57,6 @@ func NewLogger(cfg config.LogConfiguration) logger.Logger {
 }
 func NewLoggerWithFields(cfg config.LogConfiguration, fields map[string]interface{}) logger.Logger {
 	logr := newLogger(cfg)
-	logr.Init(logger.WithFields(fields))
+	_ = logr.Init(logger.WithFields(fields))
 	return logr
 }

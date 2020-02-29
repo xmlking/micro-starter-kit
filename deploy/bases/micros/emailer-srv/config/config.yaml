@@ -3,7 +3,7 @@ name: emailersrv
 version: v0.1.0
 log:
   level: info
-  format: json
+  runtime: prod
 email:
   username: yourGmailUsername
   password: yourGmailAppPassword
