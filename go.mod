@@ -21,7 +21,7 @@ require (
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.5.1
-	github.com/thoas/go-funk v0.5.0
+	github.com/thoas/go-funk v0.6.0
 	github.com/xmlking/logger v0.1.3
 	github.com/xmlking/logger/gormlog v0.1.3
 	github.com/xmlking/logger/zerolog v0.1.3
