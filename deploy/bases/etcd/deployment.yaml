@@ -8,10 +8,15 @@ metadata:
   #   etcd.database.coreos.com/scope: clusterwide
 spec:
   size: 3
-  version: "3.3.18"
+  version: "v3.3.18"
   repository: "quay.io/coreos/etcd"
   pod:
     labels:
-      application: micro
+      app.kubernetes.io/name: etcd-cluster
     busyboxImage: "busybox:1.28.0-glibc"
     tmpfs: true
+    HostNetwork: true
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      fsGroup: 1000

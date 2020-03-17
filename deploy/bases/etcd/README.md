@@ -4,6 +4,10 @@ Default etcd operator behavior is to only manage etcd clusters created in the sa
 
 ## Installing ETCD Operator
 
+### Manual
+
+Read [etcd-operator manual instal doc](../etcd-operator/manual/README.md) **[Preferred]**
+
 ### Helm
 
 ```bash

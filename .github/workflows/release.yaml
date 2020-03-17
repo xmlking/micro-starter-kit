@@ -61,6 +61,7 @@ jobs:
       - name: Build docker images
         run: make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=$GITHUB_REPOSITORY
       - name: Push docker images
+        if: github.ref == 'refs/heads/master'
         run: |
           # docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_DOCKER_PASSWORD }}
           docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_TOKEN }}
