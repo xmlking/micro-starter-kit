@@ -1,12 +1,19 @@
-# etcd
+# etcd Operator
 
 Default etcd operator behavior is to only manage etcd clusters created in the same namespace.
 
-## Installing ETCD Operator
+## Installing etcd operator
 
 ### Manual
 
-Read [etcd-operator manual instal doc](../etcd-operator/manual/README.md) **[Preferred]**
+**Don't use Helm, recommended this manual deployment for etcd-operator**
+
+```bash
+# Deploy etcd operator
+kubectl apply -f deploy/bases/etcd-operator/manual/deployment.yaml
+# Undeploy etcd operator
+kubectl delete -f deploy/bases/etcd-operator/manual/deployment.yaml
+```
 
 ### Helm
 
@@ -17,21 +24,15 @@ helm repo update
 ```
 
 ```bash
-
-# install ETCD operator
+# install etcd operator
 helm install sumo --set deployments.backupOperator=false  --set deployments.restoreOperator=false stable/etcd-operator
 
  # Check the etcd-operator logs
 export POD=$(kubectl get pods -l app=sumo-etcd-operator-etcd-operator --namespace default --output name)
-kubectl logs $POD --namespace=default
-
-# deploy ETCD cluster
-kubectl create -f deploy/bases/etcd/deployment.yaml
-# Optionally create load balancer  service (to access from laptop and test etcd is responding)
-kubectl create -f deploy/bases/etcd/service.json
+kubectl logs -f $POD --namespace=default
 ```
 
-## Uninstalling ETCD Operator
+## Uninstalling etcd operator
 
 ```bash
 # uninstall ETCD operator
@@ -45,20 +46,7 @@ kubectl delete -f deploy/bases/etcd/deployment.yaml
 
 ```bash
 # update ETCD operator
-helm upgrade sumo stable/etcd-operator
-
-# Resize an etcd cluster
- kubectl apply -f deploy/bases/etcd/deployment.yaml
-```
-
-### ETCD
-
-Install etcd in your local environment and query remote etcd cluster
-
-```bash
-kubectl port-forward service/etcd-cluster-client -n default 2379
-ETCDCTL_API=3 etcdctl version
-ETCDCTL_API=3 etcdctl -w table member list
+helm upgrade sumo stable/etcd-operato
 ```
 
 ## Reference

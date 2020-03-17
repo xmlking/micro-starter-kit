@@ -59,11 +59,13 @@ replicas:
     count: 1
 
 images:
-  - name: etcd
-    newTag: 3.3.18
+  - name: redis
+    newTag: 5.0.7-alpine
+  - name: quay.io/coreos/etcd
+    newTag: v3.3.18
   - name: quay.io/coreos/etcd-operator
-    newName: docker.pkg.github.com/cbws/etcd-operator/operator
-    newTag: v0.10.0
+    newName: xmlking/etcd-operator
+    newTag: v0.10.1
   - name: postgres
     newTag: 11.5-alpine
   - name: micro/micro
