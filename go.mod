@@ -25,5 +25,5 @@ require (
 	github.com/xmlking/logger v0.1.3
 	github.com/xmlking/logger/gormlog v0.1.3
 	github.com/xmlking/logger/zerolog v0.1.3
-	google.golang.org/genproto v0.0.0-20200313141609-30c55424f95d
+	google.golang.org/genproto 08878b785e9c
 )
