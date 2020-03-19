@@ -62,7 +62,7 @@ images:
   - name: redis
     newTag: 5.0.7-alpine
   - name: quay.io/coreos/etcd
-    newTag: v3.3.18
+    newTag: v3.4.5
   - name: quay.io/coreos/etcd-operator
     newName: xmlking/etcd-operator
     newTag: v0.10.1
