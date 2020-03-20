@@ -9,7 +9,7 @@
 ```bash
 # by default this will download all modules in go.mod
 go mod download
-# with golang 1.13, some modules are not compatible yet. please use this as temp solution.
+# with golang 1.14, some modules are not compatible yet. please use this as temp solution.
 go env -w GOPROXY=direct
 go env -w GOSUMDB=off
 go mod download
@@ -25,7 +25,7 @@ go mod download
   ```go
   module github.com/starkandwayne/my-go-project
 
-  go 1.13
+  go 1.14
 
   require (
     github.com/fatih/color v1.7.0 // indirect
