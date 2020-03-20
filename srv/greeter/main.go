@@ -70,7 +70,7 @@ func main() {
 	var options []micro.Option
 	if cfg.Features["mtls"].Enabled {
 		if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
-			log.Errorw("unable to load certs", err)
+			log.WithError(err).Error("unable to load certs")
 		} else {
 			options = append(options,
 				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go

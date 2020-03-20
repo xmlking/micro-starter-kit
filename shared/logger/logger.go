@@ -11,10 +11,10 @@ import (
 func InitLogger(logConf config.LogConfiguration) {
 	// set as default logger
 	logger.DefaultLogger = newLogger(logConf)
-	log.Infow("Logger set to Zerolog with:", map[string]interface{}{
+	log.WithFields( map[string]interface{}{
 		"logLevel": logConf.Level,
 		"runtime":  logConf.Runtime,
-	})
+	}).Info("Logger set to Zerolog with:")
 }
 
 // newLogger create new logger from config

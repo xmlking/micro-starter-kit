@@ -82,7 +82,7 @@ func main() {
 			// 	filepath.Join(configDir, config.Get("features", "mtls", "cafile").String("")),
 			// 	filepath.Join(configDir, config.Get("features", "mtls", "servername").String("")),
 			// ); err != nil {
-			log.Errorw("unable to load certs", err)
+			log.WithError(err).Error("unable to load certs")
 		} else {
 			options = append(options,
 				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go

@@ -90,8 +90,8 @@ func InitConfig(configDir, configFile string) {
 		cli.NewSource(),
 	); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Errorw(fmt.Sprintf(`missing config file at %s, fallback to default config path.
-            you can set config path via: --configDir=path/to/my/configDir --configFile=config.yaml`, configPath), err)
+			log.WithError(err).Error(fmt.Sprintf(`missing config file at %s, fallback to default config path.
+            you can set config path via: --configDir=path/to/my/configDir --configFile=config.yaml`, configPath))
 		} else {
 			log.Fatal(err.Error())
 		}
@@ -108,8 +108,8 @@ func LoadExtraConfig(configDir, configFile string) {
 
 	if err := microConfig.Load(pkger.NewSource(pkger.WithPath(configPath))); err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.Errorw(fmt.Sprintf(`missing config file at %s, fallback to default config path.
-            you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath), err)
+			log.WithError(err).Error(fmt.Sprintf(`missing config file at %s, fallback to default config path.
+            you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath))
 		} else {
 			log.Fatal(err.Error())
 		}

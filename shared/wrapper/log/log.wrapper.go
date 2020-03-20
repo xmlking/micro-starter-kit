@@ -14,12 +14,12 @@ func NewHandlerWrapper() server.HandlerWrapper {
 	return func(fn server.HandlerFunc) server.HandlerFunc {
 		return func(ctx context.Context, req server.Request, rsp interface{}) (err error) {
 			md, _ := metadata.FromContext(ctx)
-			log.Debugw("Server-Side Handler", map[string]interface{}{
-				"category": "LogWrapper",
-				"service":  req.Service(),
-				"method":   req.Method(),
-				"ctx":      md,
-			})
+			log.WithFields(map[string]interface{}{
+                "category": "LogWrapper",
+                "service":  req.Service(),
+                "method":   req.Method(),
+                "ctx":      md,
+            }).Debug("Server-Side Handler")
 			err = fn(ctx, req, rsp)
 			//securityLog(ctx, req, rsp)
 			return
@@ -32,13 +32,13 @@ func NewSubscriberWrapper() server.SubscriberWrapper {
 	return func(fn server.SubscriberFunc) server.SubscriberFunc {
 		return func(ctx context.Context, p server.Message) (err error) {
 			md, _ := metadata.FromContext(ctx)
-			log.Debugw("Server-Side Subscriber", map[string]interface{}{
-				"category":    "LogWrapper",
-				"Topic":       p.Topic(),
-				"ContentType": p.ContentType(),
-				"Payload":     p.Payload(),
-				"ctx":         md,
-			})
+			log.WithFields(map[string]interface{}{
+                "category":    "LogWrapper",
+                "Topic":       p.Topic(),
+                "ContentType": p.ContentType(),
+                "Payload":     p.Payload(),
+                "ctx":         md,
+            }).Debug("Server-Side Subscriber")
 			err = fn(ctx, p)
 			return
 		}
@@ -51,25 +51,25 @@ type clientWrapper struct {
 
 func (l *clientWrapper) Call(ctx context.Context, req client.Request, rsp interface{}, opts ...client.CallOption) (err error) {
 	md, _ := metadata.FromContext(ctx)
-	log.Debugw("Client-Side Call", map[string]interface{}{
-		"category": "LogWrapper",
-		"service":  req.Service(),
-		"method":   req.Method(),
-		"ctx":      md,
-	})
+	log.WithFields(map[string]interface{}{
+        "category": "LogWrapper",
+        "service":  req.Service(),
+        "method":   req.Method(),
+        "ctx":      md,
+    }).Debug("Client-Side Call")
 	err = l.Client.Call(ctx, req, rsp, opts...)
 	return
 }
 
 func (l *clientWrapper) Publish(ctx context.Context, p client.Message, opts ...client.PublishOption) (err error) {
 	md, _ := metadata.FromContext(ctx)
-	log.Debugw("Client-Side Publish", map[string]interface{}{
-		"category":    "LogWrapper",
-		"Topic":       p.Topic(),
-		"ContentType": p.ContentType(),
-		"Payload":     p.Payload(),
-		"ctx":         md,
-	})
+	log.WithFields(map[string]interface{}{
+        "category":    "LogWrapper",
+        "Topic":       p.Topic(),
+        "ContentType": p.ContentType(),
+        "Payload":     p.Payload(),
+        "ctx":         md,
+    }).Debug("Client-Side Publish")
 	err = l.Client.Publish(ctx, p, opts...)
 	return
 }

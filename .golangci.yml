@@ -17,6 +17,11 @@ linters-settings:
 linters:
   enable:
     - gofmt
+    - gosec
+    - prealloc
+    - interfacer
+    - gocyclo
+    - maligned
 
 issues:
   # List of regexps of issue texts to exclude, empty list by default.

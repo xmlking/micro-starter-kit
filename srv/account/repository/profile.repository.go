@@ -72,7 +72,7 @@ func (repo *profileRepository) List(limit, page uint32, sort string, model *acco
 	}
 
 	if err = db.Order(sort).Limit(limit).Offset(offset).Find(&profiles).Count(&total).Error; err != nil {
-		log.Errorw("Error in ProfileRepository.List", err)
+		log.WithError(err).Error("Error in ProfileRepository.List")
 		return
 	}
 	return
@@ -85,7 +85,7 @@ func (repo *profileRepository) Get(id string) (profile *account_entities.Profile
 	profile = &account_entities.ProfileORM{Id: go_uuid1.FromStringOrNil(id)}
 
 	if err = repo.db.First(profile).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.Errorw("Error in ProfileRepository.Get", err)
+		log.WithError(err).Error("Error in ProfileRepository.Get")
 	}
 	println(profile.Id.String())
 	println(profile.UserId.String())
@@ -100,7 +100,7 @@ func (repo *profileRepository) GetByUserID(userId string) (profile *account_enti
 	profile = &account_entities.ProfileORM{UserId: &user_uuid}
 	if err = repo.db.Where(&profile).First(&profile).Error; err != nil && err != gorm.ErrRecordNotFound {
 		// if err = repo.db.First(profile).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.Errorw("Error in ProfileRepository.GetByUserID", err)
+		log.WithError(err).Error("Error in ProfileRepository.GetByUserID")
 	}
 	println(profile.Id.String())
 	println(profile.UserId.String())
@@ -114,7 +114,7 @@ func (repo *profileRepository) Create(model *account_entities.ProfileORM) error 
 	}
 
 	if err := repo.db.Create(model).Error; err != nil {
-		log.Errorw("Error in ProfileRepository.Create", err)
+		log.WithError(err).Error("Error in ProfileRepository.Create")
 		return err
 	}
 	return nil

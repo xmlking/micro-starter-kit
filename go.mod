@@ -12,18 +12,18 @@ require (
 	github.com/golang/protobuf v1.3.5
 	github.com/google/uuid v1.1.1
 	github.com/infobloxopen/atlas-app-toolkit v0.20.0
-	github.com/infobloxopen/protoc-gen-gorm v0.19.0
+	github.com/infobloxopen/protoc-gen-gorm v0.20.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/micro/cli/v2 v2.1.2
-	github.com/micro/go-micro/v2 v2.2.0
-	github.com/micro/go-plugins/config/source/pkger/v2 v2.0.3
+	github.com/micro/go-micro/v2 v2.3.0
+	github.com/micro/go-plugins/config/source/pkger/v2 v2.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.5.1
 	github.com/thoas/go-funk v0.6.0
-	github.com/xmlking/logger v0.1.3
-	github.com/xmlking/logger/gormlog v0.1.3
-	github.com/xmlking/logger/zerolog v0.1.3
-	google.golang.org/genproto v0.0.0-20200313141609-30c55424f95d
+	github.com/xmlking/logger v0.1.4
+	github.com/xmlking/logger/gormlog v0.1.4
+	github.com/xmlking/logger/zerolog v0.1.4
+	google.golang.org/genproto v0.0.0-20200319113533-08878b785e9c
 )

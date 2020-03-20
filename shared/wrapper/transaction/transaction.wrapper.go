@@ -18,17 +18,17 @@ import (
 func publish(ctx context.Context, publisher micro.Event, req, rsp proto.Message) (err error) {
 	reqB, err := proto.Marshal(req)
 	if err != nil {
-		log.Errorw("marshaling error for req", err)
+		log.WithError(err).Error("marshaling error for req")
 		return
 	}
 	resB, err := proto.Marshal(rsp)
 	if err != nil {
-		log.Errorw("marshaling error for rsp", err)
+		log.WithError(err).Error("marshaling error for rsp")
 		return
 	}
 	event := &transactionPB.TransactionEvent{Req: reqB, Rsp: resB}
 	if err = publisher.Publish(ctx, event); err != nil {
-		log.Errorw("Publisher: Failed publishing transation", err)
+		log.WithError(err).Error("Publisher: Failed publishing transation")
 	}
 	return
 }

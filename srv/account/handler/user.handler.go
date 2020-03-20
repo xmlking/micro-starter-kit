@@ -115,14 +115,14 @@ func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp
 
 	// send email (TODO: async `go h.Event.Publish(...)`)
 	if err := h.Event.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue()}); err != nil {
-		log.Errorw("Received Event.Publish request error", err)
+		log.WithError(err).Error("Received Event.Publish request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	}
 
 	// call greeter
 	// if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
 	if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.HelloRequest{Name: req.GetFirstName().GetValue()}); err != nil {
-		log.Errorw("Received greeterService.Hello request error", err)
+		log.WithError(err).Error("Received greeterService.Hello request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	} else {
 		log.Infof("Got greeterService responce %s", res.Msg)

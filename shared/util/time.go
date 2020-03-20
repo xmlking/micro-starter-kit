@@ -12,7 +12,7 @@ import (
 func TimeToTimestamp(t time.Time) *timestamp.Timestamp {
 	ts, err := ptypes.TimestampProto(t)
 	if nil != err {
-		log.Errorw("Time to Timestamp error", err)
+		log.WithError(err).Error("Time to Timestamp error")
 	}
 	return ts
 }
@@ -24,7 +24,7 @@ func TimestampToTime(ts *timestamp.Timestamp) time.Time {
 	}
 	t, err := ptypes.Timestamp(ts)
 	if nil != err {
-		log.Errorw("Timestamp to Times error", err)
+		log.WithError(err).Error("Timestamp to Times error")
 	}
 	return t
 }

@@ -23,7 +23,7 @@ func NewTransactionHandler(repo repository.TransactionRepository) transactionPB.
 
 func (h *recorderHandler) Read(ctx context.Context, req *transactionPB.ReadRequest, rsp *transactionPB.TransactionEvent) error {
 	if rsp, err := h.repo.Read(ctx, req.GetKey()); err != nil {
-		log.Errorw("Received transactionService.Read request error", err)
+		log.WithError(err).Error("Received transactionService.Read request error")
 		return myErrors.AppError(myErrors.DBE, err)
 	} else {
 		log.Infof("Got transactionService responce %s", rsp.GetReq())
@@ -32,7 +32,7 @@ func (h *recorderHandler) Read(ctx context.Context, req *transactionPB.ReadReque
 }
 func (h *recorderHandler) Write(ctx context.Context, req *transactionPB.WriteRequest, rsp *empty.Empty) (err error) {
 	if err := h.repo.Write(ctx, req.GetKey(), req.GetEvent()); err != nil {
-		log.Errorw("Received TransactionHandler.Write request error", err)
+		log.WithError(err).Error("Received TransactionHandler.Write request error")
 		return myErrors.AppError(myErrors.DBE, err)
 	}
 	return nil

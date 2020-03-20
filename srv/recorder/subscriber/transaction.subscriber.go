@@ -52,7 +52,7 @@ func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB
 		return fmt.Errorf("TransactionSubscriber: unknown  from: %s", from)
 	}
 	if err != nil {
-		log.Errorw("TransactionSubscriber Error: Unable to save to database", err)
+		log.WithError(err).Error("TransactionSubscriber Error: Unable to save to database")
 	}
 	return err
 }

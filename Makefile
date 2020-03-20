@@ -127,7 +127,6 @@ lint lint-%:
 	else \
 		echo "Linting go in ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
-		echo "Linting protos in ${TARGET}-${TYPE}..."; \
 	fi
 
 # @clang-format -i $(shell find . -type f -name '*.proto')
