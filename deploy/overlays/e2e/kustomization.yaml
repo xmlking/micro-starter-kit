@@ -60,7 +60,7 @@ replicas:
 
 images:
   - name: redis
-    newTag: 5.0.7-alpine
+    newTag: 5.0.8
   - name: quay.io/coreos/etcd
     newTag: v3.3.18
   - name: quay.io/coreos/etcd-operator
