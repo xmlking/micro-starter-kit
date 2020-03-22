@@ -22,7 +22,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.5.1
 	github.com/thoas/go-funk v0.6.0
-	github.com/xmlking/logger v0.1.4
+	github.com/xmlking/logger v0.1.5
 	github.com/xmlking/logger/gormlog v0.1.4
 	github.com/xmlking/logger/zerolog v0.1.4
 	google.golang.org/genproto v0.0.0-20200319113533-08878b785e9c
