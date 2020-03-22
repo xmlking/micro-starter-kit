@@ -14,7 +14,7 @@ require (
 	github.com/infobloxopen/atlas-app-toolkit v0.20.0
 	github.com/infobloxopen/protoc-gen-gorm v0.20.0
 	github.com/jinzhu/gorm v1.9.12
-	github.com/markbates/pkger v0.14.0
+	github.com/markbates/pkger v0.15.0
 	github.com/micro/cli/v2 v2.1.2
 	github.com/micro/go-micro/v2 v2.3.0
 	github.com/micro/go-plugins/config/source/pkger/v2 v2.3.0
