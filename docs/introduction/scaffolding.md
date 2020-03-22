@@ -6,14 +6,15 @@
 mkdir -p ~/Developer/Work/go/micro-starter-kit
 cd ~/Developer/Work/go/micro-starter-kit
 go mod init github.com/xmlking/micro-starter-kit
-mkdir srv api fnc
+mkdir service api fnc
 
 # scaffold modules
-micro new --fqdn="accountsrv" --type="service" --alias="account" srv/account
-micro new --fqdn="greetersrv" --type="service" --alias="greeter" srv/greeter
-micro new --fqdn="emailersrv" --type="service" --alias="emailer" srv/emailer
-# micro new --fqdn="emailersrv" --type="service"  \
-# --alias="emailer"  --plugin=client/selector=static:broker=nats srv/emailer
+micro new --fqdn="mkit.service.account" --type="service" --alias="account" service/account
+micro new --fqdn="mkit.service.greeter" --type="service" --alias="greeter" service/greeter
+micro new --fqdn="mkit.service.emailer" --type="service" --alias="emailer" service/emailer
+# micro new --fqdn="mkit.service.emailer" --type="service"  \
+# --alias="emailer"  --plugin=client/selector=static:broker=nats service/emailer
+micro new --fqdn="mkit.service.recorder" --type="service" --alias="recorder" service/recorder
 ```
 
 ## Setup project

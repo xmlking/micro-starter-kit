@@ -15,7 +15,7 @@ configMapGenerator:
     files: ["envoy.yaml"]
 
 vars:
-  - name: ENVOY_SRV_ENDPOINT
+  - name: ENVOY_SERVICE_ENDPOINT
     objref:
       kind: EtcdCluster
       name: etcd-cluster

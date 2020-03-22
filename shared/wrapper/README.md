@@ -4,7 +4,7 @@
 
 ```go
 service := micro.NewService(
-  micro.Name("com.example.srv.foo"),
+  micro.Name("com.example.service.foo"),
   micro.Version("v0.1.0"),
   micro.WrapSubscriber(wrapper.NewSubscriberWrapper()),
 )

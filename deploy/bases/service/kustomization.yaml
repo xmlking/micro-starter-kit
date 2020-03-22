@@ -1,0 +1,40 @@
+namespace: default
+commonLabels:
+  app.kubernetes.io/part-of: micro-starter-kit
+  app.kubernetes.io/managed-by: kustomize
+commonAnnotations:
+  org: acmeCorporation
+
+bases:
+  - gateway
+  - proxy
+  - account
+  - emailer
+  - greeter
+  - recorder
+
+configurations:
+  - kconfig.yaml
+
+configMapGenerator:
+  # - name: env-vars
+  - name: env-vars-common
+    # behavior: merge
+    literals:
+      - MICRO_SERVER_ADDRESS=0.0.0.0:8080
+      - MICRO_BROKER_ADDRESS=0.0.0.0:10001
+      - APP_ENV=development
+      - CONFIG_DIR=/config
+      - CONFIG_FILE=config.yaml
+      - MICRO_LOG_LEVEL=debug
+      - MICRO_CLIENT_RETRIES=3
+      - MICRO_CLIENT_REQUEST_TIMEOUT=5s
+
+secretGenerator:
+  - name: secrets
+    literals:
+      - DATABASE_PASSWORD=fake
+  # - name: app-tls
+  #   files:
+  #     - secret/tls.cert
+  #     - secret/tls.key

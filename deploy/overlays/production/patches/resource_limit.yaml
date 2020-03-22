@@ -2,12 +2,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: srv
+  name: service
 spec:
   template:
     spec:
       containers:
-        - name: srv
+        - name: service
           resources:
             requests:
               cpu: 250m

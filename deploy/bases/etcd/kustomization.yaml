@@ -11,7 +11,7 @@ resources:
   - deployment.yaml
 
 vars:
-  - name: ETCD_SRV_ENDPOINT
+  - name: ETCD_SERVICE_ENDPOINT
     objref:
       kind: EtcdCluster
       name: etcd-cluster

@@ -104,7 +104,7 @@ deploy
 │   │   ├── deployment.yaml
 │   │   ├── kustomization.yaml
 │   │   └── service.yaml
-│   ├── account-srv
+│   ├── service/account
 │   │   ├── config
 │   │   │   └── config.yaml
 │   │   ├── deployment.yaml
@@ -117,7 +117,7 @@ deploy
 │   │   ├── service-account.yaml
 │   │   ├── service-ui.yaml
 │   │   └── service.yaml
-│   ├── emailer-srv
+│   ├── service/emailer
 │   │   ├── config
 │   │   │   └── config.yaml
 │   │   ├── deployment.yaml
@@ -177,7 +177,7 @@ kubectl apply -k ./deploy/overlays/production
 
 # update image version
 IMAGE_VERSION=v0.1.0-118-g21f8a30
-cd deploy && kustomize edit set image xmlking/account-srv:$IMAGE_VERSION && cd ..
+cd deploy && kustomize edit set image docker.pkg.github.com/xmlking/micro-starter-kit/service/account:$IMAGE_VERSION && cd ..
 
 kustomize build deploy/overlays/staging | kubectl apply -f -
 kustomize build deploy/overlays/production | kubectl apply -f -
@@ -214,9 +214,9 @@ kubectl apply -f build/deploy.yaml
 kubectl get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services
 
-POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
+POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account -o jsonpath='{.items[0].metadata.name}')
 kubectl logs -f -c initcar $POD_NAME
-kubectl logs -f -c srv $POD_NAME
+kubectl logs -f -c service $POD_NAME
 kubectl logs -f -c health  $POD_NAME
 kubectl exec -it $POD_NAME -- busybox sh
 

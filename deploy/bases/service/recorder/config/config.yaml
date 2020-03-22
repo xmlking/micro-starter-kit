@@ -1,0 +1,44 @@
+environment: production
+name: recorder
+version: v0.1.0
+log:
+  level: info
+  runtime: prod
+
+services:
+  account:
+    endpoint: mkit.service.account
+    version: v0.1.0
+  greeter:
+    endpoint: mkit.service.greeter
+    version: v0.1.0
+  emailer:
+    endpoint: mkit.service.emailer
+    version: v0.1.0
+  recorder:
+    endpoint: mkit.service.recorder
+    version: v0.1.0
+
+# Feature Flags (enabled/disabled)
+features:
+  metrics:
+    address: prometheus:8125
+    flushInterval: 1000000000
+    enabled: false
+  tracing:
+    address: jaeger:6831
+    flushInterval: 5000000000
+    enabled: false
+  mtls:
+    certfile: certs/micro.crt
+    keyfile: certs/micro.key
+    cafile: certs/ca.crt
+    servername: "*"
+    enabled: false
+  validator:
+    enabled: true
+  reqlogs:
+    enabled: true
+  translogs:
+    topic: mkit.service.recorder
+    enabled: true

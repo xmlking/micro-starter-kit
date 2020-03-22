@@ -15,7 +15,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.Create",
     "request": {
         "username": "sumo",
@@ -33,7 +33,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.Create",
     "request": {
         "username": "sumo1",
@@ -50,7 +50,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.List",
     "request": {
     }
@@ -63,7 +63,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.List",
     "request": {
         "limit": 10,
@@ -78,7 +78,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.List",
     "request": {
         "limit": 10,
@@ -98,7 +98,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.Get",
     "request": {
         "id":  "{{firstUserId}}"
@@ -112,7 +112,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.Exist",
     "request": {
         "id": "{{firstUserId}}"
@@ -126,7 +126,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.Exist",
     "request": {
         "username": "sumo",
@@ -142,7 +142,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.Update",
     "request": {
         "id":  "{{firstUserId}}",
@@ -161,7 +161,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "UserService.Delete",
     "request": {
         "id":  "{{firstUserId}}"
@@ -177,7 +177,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "ProfileService.Create",
     "request": {
         "user_id":  "{{firstUserId}}",
@@ -196,7 +196,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "ProfileService.List",
     "request": {
     }
@@ -209,7 +209,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "ProfileService.List",
     "request": {
         "limit": 10,
@@ -229,7 +229,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "ProfileService.Get",
     "request": {
        "profile_id": "{{firstProfileId}}"
@@ -244,7 +244,7 @@ content-type: {{jsonType}}
 Accept: {{jsonType}}
 
 {
-    "service": "accountsrv",
+    "service": "mkit.service.account",
     "method": "ProfileService.Get",
     "request": {
        "user_id": "{{firstUserId}}"

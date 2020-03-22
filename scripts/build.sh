@@ -13,4 +13,4 @@ build() {
 }
 
 build api
-build srv
+build service

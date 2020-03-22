@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
+spec:
+  type: ClusterIP
+  # We want the servers to become available even if they're not ready
+  publishNotReadyAddresses: true
+  ports:
+    - name: grpc-port
+      port: 8080
+      protocol: TCP
+      targetPort: grpc-port

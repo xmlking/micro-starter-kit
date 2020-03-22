@@ -26,7 +26,7 @@ docker exec -it envoy /bin/bash
 
 # admin http://localhost:9901/
 
- curl 'http://localhost:9090/greetersrv/Greeter.Hello' \
+ curl 'http://localhost:9090/mkit.service.greeter/Greeter.Hello' \
  -H 'Content-Type: application/grpc-web+proto' \
  -H 'X-Grpc-Web: 1' \
  -H 'custom-header-1: value1' \

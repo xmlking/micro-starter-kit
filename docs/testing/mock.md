@@ -17,7 +17,7 @@ brew cask install --appdir=~/Applications bloomrpc
 ### Run
 
 ```bash
-bloomrpc-mock srv/greeter/proto/greeter/greeter.proto
+bloomrpc-mock service/greeter/proto/greeter/greeter.proto
 # Or
 bloomrpc-mock e2e/account.bloomrpc.proto \
 -r config/certs/ca.crt \

@@ -10,7 +10,7 @@ commonAnnotations:
   note: Hello, I am integration!
 
 bases:
-  - ../../bases/micros
+  - ../../bases/service
 
 # enable mage-pull-policy and resource_limit as needed
 patches:
@@ -34,12 +34,10 @@ configMapGenerator:
       # - MICRO_SELECTOR=static # static/memory still not working with gateway & proxy
       # - MICRO_REGISTRY=memory
       # following endpoint overwrites (in config.yaml) should be enabled only when  MICRO_SELECTOR=static is used.
-      # - SERVICES_ACCOUNTSRV_ENDPOINT=$(ACCOUNT_SRV_ENDPOINT)
-      # - SERVICES_GREETERSRV_ENDPOINT=$(GREETER_SRV_ENDPOINT)
-      # - SERVICES_EMAILERSRV_ENDPOINT=$(EMAILER_SRV_ENDPOINT)
-      # - SERVICES_RECORDERSRV_ENDPOINT=$(RECORDER_SRV_ENDPOINT)
-      # - SERVICES_GATEWAYSRV_ENDPOINT=$(GATEWAY_SRV_ENDPOINT)
-      # - SERVICES_PROXYSRV_ENDPOINT=$(PROXY_SRV_ENDPOINT)
+      # - SERVICES_ACCOUNT_ENDPOINT=$(ACCOUNT_SERVICE_ENDPOINT)
+      # - SERVICES_GREETER_ENDPOINT=$(GREETER_SERVICE_ENDPOINT)
+      # - SERVICES_EMAILER_SERVICE_ENDPOINT=$(EMAILER_SERVICE_ENDPOINT)
+      # - SERVICES_RECORDER_ENDPOINT=$(RECORDER_SERVICE_ENDPOINT)
       # - FEATURES_MTLS_ENABLED=true
       # - INSECURE_SKIP_VERIFY=true
       - FEATURES_REQLOGS_ENABLED=true
@@ -55,7 +53,7 @@ secretGenerator:
   #   type: kubernetes.io/dockerconfigjson
 
 replicas:
-  - name: srv
+  - name: service
     count: 1
 
 images:
@@ -71,15 +69,15 @@ images:
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
     newTag: v2.0.0
-  - name: xmlking/account-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
+  - name: xmlking/account-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-service
     newTag: $(IMAGE_VERSION)
-  - name: xmlking/emailer-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv
+  - name: xmlking/emailer-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-service
     newTag: $(IMAGE_VERSION)
-  - name: xmlking/greeter-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
+  - name: xmlking/greeter-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-service
     newTag: $(IMAGE_VERSION)
-  - name: xmlking/recorder-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/recorder-srv
+  - name: xmlking/recorder-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/recorder-service
     newTag: $(IMAGE_VERSION)

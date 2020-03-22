@@ -9,11 +9,12 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	// "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
-	greeterPB "github.com/xmlking/micro-starter-kit/srv/greeter/proto/greeter"
+	greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
+	"github.com/xmlking/micro-starter-kit/shared/constants"
 )
 
 var (
-	greeter greeterPB.GreeterService
+	greeterSrvClient greeterPB.GreeterService
 )
 
 /**
@@ -25,7 +26,7 @@ var (
 * You can also run this test againest your local running service with mDNS. i.e., `make run-greeter`
 **/
 func init() {
-	greeter = greeterPB.NewGreeterService("greetersrv", client.NewClient())
+	greeterSrvClient = greeterPB.NewGreeterService(constants.GREETER_SERVICE, client.DefaultClient)
 }
 
 func TestGreeter_Hello_E2E(t *testing.T) {
@@ -33,7 +34,7 @@ func TestGreeter_Hello_E2E(t *testing.T) {
 		t.Skip("skipping e2e test")
 	}
 
-	rsp, err := greeter.Hello(context.TODO(), &greeterPB.HelloRequest{Name: "Sumo"})
+	rsp, err := greeterSrvClient.Hello(context.TODO(), &greeterPB.HelloRequest{Name: "Sumo"})
 	if err != nil {
 		t.Error(err)
 	}

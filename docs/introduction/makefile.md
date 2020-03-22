@@ -9,7 +9,7 @@ using Makefile
 ## Targets
 
 - default **VERSION** is `git tag`
-- default **TYPE** is `srv`
+- default **TYPE** is `service`
 
 ### proto
 
@@ -18,9 +18,7 @@ using Makefile
 ```bash
 make proto
 make proto TARGET=account
-make proto TARGET=account TYPE=api
 make proto-account
-make proto-account-api
 ## generate for protos in shared package
 make proto TARGET=shared TYPE=.
 ```
@@ -81,9 +79,9 @@ make run-demo-cmd
 ```bash
 # lint all
 make lint
-# lint account srv
+# lint account service
 make lint-account
-make lint-account-srv
+make lint-account-service
 # goup checks if there are any updates for imports in your module.
 # the main purpose is using it as a linter in continuous integration or in development process.
 make gomod_lint
@@ -103,8 +101,8 @@ make pkger
 # use git tag as VERSION
 make build VERSION=v0.1.1
 make build TARGET=account VERSION=v0.1.1
-make build TARGET=account TYPE=srv VERSION=v0.1.1
-make build TARGET=emailer TYPE=srv VERSION=v0.1.1
+make build TARGET=account TYPE=service VERSION=v0.1.1
+make build TARGET=emailer TYPE=service VERSION=v0.1.1
 make build TARGET=account TYPE=api VERSION=v0.1.1
 make build-account VERSION=v0.1.1
 make build-account-api VERSION=v0.1.1
@@ -122,18 +120,18 @@ make release VERSION=v0.1.1 GITHUB_TOKEN=123...
 
 ```bash
 make docker-account VERSION=v0.1.1
-make docker-account-srv VERSION=v0.1.1
+make docker-account-service VERSION=v0.1.1
 make docker TARGET=account VERSION=v0.1.1
-make docker TARGET=account TYPE=srv VERSION=v0.1.1
+make docker TARGET=account TYPE=service VERSION=v0.1.1
 make docker TARGET=account DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit
 make docker TARGET=account DOCKER_REGISTRY=us.gcr.io DOCKER_CONTEXT_PATH=<MY_PROJECT_ID>/micro-starter-kit GO_MICRO_VERSION=v1.17.1
 # short hand for TARGET and TYPE args
-make docker-emailer-srv
+make docker-emailer-service
 
 # build all docker images for docker-compose
 make docker
 make docker DOCKER_REGISTRY=us.gcr.io
-make docker VERSION=v0.2.9 GO_MICRO_VERSION=v1.17.1
+make docker VERSION=v0.3.2 GO_MICRO_VERSION=v2.3.0
 make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit
 make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit VERSION=v0.2.9
 make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=xmlking/micro-starter-kit VERSION=v0.2.9 GO_MICRO_VERSION=v1.17.1

@@ -135,10 +135,10 @@ When we want to run our unit tests, we would use the -short flag, and omit it fo
 ```bash
 # Run only Unit tests:
 go test -v -short
-go test -v -short ./srv/emailer/service
+go test -v -short ./service/emailer/service
 # Run only Integration Tests: Useful for smoke testing canaries in production.
 go test -v -run Integration
-go test -v -run Integration ./srv/emailer/service
+go test -v -run Integration ./service/emailer/service
 ```
 
 - How to ssh and debug a `scratch` container?

@@ -14,7 +14,7 @@
         "MICRO_BROKER": "googlepubsub"
       },
       "args": []
-      // "args": ["--selector=static", "--server_address=accountsrv:8080"]
+      // "args": ["--selector=static", "--server_address=account:8080"]
     }
   ]
 }

@@ -12,7 +12,7 @@ commonAnnotations:
   note: Hello, I am production!
 
 bases:
-  - ../../bases/micros
+  - ../../bases/service
   - ../../bases/etcd
 
 # enable mage-pull-policy and resource_limit as needed
@@ -39,7 +39,7 @@ configMapGenerator:
       - MICRO_LOG_LEVEL=info
       # profile specific variables
       - MICRO_REGISTRY=etcd
-      - MICRO_REGISTRY_ADDRESS="$(ETCD_SRV_ENDPOINT)-client"
+      - MICRO_REGISTRY_ADDRESS="$(ETCD_SERVICE_ENDPOINT)-client"
       - MICRO_REGISTER_TTL="60"
       - MICRO_REGISTER_INTERVAL="30"
       # - FEATURES_MTLS_ENABLED=true
@@ -57,7 +57,7 @@ secretGenerator:
   #   type: kubernetes.io/dockerconfigjson
 
 replicas:
-  - name: srv
+  - name: service
     count: 1
 
 images:
@@ -73,15 +73,15 @@ images:
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
     newTag: v2.0.0
-  - name: xmlking/account-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-srv
+  - name: xmlking/account-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-service
     newTag: $(IMAGE_VERSION)
-  - name: xmlking/emailer-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-srv
+  - name: xmlking/emailer-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/emailer-service
     newTag: $(IMAGE_VERSION)
-  - name: xmlking/greeter-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-srv
+  - name: xmlking/greeter-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/greeter-service
     newTag: $(IMAGE_VERSION)
-  - name: xmlking/recorder-srv
-    newName: docker.pkg.github.com/xmlking/micro-starter-kit/recorder-srv
+  - name: xmlking/recorder-service
+    newName: docker.pkg.github.com/xmlking/micro-starter-kit/recorder-service
     newTag: $(IMAGE_VERSION)

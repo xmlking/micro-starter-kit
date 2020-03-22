@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package mkit.service.emailer.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/service/emailer/proto/emailer";
+option java_multiple_files = true;
+option java_package = "mkit.service.emailer.v1";
+
+message Message {
+    string to = 1;
+    string from = 2;
+    string subject = 3;
+    string body = 4;
+}

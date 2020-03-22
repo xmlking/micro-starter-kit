@@ -12,7 +12,7 @@ import (
 	"github.com/xmlking/logger/log"
 
 	"github.com/xmlking/micro-starter-kit/shared/constants"
-	transactionPB "github.com/xmlking/micro-starter-kit/srv/recorder/proto/transaction"
+	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
 )
 
 func publish(ctx context.Context, publisher micro.Event, req, rsp proto.Message) (err error) {

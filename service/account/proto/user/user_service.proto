@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package mkit.service.account.user.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/service/account/proto/user";
+option java_multiple_files = true;
+option java_package = "mkit.service.account.user.v1";
+
+import "google/protobuf/wrappers.proto";
+// import "shared/proto/common/common.proto";
+import "service/account/proto/entities/entities.proto";
+import "third_party/proto/validate/validate.proto";
+
+// Ref:
+// https://github.com/seizadi/atlas-template/blob/master/resolved/pkg/pb/cmdb.proto
+
+// User Service
+service UserService {
+    rpc Exist (ExistRequest) returns (ExistResponse);
+    rpc List (ListRequest) returns (ListResponse);
+    rpc Get (GetRequest) returns (GetResponse);
+    rpc Create (CreateRequest) returns (CreateResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+}
+
+// FIXME: https://github.com/envoyproxy/protoc-gen-validate/issues/223
+// with Workaround in .override.go
+message ExistRequest {
+    google.protobuf.StringValue id = 1 [(validate.rules).string.uuid = true]; // Not Working
+    google.protobuf.StringValue username = 2 [(validate.rules).string = {
+    min_len: 4
+    max_len: 16
+    pattern: "^[a-z0-9_-]{3,15}$"
+    max_bytes: 256
+  }];
+    google.protobuf.StringValue first_name = 3 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue last_name = 4 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue email = 5 [(validate.rules).string.email = true]; // Not Working
+}
+
+message ExistResponse {
+    option (validate.disabled) = true;
+    bool result = 1;
+}
+
+message ListRequest {
+    google.protobuf.UInt32Value limit = 1 [(validate.rules).uint32 = { gte: 1 lte: 100 }];
+    google.protobuf.UInt32Value page = 2 [(validate.rules).uint32.gte = 1];
+    google.protobuf.StringValue sort = 3;
+    google.protobuf.StringValue username = 4 [(validate.rules).string = {
+    min_len: 4
+    max_len: 16
+    pattern: "^[a-z0-9_-]{3,15}$"
+    max_bytes: 256
+  }];
+    google.protobuf.StringValue first_name = 5 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue last_name = 6 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue email = 7 [(validate.rules).string.email = true]; // Not Working
+}
+
+message ListResponse {
+    option (validate.disabled) = true;
+    repeated mkit.service.account.entities.v1.User results = 1;
+    uint32 total = 2;
+}
+
+message GetRequest {
+    google.protobuf.StringValue id = 1 [(validate.rules).string.uuid = true]; // Not Working
+    google.protobuf.StringValue username = 2 [(validate.rules).string = {
+    min_len: 4
+    max_len: 16
+    pattern: "^[a-z0-9_-]{3,15}$"
+    max_bytes: 256
+  }];
+    google.protobuf.StringValue first_name = 3 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue last_name = 4 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue email = 5 [(validate.rules).string.email = true]; // Not Working
+}
+
+message GetResponse {
+    option (validate.disabled) = true;
+    mkit.service.account.entities.v1.User result = 1;
+    // basic.Error error =2;
+}
+
+message CreateRequest {
+    google.protobuf.StringValue username = 2 [(validate.rules).string = {
+    min_len: 4
+    max_len: 16
+    pattern: "^[a-z0-9_-]{3,15}$"
+    max_bytes: 256
+  }];
+    google.protobuf.StringValue first_name = 3 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue last_name = 4 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue email = 5 [(validate.rules).string.email = true]; // Not Working
+}
+
+message CreateResponse {
+    option (validate.disabled) = true;
+    mkit.service.account.entities.v1.User result = 1;
+}
+
+message UpdateRequest {
+    google.protobuf.StringValue id = 1 [(validate.rules).string.uuid = true]; // Not Working
+    google.protobuf.StringValue username = 2 [(validate.rules).string = {
+    min_len: 4
+    max_len: 16
+    pattern: "^[a-z0-9_-]{3,15}$"
+    max_bytes: 256
+  }];
+    google.protobuf.StringValue first_name = 3 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue last_name = 4 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue email = 5 [(validate.rules).string.email = true]; // Not Working
+}
+
+message UpdateResponse {
+    option (validate.disabled) = true;
+    mkit.service.account.entities.v1.User result = 1;
+}
+
+message DeleteRequest {
+    google.protobuf.StringValue id = 1 [(validate.rules).string.uuid = true]; // Not Working
+    google.protobuf.StringValue username = 2 [(validate.rules).string = {
+    min_len: 4
+    max_len: 16
+    pattern: "^[a-z0-9_-]{3,15}$"
+    max_bytes: 256
+  }];
+    google.protobuf.StringValue first_name = 3 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue last_name = 4 [(validate.rules).string.min_len = 3];
+    google.protobuf.StringValue email = 5 [(validate.rules).string.email = true]; // Not Working
+}
+
+message DeleteResponse {
+    option (validate.disabled) = true;
+    mkit.service.account.entities.v1.User result = 1;
+}

@@ -27,9 +27,9 @@ HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
 HAS_PKGER				:= $(shell command -v pkger 2> /dev/null)
 HAS_KO					:= $(shell command -v ko 2> /dev/null)
 
-# Type of service e.g api, fnc, srv, web (default: "srv")
-TYPE = $(or $(word 2,$(subst -, ,$*)), srv)
-override TYPES:= srv
+# Type of service e.g api, service, web, cmd (default: "service")
+TYPE = $(or $(word 2,$(subst -, ,$*)), service)
+override TYPES:= service
 # Target for running the action
 TARGET = $(word 1,$(subst -, ,$*))
 
@@ -68,7 +68,7 @@ ifdef GIT_DIRTY
 endif
 
 clean:
-	@for d in ./build/*-srv; do \
+	@for d in ./build/*-service; do \
 		echo "Deleting $$d;"; \
 		rm -f $$d; \
 	done
@@ -105,7 +105,7 @@ proto proto-%:
 			echo ✓ compiled: $$f; \
 		done \
 	fi
-	@rsync -a github.com/xmlking/micro-starter-kit/srv/account/proto/ srv/account/proto && rm -Rf github.com
+	@rsync -a github.com/xmlking/micro-starter-kit/service/account/proto/ service/account/proto && rm -Rf github.com
 
 proto_lint:
 	@echo "Linting all protos"; \

@@ -75,7 +75,7 @@ By default this project use embedded `sqlite3` database. if you want to use **po
 - start **postgres** via `docker-compose` command provided below
 - uncommend `postgres` import statement and comment `sqlite` in `plugin.go`
 - start micro server with `--configFile=config.dev.postgres.yaml` flag <br/>
-  i.e., `go run srv/account/main.go srv/account/plugin.go --configFile=config.dev.postgres.yaml`
+  i.e., `go run service/account/main.go service/account/plugin.go --configFile=config.dev.postgres.yaml`
 
 ```bash
 # to start postgres in foreground
@@ -96,8 +96,8 @@ make run-account
 # or
 make run-account ARGS="--server_address=localhost:55011"
 # or
-go run srv/account/main.go srv/account/plugin.go \
---configDir deploy/bases/account-srv/config \
+go run service/account/main.go service/account/plugin.go \
+--configDir deploy/bases/services/account/config \
 --server_address=0.0.0.0:55011 --broker_address=0.0.0.0:55021
 
 make run-greeter
@@ -150,8 +150,8 @@ docker rmi $(docker images -f "dangling=true" -q)
 make kustomize
 kubectl apply -f build/deploy.yaml
 
-POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
-kubectl logs -f -c srv $POD_NAME
+POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account -o jsonpath='{.items[0].metadata.name}')
+kubectl logs -f -c service $POD_NAME
 
 kubectl delete -f build/deploy.yaml
 ```

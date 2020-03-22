@@ -20,11 +20,11 @@ static_resources:
                     - name: local_service
                       domains: ["*"]
                       routes:
-                        - match: { prefix: "/accountsrv.Account" }
+                        - match: { prefix: "/mkit.service.account.Account" }
                           route:
                             cluster: account_service
                             max_grpc_timeout: 0s
-                        - match: { prefix: "/greetersrv.Greeter" }
+                        - match: { prefix: "/mkit.service.greeter.Greeter" }
                           route:
                             cluster: greeter_service
                             max_grpc_timeout: 0s

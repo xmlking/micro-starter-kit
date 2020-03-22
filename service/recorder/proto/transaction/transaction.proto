@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package mkit.service.recorder.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction";
+option java_multiple_files = true;
+option java_package = "mkit.service.recorder.v1";
+
+import "google/protobuf/empty.proto";
+import "third_party/proto/validate/validate.proto";
+
+service TransactionService {
+    rpc Read (ReadRequest) returns (TransactionEvent);
+    rpc Write (WriteRequest) returns (google.protobuf.Empty);
+}
+
+message ReadRequest {
+    option (validate.disabled) = true;
+    string key = 1;
+}
+
+message WriteRequest {
+    option (validate.disabled) = true;
+    string key = 1;
+    TransactionEvent event = 2;
+}
+
+// Transaction Event
+message TransactionEvent {
+    // request
+    bytes req = 1;
+    // responce
+    bytes rsp = 2;
+}

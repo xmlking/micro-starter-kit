@@ -39,7 +39,7 @@ COPY ./ ./
 
 # Build the executable to `/app`. Mark the build as statically linked.
 ARG VERSION=0.0.1
-ARG TYPE=srv
+ARG TYPE=service
 ARG TARGET=account
 
 RUN pkger -o $TYPE/$TARGET -include /config
@@ -61,10 +61,10 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Import the compiled executable from the second stage.
 ARG VERSION=0.0.1
-ARG TYPE=srv
+ARG TYPE=service
 ARG TARGET=account
 COPY --from=builder /app /app
-COPY --from=builder src/deploy/bases/micros/${TARGET}-${TYPE}/config /config
+COPY --from=builder src/deploy/bases/service/${TARGET}/config /config
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind
