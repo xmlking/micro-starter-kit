@@ -1,10 +1,11 @@
 package main
 
 import (
+	"path/filepath"
+
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/transport"
 	"github.com/xmlking/logger/log"
 
 	// "github.com/micro/go-micro/v2/service/grpc"
@@ -19,37 +20,17 @@ import (
 
 const (
 	serviceName = "emailersrv"
+	configDir   = "/config"
+	configFile  = "config.yaml"
 )
 
 var (
-	configDir  string
-	configFile string
-	cfg        myConfig.ServiceConfiguration
+	cfg myConfig.ServiceConfiguration
 )
 
 func main() {
 	// New Service
 	service := micro.NewService(
-		// optional cli flag to override config.
-		// comment out if you don't need to override any base config via CLI
-		micro.Flags(
-			&cli.StringFlag{
-				Name:        "configDir",
-				Aliases:     []string{"d"},
-				Value:       "/config",
-				Usage:       "Path to the config directory. Defaults to 'config'",
-				EnvVars:     []string{"CONFIG_DIR"},
-				Destination: &configDir,
-			},
-			&cli.StringFlag{
-				Name:        "configFile",
-				Aliases:     []string{"f"},
-				Value:       "config.yaml",
-				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
-				EnvVars:     []string{"CONFIG_FILE"},
-				Destination: &configFile,
-			},
-		),
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
 	)
@@ -69,14 +50,18 @@ func main() {
 	// Initialize Features
 	var options []micro.Option
 	if cfg.Features["mtls"].Enabled {
-		if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
+		// if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
+		if tlsConf, err := util.GetTLSConfig(
+			filepath.Join(configDir, config.Get("features", "mtls", "certfile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "keyfile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "cafile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "servername").String("")),
+		); err != nil {
 			log.WithError(err).Error("unable to load certs")
 		} else {
+			println(tlsConf)
 			options = append(options,
-				// https://github.com/ykumar-rb/ZTP/blob/master/pnp/server.go
-				// grpc.WithTLS(tlsConf),
-				micro.Transport(transport.NewTransport(transport.Secure(true))),
-				micro.Transport(transport.NewTransport(transport.TLSConfig(tlsConf))),
+				util.WithTLS(tlsConf),
 			)
 		}
 	}

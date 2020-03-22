@@ -51,7 +51,7 @@ features:
     certfile: certs/micro.crt
     keyfile: certs/micro.key
     cafile: certs/ca.crt
-    servername: '*'
+    servername: "*"
     enabled: false
   validator:
     enabled: true

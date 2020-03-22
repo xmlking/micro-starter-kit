@@ -6,6 +6,11 @@ import (
 	"io/ioutil"
 	"net"
 
+	"github.com/markbates/pkger"
+	"github.com/markbates/pkger/pkging"
+	"github.com/micro/go-micro/v2"
+	gc "github.com/micro/go-micro/v2/client/grpc"
+	gs "github.com/micro/go-micro/v2/server/grpc"
 	maddr "github.com/micro/go-micro/v2/util/addr"
 	mls "github.com/micro/go-micro/v2/util/tls"
 )
@@ -33,17 +38,39 @@ func GetSelfSignedTLSConfig(address string) (*tls.Config, error) {
 
 func GetTLSConfig(certFile string, keyFile string, caFile string, address string) (tlsConfig *tls.Config, err error) {
 	var cert tls.Certificate
-	cert, err = tls.LoadX509KeyPair(certFile, keyFile)
+	var certPEMBlock, keyPEMBlock, caPEMBlock []byte
+	var certF, keyF, caF pkging.File
+	// cert, err = tls.LoadX509KeyPair(certFile, keyFile)
+	certF, err = pkger.Open(certFile)
 	if err != nil {
 		return
 	}
-	var caCert []byte
-	caCert, err = ioutil.ReadFile(caFile)
+	certPEMBlock, err = ioutil.ReadAll(certF)
+	if err != nil {
+		return
+	}
+	keyF, err = pkger.Open(keyFile)
+	if err != nil {
+		return
+	}
+	keyPEMBlock, err = ioutil.ReadAll(keyF)
+	if err != nil {
+		return
+	}
+	cert, err = tls.X509KeyPair(certPEMBlock, keyPEMBlock)
+	if err != nil {
+		return
+	}
+	caF, err = pkger.Open(caFile)
+	if err != nil {
+		return
+	}
+	caPEMBlock, err = ioutil.ReadAll(caF)
 	if err != nil {
 		return
 	}
 	caCertPool := x509.NewCertPool()
-	caCertPool.AppendCertsFromPEM(caCert)
+	caCertPool.AppendCertsFromPEM(caPEMBlock)
 
 	tlsConfig = &tls.Config{
 		Certificates: []tls.Certificate{cert},
@@ -51,4 +78,15 @@ func GetTLSConfig(certFile string, keyFile string, caFile string, address string
 		RootCAs:      caCertPool,
 	}
 	return
+}
+
+func WithTLS(t *tls.Config) micro.Option {
+	return func(o *micro.Options) {
+		o.Client.Init(
+			gc.AuthTLS(t),
+		)
+		o.Server.Init(
+			gs.AuthTLS(t),
+		)
+	}
 }
