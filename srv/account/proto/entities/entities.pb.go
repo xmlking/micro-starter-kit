@@ -160,7 +160,8 @@ func (m *User) GetProfile() *Profile {
 // Profile Entity
 type Profile struct {
 	// gorm.types.UUID id                      = 1  [(gorm.field).tag = {
-	// type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; primary key
+	// type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; primary
+	// key
 	Id        *types.UUID          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	CreatedAt *timestamp.Timestamp `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt *timestamp.Timestamp `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`

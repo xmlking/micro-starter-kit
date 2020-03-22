@@ -8,9 +8,11 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 ### Build Status
+
 [![Build Status](https://github.com/xmlking/micro-starter-kit/workflows/Test%20on%20Push/badge.svg?branch=develop)](https://github.com/xmlking/micro-starter-kit/actions?query=branch%3Adevelop+event%3Apush+workflow%3A%22Test+on+Push%22)
 
 ### Quality
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/xmlking/micro-starter-kit)](https://goreportcard.com/report/github.com/xmlking/micro-starter-kit)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/xmlking/micro-starter-kit.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/xmlking/micro-starter-kit/alerts/)
 [![codecov](https://codecov.io/gh/xmlking/micro-starter-kit/branch/develop/graph/badge.svg)](https://codecov.io/gh/xmlking/micro-starter-kit)
@@ -86,25 +88,29 @@ docker system prune --volumes
 
 #### Services
 
-> Node: `--server_address=localhost:5501x --broker_address=localhost:5502x` required only when you are behind VPN a.k.a `Work From Home`
+> Node: `--server_address=localhost:5501x` required only when you are behind VPN a.k.a `Work From Home`
 
 ```bash
 # dev mode
 make run-account
 # or
-make run-account ARGS="--server_address=localhost:55011 --broker_address=localhost:55021"
+make run-account ARGS="--server_address=localhost:55011"
 # or
 go run srv/account/main.go srv/account/plugin.go \
 --configDir deploy/bases/account-srv/config \
---server_address=localhost:55011 --broker_address=localhost:55021
+--server_address=0.0.0.0:55011 --broker_address=0.0.0.0:55021
 
 make run-greeter
 # or
-make run-emailer ARGS="--server_address=localhost:55012 --broker_address=localhost:55022"
+make run-emailer ARGS="--server_address=localhost:55012"
 
 make run-emailer
 # or
-make run-emailer ARGS="--server_address=localhost:55013 --broker_address=localhost:55023"
+make run-emailer ARGS="--server_address=localhost:55013"
+
+make run-recorder
+# or
+make run-recorder ARGS="--server_address=localhost:55014"
 
 
 # integration tests for config module via CMD
