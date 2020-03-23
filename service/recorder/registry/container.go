@@ -6,10 +6,10 @@ import (
 	"github.com/sarulabs/di/v2"
 	"github.com/xmlking/logger/log"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/service/recorder/handler"
 	"github.com/xmlking/micro-starter-kit/service/recorder/repository"
 	"github.com/xmlking/micro-starter-kit/service/recorder/subscriber"
+	"github.com/xmlking/micro-starter-kit/shared/config"
 )
 
 // Container - provide di Container

@@ -13,10 +13,10 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/xmlking/logger"
 
-	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 	account_entities "github.com/xmlking/micro-starter-kit/service/account/proto/entities"
 	profilePB "github.com/xmlking/micro-starter-kit/service/account/proto/profile"
 	"github.com/xmlking/micro-starter-kit/service/account/repository"
+	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 )
 
 // ProfileHandler struct

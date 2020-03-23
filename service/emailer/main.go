@@ -7,7 +7,7 @@ import (
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/config"
 	"github.com/xmlking/logger/log"
-    	"github.com/xmlking/micro-starter-kit/shared/constants"
+	"github.com/xmlking/micro-starter-kit/shared/constants"
 
 	// "github.com/micro/go-micro/v2/service/grpc"
 	"github.com/xmlking/micro-starter-kit/service/emailer/registry"

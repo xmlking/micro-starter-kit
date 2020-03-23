@@ -8,14 +8,14 @@ import (
 	"github.com/micro/go-micro/v2/config"
 	"github.com/xmlking/logger/log"
 
-    "github.com/xmlking/micro-starter-kit/shared/constants"
+	"github.com/xmlking/micro-starter-kit/service/greeter/handler"
+	greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/shared/constants"
 	"github.com/xmlking/micro-starter-kit/shared/logger"
 	"github.com/xmlking/micro-starter-kit/shared/util"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 	transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
-	"github.com/xmlking/micro-starter-kit/service/greeter/handler"
-	greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
 )
 
 const (

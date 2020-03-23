@@ -6,12 +6,12 @@ import (
 
 	"github.com/xmlking/logger/log"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
-	"github.com/xmlking/micro-starter-kit/shared/database"
-	"github.com/xmlking/micro-starter-kit/shared/logger"
 	"github.com/xmlking/micro-starter-kit/service/account/handler"
 	account_entities "github.com/xmlking/micro-starter-kit/service/account/proto/entities"
 	"github.com/xmlking/micro-starter-kit/service/account/repository"
+	"github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/shared/database"
+	"github.com/xmlking/micro-starter-kit/shared/logger"
 )
 
 // Container - provide di Container

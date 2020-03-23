@@ -8,13 +8,13 @@ import (
 	"github.com/micro/go-micro/v2/config"
 	"github.com/xmlking/logger/log"
 
-    "github.com/xmlking/micro-starter-kit/shared/constants"
+	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
+	"github.com/xmlking/micro-starter-kit/service/recorder/registry"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/shared/constants"
 	"github.com/xmlking/micro-starter-kit/shared/logger"
 	"github.com/xmlking/micro-starter-kit/shared/util"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
-	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
-	"github.com/xmlking/micro-starter-kit/service/recorder/registry"
 )
 
 const (

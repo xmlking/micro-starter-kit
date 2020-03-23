@@ -6,9 +6,9 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/xmlking/logger/log"
 
-	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
 	"github.com/xmlking/micro-starter-kit/service/recorder/repository"
+	myErrors "github.com/xmlking/micro-starter-kit/shared/errors"
 )
 
 type recorderHandler struct {

@@ -5,10 +5,10 @@ import (
 
 	"github.com/xmlking/logger/log"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
-	"github.com/xmlking/micro-starter-kit/shared/email"
 	"github.com/xmlking/micro-starter-kit/service/emailer/service"
 	"github.com/xmlking/micro-starter-kit/service/emailer/subscriber"
+	"github.com/xmlking/micro-starter-kit/shared/config"
+	"github.com/xmlking/micro-starter-kit/shared/email"
 )
 
 // Container - provide di Container

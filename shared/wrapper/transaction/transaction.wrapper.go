@@ -11,8 +11,8 @@ import (
 	"github.com/micro/go-micro/v2/server"
 	"github.com/xmlking/logger/log"
 
-	"github.com/xmlking/micro-starter-kit/shared/constants"
 	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
+	"github.com/xmlking/micro-starter-kit/shared/constants"
 )
 
 func publish(ctx context.Context, publisher micro.Event, req, rsp proto.Message) (err error) {
