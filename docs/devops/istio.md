@@ -1,69 +1,74 @@
 # Istio
 
-> assume you already have `helm` cli installed and activated on your k8s with `helm init`
-
-## Enter the following commands to download Istio
+ 
+## Install
 
 ```bash
-# Download latest Istio and unpack Istio
-cd ~/Developer/Work/tools/
-export ISTIO_VERSION=1.3.2
-curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.3.2 sh -
-cd istio-${ISTIO_VERSION}
+brew install istioctl
+Optionally souce below file to enable auto-completion
+. /Users/schintha/Developer/Apps/istio-1.5.1/tools/_istioctl
 ```
 
-## Installing **Istio** via Helm (recommended)
-
 ```bash
-cd  ~/Developer/Work/tools/istio-1.3.2/
-kubectl apply -f install/kubernetes/helm/helm-service-account.yaml
-helm init --service-account tiller
-helm install install/kubernetes/helm/istio-init --name istio-init --namespace istio-system
-kubectl get crds | grep 'istio.io' | wc -l
-helm install install/kubernetes/helm/istio --name istio --namespace istio-system \
-    --values install/kubernetes/helm/istio/values-istio-demo.yaml
+$ istioctl proxy-<TAB>
+proxy-config proxy-status
 ```
 
-## Verify
+
+
+### Profiles
+
+To see list of available profiles
+```bash
+istioctl profile list
+# Display the configuration of a profile
+istioctl profile dump demo
+istioctl profile dump --config-path components.pilot demo
+# Show differences in profiles
+istioctl profile diff default demo
+# Generateing a manifest before installation
+istioctl manifest generate > generated-manifest.yaml
+```
+
+### Setup
+
+> For this installation, we use the demo [configuration profile](https://istio.io/docs/setup/additional-setup/config-profiles/)
 
 ```bash
-helm ls -a
+# setup Istio into your kubernetes cluster
+$ istioctl manifest apply --set profile=demo
+# To enable the Grafana dashboard on top of the default profile
+$ istioctl manifest apply --set addonComponents.grafana.enabled=true
 
+Detected that your cluster does not support third party JWT authentication. Falling back to less secure first party JWT
+- Applying manifest for component Base...
+✔ Finished applying manifest for component Base.
+- Applying manifest for component Pilot...
+✔ Finished applying manifest for component Pilot.
+Waiting for resources to become ready...
+- Applying manifest for component EgressGateways...
+- Applying manifest for component IngressGateways...
+- Applying manifest for component AddonComponents...
+✔ Finished applying manifest for component EgressGateways.
+✔ Finished applying manifest for component IngressGateways.
+✔ Finished applying manifest for component AddonComponents.
+
+✔ Installation complete
+```
+
+### Verify
+
+```bash
 kubectl get svc -n istio-system
 kubectl get pods -n istio-system
+# verify generated
+istioctl manifest generate <your original installation options> > $HOME/generated-manifest.yaml
+istioctl verify-install -f $HOME/generated-manifest.yaml
 ```
 
-## Uninstall
+### Enable
 
-```bash
-helm delete --purge istio
-helm delete --purge istio-init
-helm delete --purge istio-cni
-kubectl delete namespace istio-system
-
-# Deleting CRDs and Istio Configuration
-kubectl delete -f install/kubernetes/helm/istio-init/files
-```
-
-## Access
-
-[kiali](https://istio.io/docs/tasks/telemetry/kiali/)
-
-```bash
-# open kiali
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
-open http://localhost:20001/kiali/console
-admin : admin
-```
-
-[Jaeger](https://istio.io/docs/tasks/telemetry/distributed-tracing/jaeger/)
-
-```bash
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=jaeger -o jsonpath='{.items[0].metadata.name}') 15032:16686
-open  http://localhost:15032
-```
-
-## Deploy your application
+Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
 
 > switch on/off istio for `default` namespace
 
@@ -82,8 +87,35 @@ metadata:
   sidecar.istio.io/inject: "false"
 ```
 
+## Access
+
+[kiali](https://istio.io/docs/tasks/telemetry/kiali/)
+
+```bash
+istioctl dashboard kiali
+open http://localhost:20001/kiali/console
+# admin : admin
+```
+
+[Jaeger](https://istio.io/docs/tasks/telemetry/distributed-tracing/jaeger/)
+
+```bash
+istioctl dashboard Jaeger
+open  http://localhost:15032
+```
+
+Get an overview of your mesh
+
+```bash
+istioctl proxy-status
+```
+
+## Uninstall
+
+```bash
+istioctl manifest generate --set profile=demo | kubectl delete -f -
+```
+
 ## Reference
 
-- [ISTIO WORKSHOP](https://polarsquad.github.io/istio-workshop/install-istio/)
-- https://dzone.com/articles/setup-of-a-local-kubernetes-and-istio-dev-environm-1
-- https://istio.io/docs/setup/install/helm/
+- https://istio.io/docs/setup/getting-started/
