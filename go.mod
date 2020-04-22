@@ -7,7 +7,6 @@ go 1.14
 replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
 
 require (
-	cloud.google.com/go/pubsub v1.3.1
 	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/golang/protobuf v1.4.0
@@ -27,5 +26,12 @@ require (
 	github.com/xmlking/logger v0.1.5
 	github.com/xmlking/logger/gormlog v0.1.5
 	github.com/xmlking/logger/zerolog v0.1.5
+	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
+	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
+	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
+	golang.org/x/tools v0.0.0-20200312045724-11d5b4c81c7d // indirect
+	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/genproto v0.0.0-20200420144010-e5e8543f8aeb
+	google.golang.org/grpc v1.28.0 // indirect
+	honnef.co/go/tools v0.0.1-2020.1.3 // indirect
 )
