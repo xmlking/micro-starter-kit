@@ -3,7 +3,7 @@ commonLabels:
   app.kubernetes.io/instance: emailer-abcxzy
   app.kubernetes.io/component: microservice
 
-namePrefix: emailer
+namePrefix: emailer-
 
 resources:
   - deployment.yaml

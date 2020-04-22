@@ -7,7 +7,7 @@ commonLabels:
 commonAnnotations:
   org: acmeCorporation
 
-namePrefix: proxy
+namePrefix: proxy-
 
 resources:
   - deployment.yaml

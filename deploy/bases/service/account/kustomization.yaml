@@ -3,7 +3,7 @@ commonLabels:
   app.kubernetes.io/instance: account-service-abcxzy
   app.kubernetes.io/component: microservice
 
-namePrefix: account
+namePrefix: account-
 
 resources:
   - deployment.yaml

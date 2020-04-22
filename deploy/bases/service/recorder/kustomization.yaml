@@ -3,7 +3,7 @@ commonLabels:
   app.kubernetes.io/instance: recorder-abcxzy
   app.kubernetes.io/component: microservice
 
-namePrefix: recorder
+namePrefix: recorder-
 
 resources:
   - deployment.yaml

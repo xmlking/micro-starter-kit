@@ -7,7 +7,7 @@ commonLabels:
 commonAnnotations:
   org: acmeCorporation
 
-namePrefix: gateway
+namePrefix: gateway-
 
 resources:
   - deployment.yaml

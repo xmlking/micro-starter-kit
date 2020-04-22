@@ -3,7 +3,7 @@ commonLabels:
   app.kubernetes.io/instance: greeter-abcxzy
   app.kubernetes.io/component: microservice
 
-namePrefix: greeter
+namePrefix: greeter-
 
 resources:
   - deployment.yaml
