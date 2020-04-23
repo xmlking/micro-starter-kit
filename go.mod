@@ -4,7 +4,7 @@ go 1.14
 
 // replace github.com/micro/go-micro/v2 => /Users/schintha/Developer/Work/go/3rd-party/go-micro
 // FIXME : https://github.com/etcd-io/etcd/issues/11563
-replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
+replace google.golang.org/grpc => google.golang.org/grpc v1.29.1
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
