@@ -16,7 +16,7 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/markbates/pkger v0.15.1
 	github.com/micro/cli/v2 v2.1.2
-	github.com/micro/go-micro/v2 v2.5.0
+	github.com/micro/go-micro/v2 v2.6.0
 	github.com/micro/go-plugins/config/source/pkger/v2 v2.5.0
 	github.com/pkg/errors v0.9.1
 	github.com/sarulabs/di/v2 v2.4.0
@@ -27,8 +27,6 @@ require (
 	github.com/xmlking/logger/gormlog v0.1.5
 	github.com/xmlking/logger/zerolog v0.1.5
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
 	golang.org/x/tools v0.0.0-20200312045724-11d5b4c81c7d // indirect
 	google.golang.org/appengine v1.6.5 // indirect
 	google.golang.org/genproto v0.0.0-20200420144010-e5e8543f8aeb
