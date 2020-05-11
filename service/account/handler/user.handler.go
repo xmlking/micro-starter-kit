@@ -136,12 +136,9 @@ func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp
 func (h *userHandler) Update(ctx context.Context, req *userPB.UpdateRequest, rsp *userPB.UpdateResponse) error {
 	log.Info("Received UserHandler.Update request")
 	// Identify the user
-	acc, err := auth.AccountFromContext(ctx)
-	if err != nil {
-		return errors.InternalServerError("mkit.service.account.user.update", err.Error())
-	}
-	if acc == nil {
-		return errors.Unauthorized("mkit.service.account.user.update", "A valid auth token is required")
+	acc, ok := auth.AccountFromContext(ctx)
+	if !ok {
+        return errors.Unauthorized("mkit.service.account.user.update", "A valid auth token is required")
 	}
 	log.Infof("Caller Account: %v", acc)
 
