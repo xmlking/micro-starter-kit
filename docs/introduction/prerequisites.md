@@ -77,6 +77,7 @@ GO111MODULE=on go get github.com/rvflash/goup
 ```bash
 go get -d github.com/envoyproxy/protoc-gen-validate
 cd ~/go/src/github.com/envoyproxy/protoc-gen-validate
+git pull
 make build
 ```
 
@@ -85,6 +86,7 @@ make build
 ```bash
 go get -d github.com/infobloxopen/protoc-gen-gorm
 cd ~/go/src/github.com/infobloxopen/protoc-gen-gorm
+git pull
 make install
 ```
 
