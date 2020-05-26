@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/xmlking/logger/log"
+    "github.com/rs/zerolog/log"
 
 	"github.com/xmlking/micro-starter-kit/shared/config"
 
@@ -38,7 +38,7 @@ type SendEmail struct {
 
 // Send sends an email here, and perhaps returns an error.
 func (sender *SendEmail) Send(subject, body string, to []string) error {
-	log.Info("in SendEmail.Send")
+	log.Info().Msg("in SendEmail.Send")
 	var doc bytes.Buffer
 	context := struct {
 		From    string
@@ -53,10 +53,10 @@ func (sender *SendEmail) Send(subject, body string, to []string) error {
 	}
 	err1 := emailTmpl.Execute(&doc, context)
 	if err1 != nil {
-		log.Error("error trying to execute mail template")
+		log.Error().Msg("error trying to execute mail template")
 		return err1
 	}
-	log.Debugf("sending email to: %s from: %s, subject: %s, body: %s", to, sender.from, subject, doc.Bytes())
+	log.Debug().Msgf("sending email to: %s from: %s, subject: %s, body: %s", to, sender.from, subject, doc.Bytes())
 	err := sender.send(sender.address, sender.auth, sender.from, to, doc.Bytes())
 	if err != nil {
 		return myErrors.AppError(myErrors.SME, err.Error())

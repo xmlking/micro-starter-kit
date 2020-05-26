@@ -1,14 +1,17 @@
 package main
 
 import (
-	"github.com/micro/cli/v2"
-	"github.com/micro/go-micro/v2"
-	"github.com/micro/go-micro/v2/config"
-	"github.com/xmlking/logger/log"
+    "github.com/micro/cli/v2"
+    "github.com/micro/go-micro/v2"
+    "github.com/micro/go-micro/v2/config"
 
-	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-	"github.com/xmlking/micro-starter-kit/shared/logger"
-	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
+    "github.com/rs/zerolog/log"
+
+    myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+    // bootstrap config and logger
+    "github.com/xmlking/micro-starter-kit/shared/logger"
+
+    logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 )
 
 const (
@@ -72,25 +75,25 @@ func main() {
 	service.Init(
 		micro.Action(func(c *cli.Context) (err error) {
 			// load config
-			myConfig.InitConfig(configDir, configFile)
+			myConfig.Init(myConfig.WithConfigDir(configDir) , myConfig.WithConfigFile(configFile))
 			err = config.Scan(&cfg)
-			logger.InitLogger(cfg.Log)
+			logger.Init()
 			return
 		}),
 	)
 
-	log.Debugf("IsProduction? %v", myConfig.IsProduction)
-	log.Debugf("environment: %v", cfg.Environment)
-	log.Debug(config.Get("database", "dialect").String("postgres"))
-	log.Debug(config.Get("database", "host").String("no-address"))
-	log.Debug(config.Get("database", "port").Int(0000))
-	log.Debug(config.Get("observability", "tracing", "flushInterval").Int(2000000000))
-	log.Debug(cfg)
-	log.Debugf("cfg is %v", cfg)
-	log.Debug(configDir)
+	log.Debug().Msgf("IsProduction? %v", myConfig.IsProduction)
+	log.Debug().Msgf("environment: %v", cfg.Environment)
+	log.Debug().Msgf(config.Get("database", "dialect").String("postgres"))
+	log.Debug().Msgf(config.Get("database", "host").String("no-address"))
+	log.Debug().Msgf(config.Get("database", "port").String("0000"))
+	log.Debug().Msgf(config.Get("observability", "tracing", "flushInterval").String("2000000000"))
+	println(cfg)
+	log.Debug().Msgf("cfg is %v", cfg)
+	log.Debug().Msg(configDir)
 
 	// Run service
 	if err := service.Run(); err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("")
 	}
 }

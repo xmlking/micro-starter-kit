@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"context"
+    "context"
 
-	"github.com/micro/go-micro/v2/util/log"
+    "github.com/rs/zerolog/log"
 
-	greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
+    greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
 )
 
 // Greeter struct
@@ -18,7 +18,7 @@ func NewGreeterHandler() greeterPB.GreeterServiceHandler {
 
 // Hello method
 func (s *greeterHandler) Hello(ctx context.Context, req *greeterPB.HelloRequest, rsp *greeterPB.HelloResponse) error {
-	log.Info("Received Greeter.Hello request")
+	log.Info().Msg("Received Greeter.Hello request")
 	rsp.Msg = "Hello " + req.Name
 	return nil
 }

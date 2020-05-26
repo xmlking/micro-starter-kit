@@ -1,19 +1,17 @@
 package database
 
 import (
-	"fmt"
+    "fmt"
 
-	"github.com/jinzhu/gorm"
+    "github.com/jinzhu/gorm"
+    "github.com/rs/zerolog/log"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
-
-	"github.com/xmlking/logger/gormlog"
-
-	myLogger "github.com/xmlking/micro-starter-kit/shared/logger"
+    "github.com/xmlking/micro-starter-kit/shared/config"
+    "github.com/xmlking/micro-starter-kit/shared/logger/gormlog"
 )
 
 // GetDatabaseConnection return (gorm.DB or error)
-func GetDatabaseConnection(dbConf config.DatabaseConfiguration, logConf config.LogConfiguration) (db *gorm.DB, err error) {
+func GetDatabaseConnection(dbConf config.DatabaseConfiguration) (db *gorm.DB, err error) {
 	var timezoneCommand string
 
 	switch dbConf.Dialect {
@@ -32,10 +30,10 @@ func GetDatabaseConnection(dbConf config.DatabaseConfiguration, logConf config.L
 	if err != nil {
 		return
 	}
+    mLogger :=  log.With().
+        Str("module", "gorm").
+        Logger()
 
-	mLogger := myLogger.NewLoggerWithFields(logConf, map[string]interface{}{
-		"module": "gorm",
-	})
 	db.SetLogger(gormlog.NewGormLogger(mLogger))
 
 	if dbConf.Logging {

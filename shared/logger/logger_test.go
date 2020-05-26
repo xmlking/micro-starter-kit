@@ -1,24 +1,32 @@
 package logger_test
 
 import (
-	"testing"
+    "testing"
 
-	"github.com/xmlking/logger/log"
-
-	"github.com/xmlking/micro-starter-kit/shared/config"
-	"github.com/xmlking/micro-starter-kit/shared/logger"
+    "github.com/rs/zerolog/log"
+    // bootstrap config and logger
+    "github.com/xmlking/micro-starter-kit/shared/logger"
 )
 
 func TestLogger(t *testing.T) {
-	logger.InitLogger(config.LogConfiguration{Level: "debug", Runtime: "development"})
-	log.Info("Hello World")
-	log.Infof("Hello %s", "Sumo")
+
+	log.Info().Msg("Hello World")
+	log.Info().Msgf("Hello %s", "Sumo")
 }
 
 func TestWithGcp(t *testing.T) {
-	logger.InitLogger(config.LogConfiguration{Level: "debug", Runtime: "gcp"})
-	log.Infof("testing: %s", "WithGcp")
+    // logger.Init(logger.WithFormat())
+    logger.Init(logger.WithTimeFormat("ddd"))
+	log.Info().Msgf("testing: %s", "WithGcp")
 	// reset `LevelFieldName` to make other tests pass.
-	logger.InitLogger(config.LogConfiguration{Level: "debug", Runtime: "development"})
-	log.Infof("testing: %s", "WithDevelopment")
+	// logger.Init(logger.WithFields())
+	log.Info().Msgf("testing: %s", "WithDevelopment")
 }
+
+// TODO: test Sub-loggers
+// Sub-loggers let you chain default logger with additional context
+// With creates a child logger with the field added to its context.
+//sublogger := log.With().
+//Str("component", "foo").
+//Logger()
+//sublogger.Info().Msg("hello world")

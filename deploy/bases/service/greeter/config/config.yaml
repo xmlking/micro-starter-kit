@@ -3,7 +3,7 @@ name: greeter
 version: v0.1.0
 log:
   level: info
-  runtime: prod
+  format: gcp
   services:
   account:
     endpoint: mkit.service.account

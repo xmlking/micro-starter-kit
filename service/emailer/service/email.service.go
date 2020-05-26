@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"html/template"
 
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 )
 
 var welcomeEmailTmpl *template.Template
@@ -28,7 +28,7 @@ type emailService struct {
 
 // Welcome method
 func (welcomer *emailService) Welcome(name, email string) error {
-	log.Info("in Welcome")
+	log.Info().Msg("in Welcome")
 	var body bytes.Buffer
 	if err := welcomeEmailTmpl.Execute(&body, struct{ Name string }{name}); err != nil {
 		return err

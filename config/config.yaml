@@ -3,7 +3,7 @@ name: account
 version: v0.1.0
 log:
   level: debug
-  runtime: local
+  format: pretty
 database:
   dialect: sqlite3
   host: 0.0.0.0

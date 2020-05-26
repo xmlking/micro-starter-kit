@@ -6,7 +6,7 @@ import (
 
 	"github.com/micro/go-micro/v2/metadata"
 	"github.com/pkg/errors"
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
 	"github.com/xmlking/micro-starter-kit/service/recorder/repository"
@@ -30,7 +30,7 @@ func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB
 	tranId := md[constants.TransID]
 
 	if len(tranId) == 0 {
-		log.Errorf("TransactionSubscriber: missing  TranID")
+		log.Error().Msg("TransactionSubscriber: missing  TranID")
 		return errors.New("TransactionSubscriber: missing  TranID")
 	}
 	switch from := md["Micro-From-Service"]; from {
@@ -41,11 +41,11 @@ func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB
 	case constants.GREETER_SERVICE:
 		err = s.repo.Write(ctx, fmt.Sprintf("%s#%s", tranId, from), event)
 	default:
-		log.Errorf("TransactionSubscriber: unknown  from: %s", from)
+        log.Error().Msgf("TransactionSubscriber: unknown  from: %s", from)
 		return fmt.Errorf("TransactionSubscriber: unknown  from: %s", from)
 	}
 	if err != nil {
-		log.WithError(err).Error("TransactionSubscriber Error: Unable to save to database")
+		log.Error().Err(err).Msg("TransactionSubscriber Error: Unable to save to database")
 	}
 	return err
 }

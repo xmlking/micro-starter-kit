@@ -4,7 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	account_entities "github.com/xmlking/micro-starter-kit/service/account/proto/entities"
 )
@@ -33,7 +33,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 // Exist
 func (repo *userRepository) Exist(model *account_entities.UserORM) bool {
-	log.Infof("Received userRepository.Exist request %v", *model)
+	log.Info().Msgf("Received userRepository.Exist request %v", *model)
 	var count int
 	if model.Username != nil && len(*model.Username) > 0 {
 		repo.db.Model(&account_entities.UserORM{}).Where("username = ?", model.Username).Count(&count)
@@ -87,7 +87,7 @@ func (repo *userRepository) List(limit, page uint32, sort string, model *account
 	}
 	// enable auto preloading for `Profile`
 	if err = db.Set("gorm:auto_preload", true).Order(sort).Limit(limit).Offset(offset).Find(&users).Count(&total).Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.List")
+		log.Error().Err(err).Msg("Error in UserRepository.List")
 		return
 	}
 	return
@@ -102,7 +102,7 @@ func (repo *userRepository) Get(id string) (user *account_entities.UserORM, err 
 	user = &account_entities.UserORM{Id: u2}
 	// enable auto preloading for `Profile`
 	if err = repo.db.Set("gorm:auto_preload", true).First(user).Error; err != nil && err != gorm.ErrRecordNotFound {
-		log.WithError(err).Error("Error in UserRepository.Get")
+		log.Error().Err(err).Msg("Error in UserRepository.Get")
 	}
 	return
 }
@@ -114,7 +114,7 @@ func (repo *userRepository) Create(model *account_entities.UserORM) error {
 	}
 	// if err := repo.db.Set("gorm:association_autoupdate", false).Create(model).Error; err != nil {
 	if err := repo.db.Create(model).Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.Create")
+		log.Error().Err(err).Msg("Error in UserRepository.Create")
 		return err
 	}
 	return nil
@@ -132,11 +132,11 @@ func (repo *userRepository) Update(id string, model *account_entities.UserORM) e
 	// result := repo.db.Set("gorm:association_autoupdate", false).Save(model)
 	result := repo.db.Model(user).Updates(model)
 	if err := result.Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.Update")
+		log.Error().Err(err).Msg("Error in UserRepository.Update")
 		return err
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {
-		log.Errorf("Error in UserRepository.Update, rowsAffected: %v", rowsAffected)
+        log.Error().Msgf("Error in UserRepository.Update, rowsAffected: %v", rowsAffected)
 		return errors.New("no records updated, No match was found")
 	}
 	return nil
@@ -146,11 +146,11 @@ func (repo *userRepository) Update(id string, model *account_entities.UserORM) e
 func (repo *userRepository) Delete(model *account_entities.UserORM) error {
 	result := repo.db.Delete(model)
 	if err := result.Error; err != nil {
-		log.WithError(err).Error("Error in UserRepository.Delete")
+		log.Error().Err(err).Msg("Error in UserRepository.Delete")
 		return err
 	}
 	if rowsAffected := result.RowsAffected; rowsAffected == 0 {
-		log.Errorf("Error in UserRepository.Delete, rowsAffected: %v", rowsAffected)
+        log.Error().Msgf("Error in UserRepository.Delete, rowsAffected: %v", rowsAffected)
 		return errors.New("no records deleted, No match was found")
 	}
 	return nil

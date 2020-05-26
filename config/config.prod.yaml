@@ -3,7 +3,7 @@ name: account
 version: v0.1.0
 log:
   level: info
-  runtime: gcs
+  format: gcp
 database:
   dialect: postgres
   host: postgres
@@ -58,7 +58,7 @@ features:
     certfile: certs/micro.crt
     keyfile: certs/micro.key
     cafile: certs/ca.crt
-    servername: '*'
+    servername: "*"
     enabled: false
   validator:
     enabled: true

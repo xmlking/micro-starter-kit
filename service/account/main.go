@@ -1,12 +1,10 @@
 package main
 
 import (
-	"path/filepath"
-
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/config"
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	// "github.com/micro/go-micro/v2/service/grpc"
 	"github.com/xmlking/micro-starter-kit/service/account/handler"
@@ -17,7 +15,7 @@ import (
 	greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
 	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
 	"github.com/xmlking/micro-starter-kit/shared/constants"
-	"github.com/xmlking/micro-starter-kit/shared/logger"
+	_ "github.com/xmlking/micro-starter-kit/shared/logger"
 	"github.com/xmlking/micro-starter-kit/shared/util"
 	logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 	transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
@@ -26,12 +24,11 @@ import (
 
 const (
 	serviceName = constants.ACCOUNT_SERVICE
-	configDir   = "/config"
-	configFile  = "config.yaml"
 )
 
 var (
-	cfg myConfig.ServiceConfiguration
+	cfg = myConfig.GetServiceConfig()
+    ff = myConfig.GetFeatureFlags()
 )
 
 func main() {
@@ -44,46 +41,37 @@ func main() {
 	// Initialize service
 	service.Init(
 		micro.Action(func(c *cli.Context) (err error) {
-			// load config
-			myConfig.InitConfig(configDir, configFile)
-			err = config.Scan(&cfg)
-			logger.InitLogger(cfg.Log)
+			// do some life cycle actions
 			return
 		}),
 	)
 
 	// Initialize Features
 	var options []micro.Option
-	if cfg.Features["mtls"].Enabled {
-		// if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
-		if tlsConf, err := util.GetTLSConfig(
-			filepath.Join(configDir, config.Get("features", "mtls", "certfile").String("")),
-			filepath.Join(configDir, config.Get("features", "mtls", "keyfile").String("")),
-			filepath.Join(configDir, config.Get("features", "mtls", "cafile").String("")),
-			filepath.Join(configDir, config.Get("features", "mtls", "servername").String("")),
-		); err != nil {
-			log.WithError(err).Error("unable to load certs")
+	if ff.IsTLSEnabled() {
+		if tlsConf, err := myConfig.CreateServerCerts(); err != nil {
+			log.Error().Err(err).Msg("unable to load certs")
 		} else {
-			println(tlsConf)
+            log.Info().Msg("TLS Enabled")
 			options = append(options,
 				util.WithTLS(tlsConf),
 			)
 		}
 	}
 	// Wrappers are invoked in the order as they added
-	if cfg.Features["reqlogs"].Enabled {
+	if ff.IsReqlogsEnabled() {
 		options = append(options,
 			micro.WrapHandler(logWrapper.NewHandlerWrapper()),
 			micro.WrapClient(logWrapper.NewClientWrapper()),
 		)
 	}
-	if cfg.Features["validator"].Enabled {
+	if ff.IsValidatorEnabled() {
 		options = append(options,
 			micro.WrapHandler(validatorWrapper.NewHandlerWrapper()),
 		)
 	}
-	if cfg.Features["translogs"].Enabled {
-		topic := config.Get("features", "translogs", "topic").String("mkit.service.recorder")
+	if ff.IsTranslogsEnabled() {
+        topic := config.Get("features", "translogs", "topic").String("mkit.service.recorder")
 		publisher := micro.NewEvent(topic, service.Client())
 		options = append(options,
 			micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)),
@@ -99,10 +87,10 @@ func main() {
 	ctn, err := registry.NewContainer(cfg)
 	defer ctn.Clean()
 	if err != nil {
-		log.Fatalf("failed to build container: %v", err)
+        log.Fatal().Msgf("failed to build container: %v", err)
 	}
 
-	log.Debugf("Client type: grpc or regular? %T\n", service.Client()) // FIXME: expected *grpc.grpcClient but got *micro.clientWrapper
+	log.Debug().Msgf("Client type: grpc or regular? %T\n", service.Client()) // FIXME: expected *grpc.grpcClient but got *micro.clientWrapper
 
 	// Publisher publish to "mkit.service.emailer"
 	publisher := micro.NewEvent(constants.EMAILER_SERVICE, service.Client())
@@ -117,9 +105,9 @@ func main() {
 	userPB.RegisterUserServiceHandler(service.Server(), userHandler)
 	profilePB.RegisterProfileServiceHandler(service.Server(), profileHandler)
 
-	myConfig.PrintBuildInfo()
+	println(myConfig.GetBuildInfo())
 	// Run service
 	if err := service.Run(); err != nil {
-		log.Fatal(err)
+        log.Fatal().Err(err).Msg("")
 	}
 }

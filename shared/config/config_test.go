@@ -1,15 +1,15 @@
-package config
+package config_test
 
 import (
 	"testing"
 
-	microConfig "github.com/micro/go-micro/v2/config"
+	"github.com/xmlking/micro-starter-kit/shared/config"
 )
 
 func TestConfig(t *testing.T) {
-	// For Tests, always use relative paths
-	InitConfig("/config", "config.prod.yaml")
-	dialect := microConfig.Get("database", "dialect").String("no dialect")
+	config.DefaultConfig = config.NewConfig(config.WithConfigDir("/config"), config.WithConfigFile("config.prod.yaml"))
+	config.IsProduction()
+	dialect := config.GetServiceConfig().Database.Dialect
 	if dialect != "postgres" {
 		t.Fatalf("Expected %s got %s", "postgres", dialect)
 	}

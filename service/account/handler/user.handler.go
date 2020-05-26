@@ -9,7 +9,7 @@ import (
 	"github.com/micro/go-micro/v2/errors"
 	uuid "github.com/satori/go.uuid"
 	"github.com/thoas/go-funk"
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	account_entities "github.com/xmlking/micro-starter-kit/service/account/proto/entities"
 	userPB "github.com/xmlking/micro-starter-kit/service/account/proto/user"
@@ -36,7 +36,7 @@ func NewUserHandler(repo repository.UserRepository, eve micro.Event, greeterClie
 }
 
 func (h *userHandler) Exist(ctx context.Context, req *userPB.ExistRequest, rsp *userPB.ExistResponse) error {
-	log.Info("Received UserHandler.Exist request")
+    log.Info().Msg("Received UserHandler.Exist request")
 	model := account_entities.UserORM{}
 	model.Id = uuid.FromStringOrNil(req.Id.GetValue())
 	username := req.Username.GetValue()
@@ -44,13 +44,13 @@ func (h *userHandler) Exist(ctx context.Context, req *userPB.ExistRequest, rsp *
 	model.Email = req.Email.GetValue()
 
 	exists := h.userRepository.Exist(&model)
-	log.Infof("user exists? %t", exists)
+	log.Info().Msgf("user exists? %t", exists)
 	rsp.Result = exists
 	return nil
 }
 
 func (h *userHandler) List(ctx context.Context, req *userPB.ListRequest, rsp *userPB.ListResponse) error {
-	log.Info("Received UserHandler.List request")
+	log.Info().Msg("Received UserHandler.List request")
 	model := account_entities.UserORM{}
 	username := req.Username.GetValue()
 	model.Username = &username
@@ -80,7 +80,7 @@ func (h *userHandler) List(ctx context.Context, req *userPB.ListRequest, rsp *us
 }
 
 func (h *userHandler) Get(ctx context.Context, req *userPB.GetRequest, rsp *userPB.GetResponse) error {
-	log.Info("Received UserHandler.Get request")
+	log.Info().Msg("Received UserHandler.Get request")
 
 	id := req.Id.GetValue()
 	if id == "" {
@@ -102,7 +102,7 @@ func (h *userHandler) Get(ctx context.Context, req *userPB.GetRequest, rsp *user
 }
 
 func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp *userPB.CreateResponse) error {
-	log.Info("Received UserHandler.Create request")
+	log.Info().Msg("Received UserHandler.Create request")
 
 	model := account_entities.UserORM{}
 	username := req.Username.GetValue()
@@ -117,30 +117,30 @@ func (h *userHandler) Create(ctx context.Context, req *userPB.CreateRequest, rsp
 
 	// send email (TODO: async `go h.Event.Publish(...)`)
 	if err := h.Event.Publish(ctx, &emailerPB.Message{To: req.Email.GetValue()}); err != nil {
-		log.WithError(err).Error("Received Event.Publish request error")
+        log.Error().Err(err).Msg("Received Event.Publish request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	}
 
 	// call greeter
 	// if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.Request{Name: req.GetFirstName().GetValue()}); err != nil {
 	if res, err := h.greeterSrvClient.Hello(ctx, &greeterPB.HelloRequest{Name: req.GetFirstName().GetValue()}); err != nil {
-		log.WithError(err).Error("Received greeterService.Hello request error")
+        log.Error().Err(err).Msg("Received greeterService.Hello request error")
 		return myErrors.AppError(myErrors.PSE, err)
 	} else {
-		log.Infof("Got greeterService responce %s", res.Msg)
+		log.Info().Msgf("Got greeterService responce %s", res.Msg)
 	}
 
 	return nil
 }
 
 func (h *userHandler) Update(ctx context.Context, req *userPB.UpdateRequest, rsp *userPB.UpdateResponse) error {
-	log.Info("Received UserHandler.Update request")
+	log.Info().Msg("Received UserHandler.Update request")
 	// Identify the user
 	acc, ok := auth.AccountFromContext(ctx)
 	if !ok {
         return errors.Unauthorized("mkit.service.account.user.update", "A valid auth token is required")
 	}
-	log.Infof("Caller Account: %v", acc)
+	log.Info().Msgf("Caller Account: %v", acc)
 
 	id := req.Id.GetValue()
 	if id == "" {
@@ -162,7 +162,7 @@ func (h *userHandler) Update(ctx context.Context, req *userPB.UpdateRequest, rsp
 }
 
 func (h *userHandler) Delete(ctx context.Context, req *userPB.DeleteRequest, rsp *userPB.DeleteResponse) error {
-	log.Info("Received UserHandler.Delete request")
+	log.Info().Msg("Received UserHandler.Delete request")
 
 	id := req.Id.GetValue()
 	if id == "" {

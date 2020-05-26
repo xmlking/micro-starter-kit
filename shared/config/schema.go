@@ -1,9 +1,14 @@
 package config
 
 import (
-	"fmt"
-	"time"
+    "fmt"
+    "time"
+
+    "github.com/rs/zerolog"
 )
+
+// Application runtime environment enum.
+type Environment string
 
 const (
 	// Development environment
@@ -14,8 +19,16 @@ const (
 	Production Environment = "production"
 )
 
-// Environment represents an application environment.
-type Environment string
+// Log format enum.
+type Format string
+
+const (
+    PRETTY Format = "pretty"
+    JSON Format = "json"
+    GCP Format = "gcp"
+    AZURE Format = "azure"
+    AWS Format = "aws"
+)
 
 // TODO: use proto to define config.yaml schema
 // ServiceConfiguration is the top level configuration struct which is loaded from the defined source(s)
@@ -33,7 +46,25 @@ type ServiceConfiguration struct {
 // LogConfiguration holds log config
 type LogConfiguration struct {
 	Level   string `json:"level"`
-	Runtime string `json:"runtime"` // dev, prod, gcp, azure, aws
+	Format string `json:"format" default:"dev"`  // pretty, json, gcp, azure, aws
+}
+func (l *LogConfiguration) LogLevel() (zerolog.Level,  error) {
+    return zerolog.ParseLevel(l.Level)
+}
+func (l *LogConfiguration) LogFormat() Format {
+    switch l.Format {
+    case "pretty":
+        return PRETTY
+    case "json":
+        return JSON
+    case "gcp":
+        return GCP
+    case "azure":
+        return AZURE
+    case "aws":
+        return AWS
+    }
+    return JSON
 }
 
 const (

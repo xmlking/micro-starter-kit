@@ -2,10 +2,13 @@ package main
 
 import (
     "net"
+    "net/http"
+    "path/filepath"
 
     "github.com/micro/cli/v2"
     "github.com/micro/go-micro/v2"
     "github.com/micro/go-micro/v2/config"
+    "github.com/soheilhy/cmux"
     "github.com/rs/zerolog/log"
 
     sgrpc "github.com/micro/go-micro/v2/server/grpc"
@@ -15,10 +18,14 @@ import (
     healthPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/health"
     myConfig "github.com/xmlking/micro-starter-kit/shared/config"
     "github.com/xmlking/micro-starter-kit/shared/constants"
-    _ "github.com/xmlking/micro-starter-kit/shared/logger"
+    "github.com/xmlking/micro-starter-kit/shared/logger"
     "github.com/xmlking/micro-starter-kit/shared/util"
     logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
     transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
+
+    "google.golang.org/grpc/health"
+    "google.golang.org/grpc/health/grpc_health_v1"
+    "google.golang.org/grpc"
 )
 
 const (
@@ -26,50 +33,72 @@ const (
 )
 
 var (
-    cfg = myConfig.GetServiceConfig()
+	cfg = myConfig.GetServiceConfig()
     ff = myConfig.GetFeatureFlags()
 )
 
 func main() {
-    // lis, err := net.Listen("tcp", ":0")
-    lis, err := net.Listen("unix", "/tmp/greeter.sock") //  you can also use Unix Domain Sockets (UDS) as address
+    lis, err := net.Listen("tcp", ":0")
     if err != nil {
         log.Fatal().Msgf("failed to listen: %v", err)
     }
-    println(lis.Addr().String())
+
+    hsrv := health.NewServer()
+    hsrv.SetServingStatus("", grpc_health_v1.HealthCheckResponse_SERVING)
+    gs := grpc.NewServer()
+    grpc_health_v1.RegisterHealthServer(gs, hsrv)
+
+    m := cmux.New(lis)
+    grpcL := m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
+    httpL := m.Match(cmux.HTTP1Fast())
+
+    httpS := &http.Server{
+        Handler: handler.NewHttpHandler(),
+    }
+
+    go httpS.Serve(httpL)
 
 	// New Service
 	service := micro.NewService(
 		micro.Name(serviceName),
 		micro.Version(myConfig.Version),
-        micro.Server(sgrpc.NewServer(sgrpc.Listener(lis))),
+        micro.Server(sgrpc.NewServer(sgrpc.Listener(grpcL))),
 	)
 
 	// Initialize service
 	service.Init(
 		micro.Action(func(c *cli.Context) (err error) {
-			// do some life cycle actions
+			// load config
+			myConfig.InitConfig(configDir, configFile)
+			err = config.Scan(&cfg)
+			logger.InitLogger(cfg.Log)
 			return
 		}),
 	)
 
 	// Initialize Features
 	var options []micro.Option
-	if ff.IsTLSEnabled() {
-		if tlsConf, err := myConfig.CreateServerCerts(); err != nil {
+	if cfg.Features["mtls"].Enabled {
+		// if tlsConf, err := util.GetSelfSignedTLSConfig("localhost"); err != nil {
+		if tlsConf, err := util.GetTLSConfig(
+			filepath.Join(configDir, config.Get("features", "mtls", "certfile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "keyfile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "cafile").String("")),
+			filepath.Join(configDir, config.Get("features", "mtls", "servername").String("")),
+		); err != nil {
 			log.Error().Err(err).Msg("unable to load certs")
 		} else {
-            log.Info().Msg("TLS Enabled")
+			log.Info().Msg("TLS Enabled")
 			options = append(options,
 				util.WithTLS(tlsConf),
 			)
 		}
 	}
 	// Wrappers are invoked in the order as they added
-    if ff.IsReqlogsEnabled() {
+	if cfg.Features["reqlogs"].Enabled {
 		options = append(options, micro.WrapHandler(logWrapper.NewHandlerWrapper()))
 	}
-    if ff.IsTranslogsEnabled() {
+	if cfg.Features["translogs"].Enabled {
 		topic := config.Get("features", "translogs", "topic").String(constants.RECORDER_SERVICE)
 		publisher := micro.NewEvent(topic, service.Client())
 		options = append(options, micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)))
@@ -83,11 +112,13 @@ func main() {
 	// Register Handler
 	_ = greeterPB.RegisterGreeterServiceHandler(service.Server(), handler.NewGreeterHandler())
     _ = healthPB.RegisterHealthHandler(service.Server(), handler.NewHealthHandler())
-
-    println(myConfig.GetBuildInfo())
-
+	println(myConfig.GetBuildInfo())
 	// Run service
 	if err := service.Run(); err != nil {
-        log.Fatal().Err(err).Msg("")
+		log.Fatal().Err(err).Msg("")
 	}
+
+    //if err := m.Serve(); err != nil {
+    //    println("server done")
+    //}
 }

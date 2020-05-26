@@ -3,7 +3,7 @@ name: account
 version: v0.1.0
 log:
   level: debug
-  runtime: docker-compose
+  format: json
 database:
   dialect: postgres
   host: postgres

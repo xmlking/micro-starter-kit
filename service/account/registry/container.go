@@ -1,17 +1,16 @@
 package registry
 
 import (
-	"github.com/jinzhu/gorm"
-	"github.com/sarulabs/di/v2"
+    "github.com/jinzhu/gorm"
+    "github.com/sarulabs/di/v2"
 
-	"github.com/xmlking/logger/log"
+    "github.com/rs/zerolog/log"
 
-	"github.com/xmlking/micro-starter-kit/service/account/handler"
-	account_entities "github.com/xmlking/micro-starter-kit/service/account/proto/entities"
-	"github.com/xmlking/micro-starter-kit/service/account/repository"
-	"github.com/xmlking/micro-starter-kit/shared/config"
-	"github.com/xmlking/micro-starter-kit/shared/database"
-	"github.com/xmlking/micro-starter-kit/shared/logger"
+    "github.com/xmlking/micro-starter-kit/service/account/handler"
+    account_entities "github.com/xmlking/micro-starter-kit/service/account/proto/entities"
+    "github.com/xmlking/micro-starter-kit/service/account/repository"
+    "github.com/xmlking/micro-starter-kit/shared/config"
+    "github.com/xmlking/micro-starter-kit/shared/database"
 )
 
 // Container - provide di Container
@@ -23,7 +22,7 @@ type Container struct {
 func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 	builder, err := di.NewBuilder()
 	if err != nil {
-		log.Fatal(err)
+        log.Fatal().Err(err).Msg("")
 		return nil, err
 	}
 
@@ -56,17 +55,15 @@ func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 			Build: func(ctn di.Container) (interface{}, error) {
 				repo := ctn.Get("profile-repository").(repository.ProfileRepository)
 
-				logger := logger.NewLoggerWithFields(cfg.Log, map[string]interface{}{
-					"component": "ProfileHandler",
-				})
-				return handler.NewProfileHandler(repo, logger), nil
+				subLogger := log.With().Str("component", "ProfileHandler").Logger()
+				return handler.NewProfileHandler(repo, subLogger), nil
 			},
 		},
 		{
 			Name:  "database",
 			Scope: di.App,
 			Build: func(ctn di.Container) (interface{}, error) {
-				return database.GetDatabaseConnection(cfg.Database, cfg.Log)
+				return database.GetDatabaseConnection(cfg.Database)
 			},
 			Close: func(obj interface{}) error {
 				return obj.(*gorm.DB).Close()

@@ -1,24 +1,29 @@
 package config
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"runtime"
-	"strings"
+    "context"
+    "crypto/tls"
+    "fmt"
+    "os"
+    "path/filepath"
+    "runtime"
+    "strings"
 
-	microConfig "github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/config/source/cli"
-	"github.com/micro/go-micro/v2/config/source/env"
-	"github.com/micro/go-plugins/config/source/pkger/v2"
-	// "github.com/micro/go-plugins/config/source/configmap/v2"
-	"github.com/xmlking/logger/log"
+    microConfig "github.com/micro/go-micro/v2/config"
+    "github.com/micro/go-micro/v2/config/source/cli"
+    "github.com/micro/go-micro/v2/config/source/env"
+    "github.com/micro/go-plugins/config/source/pkger/v2"
+    "github.com/rs/zerolog/log"
+
+    "github.com/xmlking/micro-starter-kit/shared/util"
 )
 
 var (
-	// IsProduction will have CurrentMode of the application
-	IsProduction bool
+	// Default Config
+	DefaultConfig Config = NewConfig()
+)
 
+var (
 	// Version is populated by govvv in compile-time.
 	Version = "untouched"
 	// BuildDate is populated by govvv.
@@ -46,40 +51,34 @@ git state   : %s
 git summary : %s
 `
 
-const (
-	// DefaultConfigDir if no ConfigDir supplied
-	DefaultConfigDir = "/config"
-	// DefaultConfigFile if no ConfigFile supplied
-	DefaultConfigFile = "config.yaml"
-)
-
-// PrintBuildInfo print build info
-func PrintBuildInfo() {
-	log.Info(GetBuildInfo())
+type Config interface {
+	Init(options ...Option) error
+	Options() Options
+	GetBuildInfo() string
+	GetServiceConfig() ServiceConfiguration
+	CreateServerCerts() (*tls.Config, error)
+	GetFeatureFlags() FeatureFlags
+	IsProduction() bool
+	String() string
 }
 
-// GetBuildInfo get build info
-func GetBuildInfo() string {
-	return fmt.Sprintf(versionMsg, Version, BuildDate, runtime.Version(), runtime.Compiler, runtime.GOOS, runtime.GOARCH,
-		GitCommit, GitBranch, GitState, GitSummary)
+type defaultConfig struct {
+	opts         Options
+	cfg          ServiceConfiguration
+	isProduction bool
+	ff           FeatureFlags
 }
 
-// InitConfig loads the configuration from file then from environment variables and then from cli flags
-func InitConfig(configDir, configFile string) {
-	if _, found := os.LookupEnv("APP_ENV"); found {
-		IsProduction = true
+// Re-init means, loading extra configuration into MicroConfig, when new files are provided.
+func (c *defaultConfig) Init(opts ...Option) (err error) {
+	for _, o := range opts {
+		o(&c.opts)
 	}
 
-	if configDir == "" {
-		configDir = DefaultConfigDir
-	}
-	if configFile == "" {
-		configFile = DefaultConfigFile
-	}
-	configPath := filepath.Join(configDir, configFile)
-	log.Infof("loading configuration from file: %s", configPath)
+	configPath := filepath.Join(c.opts.ConfigDir, c.opts.ConfigFile)
+	log.Info().Msgf("loading configuration from file: %s", configPath)
 
-	if err := microConfig.Load(
+	err = microConfig.Load(
 		// base config from file. Default: config/config.yaml
 		pkger.NewSource(pkger.WithPath(configPath)),
 		// override file from configmap
@@ -88,30 +87,101 @@ func InitConfig(configDir, configFile string) {
 		env.NewSource(),
 		// override env with cli flags
 		cli.NewSource(),
-	); err != nil {
+	)
+	if err != nil {
 		if strings.Contains(err.Error(), "no such file") {
-			log.WithError(err).Error(fmt.Sprintf(`missing config file at %s, fallback to default config path.
-            you can set config path via: --configDir=path/to/my/configDir --configFile=config.yaml`, configPath))
+			log.Error().Err(err).Msgf("missing config file at %s", configPath)
 		} else {
-			log.Fatal(err.Error())
+			log.Fatal().Err(err).Msg("")
 		}
+		return
 	}
+
+	err = microConfig.Scan(&c.cfg)
+	if err != nil {
+		return
+	}
+
+    if c.cfg.Environment == "production" {
+        c.isProduction = true
+    } else if _, found := os.LookupEnv("APP_ENV"); found {
+		c.isProduction = true
+	}
+
+	c.ff = &featureFlags{features: c.cfg.Features}
+	return
 }
 
-// LoadExtraConfig loads the extra configuration from file
-func LoadExtraConfig(configDir, configFile string) {
-	if configDir == "" {
-		configDir = DefaultConfigDir
-	}
-	configPath := filepath.Join(configDir, configFile)
-	log.Infof("loading extra configuration from file: %s", configPath)
-
-	if err := microConfig.Load(pkger.NewSource(pkger.WithPath(configPath))); err != nil {
-		if strings.Contains(err.Error(), "no such file") {
-			log.WithError(err).Error(fmt.Sprintf(`missing config file at %s, fallback to default config path.
-            you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath))
-		} else {
-			log.Fatal(err.Error())
-		}
-	}
+func (c *defaultConfig) GetBuildInfo() string {
+	return fmt.Sprintf(versionMsg, Version, BuildDate, runtime.Version(), runtime.Compiler, runtime.GOOS, runtime.GOARCH,
+		GitCommit, GitBranch, GitState, GitSummary)
 }
+
+func (c *defaultConfig) CreateServerCerts() (tlsConf *tls.Config, err error) {
+	tlsConf, err = util.GetTLSConfig(
+		filepath.Join(c.opts.ConfigDir, microConfig.Get("features", "mtls", "certfile").String("")),
+		filepath.Join(c.opts.ConfigDir, microConfig.Get("features", "mtls", "keyfile").String("")),
+		filepath.Join(c.opts.ConfigDir, microConfig.Get("features", "mtls", "cafile").String("")),
+		filepath.Join(c.opts.ConfigDir, microConfig.Get("features", "mtls", "servername").String("")),
+	)
+	if err != nil {
+		tlsConf, err = util.GetSelfSignedTLSConfig("*")
+	}
+	return
+}
+
+func (c *defaultConfig) GetFeatureFlags() FeatureFlags {
+	return c.ff
+}
+
+func (c *defaultConfig) IsProduction() bool {
+	return c.isProduction
+}
+
+func (c *defaultConfig) GetServiceConfig() (cfg ServiceConfiguration) {
+	return c.cfg
+}
+
+func (c *defaultConfig) Options() Options {
+	return c.opts
+}
+
+func (c *defaultConfig) String() string {
+	return "default"
+}
+
+func NewConfig(opts ...Option) Config {
+	// Default options
+	options := Options{
+		ConfigDir:  "/config",
+		ConfigFile: "config.yaml",
+		Context:    context.Background(),
+	}
+
+	c := &defaultConfig{opts: options}
+	_ = c.Init(opts...)
+	return c
+}
+
+// Helper functions on DefaultConfig
+func Init(options ...Option) error {
+	return DefaultConfig.Init(options...)
+}
+func IsProduction() bool {
+	return DefaultConfig.IsProduction()
+}
+
+func GetBuildInfo() string {
+	return DefaultConfig.GetBuildInfo()
+}
+func GetServiceConfig() ServiceConfiguration {
+	return DefaultConfig.GetServiceConfig()
+}
+func CreateServerCerts() (*tls.Config, error) {
+	return DefaultConfig.CreateServerCerts()
+}
+func GetFeatureFlags() FeatureFlags {
+	return DefaultConfig.GetFeatureFlags()
+}
+
+

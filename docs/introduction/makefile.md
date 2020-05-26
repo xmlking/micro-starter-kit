@@ -69,7 +69,7 @@ make deploy/e2e GITHUB_TOKEN=123...
 make run-account
 make run TARGET=emailer
 make run-emailer
-make run-account-api
+make run-greeter ARGS="--server_address=127.0.0.1:8080"
 make run-micro-cmd ARGS="--api_address=0.0.0.0:8088 api"
 make run-demo-cmd
 ```

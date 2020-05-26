@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/micro/go-micro/v2/store"
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
 )
@@ -42,7 +42,7 @@ func (repo *transactionRepository) Read(ctx context.Context, key string) (transa
 
 // Write:
 func (repo *transactionRepository) Write(ctx context.Context, key string, transation *transactionPB.TransactionEvent) error {
-	log.Debugf("Writing to database: key: %s, transation: %v", key, transation)
+	log.Debug().Msgf("Writing to database: key: %s, transation: %v", key, transation)
 	data, error := proto.Marshal(transation)
 	if error != nil {
 		return error

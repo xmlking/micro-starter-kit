@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	transactionPB "github.com/xmlking/micro-starter-kit/service/recorder/proto/transaction"
 	"github.com/xmlking/micro-starter-kit/service/recorder/repository"
@@ -23,16 +23,16 @@ func NewTransactionHandler(repo repository.TransactionRepository) transactionPB.
 
 func (h *recorderHandler) Read(ctx context.Context, req *transactionPB.ReadRequest, rsp *transactionPB.TransactionEvent) error {
 	if rsp, err := h.repo.Read(ctx, req.GetKey()); err != nil {
-		log.WithError(err).Error("Received TransactionRepository.Read request error")
+		log.Error().Err(err).Msg("Received TransactionRepository.Read request error")
 		return myErrors.AppError(myErrors.DBE, err)
 	} else {
-		log.Infof("Got transactionService responce %s", rsp.GetReq())
+		log.Info().Msgf("Got transactionService responce %s", rsp.GetReq())
 	}
 	return nil
 }
 func (h *recorderHandler) Write(ctx context.Context, req *transactionPB.WriteRequest, rsp *empty.Empty) (err error) {
 	if err := h.repo.Write(ctx, req.GetKey(), req.GetEvent()); err != nil {
-		log.WithError(err).Error("Received TransactionHandler.Write request error")
+		log.Error().Err(err).Msg("Received TransactionHandler.Write request error")
 		return myErrors.AppError(myErrors.DBE, err)
 	}
 	return nil

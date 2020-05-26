@@ -4,7 +4,7 @@ import (
 	"github.com/micro/go-micro/v2/store"
 	mstore "github.com/micro/go-micro/v2/store/memory"
 	"github.com/sarulabs/di/v2"
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	"github.com/xmlking/micro-starter-kit/service/recorder/handler"
 	"github.com/xmlking/micro-starter-kit/service/recorder/repository"
@@ -21,7 +21,7 @@ type Container struct {
 func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 	builder, err := di.NewBuilder()
 	if err != nil {
-		log.Fatal(err)
+        log.Fatal().Err(err).Msg("")
 		return nil, err
 	}
 

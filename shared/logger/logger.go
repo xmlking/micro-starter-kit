@@ -1,62 +1,161 @@
 package logger
 
 import (
-	"github.com/xmlking/logger"
-	"github.com/xmlking/logger/log"
-	"github.com/xmlking/logger/zerolog"
+    "context"
+    "fmt"
+    "os"
+    "runtime/debug"
+    "time"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
+    "github.com/rs/zerolog"
+    "github.com/rs/zerolog/log"
+    "github.com/rs/zerolog/pkgerrors"
+
+    mLogger "github.com/micro/go-micro/v2/logger"
+
+    "github.com/xmlking/micro-starter-kit/shared/config"
+    "github.com/xmlking/micro-starter-kit/shared/logger/gcp"
+    zeroToMicroAdopter "github.com/xmlking/micro-starter-kit/shared/logger/micro"
 )
 
-func InitLogger(logConf config.LogConfiguration) {
-	// set as default logger
-	logger.DefaultLogger = newLogger(logConf)
-	log.WithFields(map[string]interface{}{
-		"logLevel": logConf.Level,
-		"runtime":  logConf.Runtime,
-	}).Info("Logger set to Zerolog with:")
+var (
+    // Default Logger
+    DefaultLogger Logger = NewLogger()
+)
+
+
+type Logger interface {
+	Init(options ...Option) error
+	Options() Options
+	String() string
 }
 
-// newLogger create new logger from config
-// log level: panic, fatal, error, warn, info, debug, trace
-func newLogger(cfg config.LogConfiguration) (mLogger logger.Logger) {
-	level := cfg.Level
-	runtime := cfg.Runtime
-	logLevel, err := logger.ParseLevel(level)
-	if err != nil {
-		panic(err)
+type defaultLogger struct {
+	opts Options
+}
+
+func (l *defaultLogger) Init(opts ...Option) error {
+	for _, o := range opts {
+		o(&l.opts)
 	}
 
-	if runtime == "gcp" {
-		mLogger = zerolog.NewLogger(
-			logger.WithLevel(logLevel),
-			zerolog.UseAsDefault(),
-			zerolog.WithGCPMode(),
-		)
-	} else if config.IsProduction {
-		mLogger = zerolog.NewLogger(
-			logger.WithLevel(logLevel),
-			zerolog.UseAsDefault(),
-			zerolog.WithProductionMode(),
-		)
-	} else {
-		mLogger = zerolog.NewLogger(
-			logger.WithLevel(logLevel),
-			zerolog.UseAsDefault(),
-			zerolog.WithDevelopmentMode(),
-		)
-	}
-	return
+    // Reset to zerolog defaults
+    zerolog.TimeFieldFormat = time.RFC3339
+    zerolog.ErrorStackMarshaler = nil
+    zerolog.LevelFieldName = "level"
+    zerolog.TimestampFieldName = "time"
+    zerolog.LevelFieldMarshalFunc = func(l zerolog.Level) string { return l.String() }
+
+    var logr zerolog.Logger
+
+    if l.opts.Format == config.GCP {    // Only GCP Mode implemented
+
+        zerolog.TimeFieldFormat = time.RFC3339Nano
+        zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
+        zerolog.LevelFieldName = "severity"
+        // logr.Hook(gcp.StackdriverSeverityHook{})
+        zerolog.TimestampFieldName = "timestamp"
+        zerolog.LevelFieldMarshalFunc = gcp.LevelToSeverity
+
+        logr = zerolog.New(os.Stderr).
+            Level(zerolog.InfoLevel).
+            With().Timestamp().Stack().Logger()
+
+    } else if config.IsProduction() {  // Production Mode
+
+        zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
+        logr = zerolog.New(os.Stderr).
+            Level(zerolog.InfoLevel).
+            With().Timestamp().Stack().Logger()
+
+    } else {    // Default  Development Mode
+
+        zerolog.ErrorStackMarshaler = func(err error) interface{} {
+            fmt.Println(string(debug.Stack()))
+            return nil
+        }
+        consOut := zerolog.NewConsoleWriter(
+            func(w *zerolog.ConsoleWriter) {
+                if len(l.opts.TimeFormat) > 0 {
+                    w.TimeFormat = l.opts.TimeFormat
+                }
+                w.Out = os.Stderr
+                w.NoColor = false
+            },
+        )
+        logr = zerolog.New(consOut).
+            Level(zerolog.DebugLevel).
+            With().Timestamp().Stack().Logger()
+
+    }
+
+    // Set log Level if not default
+    if l.opts.Level != zerolog.NoLevel {
+        zerolog.SetGlobalLevel(l.opts.Level)
+        logr = logr.Level(l.opts.Level)
+    }
+
+    // Adding ReportCaller hook
+    if l.opts.ReportCaller {
+        if l.opts.Format == config.GCP {
+            logr.Hook(gcp.CallerHook{})
+        } else {
+            logr = logr.With().Caller().Logger()
+        }
+    }
+
+    // Setting timeFormat
+    if len(l.opts.TimeFormat) > 0 {
+        zerolog.TimeFieldFormat = l.opts.TimeFormat
+    }
+
+    // Adding seed fields if exist
+    if l.opts.Fields != nil {
+        logr = logr.With().Fields(l.opts.Fields).Logger()
+    }
+
+    // Also set it as zerolog's Default logger
+    log.Logger = logr
+
+    // Also set it as micro's Default logger
+    mLogger.DefaultLogger = zeroToMicroAdopter.Convert(logr)
+
+    log.Info().
+        Str("LogLevel", l.opts.Level.String()).
+        Str("LogFormat", string(l.opts.Format)).
+        Msg("Logger set to Zerolog with:")
+
+	return nil
 }
 
-// NewLogger create new logger from config and return Logger interface
-// log level: panic, fatal, error, warn, info, debug, trace
-// log runtime: dev, prod, gcp, azure, aws
-func NewLogger(cfg config.LogConfiguration) logger.Logger {
-	return newLogger(cfg)
+func (l *defaultLogger) Options() Options {
+	return l.opts
 }
-func NewLoggerWithFields(cfg config.LogConfiguration, fields map[string]interface{}) logger.Logger {
-	logr := newLogger(cfg)
-	_ = logr.Init(logger.WithFields(fields))
-	return logr
+
+func (l *defaultLogger) String() string {
+	return "default"
+}
+
+func NewLogger(opts ...Option) Logger {
+    logCfg := config.GetServiceConfig().Log
+    level, err := logCfg.LogLevel()
+    if err != nil {
+        log.Err(err).Msg("")
+    }
+
+	// Set default options
+	options := Options {
+		Level: level,
+        Format:  logCfg.LogFormat(),
+        Context:    context.Background(),
+	}
+
+	l := &defaultLogger{opts: options}
+	_ = l.Init(opts...)
+	return l
+}
+
+// Helper functions on DefaultLogger
+func Init(options ...Option) error {
+    return DefaultLogger.Init(options...)
 }

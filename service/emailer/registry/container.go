@@ -3,7 +3,7 @@ package registry
 import (
 	"github.com/sarulabs/di/v2"
 
-	"github.com/xmlking/logger/log"
+	"github.com/rs/zerolog/log"
 
 	"github.com/xmlking/micro-starter-kit/service/emailer/service"
 	"github.com/xmlking/micro-starter-kit/service/emailer/subscriber"
@@ -20,7 +20,7 @@ type Container struct {
 func NewContainer(cfg config.ServiceConfiguration) (*Container, error) {
 	builder, err := di.NewBuilder()
 	if err != nil {
-		log.Fatal(err)
+        log.Fatal().Err(err).Msg("")
 		return nil, err
 	}
 
