@@ -271,6 +271,14 @@ func (m *GetRequest) Validate() error {
 	return nil
 }
 
+func (m *GetRequest) _validateUuid(uuid string) error {
+	if matched := _profile_service_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
+	}
+
+	return nil
+}
+
 // GetRequestValidationError is the validation error returned by
 // GetRequest.Validate if the designated constraints aren't met.
 type GetRequestValidationError struct {
@@ -463,6 +471,14 @@ func (m *CreateRequest) Validate() error {
 			}
 		}
 
+	}
+
+	return nil
+}
+
+func (m *CreateRequest) _validateUuid(uuid string) error {
+	if matched := _profile_service_uuidPattern.MatchString(uuid); !matched {
+		return errors.New("invalid uuid format")
 	}
 
 	return nil

@@ -30,11 +30,11 @@ func GetDatabaseConnection(dbConf config.DatabaseConfiguration) (db *gorm.DB, er
 	if err != nil {
 		return
 	}
-    mLogger :=  log.With().
+    gLogger :=  log.With().
         Str("module", "gorm").
         Logger()
 
-	db.SetLogger(gormlog.NewGormLogger(mLogger))
+	db.SetLogger(gormlog.NewGormLogger(gLogger))
 
 	if dbConf.Logging {
 		db.Debug()

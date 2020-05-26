@@ -12,51 +12,6 @@ import (
 **/
 // PATCH for FIXME: https://github.com/envoyproxy/protoc-gen-validate/issues/223
 
-func (m *GetRequest) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *GetRequest) _validateHostname(host string) error {
-	return _validateHostname(host)
-}
-func (m *GetRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
-
-func (m *ExistRequest) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *ExistRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
-
-func (m *CreateRequest) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *CreateRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
-
-func (m *UpdateRequest) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *UpdateRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
-
-func (m *DeleteRequest) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *DeleteRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
-
-func (m *ListRequest) _validateEmail(addr string) error {
-	return _validateEmail(addr)
-}
-func (m *ListRequest) _validateHostname(host string) error {
-	return _validateHostname(host)
-}
-
 func _validateUuid(uuid string) error {
 	if matched := _user_service_uuidPattern.MatchString(uuid); !matched {
 		return errors.New("invalid uuid format")

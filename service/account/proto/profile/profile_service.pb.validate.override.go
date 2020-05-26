@@ -18,18 +18,12 @@ func (m *GetRequest) _validateEmail(addr string) error {
 func (m *GetRequest) _validateHostname(host string) error {
 	return _validateHostname(host)
 }
-func (m *GetRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
-}
 
 func (m *CreateRequest) _validateEmail(addr string) error {
 	return _validateEmail(addr)
 }
 func (m *CreateRequest) _validateHostname(host string) error {
 	return _validateHostname(host)
-}
-func (m *CreateRequest) _validateUuid(uuid string) error {
-	return _validateUuid(uuid)
 }
 
 func (m *ListRequest) _validateUuid(uuid string) error {
