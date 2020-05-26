@@ -6,6 +6,7 @@ go 1.14
 // replace github.com/micro/go-micro/v2 => /Users/schintha/Developer/Work/go/3rd-party/go-micro
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/golang/protobuf v1.4.1
 	github.com/google/uuid v1.1.1
@@ -24,5 +25,5 @@ require (
 	github.com/xmlking/logger v0.1.5
 	github.com/xmlking/logger/gormlog v0.1.5
 	github.com/xmlking/logger/zerolog v0.1.5
-	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
+	google.golang.org/genproto v0.0.0-20200521103424-e9a78aa275b7
 )
