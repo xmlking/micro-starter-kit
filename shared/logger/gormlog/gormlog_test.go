@@ -1,18 +1,21 @@
 package gormlog_test
 
 import (
+    "os"
     "time"
 
     "github.com/rs/zerolog"
     "github.com/rs/zerolog/log"
 
+    "github.com/xmlking/micro-starter-kit/shared/config"
     "github.com/xmlking/micro-starter-kit/shared/logger"
     "github.com/xmlking/micro-starter-kit/shared/logger/gormlog"
 )
 
 func ExampleLogger() {
    logger.Init(
-        // logger.WithOutput(os.Stdout),
+        logger.WithOutput(os.Stdout),
+        logger.WithFormat(config.JSON),
         logger.WithTimeFormat("ddd"),
         logger.WithLevel(zerolog.DebugLevel),
     )
@@ -29,12 +32,15 @@ func ExampleLogger() {
     )
 
     // Output:
-    //{"duration":2000000000,"level":"debug","message":"gorm query","query":"SELECT * FROM foo WHERE id = 123","rows_affected":2,"source":"/foo/bar.go","time":"ddd"}
+    //{"level":"info","LogLevel":"debug","LogFormat":"json","time":"ddd","message":"Logger set to Zerolog with:"}
+    //{"level":"debug","duration":2000,"query":"SELECT * FROM foo WHERE id = 123","rows_affected":2,"source":"/foo/bar.go","time":"ddd","message":"gorm query"}
+
 }
 
 func ExampleWithRecordToFields() {
     logger.Init(
-        // logger.WithOutput(os.Stdout),
+        logger.WithOutput(os.Stdout),
+        logger.WithFormat(config.JSON),
         logger.WithTimeFormat("ddd"),
         logger.WithLevel(zerolog.DebugLevel),
     )

@@ -2,6 +2,7 @@ package logger
 
 import (
     "context"
+    "io"
 
     "github.com/rs/zerolog"
 
@@ -22,6 +23,8 @@ type Options struct {
     ReportCaller bool
     // fields to always be logged
     Fields map[string]interface{}
+    // It's common to set this to a file, or leave it default which is `os.Stderr`
+    Out io.Writer
 	// Alternative options
 	Context context.Context
 }
@@ -58,6 +61,13 @@ func ReportCaller() Option {
 func WithFields(fields map[string]interface{}) Option {
     return func(args *Options) {
         args.Fields = fields
+    }
+}
+
+// WithOutput set default output writer for the logger
+func WithOutput(out io.Writer) Option {
+    return func(args *Options) {
+        args.Out = out
     }
 }
 

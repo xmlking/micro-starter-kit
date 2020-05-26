@@ -23,21 +23,20 @@ var (
     DefaultLogger Logger = NewLogger()
 )
 
-
 type Logger interface {
-	Init(options ...Option) error
-	Options() Options
-	String() string
+    Init(options ...Option) error
+    Options() Options
+    String() string
 }
 
 type defaultLogger struct {
-	opts Options
+    opts Options
 }
 
 func (l *defaultLogger) Init(opts ...Option) error {
-	for _, o := range opts {
-		o(&l.opts)
-	}
+    for _, o := range opts {
+        o(&l.opts)
+    }
 
     // Reset to zerolog defaults
     zerolog.TimeFieldFormat = time.RFC3339
@@ -48,7 +47,7 @@ func (l *defaultLogger) Init(opts ...Option) error {
 
     var logr zerolog.Logger
 
-    if l.opts.Format == config.GCP {    // Only GCP Mode implemented
+    if l.opts.Format == config.GCP { // Only GCP Mode implemented
 
         zerolog.TimeFieldFormat = time.RFC3339Nano
         zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
@@ -57,18 +56,18 @@ func (l *defaultLogger) Init(opts ...Option) error {
         zerolog.TimestampFieldName = "timestamp"
         zerolog.LevelFieldMarshalFunc = gcp.LevelToSeverity
 
-        logr = zerolog.New(os.Stderr).
+        logr = zerolog.New(l.opts.Out).
             Level(zerolog.InfoLevel).
             With().Timestamp().Stack().Logger()
 
-    } else if config.IsProduction() {  // Production Mode
+    } else if l.opts.Format == config.JSON || config.IsProduction() { // Production Mode
 
         zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
-        logr = zerolog.New(os.Stderr).
+        logr = zerolog.New(l.opts.Out).
             Level(zerolog.InfoLevel).
             With().Timestamp().Stack().Logger()
 
-    } else {    // Default  Development Mode
+    } else { // Default  Development Mode
 
         zerolog.ErrorStackMarshaler = func(err error) interface{} {
             fmt.Println(string(debug.Stack()))
@@ -79,7 +78,7 @@ func (l *defaultLogger) Init(opts ...Option) error {
                 if len(l.opts.TimeFormat) > 0 {
                     w.TimeFormat = l.opts.TimeFormat
                 }
-                w.Out = os.Stderr
+                w.Out = l.opts.Out
                 w.NoColor = false
             },
         )
@@ -125,15 +124,15 @@ func (l *defaultLogger) Init(opts ...Option) error {
         Str("LogFormat", string(l.opts.Format)).
         Msg("Logger set to Zerolog with:")
 
-	return nil
+    return nil
 }
 
 func (l *defaultLogger) Options() Options {
-	return l.opts
+    return l.opts
 }
 
 func (l *defaultLogger) String() string {
-	return "default"
+    return "default"
 }
 
 func NewLogger(opts ...Option) Logger {
@@ -143,16 +142,17 @@ func NewLogger(opts ...Option) Logger {
         log.Err(err).Msg("")
     }
 
-	// Set default options
-	options := Options {
-		Level: level,
+    // Set default options
+    options := Options{
+        Level:   level,
         Format:  logCfg.LogFormat(),
-        Context:    context.Background(),
-	}
+        Out:     os.Stderr,
+        Context: context.Background(),
+    }
 
-	l := &defaultLogger{opts: options}
-	_ = l.Init(opts...)
-	return l
+    l := &defaultLogger{opts: options}
+    _ = l.Init(opts...)
+    return l
 }
 
 // Helper functions on DefaultLogger
