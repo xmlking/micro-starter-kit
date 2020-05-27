@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: envoy
+  app.kubernetes.io/instance: envoy-abcxzy
+  app.kubernetes.io/component: infra
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: env-vars
+    literals:
+      - ENVOY_LOG_LEVEL=info
+  - name: config
+    files:
+      - 'config/envoy.yaml'
+      - 'config/clusters.yaml'
+      - 'config/endpoints.yaml'
+      - 'config/listeners.yaml'
+      - 'config/routes.yaml'
+
+vars:
+  - name: ENVOY_SERVICE_ENDPOINT
+    objref:
+      kind: Service
+      name: envoy
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

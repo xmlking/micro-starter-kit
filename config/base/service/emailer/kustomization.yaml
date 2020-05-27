@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: emailer
+  app.kubernetes.io/instance: emailer-abcxzy
+  app.kubernetes.io/component: microservice
+
+namePrefix: emailer-
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: config
+    files:
+      - config/config.yaml
+  - name: env-vars
+    literals:
+      - MICRO_SERVER_NAME=mkit.service.emailer
+      # - MICRO_SERVER_ADVERTISE="$(EMAILER_SERVICE_ENDPOINT):8080"
+
+vars:
+  - name: EMAILER_SERVICE_ENDPOINT
+    objref:
+      kind: Service
+      name: service
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

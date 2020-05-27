@@ -1,0 +1,18 @@
+version_info: '0'
+resources:
+  - '@type': type.googleapis.com/envoy.api.v2.RouteConfiguration
+    name: route_config_0
+    virtual_hosts:
+      - name: local_service
+        domains: ['*'] # "example.com" in prod
+        routes:
+          - match: { prefix: '/yeti.account.v1.AccountService' }
+            route: { cluster: account_service, max_grpc_timeout: 15.0s }
+          - match: { prefix: '/yeti.echo.v1.EchoService' }
+            route: { cluster: echo_service, max_grpc_timeout: 15.0s }
+        cors:
+          allow_origin_string_match:
+            - safe_regex: { google_re2: {}, regex: '\*' }
+          allow_methods: GET, PUT, DELETE, POST, OPTIONS
+          allow_headers: keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout
+          max_age: '1728000'

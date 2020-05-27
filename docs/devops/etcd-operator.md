@@ -53,4 +53,4 @@ spec:
 
 ## Install etcd
 
-Refer for rest of instructions [here](../../deploy/bases/etcd/README.md)
+Refer for rest of instructions [here](../../config/base/etcd/README.md)

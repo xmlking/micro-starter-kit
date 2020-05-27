@@ -1,0 +1,13 @@
+commonLabels:
+  app.kubernetes.io/name: etcd-operator
+  app.kubernetes.io/instance: etcd-operator-abcxzy
+  app.kubernetes.io/component: infra
+
+resources:
+  - deployment.yaml
+  - service-account.yaml
+
+images:
+  - name: quay.io/coreos/etcd-operator
+    newName: xmlking/etcd-operator
+    newTag: v0.10.1
