@@ -20,8 +20,8 @@ brew cask install --appdir=~/Applications bloomrpc
 bloomrpc-mock service/greeter/proto/greeter/greeter.proto
 # Or
 bloomrpc-mock e2e/account.bloomrpc.proto \
--r config/certs/ca.crt \
--k config/certs/micro.key,config/certs/micro.crt \
+-r config/base/secrets/certs/upstream-cert.pem \
+-k config/base/secrets/certs/client-key.pem,config/base/secrets/certs/client-cert.pem \
 -i ~/go/src  -i /usr/local/Cellar/protobuf/3.11.2/include \
 -i ~/Developer/Work/go/micro-starter-kit
 ```

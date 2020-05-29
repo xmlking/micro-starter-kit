@@ -9,6 +9,8 @@ Transactions are published by other micro services i.e., `account`, `emailer`, `
 
 ```bash
 export MICRO_BROKER=googlepubsub
+export GOOGLEPUBSUB_PROJECT_ID=<my-project-id>
+export GOOGLE_APPLICATION_CREDENTIALS=<path_to.json>
 ```
 
 ```bash
