@@ -82,13 +82,12 @@ func main() {
 		}),
 	)
 
-	log.Debug().Msgf("IsProduction? %v", myConfig.IsProduction)
+	log.Debug().Msgf("IsProduction? %v", myConfig.IsProduction())
 	log.Debug().Msgf("environment: %v", cfg.Environment)
 	log.Debug().Msgf(config.Get("database", "dialect").String("postgres"))
 	log.Debug().Msgf(config.Get("database", "host").String("no-address"))
 	log.Debug().Msgf(config.Get("database", "port").String("0000"))
 	log.Debug().Msgf(config.Get("observability", "tracing", "flushInterval").String("2000000000"))
-	println(cfg)
 	log.Debug().Msgf("cfg is %v", cfg)
 	log.Debug().Msg(configDir)
 

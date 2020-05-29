@@ -69,7 +69,8 @@ func ExampleWithRecordToFields() {
     )
 
     // Output:
-    //{"caller":"/foo/bar.go","duration_ms":200,"level":"debug","message":"gorm query","query":"SELECT * FROM foo WHERE id = 123","rows_affected":2,"time":"ddd"}
+    //{"level":"info","LogLevel":"debug","LogFormat":"json","time":"ddd","message":"Logger set to Zerolog with:"}
+    //{"level":"debug","caller":"/foo/bar.go","duration_ms":200,"query":"SELECT * FROM foo WHERE id = 123","rows_affected":2,"time":"ddd","message":"gorm query"}
 }
 
 /**

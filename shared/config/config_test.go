@@ -7,7 +7,7 @@ import (
 )
 
 func TestConfig(t *testing.T) {
-	config.DefaultConfig = config.NewConfig(config.WithConfigDir("/config"), config.WithConfigFile("config.prod.yaml"))
+	config.DefaultConfig = config.NewConfig(config.WithConfigDir("/config/envs/local/config"), config.WithConfigFile("config.prod.yaml"))
 	config.IsProduction()
 	dialect := config.GetServiceConfig().Database.Dialect
 	if dialect != "postgres" {

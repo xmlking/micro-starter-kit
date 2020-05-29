@@ -48,9 +48,9 @@ features:
     flushInterval: 5000000000
     enabled: false
   mtls:
-    certfile: certs/micro.crt
-    keyfile: certs/micro.key
-    cafile: certs/ca.crt
+    certfile: config/base/secrets/certs/upstream-localhost-cert.pem
+    keyfile: config/base/secrets/certs/upstream-localhost-key.pem
+    cafile: config/base/secrets/certs/upstream-cert.pem
     servername: "*"
     enabled: false
   validator:
