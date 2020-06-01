@@ -1,23 +1,8 @@
-# Accept the Go version for the image to be set as a build argument.
-# Set default to Go v1.14
-ARG GO_VERSION=1.14
+# Accept the Go Micro version for the image to be set as a build argument.
+ARG GO_MICRO_VERSION=latest
 
 # First stage: build the executable.
-FROM golang:${GO_VERSION}-alpine AS builder
-
-RUN apk add --no-cache gcc musl-dev
-
-# Create the user and group files that will be used in the running container to
-# run the process as an unprivileged user.
-RUN mkdir /user && \
-    echo 'nobody:x:65534:65534:nobody:/:' > /user/passwd && \
-    echo 'nobody:x:65534:' > /user/group
-
-# Install the Certificate-Authority certificates for the app to be able to make
-# calls to HTTPS endpoints.
-# Git is required for fetching the dependencies.
-RUN apk add --no-cache ca-certificates git && \
-    rm -rf /var/cache/apk/* /tmp/*
+FROM micro/go-micro:${GO_MICRO_VERSION} AS builder
 
 # Set the environment variables for the go command:
 # * CGO_ENABLED=0 to build a statically-linked executable
@@ -32,9 +17,9 @@ WORKDIR /src
 # and will therefore be cached for speeding up the next build
 COPY ./go.mod ./go.sum ./
 # Get dependancies - will also be cached if we won't change mod/sum
-RUN go mod download && \
-    GO111MODULE=off go get github.com/ahmetb/govvv && \
-    go install github.com/markbates/pkger/cmd/pkger
+RUN go env -w GO111MODULE=on && unset GOPROXY && go env -w GOPROXY="https://proxy.golang.org,direct" && go mod download && \
+    go get github.com/ahmetb/govvv && \
+    go get github.com/markbates/pkger/cmd/pkger
 
 # COPY the source code as the last step
 COPY ./ ./
@@ -55,6 +40,9 @@ FROM scratch AS final
 # copy 1 MiB busybox executable
 COPY --from=busybox:1.31.1 /bin/busybox /bin/busybox
 
+# copy dumb-ini from micro
+COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
+
 # Import the user and group files from the first stage.
 COPY --from=builder /user/group /user/passwd /etc/
 
@@ -66,7 +54,7 @@ ARG VERSION=0.0.1
 ARG TYPE=service
 ARG TARGET=account
 COPY --from=builder /app /app
-COPY --from=builder src/deploy/bases/service/${TARGET}/config /config
+COPY --from=builder src/config/base/service/${TARGET}/config /config
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind
@@ -94,7 +82,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.vendor=$VENDOR \
     org.label-schema.version=$VERSION \
     org.label-schema.docker.schema-version="1.0" \
-    org.label-schema.docker.cmd=docker="run -it -p 8080:8080  ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}"
+    org.label-schema.docker.cmd="docker run -it -e MICRO_SERVER_ADDRESS=0.0.0.0:8080 -p 8080:8080  ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}"
 
 # Run the compiled binary.
-ENTRYPOINT ["/app"]
+ENTRYPOINT ["/usr/bin/dumb-init", "/app"]

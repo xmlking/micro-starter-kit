@@ -1,0 +1,31 @@
+config/base
+config/envs
+config/README.md
+
+.github
+.vscode
+.idea
+TODO
+
+docs
+e2e
+scripts
+build
+
+# Allow files and directories
+!config/base/service/account/config/**
+!config/base/service/emailer/config/**
+!config/base/service/greeter/config/**
+!config/base/service/recorder/config/**
+
+# Ignore unnecessary files inside allowed directories
+# This should go after the allowed directories
+config/README.md
+docker-compose.yaml
+no_cgo.dockerfile
+cgo.dockerfile
+Makefile_proto
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db
