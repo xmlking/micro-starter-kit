@@ -17,9 +17,9 @@ WORKDIR /src
 # and will therefore be cached for speeding up the next build
 COPY ./go.mod ./go.sum ./
 # Get dependancies - will also be cached if we won't change mod/sum
-RUN go mod download && \
-    GO111MODULE=off go get github.com/ahmetb/govvv && \
-    go install github.com/markbates/pkger/cmd/pkger
+RUN go env -w GO111MODULE=on && unset GOPROXY && go env -w GOPROXY="https://proxy.golang.org,direct" && go mod download && \
+    go get github.com/ahmetb/govvv && \
+    go get github.com/markbates/pkger/cmd/pkger
 
 # COPY the source code as the last step
 COPY ./ ./
@@ -54,7 +54,7 @@ ARG VERSION=0.0.1
 ARG TYPE=service
 ARG TARGET=account
 COPY --from=builder /app /app
-COPY --from=builder src/deploy/bases/service/${TARGET}/config /config
+COPY --from=builder src/config/base/service/${TARGET}/config /config
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind
@@ -82,7 +82,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.vendor=$VENDOR \
     org.label-schema.version=$VERSION \
     org.label-schema.docker.schema-version="1.0" \
-    org.label-schema.docker.cmd=docker="run -it -p 8080:8080  ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}"
+    org.label-schema.docker.cmd="docker run -it -e MICRO_SERVER_ADDRESS=0.0.0.0:8080 -p 8080:8080  ${DOCKER_REGISTRY:+${DOCKER_REGISTRY}/}${DOCKER_CONTEXT_PATH}/${TARGET}-${TYPE}:${VERSION}"
 
 # Run the compiled binary.
 ENTRYPOINT ["/usr/bin/dumb-init", "/app"]
