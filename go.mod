@@ -24,6 +24,6 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.6.0
 	github.com/thoas/go-funk v0.6.0
-	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
+	google.golang.org/genproto 7c474a2e3482
 	google.golang.org/grpc v1.29.1
 )
