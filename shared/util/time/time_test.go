@@ -1,4 +1,4 @@
-package util
+package time
 
 import (
 	"testing"
@@ -11,7 +11,7 @@ import (
 func TestTimeToTimestamp(t *testing.T) {
 	assert := assert.New(t)
 	tm := time.Now()
-	ts := TimeToTimestamp(tm)
+	ts := ToTimestamp(tm)
 	assert.Equal(tm.Unix(), ts.Seconds)
 }
 
@@ -20,9 +20,9 @@ func TestTimestampToTime(t *testing.T) {
 	ts, err := ptypes.TimestampProto(time.Now())
 	assert.NoError(err)
 
-	tm := TimestampToTime(ts)
+	tm := ToTime(ts)
 	assert.Equal(tm.Unix(), ts.Seconds)
 
-	tm = TimestampToTime(nil)
+	tm = ToTime(nil)
 	assert.True(tm.IsZero())
 }

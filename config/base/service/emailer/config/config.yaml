@@ -1,13 +1,7 @@
-environment: production
-name: emailer
-version: v0.1.0
-log:
-  level: info
-  format: gcp
 email:
   username: yourGmailUsername
   password: yourGmailAppPassword
-  emailServer: smtp.gmail.com
+  email_server: smtp.gmail.com
   port: 587
   from: xmlking@gmail.com
 
@@ -25,20 +19,19 @@ services:
     endpoint: mkit.service.recorder
     version: v0.1.0
 
-# Feature Flags (enabled/disabled)
 features:
   metrics:
     address: prometheus:8125
-    flushInterval: 1000000000
+    flush_interval: 1000000000
     enabled: false
   tracing:
     address: jaeger:6831
-    flushInterval: 5000000000
+    flush_interval: 5000000000
     enabled: false
   mtls:
-    certfile: certs/micro.crt
-    keyfile: certs/micro.key
-    cafile: certs/ca.crt
+    cert_file: config/certs/micro.crt
+    key_file: config/certs/micro.key
+    ca_file: config/certs/ca.crt
     servername: "*"
     enabled: false
   validator:

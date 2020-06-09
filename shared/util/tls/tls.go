@@ -1,4 +1,4 @@
-package util
+package tls
 
 import (
 	"crypto/tls"

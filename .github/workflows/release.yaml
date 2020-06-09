@@ -67,3 +67,5 @@ jobs:
           docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_TOKEN }}
           make docker_push
           echo "make docker_push done"
+
+# TODO https://github.com/marketplace/actions/publish-docker

@@ -1,16 +1,28 @@
 package config_test
 
 import (
-	"testing"
+    "testing"
+    "time"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
+    "github.com/xmlking/micro-starter-kit/shared/config"
 )
 
-func TestConfig(t *testing.T) {
-	config.DefaultConfig = config.NewConfig(config.WithConfigDir("/config/envs/local/config"), config.WithConfigFile("config.prod.yaml"))
-	config.IsProduction()
-	dialect := config.GetServiceConfig().Database.Dialect
-	if dialect != "postgres" {
-		t.Fatalf("Expected %s got %s", "postgres", dialect)
-	}
+// CONFIGOR_DEBUG_MODE=true go test -v ./shared/config/... -count=1
+
+func TestNestedConfig(t *testing.T) {
+    t.Logf("Environment: %s", config.Configor.GetEnvironment())
+    t.Log(config.GetServiceConfig().Database)
+    connMaxLifetime := config.GetServiceConfig().Database.ConnMaxLifetime
+    if *connMaxLifetime != time.Duration(time.Hour*2) {
+        t.Fatalf("Expected %s got %s", "2h0m0s", connMaxLifetime)
+    }
+}
+
+func TestDefaultValues(t *testing.T) {
+    t.Logf("Environment: %s", config.Configor.GetEnvironment())
+    t.Log(config.GetServiceConfig().Database)
+    connMaxLifetime := config.GetServiceConfig().Database.ConnMaxLifetime
+    if *connMaxLifetime != time.Duration(time.Hour*2) {
+        t.Fatalf("Expected %s got %s", "2h0m0s", connMaxLifetime)
+    }
 }

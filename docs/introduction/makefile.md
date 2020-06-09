@@ -20,7 +20,8 @@ make proto
 make proto TARGET=account
 make proto-account
 ## generate for protos in shared package
-make proto TARGET=shared TYPE=.
+# make proto TARGET=shared TYPE=.
+make proto_shared
 ```
 
 ### test

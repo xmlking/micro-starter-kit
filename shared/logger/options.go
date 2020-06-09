@@ -2,13 +2,37 @@ package logger
 
 import (
     "context"
+    "fmt"
     "io"
 
     "github.com/rs/zerolog"
-
-    "github.com/xmlking/micro-starter-kit/shared/config"
 )
 
+
+// Log format enum.
+type Format string
+const (
+    PRETTY Format = "pretty"
+    JSON Format = "json"
+    GCP Format = "gcp"
+    AZURE Format = "azure"
+    AWS Format = "aws"
+)
+func ParseFormat(formatStr string) (Format, error)  {
+    switch formatStr {
+    case "pretty":
+        return PRETTY, nil
+    case "json":
+        return JSON, nil
+    case "gcp":
+        return GCP, nil
+    case "azure":
+        return AZURE, nil
+    case "aws":
+        return AWS, nil
+    }
+    return JSON, fmt.Errorf("unknown log Format string: '%s', defaulting to JSON", formatStr)
+}
 
 type Option func(*Options)
 
@@ -16,7 +40,7 @@ type Options struct {
 	// The logging level the logger should log at. default is `InfoLevel`
     Level zerolog.Level
     // Log format. default `json`
-    Format config.Format
+    Format Format
     // TimeFormat is one of time.RFC3339, time.RFC3339Nano, time.*
     TimeFormat string
     // Flag for whether to log caller info (off by default)
@@ -37,7 +61,7 @@ func WithLevel(level zerolog.Level) Option {
 }
 
 // WithFormat set default log format for the logger
-func WithFormat(format config.Format) Option {
+func WithFormat(format Format) Option {
     return func(args *Options) {
         args.Format = format
     }

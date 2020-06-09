@@ -1,20 +1,13 @@
-environment: production
-name: account
-version: v0.1.0
-log:
-  level: info
-  format: gcp
 database:
-  dialect: sqlite3
+  dialect: 2 # postgres = 0, mysql = 1, sqlite3 =2
   host: 0.0.0.0
   port: 9999
-  Username: sumo
-  Password: demo
+  username: sumo
+  password: demo
   database: "file:foobar?mode=memory&cache=shared"
-  maxOpenConns: 1
-  maxIdleConns: 1
-  # connMaxLifetime: 1hr
-  connMaxLifetime: 3600000000000
+  max_open_conns: 1
+  max_idle_conns: 1
+  conn_max_lifetime: 1h
   logging: true
 
 services:
@@ -31,20 +24,19 @@ services:
     endpoint: mkit.service.recorder
     version: v0.1.0
 
-# Feature Flags (enabled/disabled)
 features:
   metrics:
     address: prometheus:8125
-    flushInterval: 1000000000
+    flush_interval: 1000000000
     enabled: false
   tracing:
     address: jaeger:6831
-    flushInterval: 5000000000
+    flush_interval: 5000000000
     enabled: false
   mtls:
-    certfile: certs/micro.crt
-    keyfile: certs/micro.key
-    cafile: certs/ca.crt
+    cert_file: config/certs/micro.crt
+    key_file: config/certs/micro.key
+    ca_file: config/certs/ca.crt
     servername: "*"
     enabled: false
   validator:

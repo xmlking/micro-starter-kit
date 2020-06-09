@@ -1,3 +1,21 @@
+database:
+  dialect: 2 # postgres = 0, mysql = 1, sqlite3 =2
+  host: 0.0.0.0
+  port: 9999
+  username: sumo
+  password: demo
+  database: "file:foobar?mode=memory&cache=shared"
+  max_open_conns: 1
+  max_idle_conns: 1
+  conn_max_lifetime: 2h
+  logging: true
+email:
+  username: yourGmailUsername
+  password: yourGmailAppPassword
+  email_server: smtp.gmail.com
+  port: 587
+  from: xmlking-test@gmail.com
+
 services:
   account:
     endpoint: mkit.service.account
@@ -22,9 +40,9 @@ features:
     flush_interval: 5000000000
     enabled: false
   mtls:
-    cert_file: config/certs/micro.crt
-    key_file: config/certs/micro.key
-    ca_file: config/certs/ca.crt
+    cert_file: config/base/secrets/certs/upstream-localhost-cert.pem
+    key_file: config/base/secrets/certs/upstream-localhost-key.pem
+    ca_file: config/base/secrets/certs/upstream-cert.pem
     servername: "*"
     enabled: false
   validator:

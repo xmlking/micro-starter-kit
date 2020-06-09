@@ -1,25 +1,18 @@
-environment: development
-name: account
-version: v0.1.0
-log:
-  level: debug
-  format: pretty
 database:
-  dialect: sqlite3
+  dialect: 2 # postgres = 0, mysql = 1, sqlite3 =2
   host: 0.0.0.0
   port: 9999
-  Username: sumo
-  Password: demo
+  username: sumo
+  password: demo
   database: "file:foobar?mode=memory&cache=shared"
-  maxOpenConns: 1
-  maxIdleConns: 1
-  # connMaxLifetime: 1hr
-  connMaxLifetime: 3600000000000
+  max_open_conns: 1
+  max_idle_conns: 1
+  conn_max_lifetime: 1h
   logging: true
 email:
   username: yourGmailUsername
   password: yourGmailAppPassword
-  emailServer: smtp.gmail.com
+  email_server: smtp.gmail.com
   port: 587
   from: xmlking@gmail.com
 
@@ -37,20 +30,19 @@ services:
     endpoint: mkit.service.recorder
     version: v0.1.0
 
-# Feature Flags (enabled/disabled)
 features:
   metrics:
     address: prometheus:8125
-    flushInterval: 1000000000
+    flush_interval: 1000000000
     enabled: false
   tracing:
     address: jaeger:6831
-    flushInterval: 5000000000
+    flush_interval: 5000000000
     enabled: false
   mtls:
-    certfile: config/base/secrets/certs/upstream-localhost-cert.pem
-    keyfile: config/base/secrets/certs/upstream-localhost-key.pem
-    cafile: config/base/secrets/certs/upstream-cert.pem
+    cert_file: config/base/secrets/certs/upstream-localhost-cert.pem
+    key_file: config/base/secrets/certs/upstream-localhost-key.pem
+    ca_file: config/base/secrets/certs/upstream-cert.pem
     servername: "*"
     enabled: false
   validator:

@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package micro.common.v1;
+package mkit.shared.common.v1;
 
 option go_package = "github.com/xmlking/micro-starter-kit/shared/proto/common";
 option java_multiple_files = true;
-option java_package = "micro.common.v1";
+option java_package = "mkit.shared.common.v1";
 
 import "google/protobuf/wrappers.proto";
 

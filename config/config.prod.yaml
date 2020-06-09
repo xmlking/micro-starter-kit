@@ -1,32 +1,18 @@
-environment: production
-name: account
-version: v0.1.0
-log:
-  level: info
-  format: gcp
 database:
-  dialect: postgres
+  dialect: 0 # postgres = 0, mysql = 1, sqlite3 =2
   host: postgres
   port: 5432
-  Username: postgres
-  Password: postgres321
+  username: postgres
+  password: postgres321
   database: postgres
-  maxOpenConns: 20
-  maxIdleConns: 5
-  # connMaxLifetime: 1hr
-  connMaxLifetime: 3600000000000
+  max_open_conns: 20
+  max_idle_conns: 5
+  conn_max_lifetime: 1h
   logging: true
-observability:
-  metrics:
-    address: prometheus:8125
-    flushInterval: 1000000000
-  tracing:
-    address: jaeger:6831
-    flushInterval: 5000000000
 email:
   username: yourGmailUsername
   password: yourGmailAppPassword
-  emailServer: smtp.gmail.com
+  email_server: smtp.gmail.com
   port: 587
   from: xmlking@gmail.com
 
@@ -44,20 +30,19 @@ services:
     endpoint: mkit.service.recorder
     version: v0.1.0
 
-# Feature Flags (enabled/disabled)
 features:
   metrics:
     address: prometheus:8125
-    flushInterval: 1000000000
+    flush_interval: 1000000000
     enabled: false
   tracing:
     address: jaeger:6831
-    flushInterval: 5000000000
+    flush_interval: 5000000000
     enabled: false
   mtls:
-    certfile: certs/micro.crt
-    keyfile: certs/micro.key
-    cafile: certs/ca.crt
+    cert_file: config/certs/micro.crt
+    key_file: config/certs/micro.key
+    ca_file: config/certs/ca.crt
     servername: "*"
     enabled: false
   validator:

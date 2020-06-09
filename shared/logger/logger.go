@@ -11,17 +11,38 @@ import (
     "github.com/rs/zerolog/log"
     "github.com/rs/zerolog/pkgerrors"
 
-    mLogger "github.com/micro/go-micro/v2/logger"
+    mLogger "github.com/micro/go-micro/v2/logger" // TODO: remove
 
-    "github.com/xmlking/micro-starter-kit/shared/config"
     "github.com/xmlking/micro-starter-kit/shared/logger/gcp"
     zeroToMicroAdopter "github.com/xmlking/micro-starter-kit/shared/logger/micro"
 )
 
 var (
     // Default Logger
-    DefaultLogger Logger = NewLogger()
+    DefaultLogger Logger
 )
+
+func init() {
+    var opts []Option
+
+    if lvlStr := os.Getenv("CONFIGOR_LOG_LEVEL"); len(lvlStr) > 0 {
+        if lvl, err := zerolog.ParseLevel(lvlStr); err != nil {
+            log.Fatal().Err(err).Send()
+        } else {
+            opts = append(opts, WithLevel(lvl))
+        }
+    }
+
+    if fmtStr := os.Getenv("CONFIGOR_LOG_FORMAT"); len(fmtStr) > 0 {
+        if logFmt, err := ParseFormat(fmtStr); err != nil {
+            log.Fatal().Err(err).Send()
+        } else {
+            opts = append(opts, WithFormat(logFmt))
+        }
+    }
+
+    DefaultLogger = NewLogger(opts...)
+}
 
 type Logger interface {
     Init(options ...Option) error
@@ -47,7 +68,7 @@ func (l *defaultLogger) Init(opts ...Option) error {
 
     var logr zerolog.Logger
 
-    if l.opts.Format == config.GCP { // Only GCP Mode implemented
+    if l.opts.Format == GCP { // Only GCP Mode implemented
 
         zerolog.TimeFieldFormat = time.RFC3339Nano
         zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
@@ -60,7 +81,7 @@ func (l *defaultLogger) Init(opts ...Option) error {
             Level(zerolog.InfoLevel).
             With().Timestamp().Stack().Logger()
 
-    } else if l.opts.Format == config.JSON || config.IsProduction() { // Production Mode
+    } else if l.opts.Format == JSON { // Production Mode
 
         zerolog.ErrorStackMarshaler = pkgerrors.MarshalStack
         logr = zerolog.New(l.opts.Out).
@@ -96,7 +117,7 @@ func (l *defaultLogger) Init(opts ...Option) error {
 
     // Adding ReportCaller hook
     if l.opts.ReportCaller {
-        if l.opts.Format == config.GCP {
+        if l.opts.Format == GCP {
             logr.Hook(gcp.CallerHook{})
         } else {
             logr = logr.With().Caller().Logger()
@@ -119,7 +140,7 @@ func (l *defaultLogger) Init(opts ...Option) error {
     // Also set it as micro's Default logger
     mLogger.DefaultLogger = zeroToMicroAdopter.Convert(logr)
 
-    log.Info().
+    logr.Info().
         Str("LogLevel", l.opts.Level.String()).
         Str("LogFormat", string(l.opts.Format)).
         Msg("Logger set to Zerolog with:")
@@ -136,16 +157,10 @@ func (l *defaultLogger) String() string {
 }
 
 func NewLogger(opts ...Option) Logger {
-    logCfg := config.GetServiceConfig().Log
-    level, err := logCfg.LogLevel()
-    if err != nil {
-        log.Err(err).Msg("")
-    }
-
     // Set default options
     options := Options{
-        Level:   level,
-        Format:  logCfg.LogFormat(),
+        Level:   zerolog.InfoLevel,
+        Format:  PRETTY,
         Out:     os.Stderr,
         Context: context.Background(),
     }

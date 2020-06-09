@@ -62,6 +62,7 @@ go install github.com/markbates/pkger/cmd/pkger
 # fetch protoc plugins into $GOPATH
 GO111MODULE=off go get github.com/golang/protobuf/{proto,protoc-gen-go}
 GO111MODULE=on go get github.com/micro/micro/v2/cmd/protoc-gen-micro@master
+GO111MODULE=on go get github.com/gogo/protobuf/protoc-gen-gofast
 # GO111MODULE=off go get -u github.com/envoyproxy/protoc-gen-validate
 # GO111MODULE=off go get -u github.com/infobloxopen/protoc-gen-gorm
 # getting official micro cli

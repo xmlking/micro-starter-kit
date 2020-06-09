@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package mkit.shared.config.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/shared/proto/config";
+option java_multiple_files = true;
+option java_package = "mkit.shared.config.v1";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+import "third_party/proto/validate/validate.proto";
+import "third_party/proto/gogoproto/gogo.proto";
+
+// Config Service
+service ConfigService {
+    rpc Get (google.protobuf.Empty) returns (ServiceConfiguration);
+    rpc Set (ServiceConfiguration) returns (google.protobuf.Empty);
+}
+
+message Service {
+    string endpoint = 1 [json_name = "endpoint"];
+    string version = 2 [(gogoproto.moretags) = "yaml:\"version\" default:\"v0.1.0\""];
+    uint32 deadline = 3 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"10\""];
+}
+
+message EmailConfiguration {
+    string username = 1 [(gogoproto.moretags) = "yaml:\"username\""];
+    string password = 2;
+    string email_server = 3 [(gogoproto.moretags) = "yaml:\"email_server\""];
+    uint32 port = 4;
+    // string from = 5 [(tagger.tags) = "valid:\"email,optional\""];
+    string from = 5 [(gogoproto.moretags) = "valid:\"email,optional\""];
+}
+
+enum DatabaseDialect {
+    PostgreSQL = 0;
+    MySQL = 1;
+    SQLLite = 2;
+}
+
+message DatabaseConfiguration {
+    DatabaseDialect dialect = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"postgres\""];
+    string host = 2;
+    uint32 port = 3 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"5432\""];
+    string username = 4 [(gogoproto.moretags) = "valid:\"alphanum,required\""];
+    string password = 5 [(gogoproto.moretags) = "valid:\"alphanum,required\""];
+    string database = 6 [(gogoproto.moretags) = "valid:\"type(string),required\""];
+    string charset = 7 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"utf8\""];
+    bool utc = 8 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"true\""];
+    bool logging = 9 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+    bool singularize = 10 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+    uint32 max_open_conns = 11 [(gogoproto.moretags) = "yaml:\"max_open_conns,omitempty\" default:\"1\""];
+    uint32 max_idle_conns = 12 [(gogoproto.moretags) = "yaml:\"max_idle_conns,omitempty\" default:\"1\""];
+    google.protobuf.Duration conn_max_lifetime = 13 [(gogoproto.stdduration) = true, (gogoproto.moretags) = "yaml:\"conn_max_lifetime,omitempty\" default:\"1h\""];
+}
+
+message Features {
+    message Metrics {
+        bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+        string address = 2;
+        uint64 flush_interval = 3 [(gogoproto.moretags) = "yaml:\"flush_interval,omitempty\" default:\"10000000\""];
+    }
+    message Tracing {
+        bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+        string address = 2;
+        uint64 flush_interval = 3 [(gogoproto.moretags) = "yaml:\"flush_interval,omitempty\" default:\"10000000\""];
+    }
+    message TLS {
+        bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+        string cert_file = 2 [(gogoproto.moretags) = "yaml:\"cert_file\" valid:\"alphanum,required\""];
+        string key_file = 3 [(gogoproto.moretags) = "yaml:\"key_file\" valid:\"alphanum,required\""];
+        string ca_file = 4 [(gogoproto.moretags) = "yaml:\"ca_file\" valid:\"alphanum,required\""];
+        string servername = 5 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"*\""];
+    }
+    message Validator {
+        bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+    }
+    message ReqLogs {
+        bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+    }
+    message TransLogs {
+        bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
+        string topic = 2;
+    }
+    Metrics metrics = 1;
+    Tracing tracing = 2;
+    TLS tls = 3;
+    Validator validator = 4;
+    ReqLogs req_logs = 5;
+    TransLogs trans_logs = 6;
+}
+
+message ServiceConfiguration {
+    option (validate.disabled) = true;
+    string service_name = 1;
+    string version = 2;
+    DatabaseConfiguration database = 3;
+    EmailConfiguration email = 4;
+    Features features = 5;
+    map<string, Service> services = 6;
+}

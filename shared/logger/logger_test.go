@@ -9,12 +9,11 @@ import (
     "github.com/pkg/errors"
     "github.com/rs/zerolog"
     "github.com/rs/zerolog/log"
-    // bootstrap config and logger
+    // bootstrap logger
     "github.com/xmlking/micro-starter-kit/shared/logger"
 )
 
 func TestLogger(t *testing.T) {
-
 	log.Info().Msg("Hello World")
 	log.Info().Msgf("Hello %s", "Sumo")
 }

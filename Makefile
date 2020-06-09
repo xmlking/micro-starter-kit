@@ -107,6 +107,14 @@ proto proto-%:
 	fi
 	@rsync -a github.com/xmlking/micro-starter-kit/service/account/proto/ service/account/proto && rm -Rf github.com
 
+proto_shared:
+	@for f in ./shared/proto/**/*.proto; do \
+		protoc --proto_path=.:${GOPATH}/src \
+		--gofast_out=plugins=grpc,paths=source_relative:. \
+		--validate_out=lang=gogo,paths=source_relative:. $$f; \
+		echo ✓ compiled: $$f; \
+	done
+
 proto_lint:
 	@echo "Linting all protos"; \
 	@${GOPATH}/bin/buf check lint
