@@ -28,10 +28,10 @@
   - Commands
     - [Demo](../cmd/demo/README.md)
   - Services
-    - [Account](../srv/account/README.md)
-    - [Emailer](../srv/emailer/README.md)
-    - [Greeter](../srv/greeter/README.md)
-    - [Recorder](../srv/recorder/README.md)
+    - [Account](../service/account/README.md)
+    - [Emailer](../service/emailer/README.md)
+    - [Greeter](../service/greeter/README.md)
+    - [Recorder](../service/recorder/README.md)
 - DevOps
   - [Docker](devops/docker.md)
   - [KinD](devops/kind.md)

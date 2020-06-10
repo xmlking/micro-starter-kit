@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package mkit.service.greeter.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter";
+option java_multiple_files = true;
+option java_package = "mkit.service.greeter.v1";
+
+service GreeterService {
+    // Hello is echo method
+    rpc Hello (HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+    string name = 1;
+}
+
+message HelloResponse {
+    string msg = 1;
+}

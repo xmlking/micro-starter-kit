@@ -14,7 +14,7 @@ lint:
     - e2e
   ignore_only:
     RPC_RESPONSE_STANDARD_NAME:
-      - srv/recorder/proto/transaction/transaction.proto
+      - service/recorder/proto/transaction/transaction.proto
   rpc_allow_google_protobuf_empty_responses: true
 breaking:
   use:

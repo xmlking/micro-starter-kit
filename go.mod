@@ -1,28 +1,31 @@
 module github.com/xmlking/micro-starter-kit
 
-go 1.13
+go 1.14
 
+// for local development, you can repoint go-micro to local development go-micro workspace
 // replace github.com/micro/go-micro/v2 => /Users/schintha/Developer/Work/go/3rd-party/go-micro
-// FIXME : https://github.com/etcd-io/etcd/issues/11563
 replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
+
+// replace github.com/xmlking/configor => /Users/schintha/Developer/Work/go/configor
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
-	github.com/golang/protobuf v1.3.3
+	github.com/gogo/protobuf v1.3.1
+	github.com/golang/protobuf v1.4.2
 	github.com/google/uuid v1.1.1
-	github.com/infobloxopen/atlas-app-toolkit v0.19.2
-	github.com/infobloxopen/protoc-gen-gorm v0.18.0
+	github.com/infobloxopen/atlas-app-toolkit v0.21.1
+	github.com/infobloxopen/protoc-gen-gorm v0.20.0
 	github.com/jinzhu/gorm v1.9.12
-	github.com/micro/cli/v2 v2.1.2-0.20200204093551-dfdc8f23b971
-	github.com/micro/go-micro/v2 v2.1.1-0.20200216193645-9696efde02e6
-	github.com/micro/go-plugins/config/source/pkger/v2 v2.0.1
-	github.com/micro/go-plugins/logger/zerolog/v2 v2.0.0-20200216194855-d65e1120d8a2
+	github.com/markbates/pkger v0.17.0
+	github.com/micro/go-micro/v2 v2.8.0
 	github.com/pkg/errors v0.9.1
-	github.com/rs/zerolog v1.18.0
+	github.com/rs/zerolog v1.19.0
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
-	github.com/stretchr/testify v1.4.0
-	github.com/thoas/go-funk v0.5.0
-	google.golang.org/genproto v0.0.0-20200207204624-4f3edf09f4f6
+	github.com/stretchr/testify v1.6.1
+	github.com/thoas/go-funk v0.6.0
+	github.com/xmlking/configor v0.0.0-20200609225939-ed6133420e9d
+	google.golang.org/genproto v0.0.0-20200608115520-7c474a2e3482
+	google.golang.org/grpc v1.27.0
 )

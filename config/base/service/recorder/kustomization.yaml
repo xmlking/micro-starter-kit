@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: recorder
+  app.kubernetes.io/instance: recorder-abcxzy
+  app.kubernetes.io/component: microservice
+
+namePrefix: recorder-
+
+resources:
+  - deployment.yaml
+  - service.yaml
+
+configMapGenerator:
+  - name: config
+    files:
+      - config/config.yaml
+  - name: env-vars
+    literals:
+      - MICRO_SERVER_NAME=mkit.service.recorder
+      # - MICRO_SERVER_ADVERTISE="$(RECORDER_SERVICE_ENDPOINT):8080"
+
+vars:
+  - name: RECORDER_SERVICE_ENDPOINT
+    objref:
+      kind: Service
+      name: service
+      apiVersion: v1
+    fieldref:
+      fieldpath: metadata.name

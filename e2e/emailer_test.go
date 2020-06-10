@@ -8,12 +8,13 @@ import (
 
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/client"
-	emailerPB "github.com/xmlking/micro-starter-kit/srv/emailer/proto/emailer"
+
+	emailerPB "github.com/xmlking/micro-starter-kit/service/emailer/proto/emailer"
 )
 
 var (
-	publisher micro.Publisher
-	topic     = "emailersrv"
+	publisher micro.Event
+	topic     = "mkit.service.emailer"
 )
 
 func init() {

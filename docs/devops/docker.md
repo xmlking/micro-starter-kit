@@ -7,7 +7,7 @@
 ```bash
 # build
 GO_MICRO_VERSION=v1.17.1
-TYPE=srv
+TYPE=service
 TARGET=account
 VERSION=0.0.5-SNAPSHOT
 # DOCKER_REGISTRY=gcr.io
@@ -68,8 +68,8 @@ Run complete app suite with `docker-compose`
 
 ```bash
 docker-compose up consul
-docker-compose up account-srv
-docker-compose up emailer-srv
+docker-compose up account-service
+docker-compose up emailer-service
 docker-compose up gateway
 docker-compose up greeter-api
 ```
@@ -79,8 +79,8 @@ docker-compose up greeter-api
 > run just for testing image in k8s...
 
 ```bash
-# account-srv
-kubectl run --rm mytest --image=xmlking/account-srv:latest \
+# account-service
+kubectl run --rm mytest --image=xmlking/account-service:latest \
 --env="MICRO_REGISTRY=kubernetes" \
 --env="MICRO_SELECTOR=static" \
 --env="MICRO_SERVER_ADDRESS=0.0.0.0:8080" \

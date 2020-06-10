@@ -1,15 +1,15 @@
 {
   "recommendations": [
-    "DavidAnson.vscode-markdownlint",
-    "ms-vscode.Go",
+    "golang.go",
     "ms-azuretools.vscode-docker",
     "zxh404.vscode-proto3",
     "xaver.clang-format",
     "EditorConfig.EditorConfig",
     "donjayamanne.githistory",
-    "eamodio.gitlens",
     "humao.rest-client",
     "PKief.material-icon-theme",
-    "johnpapa.vscode-peacock"
+    "hediet.vscode-drawio",
+    "github.github-vscode-theme",
+    "github.vscode-pull-request-github"
   ]
 }

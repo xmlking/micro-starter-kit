@@ -1,58 +1,48 @@
-environment: development
-name: accountsrv
-version: v0.1.0
-log:
-  level: debug
-  runtime: local
 database:
-  dialect: sqlite3
+  dialect: 3 # unspecified = 0, postgres = 1, mysq2 = 1, sqlite3 =2
   host: 0.0.0.0
   port: 9999
-  Username: sumo
-  Password: demo
-  # FIXME: https://github.com/jinzhu/gorm/issues/2875
-  # database: "file:foobar?mode=memory&cache=shared"
-  database: "file:./build/gorm.db"
-  maxOpenConns: 1
-  maxIdleConns: 1
-  # connMaxLifetime: 1hr
-  connMaxLifetime: 60000000
+  username: sumo
+  password: demo
+  database: "file:foobar?mode=memory&cache=shared"
+  max_open_conns: 1
+  max_idle_conns: 1
+  conn_max_lifetime: 1h
   logging: true
 email:
   username: yourGmailUsername
   password: yourGmailAppPassword
-  emailServer: smtp.gmail.com
+  email_server: smtp.gmail.com
   port: 587
-  from: xmlking@gmail.com
+  from: from@gmail.com
 
 services:
-  accountsrv:
-    endpoint: accountsrv
+  account:
+    endpoint: mkit.service.account:8080
     version: v0.1.0
-  greetersrv:
-    endpoint: greetersrv
+  greeter:
+    endpoint: mkit.service.greeter:8080
     version: v0.1.0
-  emailersrv:
-    endpoint: emailersrv
+  emailer:
+    endpoint: mkit.service.emailer:8080
     version: v0.1.0
-  recordersrv:
-    endpoint: recordersrv
+  recorder:
+    endpoint: mkit.service.recorder:8080
     version: v0.1.0
 
-# Feature Flags (enabled/disabled)
 features:
   metrics:
     address: prometheus:8125
-    flushInterval: 1000000000
+    flush_interval: 1000000000
     enabled: false
   tracing:
     address: jaeger:6831
-    flushInterval: 5000000000
+    flush_interval: 5000000000
     enabled: false
-  mtls:
-    certfile: certs/micro.crt
-    keyfile: certs/micro.key
-    cafile: certs/ca.crt
+  tls:
+    cert_file: /config/base/secrets/certs/upstream-localhost-cert.pem
+    key_file: /config/base/secrets/certs/upstream-localhost-key.pem
+    ca_file: /config/base/secrets/certs/upstream-cert.pem
     servername: "*"
     enabled: false
   validator:
@@ -60,5 +50,5 @@ features:
   reqlogs:
     enabled: true
   translogs:
-    topic: recordersrv
+    topic: mkit.service.recorder
     enabled: true

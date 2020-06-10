@@ -9,6 +9,8 @@ You should have:
 ### third-party tools
 
 ```bash
+# github CLI
+brew install hub
 # for mac, use brew to install protobuf
 brew install protobuf
 # VS Code plugin `vscode-proto3` need clang-format
@@ -59,9 +61,16 @@ go install github.com/markbates/pkger/cmd/pkger
 
 # fetch protoc plugins into $GOPATH
 GO111MODULE=off go get github.com/golang/protobuf/{proto,protoc-gen-go}
-GO111MODULE=on go get github.com/micro/protoc-gen-micro/v2@v2.0.0
+GO111MODULE=on go get github.com/micro/micro/v2/cmd/protoc-gen-micro@master
+GO111MODULE=on go get github.com/gogo/protobuf/protoc-gen-gofast
 # GO111MODULE=off go get -u github.com/envoyproxy/protoc-gen-validate
 # GO111MODULE=off go get -u github.com/infobloxopen/protoc-gen-gorm
+# getting official micro cli
+GO111MODULE=on go get github.com/micro/micro/v2
+# goup checks if there are any updates for imports in your module.
+# the main purpose is using it as a linter in continuous integration or in development process.
+# Usage: goup -v -m ./...
+GO111MODULE=on go get github.com/rvflash/goup
 ```
 
 > Installing PGV can currently only be done from source:
@@ -69,6 +78,7 @@ GO111MODULE=on go get github.com/micro/protoc-gen-micro/v2@v2.0.0
 ```bash
 go get -d github.com/envoyproxy/protoc-gen-validate
 cd ~/go/src/github.com/envoyproxy/protoc-gen-validate
+git pull
 make build
 ```
 
@@ -77,21 +87,7 @@ make build
 ```bash
 go get -d github.com/infobloxopen/protoc-gen-gorm
 cd ~/go/src/github.com/infobloxopen/protoc-gen-gorm
+git pull
 make install
 ```
 
-> Installing `micro-cli`<br/>
-> instead of using default micro-cli, pull custom build `micro-cli` with `gRPC` and `CORS` enabled
-
-```bash
-# getting official micro cli
-GO111MODULE=on go get github.com/micro/micro/v2@v2.0.0
-## GO111MODULE=on go get github.com/micro/micro
-# lets use custom made micro with gRPC enabled by default...
-# GO111MODULE=on go get github.com/xmlking/micro@master
-# Temp workaround...
-GO111MODULE=off go get -d github.com/xmlking/micro
-cd ~/go/src/github.com/xmlking/micro
-git pull --all
-go install ./...
-```

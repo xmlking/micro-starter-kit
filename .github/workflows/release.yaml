@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 1
       - name: Install kustomize
         run: |
-          curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.3.0/kustomize_v3.3.0_linux_amd64.tar.gz | tar zxv
+          curl -L https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.5.4/kustomize_v3.5.4_linux_amd64.tar.gz | tar zxv
           chmod u+x kustomize
           sudo mv kustomize /usr/local/bin/
       - name: Build kustomize
@@ -61,8 +61,11 @@ jobs:
       - name: Build docker images
         run: make docker DOCKER_REGISTRY=docker.pkg.github.com DOCKER_CONTEXT_PATH=$GITHUB_REPOSITORY
       - name: Push docker images
+        if: github.ref == 'refs/heads/master'
         run: |
           # docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_DOCKER_PASSWORD }}
           docker login docker.pkg.github.com --username $GITHUB_ACTOR --password ${{ secrets.GITHUB_TOKEN }}
           make docker_push
           echo "make docker_push done"
+
+# TODO https://github.com/marketplace/actions/publish-docker

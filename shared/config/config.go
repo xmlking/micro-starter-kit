@@ -1,36 +1,37 @@
 package config
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"runtime"
-	"strings"
+    "crypto/tls"
+    "fmt"
+    "os"
+    "runtime"
+    "strings"
+    "sync"
 
-	microConfig "github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/config/source/cli"
-	"github.com/micro/go-micro/v2/config/source/env"
-	"github.com/micro/go-plugins/config/source/pkger/v2"
-	// "github.com/micro/go-plugins/config/source/configmap/v2"
-	log "github.com/xmlking/micro-starter-kit/shared/micro/logger"
+    "github.com/rs/zerolog/log"
+    "github.com/xmlking/configor"
+
+    configPB "github.com/xmlking/micro-starter-kit/shared/proto/config"
+    uTLS "github.com/xmlking/micro-starter-kit/shared/util/tls"
 )
 
 var (
-	// IsProduction will have CurrentMode of the application
-	IsProduction bool
+    Configor   *configor.Configor
+    cfg        configPB.Configuration
+    configLock = new(sync.RWMutex)
 
-	// Version is populated by govvv in compile-time.
-	Version = "untouched"
-	// BuildDate is populated by govvv.
-	BuildDate string
-	// GitCommit is populated by govvv.
-	GitCommit string
-	// GitBranch is populated by govvv.
-	GitBranch string
-	// GitState is populated by govvv.
-	GitState string
-	// GitSummary is populated by govvv.
-	GitSummary string
+    // Version is populated by govvv in compile-time.
+    Version = "untouched"
+    // BuildDate is populated by govvv.
+    BuildDate string
+    // GitCommit is populated by govvv.
+    GitCommit string
+    // GitBranch is populated by govvv.
+    GitBranch string
+    // GitState is populated by govvv.
+    GitState string
+    // GitSummary is populated by govvv.
+    GitSummary string
 )
 
 // VersionMsg is the message that is shown after process started.
@@ -46,72 +47,44 @@ git state   : %s
 git summary : %s
 `
 
-const (
-	// DefaultConfigDir if no ConfigDir supplied
-	DefaultConfigDir = "/config"
-	// DefaultConfigFile if no ConfigFile supplied
-	DefaultConfigFile = "config.yaml"
-)
+func init() {
+    configPath, exists := os.LookupEnv("CONFIGOR_FILE_PATH")
+    if !exists {
+        configPath = "/config/config.yaml"
+    }
 
-// PrintBuildInfo print build info
-func PrintBuildInfo() {
-	log.Info(GetBuildInfo())
+    Configor = configor.New(&configor.Config{UsePkger: true, ErrorOnUnmatchedKeys: true})
+    log.Info().Msgf("loading configuration from file: %s", configPath)
+    if err := Configor.Load(&cfg, configPath); err != nil {
+        if strings.Contains(err.Error(), "no such file") {
+            log.Panic().Err(err).Msgf("missing config file at %s", configPath)
+        } else {
+            log.Fatal().Err(err).Send()
+        }
+    }
 }
 
-// GetBuildInfo get build info
+/**
+  Helper Functions
+*/
+func IsProduction() bool {
+    return Configor.GetEnvironment() == "production"
+}
+
 func GetBuildInfo() string {
-	return fmt.Sprintf(versionMsg, Version, BuildDate, runtime.Version(), runtime.Compiler, runtime.GOOS, runtime.GOARCH,
-		GitCommit, GitBranch, GitState, GitSummary)
+    return fmt.Sprintf(versionMsg, Version, BuildDate, runtime.Version(), runtime.Compiler, runtime.GOOS, runtime.GOARCH,
+        GitCommit, GitBranch, GitState, GitSummary)
 }
 
-// InitConfig loads the configuration from file then from environment variables and then from cli flags
-func InitConfig(configDir, configFile string) {
-	if _, found := os.LookupEnv("APP_ENV"); found {
-		IsProduction = true
-	}
-
-	if configDir == "" {
-		configDir = DefaultConfigDir
-	}
-	if configFile == "" {
-		configFile = DefaultConfigFile
-	}
-	configPath := filepath.Join(configDir, configFile)
-	log.Infof("loading configuration from file: %s", configPath)
-
-	if err := microConfig.Load(
-		// base config from file. Default: config/config.yaml
-		pkger.NewSource(pkger.WithPath(configPath)),
-		// override file from configmap
-		// configmap.NewSource(),
-		// override configmap from env
-		env.NewSource(),
-		// override env with cli flags
-		cli.NewSource(),
-	); err != nil {
-		if strings.Contains(err.Error(), "no such file") {
-			log.WithErrorf(err, `missing config file at %s, fallback to default config path.
-            you can set config path via: --configDir=path/to/my/configDir --configFile=config.yaml`, configPath)
-		} else {
-			log.Fatal(err.Error())
-		}
-	}
+func GetConfig() configPB.Configuration { // FIXME: return a deep copy?
+    configLock.RLock()
+    defer configLock.RUnlock()
+    return cfg
 }
 
-// LoadExtraConfig loads the extra configuration from file
-func LoadExtraConfig(configDir, configFile string) {
-	if configDir == "" {
-		configDir = DefaultConfigDir
-	}
-	configPath := filepath.Join(configDir, configFile)
-	log.Infof("loading extra configuration from file: %s", configPath)
-
-	if err := microConfig.Load(pkger.NewSource(pkger.WithPath(configPath))); err != nil {
-		if strings.Contains(err.Error(), "no such file") {
-			log.WithErrorf(err, `missing config file at %s, fallback to default config path.
-            you can set config path via: --configDir=path/to/my/configDir --configFile=match.yaml`, configPath)
-		} else {
-			log.Fatal(err.Error())
-		}
-	}
+func CreateServerCerts() (tlsConfig *tls.Config, err error) {
+    configLock.RLock()
+    defer configLock.RUnlock()
+    tlsConf := cfg.Features.Tls
+    return uTLS.GetTLSConfig(tlsConf.CertFile, tlsConf.KeyFile, tlsConf.CaFile, tlsConf.Servername)
 }

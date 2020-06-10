@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package mkit.service.account.profile.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/service/account/proto/profile";
+option java_multiple_files = true;
+option java_package = "mkit.service.account.profile.v1";
+
+import "google/protobuf/timestamp.proto";
+// import "shared/proto/common/common.proto";
+import "google/protobuf/wrappers.proto";
+import "service/account/proto/entities/entities.proto";
+import "third_party/proto/validate/validate.proto";
+
+service ProfileService {
+    rpc List (ListRequest) returns (ListResponse);
+    rpc Get (GetRequest) returns (GetResponse);
+    rpc Create (CreateRequest) returns (CreateResponse);
+}
+
+// FIXME: https://github.com/envoyproxy/protoc-gen-validate/issues/223
+// Workaround in .override.go
+message ListRequest {
+    google.protobuf.UInt32Value limit = 1 [(validate.rules).uint32 = { gte: 1 lte: 100 }];
+    google.protobuf.UInt32Value page = 2 [(validate.rules).uint32.gte = 1];
+    google.protobuf.StringValue sort = 3;
+    google.protobuf.StringValue preferred_theme = 4 [
+        (validate.rules).string = { in: [ "dark", "light", "cosmic", "corporate" ] }
+    ];
+    mkit.service.account.entities.v1.Profile.GenderType gender = 5
+        [(validate.rules).enum = { in: [ 0, 1, 2 ] }];
+}
+
+message ListResponse {
+    option (validate.disabled) = true;
+    repeated mkit.service.account.entities.v1.Profile results = 1;
+    uint32 total = 2;
+}
+
+message GetRequest {
+    oneof id {
+        google.protobuf.StringValue profile_id = 1 [(validate.rules).string.uuid = true]; // Not Working
+        google.protobuf.StringValue user_id = 2 [(validate.rules).string.uuid = true]; // Not Working
+    }
+}
+
+message GetResponse {
+    option (validate.disabled) = true;
+    mkit.service.account.entities.v1.Profile result = 1;
+}
+
+message CreateRequest {
+  google.protobuf.StringValue user_id = 2
+      [(validate.rules).string.uuid = true];  // Not Working
+  google.protobuf.StringValue tz = 3;
+  google.protobuf.StringValue avatar = 4
+      [(validate.rules).string.uri_ref = true];
+  mkit.service.account.entities.v1.Profile.GenderType gender = 5
+      [(validate.rules).enum = { in: [ 0, 1, 2 ] }];
+  google.protobuf.Timestamp birthday = 6
+      [(validate.rules).timestamp.lt_now = true];
+  google.protobuf.StringValue preferred_theme = 7 [
+    (validate.rules).string = { in: [ "dark", "light", "cosmic", "corporate" ] }
+  ];
+}
+
+message CreateResponse {
+    option (validate.disabled) = true;
+    mkit.service.account.entities.v1.Profile result = 1;
+}

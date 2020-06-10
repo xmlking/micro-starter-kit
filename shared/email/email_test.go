@@ -6,17 +6,14 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/micro/go-micro/v2/config"
-	myConfig "github.com/xmlking/micro-starter-kit/shared/config"
+    "github.com/xmlking/micro-starter-kit/shared/config"
 )
 
 func TestSendEmail_Send(t *testing.T) {
-	myConfig.InitConfig("/config", "config.yaml")
-	var emailConf myConfig.EmailConfiguration
-	config.Get("email").Scan(&emailConf)
+	var emailConf = config.GetConfig().Email
 	myAuth := smtp.PlainAuth("", emailConf.Username, emailConf.Password, emailConf.EmailServer)
 	from := emailConf.From
-	address := emailConf.EmailServer + ":" + strconv.Itoa(emailConf.Port)
+	address := emailConf.EmailServer + ":" + strconv.FormatUint(uint64(emailConf.Port), 10)
 
 	type fields struct {
 		from    string

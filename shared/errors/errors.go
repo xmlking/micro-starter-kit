@@ -44,6 +44,10 @@ var appErrors = map[ErrorCode]ErrorDetail{
 	PSE: {"PSE", "broker publish error: %v", 500},
 }
 
+// TODO: Should I use https://github.com/grpc/grpc/blob/master/doc/http-grpc-status-mapping.md
+// https://github.com/avinassh/grpc-errors/blob/master/go/server.go
+// http://avi.im/grpc-errors/
+
 // AppError - App specific Error
 func AppError(errorCode ErrorCode, a ...interface{}) error {
 	return &errors.Error{

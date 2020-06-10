@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package mkit.service.account.entities.v1;
+
+option go_package = "github.com/xmlking/micro-starter-kit/service/account/proto/entities";
+option java_multiple_files = true;
+option java_package = "mkit.service.account.entities.v1";
+
+// import "shared/proto/common/common.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "third_party/proto/protoc-gen-gorm/options/gorm.proto";
+import "third_party/proto/protoc-gen-gorm/types/types.proto";
+import "third_party/proto/validate/validate.proto";
+
+// User Entity
+message User {
+    option (validate.disabled) = true;
+    option (gorm.opts) = {
+    ormable: true
+  };
+    // gorm.types.UUID id                      = 1  [(gorm.field).tag = {
+    // type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; //
+    // primary key
+
+    gorm.types.UUID id = 1 [(gorm.field).tag = {
+    type: "uuid"
+    not_null: true
+    unique: true
+    primary_key: true
+  }]; // primary key
+    google.protobuf.Timestamp created_at = 2 [(gorm.field).tag = { not_null: true }];
+    google.protobuf.Timestamp updated_at = 3 [(gorm.field).tag = { not_null: true }];
+    google.protobuf.Timestamp deleted_at = 4 [(gorm.field).tag = { index: "idx_users_deleted_at" }];
+    google.protobuf.StringValue username = 7 [(gorm.field).tag = { size: 100 not_null: true }];
+    string first_name = 8 [(gorm.field).tag = { size: 255 not_null: true }];
+    string last_name = 9 [(gorm.field).tag = { not_null: true }];
+    string email = 10 [(gorm.field).tag = { not_null: true }];
+    mkit.service.account.entities.v1.Profile profile = 11 [(gorm.field).has_one = { preload: true }];
+}
+
+// Profile Entity
+message Profile {
+    option (validate.disabled) = true;
+    option (gorm.opts) = {
+    ormable: true
+  };
+    // gorm.types.UUID id                      = 1  [(gorm.field).tag = {
+    // type: "uuid", primary_key: true, default: "uuid_generate_v4()" }]; primary
+    // key
+    gorm.types.UUID id = 1 [(gorm.field).tag = {
+    type: "uuid"
+    not_null: true
+    unique: true
+    primary_key: true
+  }]; // primary key
+    google.protobuf.Timestamp created_at = 2 [(gorm.field).tag = { not_null: true }];
+    google.protobuf.Timestamp updated_at = 3 [(gorm.field).tag = { not_null: true }];
+    google.protobuf.Timestamp deleted_at = 4 [(gorm.field).tag = { index: "idx_profiles_deleted_at" }];
+    string tz = 5; // *time.Location?
+    string avatar = 6;
+    enum GenderType {
+        GENDER_TYPE_UNSPECIFIED = 0;
+        GENDER_TYPE_MALE = 1;
+        GENDER_TYPE_FEMALE = 2;
+    }
+    // FIXME: https://github.com/jinzhu/gorm/issues/1978
+    GenderType gender = 7; //  GenderType `gorm:"not null;type:ENUM('M', 'F')"`
+    google.protobuf.Timestamp birthday = 8 [(gorm.field).tag = { not_null: true }];
+    uint32 age = 9 [(gorm.field).drop = true]; // synthetic field
+    google.protobuf.StringValue preferred_theme = 10;
+}

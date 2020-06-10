@@ -1,5 +1,4 @@
-// logging package from micro-strter-kit
+// logger setup from micro-strter-kit
 // import "github.com/xmlking/micro-starter-kit/shared/logger" to `main.go` and all test files.
-// add logger.InitLogger(cfg.Log) in service.Init()
 // set log level and format in config.yaml
-package logging
+package logger

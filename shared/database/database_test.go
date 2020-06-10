@@ -1,23 +1,27 @@
 package database
 
 import (
-	"testing"
+    "testing"
+    "time"
 
-	"github.com/xmlking/micro-starter-kit/shared/config"
+    _ "github.com/jinzhu/gorm/dialects/sqlite"
 
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/xmlking/micro-starter-kit/shared/logger"
+    _ "github.com/xmlking/micro-starter-kit/shared/logger"
+    configPB "github.com/xmlking/micro-starter-kit/shared/proto/config"
 )
 
 func TestDatabase(t *testing.T) {
-	logger.InitLogger(config.LogConfiguration{Level: "debug", Runtime: "development"})
-	_, err := GetDatabaseConnection(config.DatabaseConfiguration{
-		Dialect:  "sqlite3",
+    dur := time.Hour
+	_, err := GetDatabaseConnection(configPB.DatabaseConfiguration{
+		Dialect:  configPB.DatabaseDialect_SQLite3,
 		Host:     "127.0.0.1",
 		Port:     3306,
 		Username: "root",
 		Password: "123456",
 		Database: ":memory:",
+        MaxOpenConns: 1,
+        MaxIdleConns: 1,
+        ConnMaxLifetime: &dur,
 	})
 	if err != nil {
 		t.Fatalf("Database connection failed, %v!", err)

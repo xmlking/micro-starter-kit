@@ -1,0 +1,43 @@
+version_info: '0'
+resources:
+  - '@type': 'type.googleapis.com/envoy.api.v2.Cluster'
+    name: echo_service # account_service
+    connect_timeout: { seconds: 5 }
+    type: STRICT_DNS
+    # Comment out the following line to test on v6 networks
+    dns_lookup_family: V4_ONLY
+    http2_protocol_options: {}
+    lb_policy: ROUND_ROBIN
+    hosts:
+      # - socket_address: { address:  account.default.svc.cluster.local, port_value: 5000 } # for k8s
+      - socket_address: { address: host.docker.internal, port_value: 5000 } # for docker-4-mac
+    transport_socket:
+      name: envoy.transport_sockets.tls
+      typed_config:
+        '@type': type.googleapis.com/envoy.api.v2.auth.UpstreamTlsContext
+        common_tls_context:
+          alpn_protocols: ['h2', 'http/1.1']
+          validation_context:
+            trusted_ca: { filename: '/etc/certs/upstream-ca-cert.pem' }
+            match_subject_alt_names: { exact: 'localhost' }
+
+  - '@type': type.googleapis.com/envoy.api.v2.Cluster
+    name: echo_service1
+    connect_timeout: { seconds: 5 }
+    type: STRICT_DNS
+    # Comment out the following line to test on v6 networks
+    dns_lookup_family: V4_ONLY
+    http2_protocol_options: {}
+    lb_policy: ROUND_ROBIN
+    hosts:
+      # - socket_address: { address:  echo.default.svc.cluster.local, port_value: 5000 } # for k8s
+      - socket_address: { address: host.docker.internal, port_value: 5000 } # for docker-4-mac
+
+  - '@type': type.googleapis.com/envoy.api.v2.Cluster
+    name: echo_service2
+    connect_timeout: { seconds: 5 }
+    type: EDS
+    eds_cluster_config:
+      eds_config: { path: '/etc/envoy/endpoints.yaml' }
+    lb_policy: ROUND_ROBIN
+    http2_protocol_options: {}

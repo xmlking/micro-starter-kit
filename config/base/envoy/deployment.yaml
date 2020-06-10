@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envoy
+spec:
+  template:
+    spec:
+      containers:
+        - name: envoy
+          image: envoyproxy/envoy-alpine:latest
+          imagePullPolicy: Always
+          command:
+            - envoy
+          args:
+            - '-c /etc/envoy/envoy.yaml'
+            - '--service-node front'
+            - '--service-cluster front'
+            - '-l $(ENVOY_LOG_LEVEL)'
+          envFrom:
+            - configMapRef:
+                name: env-vars
+#            - configMapRef:
+#                name: env-vars-common
+          volumeMounts:
+            - name: config
+              mountPath: /etc/envoy
+            - name: certs
+              mountPath: /etc/certs
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /server_info
+              port: 9901
+          livenessProbe:
+            httpGet:
+              path: /server_info
+              port: 9901
+          ports:
+            - name: admin
+              containerPort: 9901
+            - name: http
+              containerPort: 9090
+            - name: https
+              containerPort: 9443
+      volumes:
+        - name: config
+          configMap:
+            name: config
+        - name: certs
+          secret:
+            secretName: certs

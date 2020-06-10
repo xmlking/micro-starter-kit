@@ -1,0 +1,48 @@
+database:
+  dialect: 1 # unspecified = 0, postgres = 1, mysq2 = 1, sqlite3 =2
+  host: 0.0.0.0
+  port: 9999
+  username: sumo
+  password: demo
+  database: "file:foobar?mode=memory&cache=shared"
+  max_open_conns: 1
+  max_idle_conns: 1
+  conn_max_lifetime: 1h
+  logging: true
+
+services:
+  account:
+    endpoint: mkit.service.account:8080
+    version: v0.1.0
+  greeter:
+    endpoint: mkit.service.greeter:8080
+    version: v0.1.0
+  emailer:
+    endpoint: mkit.service.emailer:8080
+    version: v0.1.0
+  recorder:
+    endpoint: mkit.service.recorder:8080
+    version: v0.1.0
+
+features:
+  metrics:
+    address: prometheus:8125
+    flush_interval: 1000000000
+    enabled: false
+  tracing:
+    address: jaeger:6831
+    flush_interval: 5000000000
+    enabled: false
+  tls:
+    cert_file: /config/certs/micro.crt
+    key_file: /config/certs/micro.key
+    ca_file: /config/certs/ca.crt
+    servername: "*"
+    enabled: false
+  validator:
+    enabled: true
+  reqlogs:
+    enabled: true
+  translogs:
+    topic: mkit.service.recorder
+    enabled: true

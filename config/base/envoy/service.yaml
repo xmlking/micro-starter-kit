@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: envoy
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "tcp"
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
+spec:
+  type: LoadBalancer
+  # We want the servers to become available even if they're not ready
+  publishNotReadyAddresses: true
+  ports:
+  - name: grpc-web
+    port: 9090
+    targetPort: http
+  - name: grpc-web-secure
+    port: 9443
+    targetPort: https
+  - name: http-admin
+    port: 9901
+    targetPort: admin

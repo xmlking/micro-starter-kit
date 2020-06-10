@@ -9,9 +9,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+<a name="v0.3.2"></a>
+## [v0.3.2] - 2020-06-09
+### Build
+- **deps:** updated deps
+- **deps:** updated deps
+- **deps:** updated deps
+- **deps:** updated deps
+- **docker:** update dockarfile to match directory structure changes
+- **gomod:** fix go.sum
+- **proto:** regenerate protobuf files
+- **pubsub:** remove pubsub cli
+
+### Chore
+- **deps:** update quay.io/coreos/etcd docker tag to v3.4.9
+- **deps:** update redis docker tag to v5.0.9
+- **deps:** update quay.io/coreos/etcd docker tag to v3.4.7
+- **deps:** updated deps
+- **deps:** update dependency redis to v5.0.8
+- **deps:** updated logger
+- **deps:** update dependency quay.io/coreos/etcd to v3.4.5
+- **deps:** update module thoas/go-funk to v0.6.0
+- **deps:** update dependency micro/micro to v2
+- **deps:** updated deps
+- **deps:** updated micro version
+- **refactor:** micro.Publisher -> micro.Event
+
+### Ci
+- **gitflow:** upgrading golang to 1.14
+- **gomod_lint:** adding gomod_lint task
+
+### Docs
+- **docs:** adding badges
+- **etcd:** adding etcd operator install docs
+- **istio:** updated docs for Istio, etcd operator etc
+- **setup:** fix protoc-gen-micro new location
+
+### Feat
+- **config:** changed config to use configor lib
+- **deploy:** adding etcd-operator kustomization deployment
+- **dockerfile:** using dumb-init in Dockerfle
+- **logger:** using https://github.com/xmlking/logger
+
+### Fix
+- **broker:** nats/eats broker only works without broker address
+- **config:** fix connMaxLifetime for prod
+- **deps:** fix go.sum with go-mod-download
+- **gomod:** fix go.sum file using `go mod download`
+- **logger:** fix log level for dev env
+- **logger:** fix gotmlog tests
+- **wrapper:** using server.Message methods not fields
+
+### Improvement
+- **tls:** upgrading TLS support go-micro 2.3.0
+- **transation:** improve transation wrapper, using metadata.Set
+
+### Refactor
+- **all:** renamed srv --> service
+- **config:** using new config module
+- **config:** move config.yaml to config again
+- **config:** kustomization config refactored
+- **config:** refactor logging to use native zerolog
+- **wrapper:** using all CAPITAL for metadata keys i.e., TransID = "TRANS-ID"
+
+### Style
+- **fmt:** format code
+- **fmt:** format code with fmt
+- **gofmt:** format code with gofmt
+
+### Test
+- **logger:** adding more tests
+
+
 <a name="v0.3.1"></a>
 ## [v0.3.1] - 2020-02-16
 ### Chore
+- **changelog:** updated changelog
 - **changelog:** fix changlog template
 - **deploy:** using cbws/etcd-operator image
 - **deps:** updated deps
@@ -386,7 +459,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added steps when behind VPN
 
 
-[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.2...HEAD
+[v0.3.2]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.9...v0.3.0
 [v0.2.9]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.8...v0.2.9

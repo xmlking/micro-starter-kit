@@ -2,7 +2,7 @@
 # defaultBaseImage: gcr.io/distroless/static:nonroot
 # Use: busybox to debug container
 # baseImageOverrides:
-#   github.com/xmlking/micro-starter-kit/srv/account: busybox
-#   github.com/xmlking/micro-starter-kit/srv/emailer: busybox
+#   github.com/xmlking/micro-starter-kit/account-service: busybox
+#   github.com/xmlking/micro-starter-kit/emailer-service: busybox
 
 # defaultBaseImage: gcr.io/distroless/base

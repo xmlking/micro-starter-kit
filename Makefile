@@ -27,9 +27,9 @@ HAS_GOVVV				:= $(shell command -v govvv 2> /dev/null)
 HAS_PKGER				:= $(shell command -v pkger 2> /dev/null)
 HAS_KO					:= $(shell command -v ko 2> /dev/null)
 
-# Type of service e.g api, fnc, srv, web (default: "srv")
-TYPE = $(or $(word 2,$(subst -, ,$*)), srv)
-override TYPES:= srv
+# Type of service e.g api, service, web, cmd (default: "service")
+TYPE = $(or $(word 2,$(subst -, ,$*)), service)
+override TYPES:= service
 # Target for running the action
 TARGET = $(word 1,$(subst -, ,$*))
 
@@ -42,7 +42,7 @@ BUILD_FLAGS = $(shell govvv -flags -version $(VERSION) -pkg $(VERSION_PACKAGE))
 
 .PHONY: all tools, check_dirty, clean, update_deps
 .PHONY: proto proto-% proto_lint proto_format
-.PHONY: lint lint-%
+.PHONY: lint lint-%, gomod_lint
 .PHONY: format format-%
 .PHONY: pkger pkger-%
 .PHONY: build build-%
@@ -60,6 +60,7 @@ tools:
 	# go install github.com/markbates/pkger/cmd/pkger
 	# GO111MODULE=off go get github.com/golangci/golangci-lint/cmd/golangci-lint
 	# GO111MODULE=on go get github.com/bufbuild/buf/cmd/buf
+	# GO111MODULE=on go get github.com/rvflash/goup
 
 check_dirty:
 ifdef GIT_DIRTY
@@ -67,7 +68,7 @@ ifdef GIT_DIRTY
 endif
 
 clean:
-	@for d in ./build/*-srv; do \
+	@for d in ./build/*-service; do \
 		echo "Deleting $$d;"; \
 		rm -f $$d; \
 	done
@@ -104,25 +105,36 @@ proto proto-%:
 			echo ✓ compiled: $$f; \
 		done \
 	fi
-	@rsync -a github.com/xmlking/micro-starter-kit/srv/account/proto/ srv/account/proto && rm -Rf github.com
+	@rsync -a github.com/xmlking/micro-starter-kit/service/account/proto/ service/account/proto && rm -Rf github.com
+
+proto_shared:
+	@for f in ./shared/proto/**/*.proto; do \
+		protoc --proto_path=.:${GOPATH}/src \
+		--gofast_out=plugins=grpc,paths=source_relative:. \
+		--validate_out=lang=gogo,paths=source_relative:. $$f; \
+		echo ✓ compiled: $$f; \
+	done
 
 proto_lint:
+	@echo "Linting all protos"; \
 	@${GOPATH}/bin/buf check lint
 	@${GOPATH}/bin/buf check breaking --against-input '.git#branch=master'
 
 # I prefer VS Code's proto plugin to format my code then prototool
 proto_format: proto_lint
+	@echo "Formating all protos"; \
 	@${GOPATH}/bin/prototool format -d .;
+
+gomod_lint:
+	@goup -v -m ./...
 
 lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all go"; \
 		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
-		echo "Linting all protos"; \
 	else \
 		echo "Linting go in ${TARGET}-${TYPE}..."; \
 		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
-		echo "Linting protos in ${TARGET}-${TYPE}..."; \
 	fi
 
 # @clang-format -i $(shell find . -type f -name '*.proto')

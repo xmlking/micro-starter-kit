@@ -1,9 +1,11 @@
 {
   "host": "localhost:8080",
   "insecure": true,
-  "proto": "./srv/account/proto/account/account.proto",
-  "import-paths": ["/Users/schintha/go/src"],
-  "call": "accountsrv.UserService.Create",
+  "proto": "./service/account/proto/account/account.proto",
+  "import-paths": [
+    "/Users/schintha/go/src"
+  ],
+  "call": "mkit.service.account.UserService.Create",
   "data": {
     "username": "sumo{{.RequestNumber}}",
     "firstName": "demo{{.RequestNumber}}",

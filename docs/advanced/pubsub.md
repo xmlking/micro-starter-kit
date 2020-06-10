@@ -3,9 +3,9 @@
 ```bash
 export GOOGLEPUBSUB_PROJECT_ID=my-project-id
 gcloud beta emulators pubsub start --project=$GOOGLEPUBSUB_PROJECT_ID --host-port=localhost:8085
-# Create topic `emailersrv` (optional)
+# Create topic `mkit.service.emailer` (optional)
 # Note: Second time when you run below service, it will automatically create topic
-gcloud pubsub topics create emailersrv
+gcloud pubsub topics create mkit.service.emailer
 ```
 
 Run service

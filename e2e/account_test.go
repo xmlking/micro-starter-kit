@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	// "github.com/xmlking/micro-starter-kit/shared/micro/client/selector/static"
-	profilePB "github.com/xmlking/micro-starter-kit/srv/account/proto/profile"
-	userPB "github.com/xmlking/micro-starter-kit/srv/account/proto/user"
+	profilePB "github.com/xmlking/micro-starter-kit/service/account/proto/profile"
+	userPB "github.com/xmlking/micro-starter-kit/service/account/proto/user"
 )
 
 /**
@@ -37,8 +37,8 @@ type AccountTestSuite struct {
 // SetupSuite implements suite.SetupAllSuite
 func (suite *AccountTestSuite) SetupSuite() {
 	suite.T().Log("in SetupSuite")
-	suite.user = userPB.NewUserService("accountsrv", client.NewClient())
-	suite.profile = profilePB.NewProfileService("accountsrv", client.NewClient())
+	suite.user = userPB.NewUserService("mkit.service.account", client.NewClient())
+	suite.profile = profilePB.NewProfileService("mkit.service.account", client.NewClient())
 }
 
 // TearDownSuite implements suite.TearDownAllSuite

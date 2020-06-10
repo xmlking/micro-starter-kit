@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/micro/go-micro/v2/server"
+
 	"github.com/xmlking/micro-starter-kit/shared/errors"
 )
 
