@@ -29,7 +29,7 @@ ARG VERSION=0.0.1
 ARG TYPE=service
 ARG TARGET=account
 
-RUN pkger -o $TYPE/$TARGET -include /config
+RUN pkger -o $TYPE/$TARGET -include /config/config.yaml -include /config/config.prod.yaml -include /config/certs
 RUN go build -a \
     -ldflags="-w -s -linkmode external -extldflags '-static' $(govvv -flags -version ${VERSION} -pkg $(go list ./shared/config) )" \
     -o /app ./$TYPE/$TARGET/main.go ./$TYPE/$TARGET/plugin.go

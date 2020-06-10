@@ -75,9 +75,9 @@ git push
 # dry run to see what you will create
 # kubectl apply -k config/envs/development  --dry-run=client -o yaml
 mkdir -p {./build/kubernetes/development,./build/kubernetes/production,./build/kubernetes/staging}
-kustomize build config/envs/development --output ./build/kubernetes/development
-kustomize build config/envs/production --output ./build/kubernetes/production
-kustomize build config/envs/staging --output ./build/kubernetes/staging
+kustomize build config/envs/development --output ./build/kubernetes/development --load_restrictor none 
+kustomize build config/envs/production --output ./build/kubernetes/production --load_restrictor none 
+kustomize build config/envs/staging --output ./build/kubernetes/staging --load_restrictor none
 # tag changes
 git tag v0.1.3
 git push origin  v0.1.3

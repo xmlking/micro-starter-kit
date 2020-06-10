@@ -15,7 +15,9 @@ A Makefile is included for convenience
 Build the binary
 
 ```bash
-make build TARGET=greeter TYPE=service VERSION=v0.1.1
+make build TARGET=greeter TYPE=service
+# then run with custom env
+MICRO_SERVER_ADDRESS=0.0.0.0:9999 CONFIGOR_ENV_PREFIX=APP APP_FEATURES_TLS_ENABLED=true ./build/greeter-service
 ```
 
 Run the service

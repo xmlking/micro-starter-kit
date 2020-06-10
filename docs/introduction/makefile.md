@@ -94,6 +94,9 @@ make gomod_lint
 make pkger TARGET=greeter
 make pkger-greeter
 make pkger
+# other pkger commands
+pkger list -include /config/config.yaml -include /config/config.prod.yaml -include /config/certs
+pkger info github.com/xmlking/micro-starter-kit
 ```
 
 ### build
