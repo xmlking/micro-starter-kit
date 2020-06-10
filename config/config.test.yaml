@@ -1,5 +1,5 @@
 database:
-  dialect: 2 # postgres = 0, mysql = 1, sqlite3 =2
+  dialect: 3 # unspecified = 0, postgres = 1, mysq2 = 1, sqlite3 =2
   host: 0.0.0.0
   port: 9999
   username: sumo
@@ -14,20 +14,21 @@ email:
   password: yourGmailAppPassword
   email_server: smtp.gmail.com
   port: 587
-  from: xmlking-test@gmail.com
+  from: from-test@gmail.com
 
 services:
   account:
-    endpoint: mkit.service.account
+    endpoint: mkit.service.account:8080
     version: v0.1.0
+    deadline: 8888
   greeter:
-    endpoint: mkit.service.greeter
+    endpoint: mkit.service.greeter:8080
     version: v0.1.0
   emailer:
-    endpoint: mkit.service.emailer
+    endpoint: mkit.service.emailer:8080
     version: v0.1.0
   recorder:
-    endpoint: mkit.service.recorder
+    endpoint: mkit.service.recorder:8080
     version: v0.1.0
 
 features:
@@ -39,7 +40,7 @@ features:
     address: jaeger:6831
     flush_interval: 5000000000
     enabled: false
-  mtls:
+  tls:
     cert_file: config/base/secrets/certs/upstream-localhost-cert.pem
     key_file: config/base/secrets/certs/upstream-localhost-key.pem
     ca_file: config/base/secrets/certs/upstream-cert.pem

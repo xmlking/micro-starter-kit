@@ -13,12 +13,12 @@ type greeterHandler struct{}
 
 // NewUserHandler returns an instance of `UserServiceHandler`.
 func NewGreeterHandler() greeterPB.GreeterServiceHandler {
-	return &greeterHandler{}
+    return &greeterHandler{}
 }
 
 // Hello method
 func (s *greeterHandler) Hello(ctx context.Context, req *greeterPB.HelloRequest, rsp *greeterPB.HelloResponse) error {
-	log.Info().Msg("Received Greeter.Hello request")
-	rsp.Msg = "Hello " + req.Name
-	return nil
+    log.Info().Msg("Received Greeter.Hello request")
+    rsp.Msg = "Hello " + req.Name
+    return nil
 }

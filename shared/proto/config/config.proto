@@ -13,12 +13,12 @@ import "third_party/proto/gogoproto/gogo.proto";
 
 // Config Service
 service ConfigService {
-    rpc Get (google.protobuf.Empty) returns (ServiceConfiguration);
-    rpc Set (ServiceConfiguration) returns (google.protobuf.Empty);
+    rpc Get (google.protobuf.Empty) returns (Configuration);
+    rpc Set (Configuration) returns (google.protobuf.Empty);
 }
 
 message Service {
-    string endpoint = 1 [json_name = "endpoint"];
+    string endpoint = 1 [json_name = "endpoint", (gogoproto.moretags) = "valid:\"dialstring\""];
     string version = 2 [(gogoproto.moretags) = "yaml:\"version\" default:\"v0.1.0\""];
     uint32 deadline = 3 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"10\""];
 }
@@ -27,21 +27,21 @@ message EmailConfiguration {
     string username = 1 [(gogoproto.moretags) = "yaml:\"username\""];
     string password = 2;
     string email_server = 3 [(gogoproto.moretags) = "yaml:\"email_server\""];
-    uint32 port = 4;
-    // string from = 5 [(tagger.tags) = "valid:\"email,optional\""];
+    uint32 port = 4 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"587\" valid:\"port\""];
     string from = 5 [(gogoproto.moretags) = "valid:\"email,optional\""];
 }
 
 enum DatabaseDialect {
-    PostgreSQL = 0;
-    MySQL = 1;
-    SQLLite = 2;
+    Unspecified = 0;
+    Postgre = 1;
+    MySQL = 2;
+    SQLite3 = 3;
 }
 
 message DatabaseConfiguration {
-    DatabaseDialect dialect = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"postgres\""];
-    string host = 2;
-    uint32 port = 3 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"5432\""];
+    DatabaseDialect dialect = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"2\""];
+    string host = 2 [(gogoproto.moretags) = "yaml:\",omitempty\" valid:\"host\""];
+    uint32 port = 3 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"5432\" valid:\"port\""];
     string username = 4 [(gogoproto.moretags) = "valid:\"alphanum,required\""];
     string password = 5 [(gogoproto.moretags) = "valid:\"alphanum,required\""];
     string database = 6 [(gogoproto.moretags) = "valid:\"type(string),required\""];
@@ -67,18 +67,18 @@ message Features {
     }
     message TLS {
         bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
-        string cert_file = 2 [(gogoproto.moretags) = "yaml:\"cert_file\" valid:\"alphanum,required\""];
-        string key_file = 3 [(gogoproto.moretags) = "yaml:\"key_file\" valid:\"alphanum,required\""];
-        string ca_file = 4 [(gogoproto.moretags) = "yaml:\"ca_file\" valid:\"alphanum,required\""];
-        string servername = 5 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"*\""];
+        string cert_file = 2 [(gogoproto.moretags) = "yaml:\"cert_file\" valid:\"type(string),required\""];
+        string key_file = 3 [(gogoproto.moretags) = "yaml:\"key_file\" valid:\"type(string),required\""];
+        string ca_file = 4 [(gogoproto.moretags) = "yaml:\"ca_file\" valid:\"type(string),required\""];
+        string servername = 5 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"'*'\""];
     }
     message Validator {
         bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
     }
-    message ReqLogs {
+    message Reqlogs {
         bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
     }
-    message TransLogs {
+    message Translogs {
         bool enabled = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"false\""];
         string topic = 2;
     }
@@ -86,16 +86,21 @@ message Features {
     Tracing tracing = 2;
     TLS tls = 3;
     Validator validator = 4;
-    ReqLogs req_logs = 5;
-    TransLogs trans_logs = 6;
+    Reqlogs reqlogs = 5;
+    Translogs translogs = 6;
 }
 
-message ServiceConfiguration {
+message Services {
+    Service account = 1;
+    Service greeter = 2;
+    Service emailer = 3;
+    Service recorder = 4;
+}
+
+message Configuration {
     option (validate.disabled) = true;
-    string service_name = 1;
-    string version = 2;
     DatabaseConfiguration database = 3;
     EmailConfiguration email = 4;
     Features features = 5;
-    map<string, Service> services = 6;
+    Services services = 6;
 }

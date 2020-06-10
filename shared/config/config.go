@@ -17,9 +17,8 @@ import (
 
 var (
     Configor   *configor.Configor
-    cfg        configPB.ServiceConfiguration
+    cfg        configPB.Configuration
     configLock = new(sync.RWMutex)
-    _appName   string
 
     // Version is populated by govvv in compile-time.
     Version = "untouched"
@@ -54,13 +53,13 @@ func init() {
         configPath = "/config/config.yaml"
     }
 
-    Configor = configor.New(&configor.Config{UsePkger: true})
+    Configor = configor.New(&configor.Config{UsePkger: true, ErrorOnUnmatchedKeys: true})
     log.Info().Msgf("loading configuration from file: %s", configPath)
     if err := Configor.Load(&cfg, configPath); err != nil {
         if strings.Contains(err.Error(), "no such file") {
             log.Panic().Err(err).Msgf("missing config file at %s", configPath)
         } else {
-            log.Fatal().Err(err).Msg("")
+            log.Fatal().Err(err).Send()
         }
     }
 }
@@ -68,19 +67,6 @@ func init() {
 /**
   Helper Functions
 */
-
-func GetAppName() string {
-    configLock.RLock()
-    defer configLock.RUnlock()
-    return _appName
-}
-
-func SetAppName(appName string) {
-    configLock.Lock()
-    defer configLock.Unlock()
-    _appName = appName
-}
-
 func IsProduction() bool {
     return Configor.GetEnvironment() == "production"
 }
@@ -90,27 +76,15 @@ func GetBuildInfo() string {
         GitCommit, GitBranch, GitState, GitSummary)
 }
 
-func GetServiceConfig() configPB.ServiceConfiguration {
+func GetConfig() configPB.Configuration { // FIXME: return a deep copy?
     configLock.RLock()
     defer configLock.RUnlock()
     return cfg
 }
 
-func CreateServerCerts() (tlsConf *tls.Config, err error) {
+func CreateServerCerts() (tlsConfig *tls.Config, err error) {
     configLock.RLock()
     defer configLock.RUnlock()
-    // ff := cfg.Features["mtls"]
-    // tlsConf, err = util.GetTLSConfig(ff.certfile, ff.keyfile, ff.cafile, ff.servername)
-    tlsConf, err = uTLS.GetTLSConfig("", "", "", "")
-
-    if err != nil {
-        tlsConf, err = uTLS.GetSelfSignedTLSConfig("*")
-    }
-    return
+    tlsConf := cfg.Features.Tls
+    return uTLS.GetTLSConfig(tlsConf.CertFile, tlsConf.KeyFile, tlsConf.CaFile, tlsConf.Servername)
 }
-
-//func GetFeatureFlags() FeatureFlags {
-//	configLock.RLock()
-//	defer configLock.RUnlock()
-//	return &featureFlags{features: cfg.Features}
-//}

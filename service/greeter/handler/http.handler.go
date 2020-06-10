@@ -4,7 +4,6 @@ import (
     "net/http"
 )
 
-
 type httpHandler struct{}
 
 // NewUserHandler returns an instance of `UserServiceHandler`.

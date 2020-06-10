@@ -1,98 +1,51 @@
 package main
 
 import (
-    "github.com/micro/cli/v2"
     "github.com/micro/go-micro/v2"
-    "github.com/micro/go-micro/v2/config"
 
     "github.com/rs/zerolog/log"
 
-    myConfig "github.com/xmlking/micro-starter-kit/shared/config"
-    // bootstrap config and logger
-    "github.com/xmlking/micro-starter-kit/shared/logger"
+    "github.com/xmlking/micro-starter-kit/shared/config"
+    _ "github.com/xmlking/micro-starter-kit/shared/logger"
 
     logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
 )
 
 const (
-	serviceName = "account-cmd"
+    serviceName = "account-cmd"
 )
 
 var (
-	configDir  string
-	configFile string
-	cfg        myConfig.ServiceConfiguration
+    cfg = config.GetConfig()
 )
 
-// init is called on package initialization and can therefore be used to initialize global stuff like logging, config, ..
-func init() {
-	config.Scan(&cfg)
-}
-
 func main() {
-	// New Service
-	service := micro.NewService(
-		// optional cli flag to override config.
-		// comment out if you don't need to override any base config via CLI
-		micro.Flags(
-			&cli.StringFlag{
-				Name:        "configDir",
-				Aliases:     []string{"d"},
-				Value:       "/config",
-				Usage:       "Path to the config directory. Defaults to 'config'",
-				EnvVars:     []string{"CONFIG_DIR"},
-				Destination: &configDir,
-			},
-			&cli.StringFlag{
-				Name:        "configFile",
-				Aliases:     []string{"f"},
-				Value:       "config.yaml",
-				Usage:       "Config file in configDir. Defaults to 'config.yaml'",
-				EnvVars:     []string{"CONFIG_FILE"},
-				Destination: &configFile,
-			},
-			&cli.StringFlag{
-				Name:    "database_host",
-				Aliases: []string{"dh"},
-				Value:   "127.0.0.1",
-				Usage:   "Database hostname. Defaults to 127.0.0.1",
-				EnvVars: []string{"DATABASE_HOST"},
-			},
-			&cli.IntFlag{
-				Name:    "database_port",
-				Aliases: []string{"dp"},
-				Value:   5432,
-				Usage:   "Database port. Defaults to 5432",
-				EnvVars: []string{"DATABASE_PORT"},
-			},
-		),
-		micro.Name(serviceName),
-		micro.Version(myConfig.Version),
-		micro.WrapHandler(logWrapper.NewHandlerWrapper()),
-	)
+    // New Service
+    service := micro.NewService(
+        micro.Name(serviceName),
+        micro.Version(config.Version),
+        micro.WrapHandler(logWrapper.NewHandlerWrapper()),
+    )
 
-	// Initialize service
-	service.Init(
-		micro.Action(func(c *cli.Context) (err error) {
-			// load config
-			myConfig.Init(myConfig.WithConfigDir(configDir) , myConfig.WithConfigFile(configFile))
-			err = config.Scan(&cfg)
-			logger.Init()
-			return
-		}),
-	)
+    // Initialize service
+    service.Init(
+        micro.BeforeStart(func() (err error) {
+            return
+        }),
+        micro.BeforeStop(func() (err error) {
+            return
+        }),
+    )
 
-	log.Debug().Msgf("IsProduction? %v", myConfig.IsProduction())
-	log.Debug().Msgf("environment: %v", cfg.Environment)
-	log.Debug().Msgf(config.Get("database", "dialect").String("postgres"))
-	log.Debug().Msgf(config.Get("database", "host").String("no-address"))
-	log.Debug().Msgf(config.Get("database", "port").String("0000"))
-	log.Debug().Msgf(config.Get("observability", "tracing", "flushInterval").String("2000000000"))
-	log.Debug().Msgf("cfg is %v", cfg)
-	log.Debug().Msg(configDir)
+    log.Debug().Msgf("IsProduction? %v", config.IsProduction())
+    log.Debug().Interface("Dialect", cfg.Database.Dialect).Send()
+    log.Debug().Msg(cfg.Database.Host)
+    log.Debug().Uint32("Port", cfg.Database.Port).Send()
+    log.Debug().Uint64("FlushInterval", cfg.Features.Tracing.FlushInterval).Send()
+    log.Debug().Msgf("cfg is %v", cfg)
 
-	// Run service
-	if err := service.Run(); err != nil {
-		log.Fatal().Err(err).Msg("")
-	}
+    // Run service
+    if err := service.Run(); err != nil {
+        log.Fatal().Err(err).Msg("")
+    }
 }

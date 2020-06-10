@@ -7,7 +7,6 @@ import (
     "github.com/rs/zerolog"
     "github.com/rs/zerolog/log"
 
-    "github.com/xmlking/micro-starter-kit/shared/config"
     "github.com/xmlking/micro-starter-kit/shared/logger"
     "github.com/xmlking/micro-starter-kit/shared/logger/gormlog"
 )
@@ -15,7 +14,7 @@ import (
 func ExampleLogger() {
    logger.Init(
         logger.WithOutput(os.Stdout),
-        logger.WithFormat(config.JSON),
+        logger.WithFormat(logger.JSON),
         logger.WithTimeFormat("ddd"),
         logger.WithLevel(zerolog.DebugLevel),
     )
@@ -40,7 +39,7 @@ func ExampleLogger() {
 func ExampleWithRecordToFields() {
     logger.Init(
         logger.WithOutput(os.Stdout),
-        logger.WithFormat(config.JSON),
+        logger.WithFormat(logger.JSON),
         logger.WithTimeFormat("ddd"),
         logger.WithLevel(zerolog.DebugLevel),
     )

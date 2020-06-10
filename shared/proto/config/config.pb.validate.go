@@ -357,13 +357,13 @@ func (m *Features) Validate() error {
 	}
 
 	{
-		tmp := m.GetReqLogs()
+		tmp := m.GetReqlogs()
 
 		if v, ok := interface{}(tmp).(interface{ Validate() error }); ok {
 
 			if err := v.Validate(); err != nil {
 				return FeaturesValidationError{
-					field:  "ReqLogs",
+					field:  "Reqlogs",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -372,13 +372,13 @@ func (m *Features) Validate() error {
 	}
 
 	{
-		tmp := m.GetTransLogs()
+		tmp := m.GetTranslogs()
 
 		if v, ok := interface{}(tmp).(interface{ Validate() error }); ok {
 
 			if err := v.Validate(); err != nil {
 				return FeaturesValidationError{
-					field:  "TransLogs",
+					field:  "Translogs",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}
@@ -443,15 +443,79 @@ var _ interface {
 	ErrorName() string
 } = FeaturesValidationError{}
 
-// Validate is disabled for ServiceConfiguration. This method will always
-// return nil.
-func (m *ServiceConfiguration) Validate() error {
+// Validate checks the field values on Services with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *Services) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	{
+		tmp := m.GetAccount()
+
+		if v, ok := interface{}(tmp).(interface{ Validate() error }); ok {
+
+			if err := v.Validate(); err != nil {
+				return ServicesValidationError{
+					field:  "Account",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+	}
+
+	{
+		tmp := m.GetGreeter()
+
+		if v, ok := interface{}(tmp).(interface{ Validate() error }); ok {
+
+			if err := v.Validate(); err != nil {
+				return ServicesValidationError{
+					field:  "Greeter",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+	}
+
+	{
+		tmp := m.GetEmailer()
+
+		if v, ok := interface{}(tmp).(interface{ Validate() error }); ok {
+
+			if err := v.Validate(); err != nil {
+				return ServicesValidationError{
+					field:  "Emailer",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+	}
+
+	{
+		tmp := m.GetRecorder()
+
+		if v, ok := interface{}(tmp).(interface{ Validate() error }); ok {
+
+			if err := v.Validate(); err != nil {
+				return ServicesValidationError{
+					field:  "Recorder",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+	}
+
 	return nil
 }
 
-// ServiceConfigurationValidationError is the validation error returned by
-// ServiceConfiguration.Validate if the designated constraints aren't met.
-type ServiceConfigurationValidationError struct {
+// ServicesValidationError is the validation error returned by
+// Services.Validate if the designated constraints aren't met.
+type ServicesValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -459,24 +523,22 @@ type ServiceConfigurationValidationError struct {
 }
 
 // Field function returns field value.
-func (e ServiceConfigurationValidationError) Field() string { return e.field }
+func (e ServicesValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e ServiceConfigurationValidationError) Reason() string { return e.reason }
+func (e ServicesValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e ServiceConfigurationValidationError) Cause() error { return e.cause }
+func (e ServicesValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e ServiceConfigurationValidationError) Key() bool { return e.key }
+func (e ServicesValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e ServiceConfigurationValidationError) ErrorName() string {
-	return "ServiceConfigurationValidationError"
-}
+func (e ServicesValidationError) ErrorName() string { return "ServicesValidationError" }
 
 // Error satisfies the builtin error interface
-func (e ServiceConfigurationValidationError) Error() string {
+func (e ServicesValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -488,14 +550,14 @@ func (e ServiceConfigurationValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sServiceConfiguration.%s: %s%s",
+		"invalid %sServices.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = ServiceConfigurationValidationError{}
+var _ error = ServicesValidationError{}
 
 var _ interface {
 	Field() string
@@ -503,7 +565,66 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = ServiceConfigurationValidationError{}
+} = ServicesValidationError{}
+
+// Validate is disabled for Configuration. This method will always return nil.
+func (m *Configuration) Validate() error {
+	return nil
+}
+
+// ConfigurationValidationError is the validation error returned by
+// Configuration.Validate if the designated constraints aren't met.
+type ConfigurationValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ConfigurationValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ConfigurationValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ConfigurationValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ConfigurationValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ConfigurationValidationError) ErrorName() string { return "ConfigurationValidationError" }
+
+// Error satisfies the builtin error interface
+func (e ConfigurationValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sConfiguration.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ConfigurationValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ConfigurationValidationError{}
 
 // Validate checks the field values on Features_Metrics with the rules defined
 // in the proto definition for this message. If any rules are violated, an
@@ -791,10 +912,10 @@ var _ interface {
 	ErrorName() string
 } = Features_ValidatorValidationError{}
 
-// Validate checks the field values on Features_ReqLogs with the rules defined
+// Validate checks the field values on Features_Reqlogs with the rules defined
 // in the proto definition for this message. If any rules are violated, an
 // error is returned.
-func (m *Features_ReqLogs) Validate() error {
+func (m *Features_Reqlogs) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -804,9 +925,9 @@ func (m *Features_ReqLogs) Validate() error {
 	return nil
 }
 
-// Features_ReqLogsValidationError is the validation error returned by
-// Features_ReqLogs.Validate if the designated constraints aren't met.
-type Features_ReqLogsValidationError struct {
+// Features_ReqlogsValidationError is the validation error returned by
+// Features_Reqlogs.Validate if the designated constraints aren't met.
+type Features_ReqlogsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -814,22 +935,22 @@ type Features_ReqLogsValidationError struct {
 }
 
 // Field function returns field value.
-func (e Features_ReqLogsValidationError) Field() string { return e.field }
+func (e Features_ReqlogsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e Features_ReqLogsValidationError) Reason() string { return e.reason }
+func (e Features_ReqlogsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e Features_ReqLogsValidationError) Cause() error { return e.cause }
+func (e Features_ReqlogsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e Features_ReqLogsValidationError) Key() bool { return e.key }
+func (e Features_ReqlogsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e Features_ReqLogsValidationError) ErrorName() string { return "Features_ReqLogsValidationError" }
+func (e Features_ReqlogsValidationError) ErrorName() string { return "Features_ReqlogsValidationError" }
 
 // Error satisfies the builtin error interface
-func (e Features_ReqLogsValidationError) Error() string {
+func (e Features_ReqlogsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -841,14 +962,14 @@ func (e Features_ReqLogsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sFeatures_ReqLogs.%s: %s%s",
+		"invalid %sFeatures_Reqlogs.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = Features_ReqLogsValidationError{}
+var _ error = Features_ReqlogsValidationError{}
 
 var _ interface {
 	Field() string
@@ -856,12 +977,12 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = Features_ReqLogsValidationError{}
+} = Features_ReqlogsValidationError{}
 
-// Validate checks the field values on Features_TransLogs with the rules
+// Validate checks the field values on Features_Translogs with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, an error is returned.
-func (m *Features_TransLogs) Validate() error {
+func (m *Features_Translogs) Validate() error {
 	if m == nil {
 		return nil
 	}
@@ -873,9 +994,9 @@ func (m *Features_TransLogs) Validate() error {
 	return nil
 }
 
-// Features_TransLogsValidationError is the validation error returned by
-// Features_TransLogs.Validate if the designated constraints aren't met.
-type Features_TransLogsValidationError struct {
+// Features_TranslogsValidationError is the validation error returned by
+// Features_Translogs.Validate if the designated constraints aren't met.
+type Features_TranslogsValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -883,24 +1004,24 @@ type Features_TransLogsValidationError struct {
 }
 
 // Field function returns field value.
-func (e Features_TransLogsValidationError) Field() string { return e.field }
+func (e Features_TranslogsValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e Features_TransLogsValidationError) Reason() string { return e.reason }
+func (e Features_TranslogsValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e Features_TransLogsValidationError) Cause() error { return e.cause }
+func (e Features_TranslogsValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e Features_TransLogsValidationError) Key() bool { return e.key }
+func (e Features_TranslogsValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e Features_TransLogsValidationError) ErrorName() string {
-	return "Features_TransLogsValidationError"
+func (e Features_TranslogsValidationError) ErrorName() string {
+	return "Features_TranslogsValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e Features_TransLogsValidationError) Error() string {
+func (e Features_TranslogsValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -912,14 +1033,14 @@ func (e Features_TransLogsValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sFeatures_TransLogs.%s: %s%s",
+		"invalid %sFeatures_Translogs.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = Features_TransLogsValidationError{}
+var _ error = Features_TranslogsValidationError{}
 
 var _ interface {
 	Field() string
@@ -927,4 +1048,4 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = Features_TransLogsValidationError{}
+} = Features_TranslogsValidationError{}

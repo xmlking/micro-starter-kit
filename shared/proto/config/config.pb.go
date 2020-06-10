@@ -36,21 +36,24 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type DatabaseDialect int32
 
 const (
-	DatabaseDialect_PostgreSQL DatabaseDialect = 0
-	DatabaseDialect_MySQL      DatabaseDialect = 1
-	DatabaseDialect_SQLLite    DatabaseDialect = 2
+	DatabaseDialect_Unspecified DatabaseDialect = 0
+	DatabaseDialect_Postgre     DatabaseDialect = 1
+	DatabaseDialect_MySQL       DatabaseDialect = 2
+	DatabaseDialect_SQLite3     DatabaseDialect = 3
 )
 
 var DatabaseDialect_name = map[int32]string{
-	0: "PostgreSQL",
-	1: "MySQL",
-	2: "SQLLite",
+	0: "Unspecified",
+	1: "Postgre",
+	2: "MySQL",
+	3: "SQLite3",
 }
 
 var DatabaseDialect_value = map[string]int32{
-	"PostgreSQL": 0,
-	"MySQL":      1,
-	"SQLLite":    2,
+	"Unspecified": 0,
+	"Postgre":     1,
+	"MySQL":       2,
+	"SQLite3":     3,
 }
 
 func (x DatabaseDialect) String() string {
@@ -62,7 +65,7 @@ func (DatabaseDialect) EnumDescriptor() ([]byte, []int) {
 }
 
 type Service struct {
-	Endpoint             string   `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty"`
+	Endpoint             string   `protobuf:"bytes,1,opt,name=endpoint,proto3" json:"endpoint,omitempty" valid:"dialstring"`
 	Version              string   `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty" yaml:"version" default:"v0.1.0"`
 	Deadline             uint32   `protobuf:"varint,3,opt,name=deadline,proto3" json:"deadline,omitempty" yaml:",omitempty" default:"10"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -125,11 +128,10 @@ func (m *Service) GetDeadline() uint32 {
 }
 
 type EmailConfiguration struct {
-	Username    string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty" yaml:"username"`
-	Password    string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
-	EmailServer string `protobuf:"bytes,3,opt,name=email_server,json=emailServer,proto3" json:"email_server,omitempty" yaml:"email_server"`
-	Port        uint32 `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
-	// string from = 5 [(tagger.tags) = "valid:\"email,optional\""];
+	Username             string   `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty" yaml:"username"`
+	Password             string   `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	EmailServer          string   `protobuf:"bytes,3,opt,name=email_server,json=emailServer,proto3" json:"email_server,omitempty" yaml:"email_server"`
+	Port                 uint32   `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty" yaml:",omitempty" default:"587" valid:"port"`
 	From                 string   `protobuf:"bytes,5,opt,name=from,proto3" json:"from,omitempty" valid:"email,optional"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -205,9 +207,9 @@ func (m *EmailConfiguration) GetFrom() string {
 }
 
 type DatabaseConfiguration struct {
-	Dialect              DatabaseDialect `protobuf:"varint,1,opt,name=dialect,proto3,enum=mkit.shared.config.v1.DatabaseDialect" json:"dialect,omitempty" yaml:",omitempty" default:"postgres"`
-	Host                 string          `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty"`
-	Port                 uint32          `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty" yaml:",omitempty" default:"5432"`
+	Dialect              DatabaseDialect `protobuf:"varint,1,opt,name=dialect,proto3,enum=mkit.shared.config.v1.DatabaseDialect" json:"dialect,omitempty" yaml:",omitempty" default:"2"`
+	Host                 string          `protobuf:"bytes,2,opt,name=host,proto3" json:"host,omitempty" yaml:",omitempty" valid:"host"`
+	Port                 uint32          `protobuf:"varint,3,opt,name=port,proto3" json:"port,omitempty" yaml:",omitempty" default:"5432" valid:"port"`
 	Username             string          `protobuf:"bytes,4,opt,name=username,proto3" json:"username,omitempty" valid:"alphanum,required"`
 	Password             string          `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty" valid:"alphanum,required"`
 	Database             string          `protobuf:"bytes,6,opt,name=database,proto3" json:"database,omitempty" valid:"type(string),required"`
@@ -260,7 +262,7 @@ func (m *DatabaseConfiguration) GetDialect() DatabaseDialect {
 	if m != nil {
 		return m.Dialect
 	}
-	return DatabaseDialect_PostgreSQL
+	return DatabaseDialect_Unspecified
 }
 
 func (m *DatabaseConfiguration) GetHost() string {
@@ -352,8 +354,8 @@ type Features struct {
 	Tracing              *Features_Tracing   `protobuf:"bytes,2,opt,name=tracing,proto3" json:"tracing,omitempty"`
 	Tls                  *Features_TLS       `protobuf:"bytes,3,opt,name=tls,proto3" json:"tls,omitempty"`
 	Validator            *Features_Validator `protobuf:"bytes,4,opt,name=validator,proto3" json:"validator,omitempty"`
-	ReqLogs              *Features_ReqLogs   `protobuf:"bytes,5,opt,name=req_logs,json=reqLogs,proto3" json:"req_logs,omitempty"`
-	TransLogs            *Features_TransLogs `protobuf:"bytes,6,opt,name=trans_logs,json=transLogs,proto3" json:"trans_logs,omitempty"`
+	Reqlogs              *Features_Reqlogs   `protobuf:"bytes,5,opt,name=reqlogs,proto3" json:"reqlogs,omitempty"`
+	Translogs            *Features_Translogs `protobuf:"bytes,6,opt,name=translogs,proto3" json:"translogs,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
 	XXX_unrecognized     []byte              `json:"-"`
 	XXX_sizecache        int32               `json:"-"`
@@ -420,16 +422,16 @@ func (m *Features) GetValidator() *Features_Validator {
 	return nil
 }
 
-func (m *Features) GetReqLogs() *Features_ReqLogs {
+func (m *Features) GetReqlogs() *Features_Reqlogs {
 	if m != nil {
-		return m.ReqLogs
+		return m.Reqlogs
 	}
 	return nil
 }
 
-func (m *Features) GetTransLogs() *Features_TransLogs {
+func (m *Features) GetTranslogs() *Features_Translogs {
 	if m != nil {
-		return m.TransLogs
+		return m.Translogs
 	}
 	return nil
 }
@@ -562,10 +564,10 @@ func (m *Features_Tracing) GetFlushInterval() uint64 {
 
 type Features_TLS struct {
 	Enabled              bool     `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty" yaml:",omitempty" default:"false"`
-	CertFile             string   `protobuf:"bytes,2,opt,name=cert_file,json=certFile,proto3" json:"cert_file,omitempty" yaml:"cert_file" valid:"alphanum,required"`
-	KeyFile              string   `protobuf:"bytes,3,opt,name=key_file,json=keyFile,proto3" json:"key_file,omitempty" yaml:"key_file" valid:"alphanum,required"`
-	CaFile               string   `protobuf:"bytes,4,opt,name=ca_file,json=caFile,proto3" json:"ca_file,omitempty" yaml:"ca_file" valid:"alphanum,required"`
-	Servername           string   `protobuf:"bytes,5,opt,name=servername,proto3" json:"servername,omitempty" yaml:",omitempty" default:"*"`
+	CertFile             string   `protobuf:"bytes,2,opt,name=cert_file,json=certFile,proto3" json:"cert_file,omitempty" yaml:"cert_file" valid:"type(string),required"`
+	KeyFile              string   `protobuf:"bytes,3,opt,name=key_file,json=keyFile,proto3" json:"key_file,omitempty" yaml:"key_file" valid:"type(string),required"`
+	CaFile               string   `protobuf:"bytes,4,opt,name=ca_file,json=caFile,proto3" json:"ca_file,omitempty" yaml:"ca_file" valid:"type(string),required"`
+	Servername           string   `protobuf:"bytes,5,opt,name=servername,proto3" json:"servername,omitempty" yaml:",omitempty" default:"'*'"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -686,25 +688,25 @@ func (m *Features_Validator) GetEnabled() bool {
 	return false
 }
 
-type Features_ReqLogs struct {
+type Features_Reqlogs struct {
 	Enabled              bool     `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty" yaml:",omitempty" default:"false"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Features_ReqLogs) Reset()         { *m = Features_ReqLogs{} }
-func (m *Features_ReqLogs) String() string { return proto.CompactTextString(m) }
-func (*Features_ReqLogs) ProtoMessage()    {}
-func (*Features_ReqLogs) Descriptor() ([]byte, []int) {
+func (m *Features_Reqlogs) Reset()         { *m = Features_Reqlogs{} }
+func (m *Features_Reqlogs) String() string { return proto.CompactTextString(m) }
+func (*Features_Reqlogs) ProtoMessage()    {}
+func (*Features_Reqlogs) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ec97fd9fcddcbbcc, []int{3, 4}
 }
-func (m *Features_ReqLogs) XXX_Unmarshal(b []byte) error {
+func (m *Features_Reqlogs) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Features_ReqLogs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Features_Reqlogs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_Features_ReqLogs.Marshal(b, m, deterministic)
+		return xxx_messageInfo_Features_Reqlogs.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -714,26 +716,26 @@ func (m *Features_ReqLogs) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *Features_ReqLogs) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Features_ReqLogs.Merge(m, src)
+func (m *Features_Reqlogs) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Features_Reqlogs.Merge(m, src)
 }
-func (m *Features_ReqLogs) XXX_Size() int {
+func (m *Features_Reqlogs) XXX_Size() int {
 	return m.Size()
 }
-func (m *Features_ReqLogs) XXX_DiscardUnknown() {
-	xxx_messageInfo_Features_ReqLogs.DiscardUnknown(m)
+func (m *Features_Reqlogs) XXX_DiscardUnknown() {
+	xxx_messageInfo_Features_Reqlogs.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Features_ReqLogs proto.InternalMessageInfo
+var xxx_messageInfo_Features_Reqlogs proto.InternalMessageInfo
 
-func (m *Features_ReqLogs) GetEnabled() bool {
+func (m *Features_Reqlogs) GetEnabled() bool {
 	if m != nil {
 		return m.Enabled
 	}
 	return false
 }
 
-type Features_TransLogs struct {
+type Features_Translogs struct {
 	Enabled              bool     `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty" yaml:",omitempty" default:"false"`
 	Topic                string   `protobuf:"bytes,2,opt,name=topic,proto3" json:"topic,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -741,18 +743,18 @@ type Features_TransLogs struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Features_TransLogs) Reset()         { *m = Features_TransLogs{} }
-func (m *Features_TransLogs) String() string { return proto.CompactTextString(m) }
-func (*Features_TransLogs) ProtoMessage()    {}
-func (*Features_TransLogs) Descriptor() ([]byte, []int) {
+func (m *Features_Translogs) Reset()         { *m = Features_Translogs{} }
+func (m *Features_Translogs) String() string { return proto.CompactTextString(m) }
+func (*Features_Translogs) ProtoMessage()    {}
+func (*Features_Translogs) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ec97fd9fcddcbbcc, []int{3, 5}
 }
-func (m *Features_TransLogs) XXX_Unmarshal(b []byte) error {
+func (m *Features_Translogs) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Features_TransLogs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Features_Translogs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_Features_TransLogs.Marshal(b, m, deterministic)
+		return xxx_messageInfo_Features_Translogs.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -762,56 +764,54 @@ func (m *Features_TransLogs) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *Features_TransLogs) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Features_TransLogs.Merge(m, src)
+func (m *Features_Translogs) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Features_Translogs.Merge(m, src)
 }
-func (m *Features_TransLogs) XXX_Size() int {
+func (m *Features_Translogs) XXX_Size() int {
 	return m.Size()
 }
-func (m *Features_TransLogs) XXX_DiscardUnknown() {
-	xxx_messageInfo_Features_TransLogs.DiscardUnknown(m)
+func (m *Features_Translogs) XXX_DiscardUnknown() {
+	xxx_messageInfo_Features_Translogs.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Features_TransLogs proto.InternalMessageInfo
+var xxx_messageInfo_Features_Translogs proto.InternalMessageInfo
 
-func (m *Features_TransLogs) GetEnabled() bool {
+func (m *Features_Translogs) GetEnabled() bool {
 	if m != nil {
 		return m.Enabled
 	}
 	return false
 }
 
-func (m *Features_TransLogs) GetTopic() string {
+func (m *Features_Translogs) GetTopic() string {
 	if m != nil {
 		return m.Topic
 	}
 	return ""
 }
 
-type ServiceConfiguration struct {
-	ServiceName          string                 `protobuf:"bytes,1,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
-	Version              string                 `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Database             *DatabaseConfiguration `protobuf:"bytes,3,opt,name=database,proto3" json:"database,omitempty"`
-	Email                *EmailConfiguration    `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	Features             *Features              `protobuf:"bytes,5,opt,name=features,proto3" json:"features,omitempty"`
-	Services             map[string]*Service    `protobuf:"bytes,6,rep,name=services,proto3" json:"services,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
-	XXX_unrecognized     []byte                 `json:"-"`
-	XXX_sizecache        int32                  `json:"-"`
+type Services struct {
+	Account              *Service `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Greeter              *Service `protobuf:"bytes,2,opt,name=greeter,proto3" json:"greeter,omitempty"`
+	Emailer              *Service `protobuf:"bytes,3,opt,name=emailer,proto3" json:"emailer,omitempty"`
+	Recorder             *Service `protobuf:"bytes,4,opt,name=recorder,proto3" json:"recorder,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ServiceConfiguration) Reset()         { *m = ServiceConfiguration{} }
-func (m *ServiceConfiguration) String() string { return proto.CompactTextString(m) }
-func (*ServiceConfiguration) ProtoMessage()    {}
-func (*ServiceConfiguration) Descriptor() ([]byte, []int) {
+func (m *Services) Reset()         { *m = Services{} }
+func (m *Services) String() string { return proto.CompactTextString(m) }
+func (*Services) ProtoMessage()    {}
+func (*Services) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ec97fd9fcddcbbcc, []int{4}
 }
-func (m *ServiceConfiguration) XXX_Unmarshal(b []byte) error {
+func (m *Services) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *ServiceConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Services) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_ServiceConfiguration.Marshal(b, m, deterministic)
+		return xxx_messageInfo_Services.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -821,54 +821,111 @@ func (m *ServiceConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *ServiceConfiguration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceConfiguration.Merge(m, src)
+func (m *Services) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Services.Merge(m, src)
 }
-func (m *ServiceConfiguration) XXX_Size() int {
+func (m *Services) XXX_Size() int {
 	return m.Size()
 }
-func (m *ServiceConfiguration) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceConfiguration.DiscardUnknown(m)
+func (m *Services) XXX_DiscardUnknown() {
+	xxx_messageInfo_Services.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ServiceConfiguration proto.InternalMessageInfo
+var xxx_messageInfo_Services proto.InternalMessageInfo
 
-func (m *ServiceConfiguration) GetServiceName() string {
+func (m *Services) GetAccount() *Service {
 	if m != nil {
-		return m.ServiceName
+		return m.Account
 	}
-	return ""
+	return nil
 }
 
-func (m *ServiceConfiguration) GetVersion() string {
+func (m *Services) GetGreeter() *Service {
 	if m != nil {
-		return m.Version
+		return m.Greeter
 	}
-	return ""
+	return nil
 }
 
-func (m *ServiceConfiguration) GetDatabase() *DatabaseConfiguration {
+func (m *Services) GetEmailer() *Service {
+	if m != nil {
+		return m.Emailer
+	}
+	return nil
+}
+
+func (m *Services) GetRecorder() *Service {
+	if m != nil {
+		return m.Recorder
+	}
+	return nil
+}
+
+type Configuration struct {
+	Database             *DatabaseConfiguration `protobuf:"bytes,3,opt,name=database,proto3" json:"database,omitempty"`
+	Email                *EmailConfiguration    `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
+	Features             *Features              `protobuf:"bytes,5,opt,name=features,proto3" json:"features,omitempty"`
+	Services             *Services              `protobuf:"bytes,6,opt,name=services,proto3" json:"services,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *Configuration) Reset()         { *m = Configuration{} }
+func (m *Configuration) String() string { return proto.CompactTextString(m) }
+func (*Configuration) ProtoMessage()    {}
+func (*Configuration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ec97fd9fcddcbbcc, []int{5}
+}
+func (m *Configuration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Configuration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Configuration.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Configuration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Configuration.Merge(m, src)
+}
+func (m *Configuration) XXX_Size() int {
+	return m.Size()
+}
+func (m *Configuration) XXX_DiscardUnknown() {
+	xxx_messageInfo_Configuration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Configuration proto.InternalMessageInfo
+
+func (m *Configuration) GetDatabase() *DatabaseConfiguration {
 	if m != nil {
 		return m.Database
 	}
 	return nil
 }
 
-func (m *ServiceConfiguration) GetEmail() *EmailConfiguration {
+func (m *Configuration) GetEmail() *EmailConfiguration {
 	if m != nil {
 		return m.Email
 	}
 	return nil
 }
 
-func (m *ServiceConfiguration) GetFeatures() *Features {
+func (m *Configuration) GetFeatures() *Features {
 	if m != nil {
 		return m.Features
 	}
 	return nil
 }
 
-func (m *ServiceConfiguration) GetServices() map[string]*Service {
+func (m *Configuration) GetServices() *Services {
 	if m != nil {
 		return m.Services
 	}
@@ -885,102 +942,104 @@ func init() {
 	proto.RegisterType((*Features_Tracing)(nil), "mkit.shared.config.v1.Features.Tracing")
 	proto.RegisterType((*Features_TLS)(nil), "mkit.shared.config.v1.Features.TLS")
 	proto.RegisterType((*Features_Validator)(nil), "mkit.shared.config.v1.Features.Validator")
-	proto.RegisterType((*Features_ReqLogs)(nil), "mkit.shared.config.v1.Features.ReqLogs")
-	proto.RegisterType((*Features_TransLogs)(nil), "mkit.shared.config.v1.Features.TransLogs")
-	proto.RegisterType((*ServiceConfiguration)(nil), "mkit.shared.config.v1.ServiceConfiguration")
-	proto.RegisterMapType((map[string]*Service)(nil), "mkit.shared.config.v1.ServiceConfiguration.ServicesEntry")
+	proto.RegisterType((*Features_Reqlogs)(nil), "mkit.shared.config.v1.Features.Reqlogs")
+	proto.RegisterType((*Features_Translogs)(nil), "mkit.shared.config.v1.Features.Translogs")
+	proto.RegisterType((*Services)(nil), "mkit.shared.config.v1.Services")
+	proto.RegisterType((*Configuration)(nil), "mkit.shared.config.v1.Configuration")
 }
 
 func init() { proto.RegisterFile("shared/proto/config/config.proto", fileDescriptor_ec97fd9fcddcbbcc) }
 
 var fileDescriptor_ec97fd9fcddcbbcc = []byte{
-	// 1373 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x57, 0x4d, 0x73, 0xdb, 0x44,
-	0x18, 0xae, 0xe2, 0x24, 0xb2, 0xd7, 0x49, 0x5a, 0xb6, 0x1f, 0xb8, 0x66, 0x1a, 0xb9, 0x6a, 0x29,
-	0x4e, 0x9b, 0xca, 0xad, 0xfb, 0x41, 0x12, 0xa6, 0xed, 0xd4, 0x6d, 0xfa, 0x85, 0x0b, 0xad, 0xd2,
-	0x72, 0x80, 0x61, 0x3c, 0x1b, 0x69, 0x2d, 0x2f, 0xd1, 0x87, 0xbb, 0x5a, 0x99, 0x98, 0x03, 0x3f,
-	0x82, 0x53, 0x7f, 0x00, 0x33, 0xfc, 0x03, 0xfe, 0x00, 0x17, 0x8e, 0x1c, 0x38, 0x0b, 0x28, 0x07,
-	0xee, 0x3a, 0x71, 0x64, 0xb4, 0xbb, 0x72, 0x9c, 0xc6, 0xb1, 0xd3, 0xc9, 0x09, 0x5f, 0xbc, 0xab,
-	0xf7, 0x79, 0x9e, 0xd5, 0xfb, 0xbe, 0xfb, 0xee, 0xbe, 0x02, 0x95, 0xb0, 0x83, 0x28, 0xb6, 0x6b,
-	0x5d, 0x1a, 0xb0, 0xa0, 0x66, 0x05, 0x7e, 0x9b, 0x38, 0xf2, 0xcf, 0xe0, 0xcf, 0xe0, 0x49, 0x6f,
-	0x8b, 0x30, 0x43, 0xc0, 0x0c, 0x69, 0xe9, 0x5d, 0x2d, 0x7f, 0xe0, 0x04, 0x81, 0xe3, 0x62, 0x41,
-	0xdc, 0x8c, 0xda, 0x35, 0xec, 0x75, 0x59, 0x5f, 0x70, 0xca, 0x8b, 0x6f, 0x1b, 0xed, 0x88, 0x22,
-	0x46, 0x02, 0x5f, 0xda, 0x97, 0x58, 0x87, 0x50, 0xbb, 0xd5, 0x45, 0x94, 0xf5, 0xe5, 0xd2, 0x3d,
-	0xe4, 0x12, 0x1b, 0x31, 0x3c, 0x18, 0x48, 0xe8, 0x85, 0xbd, 0x50, 0x27, 0x70, 0x82, 0x9d, 0x91,
-	0xc0, 0xe9, 0x3f, 0x2a, 0x40, 0xdd, 0xc0, 0xb4, 0x47, 0x2c, 0x0c, 0xcb, 0x20, 0x8f, 0x7d, 0xbb,
-	0x1b, 0x10, 0x9f, 0x95, 0x94, 0x8a, 0x52, 0x2d, 0x98, 0x83, 0x39, 0xbc, 0x05, 0xd4, 0x1e, 0xa6,
-	0x21, 0x09, 0xfc, 0xd2, 0x54, 0x6a, 0x6a, 0x9c, 0x4b, 0x62, 0x4d, 0xeb, 0x23, 0xcf, 0x5d, 0xd3,
-	0xa5, 0x41, 0xaf, 0xd8, 0xb8, 0x8d, 0x22, 0x97, 0xad, 0xe9, 0xbd, 0x2b, 0xc6, 0x55, 0xe3, 0x8a,
-	0x6e, 0x66, 0x1c, 0x78, 0x1b, 0xe4, 0x6d, 0x8c, 0x6c, 0x97, 0xf8, 0xb8, 0x94, 0xab, 0x28, 0xd5,
-	0xf9, 0x86, 0x9e, 0xc4, 0xda, 0xa2, 0xe0, 0x2f, 0x07, 0x1e, 0x61, 0x3c, 0x0e, 0x43, 0x12, 0x57,
-	0xaf, 0xe8, 0xe6, 0x80, 0xa3, 0xff, 0xa5, 0x00, 0xb8, 0xee, 0x21, 0xe2, 0xde, 0xe3, 0x91, 0x94,
-	0x61, 0x81, 0x35, 0x90, 0x8f, 0x42, 0x4c, 0x7d, 0xe4, 0x61, 0xf1, 0xc6, 0x8d, 0xe3, 0x49, 0xac,
-	0x1d, 0x15, 0xb2, 0x99, 0x45, 0x37, 0x07, 0xa0, 0xd4, 0xc5, 0x2e, 0x0a, 0xc3, 0x6f, 0x03, 0x6a,
-	0x0b, 0x3f, 0xcc, 0xc1, 0x1c, 0xae, 0x81, 0x39, 0x9c, 0x2e, 0xd1, 0x0a, 0x31, 0xed, 0x61, 0xca,
-	0xdf, 0xb3, 0xd0, 0x78, 0x3f, 0x89, 0xb5, 0xe3, 0x42, 0x70, 0xd8, 0xaa, 0x9b, 0x45, 0x3e, 0xdd,
-	0xe0, 0x33, 0x08, 0xc1, 0x74, 0x37, 0xa0, 0xac, 0x34, 0x9d, 0xfa, 0x66, 0xf2, 0x31, 0x34, 0xc0,
-	0x74, 0x9b, 0x06, 0x5e, 0x69, 0x86, 0xeb, 0x94, 0x93, 0x58, 0x3b, 0xc5, 0x93, 0x24, 0x85, 0x96,
-	0x83, 0x6e, 0xea, 0x03, 0x72, 0x75, 0x93, 0xe3, 0xf4, 0x9f, 0x55, 0x70, 0xf2, 0x3e, 0x62, 0x68,
-	0x13, 0x85, 0x78, 0xb7, 0x9b, 0xdf, 0x00, 0xd5, 0x26, 0xc8, 0xc5, 0x96, 0xc8, 0xcb, 0x42, 0xfd,
-	0x82, 0x31, 0x72, 0x77, 0x19, 0x19, 0xfd, 0xbe, 0x40, 0x37, 0xaa, 0x49, 0xac, 0x9d, 0x1f, 0x13,
-	0xe4, 0x6e, 0x10, 0x32, 0x87, 0xe2, 0x50, 0x37, 0xb3, 0x05, 0x52, 0x4f, 0x3a, 0x41, 0xc8, 0x64,
-	0x74, 0xf8, 0x18, 0xae, 0x48, 0xef, 0x44, 0xe6, 0xce, 0x27, 0xb1, 0x56, 0x19, 0x23, 0x7a, 0xe3,
-	0xfa, 0xb5, 0xba, 0x2e, 0x63, 0xb0, 0x3a, 0x94, 0xa0, 0x69, 0x1e, 0x87, 0x33, 0x49, 0xac, 0x9d,
-	0x96, 0x71, 0x40, 0x6e, 0xb7, 0x83, 0xfc, 0xc8, 0x5b, 0xa6, 0xf8, 0x55, 0x44, 0x28, 0xb6, 0x87,
-	0x53, 0xb5, 0x3a, 0x94, 0xaa, 0x99, 0x03, 0x51, 0x07, 0x99, 0xbc, 0x05, 0xf2, 0xb6, 0x8c, 0x44,
-	0x69, 0x96, 0x53, 0xcf, 0x26, 0xb1, 0x76, 0x46, 0x52, 0x59, 0xbf, 0x8b, 0xab, 0x21, 0xa3, 0xc4,
-	0x77, 0x96, 0x86, 0xe9, 0x19, 0x05, 0xde, 0x06, 0xaa, 0xd5, 0x41, 0x34, 0xc4, 0xac, 0xa4, 0x72,
-	0xf6, 0x24, 0x8f, 0x23, 0xd6, 0x5e, 0xd1, 0xcd, 0x8c, 0x04, 0x6f, 0x82, 0x5c, 0xc4, 0xac, 0x52,
-	0xbe, 0xa2, 0x54, 0xf3, 0x13, 0xb9, 0x8c, 0x46, 0x58, 0x37, 0x53, 0x02, 0xbc, 0x03, 0x54, 0x37,
-	0x70, 0x1c, 0xe2, 0x3b, 0xa5, 0x02, 0xe7, 0x7e, 0x98, 0xc4, 0xda, 0xd9, 0x31, 0xdc, 0x36, 0x72,
-	0x43, 0xac, 0x9b, 0x19, 0x0b, 0x3e, 0x04, 0xc5, 0x90, 0xf8, 0x4e, 0xe4, 0x22, 0x4a, 0xbe, 0xc3,
-	0x25, 0xf0, 0x2e, 0x22, 0xc3, 0x4c, 0xf8, 0x12, 0x2c, 0x78, 0x68, 0xbb, 0x15, 0x74, 0xb1, 0xdf,
-	0xb2, 0x02, 0xdf, 0x0f, 0x4b, 0x45, 0x9e, 0xfa, 0x5a, 0x12, 0x6b, 0x97, 0x84, 0xd6, 0x6e, 0xfb,
-	0xe8, 0x12, 0xd6, 0xcd, 0x39, 0x0f, 0x6d, 0x7f, 0xde, 0xc5, 0xfe, 0xbd, 0x14, 0x94, 0xc9, 0x12,
-	0xdb, 0xc5, 0x52, 0x76, 0x6e, 0x94, 0xec, 0x8e, 0x7d, 0x9c, 0xec, 0x63, 0xdb, 0xc5, 0x42, 0xf6,
-	0x7b, 0xf0, 0x5e, 0x8a, 0x6e, 0xa5, 0x5c, 0x97, 0xb4, 0x31, 0x23, 0x1e, 0x2e, 0xcd, 0x57, 0x94,
-	0x6a, 0xb1, 0x7e, 0xda, 0x10, 0x47, 0xaa, 0x91, 0x1d, 0xa9, 0xc6, 0x7d, 0x59, 0x54, 0x8d, 0x8f,
-	0x93, 0x58, 0xab, 0x89, 0x45, 0xf7, 0xb0, 0x47, 0xaf, 0xdb, 0xd1, 0x5f, 0xff, 0xa1, 0x29, 0xe6,
-	0xd1, 0x14, 0xfe, 0x14, 0x6d, 0x37, 0x25, 0x58, 0xff, 0xa1, 0x08, 0xf2, 0x0f, 0x30, 0x62, 0x11,
-	0xc5, 0x21, 0xbc, 0x0b, 0x54, 0x0f, 0x33, 0x4a, 0xac, 0x90, 0xd7, 0x6a, 0xb1, 0xfe, 0xd1, 0x3e,
-	0xb5, 0x9a, 0x31, 0x8c, 0xa7, 0x02, 0x6e, 0x66, 0xbc, 0x54, 0x82, 0x51, 0x64, 0xa5, 0xfb, 0x60,
-	0xea, 0x60, 0x12, 0x2f, 0x04, 0xdc, 0xcc, 0x78, 0xf0, 0x06, 0xc8, 0x31, 0x37, 0xe4, 0x05, 0x5b,
-	0xac, 0x9f, 0x9b, 0x48, 0x6f, 0x6e, 0x98, 0x29, 0x1e, 0x3e, 0x04, 0x05, 0x79, 0x8f, 0x04, 0x94,
-	0xd7, 0x6b, 0xb1, 0xbe, 0x34, 0x89, 0xfc, 0x45, 0x46, 0x30, 0x77, 0xb8, 0xb0, 0x01, 0xf2, 0x14,
-	0xbf, 0x6a, 0xb9, 0x81, 0x13, 0xf2, 0xe2, 0x3d, 0x80, 0x0f, 0x26, 0x7e, 0xd5, 0x0c, 0x9c, 0xd0,
-	0x54, 0xa9, 0x18, 0xc0, 0x47, 0x00, 0x30, 0x8a, 0xfc, 0x50, 0xa8, 0xcc, 0x1e, 0xec, 0x6d, 0x5e,
-	0xa4, 0x0c, 0xae, 0x53, 0x60, 0xd9, 0xb0, 0xfc, 0x8b, 0x02, 0x54, 0x19, 0xe5, 0xb4, 0xc8, 0xb0,
-	0x8f, 0x36, 0x5d, 0x6c, 0xf3, 0xfc, 0x1c, 0xbc, 0xc8, 0x24, 0x0b, 0x96, 0x80, 0x8a, 0x6c, 0x9b,
-	0xe2, 0x30, 0x94, 0x67, 0x64, 0x36, 0x85, 0x5f, 0x83, 0x85, 0xb6, 0x1b, 0x85, 0x9d, 0x16, 0xf1,
-	0x19, 0xa6, 0x3d, 0xe4, 0xf2, 0xf8, 0x4f, 0x37, 0x6e, 0x26, 0xb1, 0x56, 0x17, 0x2b, 0xec, 0xb6,
-	0xef, 0x73, 0xf1, 0x89, 0x9f, 0x6e, 0xce, 0x73, 0xf4, 0x63, 0x09, 0xe6, 0x5e, 0xc8, 0x44, 0xff,
-	0x8f, 0xbd, 0xf8, 0x67, 0x0a, 0xe4, 0x5e, 0x34, 0x37, 0x0e, 0xef, 0xc1, 0xa7, 0xa0, 0x60, 0x61,
-	0xca, 0x5a, 0x6d, 0xe2, 0x62, 0xd9, 0x93, 0x18, 0x49, 0xac, 0x5d, 0x94, 0x25, 0x9d, 0x99, 0xf4,
-	0xca, 0x98, 0x1b, 0x23, 0x45, 0x3d, 0x20, 0x2e, 0x86, 0x8f, 0x40, 0x7e, 0x0b, 0xf7, 0x85, 0x96,
-	0xb8, 0xf7, 0x2f, 0x27, 0xb1, 0xb6, 0x24, 0xb4, 0x32, 0xcb, 0x38, 0x29, 0x75, 0x0b, 0xf7, 0xb9,
-	0xd2, 0x3a, 0x50, 0x2d, 0x24, 0x84, 0xc4, 0x85, 0xb7, 0x9c, 0xc4, 0x5a, 0x55, 0xbe, 0x14, 0x9a,
-	0xa8, 0x33, 0x6b, 0x21, 0x2e, 0x73, 0x17, 0x00, 0xd1, 0x68, 0xf0, 0xab, 0x73, 0x66, 0xe7, 0x12,
-	0x1b, 0x13, 0xa1, 0x8b, 0xba, 0x39, 0x44, 0x2a, 0x37, 0x41, 0x61, 0x50, 0x9b, 0x87, 0x0e, 0x77,
-	0xf9, 0x09, 0x50, 0x65, 0x85, 0x1e, 0x5e, 0x6b, 0x13, 0x14, 0x06, 0x75, 0x7a, 0xf8, 0x8d, 0x70,
-	0x02, 0xcc, 0xb0, 0xa0, 0x4b, 0x2c, 0xb9, 0x91, 0xc5, 0x44, 0xff, 0x3d, 0x07, 0x4e, 0xc8, 0xc6,
-	0x76, 0x77, 0x33, 0x75, 0x16, 0xcc, 0x85, 0xe2, 0x79, 0x6b, 0xa7, 0x6f, 0x34, 0x8b, 0xf2, 0xd9,
-	0x67, 0x69, 0xeb, 0x51, 0x7a, 0xab, 0xd9, 0xdd, 0xe9, 0x63, 0x1f, 0x0d, 0x75, 0x16, 0xe2, 0x70,
-	0x5d, 0x9e, 0xd0, 0x8a, 0xed, 0x5a, 0x7c, 0xa8, 0xc9, 0xb8, 0x03, 0x66, 0x78, 0x1b, 0x38, 0xe1,
-	0x98, 0xdd, 0xdb, 0xf4, 0x9a, 0x82, 0x07, 0x3f, 0x01, 0xf9, 0xb6, 0x3c, 0xf5, 0xe4, 0x11, 0xab,
-	0x4d, 0x38, 0x1c, 0xcd, 0x01, 0x01, 0xbe, 0x04, 0x79, 0xe9, 0x70, 0x7a, 0xb2, 0xe6, 0xaa, 0xc5,
-	0xfa, 0xea, 0x3e, 0xe4, 0x51, 0x31, 0xcc, 0x1e, 0x86, 0xeb, 0x3e, 0xa3, 0x7d, 0x73, 0x20, 0x55,
-	0xfe, 0x0a, 0xcc, 0xef, 0x32, 0xc1, 0x63, 0x20, 0xb7, 0x85, 0xfb, 0x32, 0xc6, 0xe9, 0x10, 0x5e,
-	0x07, 0x33, 0x3d, 0xe4, 0x46, 0x58, 0x5e, 0x6d, 0x8b, 0xe3, 0x97, 0x35, 0x05, 0x78, 0x6d, 0x6a,
-	0x45, 0x59, 0xcb, 0xfd, 0xdb, 0x50, 0x2e, 0xae, 0x82, 0xa3, 0x6f, 0x35, 0xb9, 0x70, 0x01, 0x80,
-	0x67, 0xa2, 0x8f, 0xdd, 0x78, 0xde, 0x3c, 0x76, 0x04, 0x16, 0xc0, 0xcc, 0xd3, 0x7e, 0x3a, 0x54,
-	0x60, 0x11, 0xa8, 0x1b, 0xcf, 0x9b, 0x4d, 0xc2, 0xf0, 0xb1, 0xa9, 0xfa, 0x4f, 0x0a, 0x98, 0x17,
-	0x6e, 0x64, 0x1f, 0x3c, 0x4f, 0x40, 0xee, 0x21, 0x66, 0xf0, 0xd4, 0x9e, 0x26, 0x61, 0x3d, 0xdd,
-	0x72, 0xe5, 0x4b, 0xef, 0x10, 0x92, 0x54, 0x6b, 0x03, 0x33, 0xf8, 0x2e, 0x9c, 0xf2, 0x3e, 0x0b,
-	0x37, 0xac, 0x5f, 0xdf, 0x2c, 0x2a, 0xbf, 0xbd, 0x59, 0x54, 0xfe, 0x7c, 0xb3, 0xa8, 0xbc, 0xfe,
-	0x7b, 0xf1, 0x08, 0x18, 0xfd, 0x35, 0xf9, 0x4c, 0xf9, 0x72, 0xc5, 0x21, 0xac, 0x13, 0x6d, 0x1a,
-	0x56, 0xe0, 0xd5, 0xb6, 0x3d, 0x77, 0x8b, 0xf8, 0x4e, 0xcd, 0x23, 0x16, 0x0d, 0x2e, 0x87, 0x0c,
-	0x51, 0x86, 0xe9, 0xe5, 0x2d, 0xc2, 0x6a, 0x23, 0xbe, 0x56, 0x37, 0x67, 0xf9, 0xec, 0xda, 0x7f,
-	0x01, 0x00, 0x00, 0xff, 0xff, 0x59, 0x36, 0x42, 0x7b, 0xcb, 0x0e, 0x00, 0x00,
+	// 1398 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x97, 0xcf, 0x72, 0x13, 0xc7,
+	0x13, 0xc7, 0x59, 0xcb, 0xf6, 0x4a, 0x23, 0x8c, 0xfd, 0x1b, 0x7e, 0x10, 0xa1, 0x14, 0x5e, 0xb1,
+	0x10, 0x30, 0xc4, 0x48, 0xb6, 0x08, 0x60, 0x9c, 0x02, 0x2a, 0xb2, 0xc1, 0x21, 0x65, 0x0a, 0x58,
+	0x43, 0x0e, 0xa9, 0x4a, 0xb9, 0xc6, 0xbb, 0xad, 0xd5, 0x94, 0xf7, 0x8f, 0x98, 0x9d, 0x75, 0xec,
+	0x1c, 0xf2, 0x12, 0xb9, 0xc0, 0x25, 0x4f, 0x92, 0x5b, 0x2e, 0x39, 0xe6, 0x09, 0x36, 0x14, 0x79,
+	0x83, 0xad, 0xa4, 0x2a, 0xc7, 0xd4, 0xce, 0xcc, 0xca, 0x32, 0x96, 0x2d, 0xa5, 0x7c, 0x0a, 0x17,
+	0x3c, 0xea, 0xef, 0xa7, 0x67, 0xba, 0x67, 0x7a, 0xa6, 0x17, 0xd5, 0xa2, 0x0e, 0x61, 0xe0, 0x34,
+	0xba, 0x2c, 0xe4, 0x61, 0xc3, 0x0e, 0x83, 0x36, 0x75, 0xd5, 0x7f, 0x75, 0xf1, 0x1b, 0x3e, 0xe7,
+	0x6f, 0x53, 0x5e, 0x97, 0xb2, 0xba, 0xb2, 0xec, 0x2c, 0x56, 0x3f, 0x76, 0xc3, 0xd0, 0xf5, 0x40,
+	0x82, 0x5b, 0x71, 0xbb, 0x01, 0x7e, 0x97, 0xef, 0x49, 0xa6, 0x3a, 0xfb, 0xa1, 0xd1, 0x89, 0x19,
+	0xe1, 0x34, 0x0c, 0x94, 0xfd, 0x3a, 0xef, 0x50, 0xe6, 0x6c, 0x76, 0x09, 0xe3, 0x7b, 0x6a, 0xea,
+	0x1d, 0xe2, 0x51, 0x87, 0x70, 0xe8, 0xfd, 0xa1, 0xa4, 0x57, 0x0f, 0x4b, 0xdd, 0xd0, 0x0d, 0xf7,
+	0xff, 0x92, 0x3a, 0xf3, 0x67, 0x0d, 0xe9, 0x1b, 0xc0, 0x76, 0xa8, 0x0d, 0xb8, 0x89, 0x8a, 0x10,
+	0x38, 0xdd, 0x90, 0x06, 0xbc, 0xa2, 0xd5, 0xb4, 0xb9, 0x52, 0xeb, 0x7c, 0x9a, 0x18, 0x58, 0x78,
+	0x5e, 0x36, 0x1d, 0x4a, 0xbc, 0x88, 0x33, 0x1a, 0xb8, 0xa6, 0xd5, 0xd3, 0xe1, 0xfb, 0x48, 0xdf,
+	0x01, 0x16, 0xd1, 0x30, 0xa8, 0x8c, 0x09, 0xe4, 0x72, 0x9a, 0x18, 0xc6, 0x1e, 0xf1, 0xbd, 0x65,
+	0x53, 0x19, 0xcc, 0x9a, 0x03, 0x6d, 0x12, 0x7b, 0x7c, 0xd9, 0xdc, 0x59, 0xa8, 0x2f, 0xd6, 0x17,
+	0x4c, 0x2b, 0x67, 0xf0, 0x03, 0x54, 0x74, 0x80, 0x38, 0x1e, 0x0d, 0xa0, 0x52, 0xa8, 0x69, 0x73,
+	0x53, 0x2d, 0x33, 0x4d, 0x8c, 0x59, 0xc9, 0xcf, 0x87, 0x3e, 0xe5, 0x22, 0x3f, 0x7d, 0x2e, 0x16,
+	0x17, 0x4c, 0xab, 0xc7, 0x98, 0x3f, 0x8e, 0x21, 0xfc, 0xc8, 0x27, 0xd4, 0x5b, 0x11, 0x19, 0x56,
+	0xe9, 0xc2, 0x0d, 0x54, 0x8c, 0x23, 0x60, 0x01, 0xf1, 0x41, 0x45, 0x72, 0x36, 0x4d, 0x8c, 0x69,
+	0xe9, 0x36, 0xb7, 0x98, 0x56, 0x4f, 0x84, 0xab, 0xa8, 0xd8, 0x25, 0x51, 0xf4, 0x5d, 0xc8, 0x1c,
+	0x19, 0x87, 0xd5, 0x1b, 0xe3, 0x65, 0x74, 0x1a, 0xb2, 0x29, 0x36, 0x23, 0x60, 0x3b, 0xc0, 0xc4,
+	0x3a, 0x4b, 0xad, 0x8f, 0xd2, 0xc4, 0x38, 0x2b, 0x1d, 0xf6, 0x5b, 0x4d, 0xab, 0x2c, 0x86, 0x1b,
+	0x62, 0x84, 0x57, 0xd1, 0x78, 0x37, 0x64, 0xbc, 0x32, 0x2e, 0x62, 0x5b, 0x48, 0x13, 0x63, 0xfe,
+	0x98, 0xd8, 0x6e, 0x2f, 0xdd, 0x35, 0x6b, 0x2a, 0xdd, 0x19, 0x66, 0x5a, 0x82, 0xc6, 0x75, 0x34,
+	0xde, 0x66, 0xa1, 0x5f, 0x99, 0x10, 0x33, 0x57, 0xd3, 0xc4, 0x38, 0xaf, 0x54, 0x62, 0xae, 0xf9,
+	0xb0, 0x9b, 0x45, 0x4d, 0x3c, 0xd3, 0x12, 0x3a, 0xf3, 0x9d, 0x8e, 0xce, 0xad, 0x12, 0x4e, 0xb6,
+	0x48, 0x04, 0x07, 0x13, 0x63, 0x23, 0x3d, 0xdb, 0x47, 0xb0, 0xe5, 0x0e, 0x9f, 0x69, 0x5e, 0xad,
+	0x0f, 0x3c, 0xa7, 0xf5, 0x1c, 0x5f, 0x95, 0xea, 0xd6, 0xa5, 0x34, 0x31, 0x2e, 0x1e, 0xb3, 0xf4,
+	0xa6, 0x69, 0xe5, 0x9e, 0xf1, 0x1d, 0x34, 0xde, 0x09, 0x23, 0xae, 0x0e, 0xc4, 0x11, 0x1b, 0xaa,
+	0x02, 0xc8, 0x84, 0xa6, 0x25, 0xf4, 0xf8, 0x91, 0x4a, 0x96, 0x3c, 0x08, 0x8b, 0x69, 0x62, 0xdc,
+	0x3c, 0x2e, 0x59, 0x9f, 0xdd, 0x6a, 0x0e, 0xcc, 0xd6, 0xbd, 0xbe, 0xcd, 0x1f, 0x17, 0x4b, 0xb8,
+	0x98, 0x26, 0xc6, 0x05, 0xa5, 0x24, 0x5e, 0xb7, 0x43, 0x82, 0xd8, 0x9f, 0x67, 0xf0, 0x3a, 0xa6,
+	0x0c, 0x9c, 0xfe, 0x63, 0x70, 0xaf, 0xef, 0x18, 0x4c, 0x8c, 0x84, 0xf6, 0x4e, 0xc9, 0x7d, 0x54,
+	0x74, 0x54, 0xce, 0x2a, 0x93, 0x02, 0x15, 0x29, 0x53, 0x28, 0xdf, 0xeb, 0xc2, 0x9c, 0xac, 0x9e,
+	0xeb, 0xfd, 0x78, 0x8e, 0xe0, 0x07, 0x48, 0xb7, 0x3b, 0x84, 0x45, 0xc0, 0x2b, 0xba, 0xa0, 0xaf,
+	0xa4, 0x89, 0x51, 0x3b, 0x26, 0xfc, 0x98, 0xb7, 0x97, 0x4c, 0x2b, 0x87, 0xf0, 0x1d, 0x54, 0x88,
+	0xb9, 0x5d, 0x29, 0xd6, 0xb4, 0xb9, 0xe2, 0x50, 0x96, 0xb3, 0x18, 0x4c, 0x2b, 0x03, 0xf0, 0x43,
+	0xa4, 0x7b, 0xa1, 0xeb, 0xd2, 0xc0, 0xad, 0x94, 0x04, 0xfb, 0x49, 0x9a, 0x18, 0x97, 0x8e, 0x61,
+	0xdb, 0xc4, 0x8b, 0xc0, 0xb4, 0x72, 0x0a, 0xaf, 0xa1, 0x72, 0x44, 0x03, 0x37, 0xf6, 0x08, 0xa3,
+	0xdf, 0x43, 0x05, 0xfd, 0x1b, 0x27, 0xfd, 0x24, 0x7e, 0x85, 0xce, 0xf8, 0x64, 0x77, 0x33, 0xec,
+	0x42, 0xb0, 0x69, 0x87, 0x41, 0x10, 0x55, 0xca, 0xe2, 0x1c, 0x34, 0xd2, 0xc4, 0xf8, 0x54, 0xfa,
+	0x3a, 0x68, 0x1f, 0x7c, 0x3d, 0x98, 0xd6, 0x69, 0x9f, 0xec, 0x3e, 0xeb, 0x42, 0xb0, 0x92, 0x89,
+	0x72, 0xb7, 0xd4, 0xf1, 0x40, 0xb9, 0x3d, 0x3d, 0xc8, 0xed, 0xbe, 0xfd, 0x38, 0xb7, 0x4f, 0x1c,
+	0x0f, 0xa4, 0xdb, 0x1f, 0xd0, 0xff, 0x32, 0xf5, 0x66, 0xc6, 0x7a, 0xb4, 0x0d, 0x9c, 0xfa, 0x50,
+	0x99, 0xaa, 0x69, 0x73, 0xe5, 0xe6, 0x85, 0xba, 0xbc, 0xc6, 0xeb, 0xf9, 0x35, 0x5e, 0x5f, 0x55,
+	0xe5, 0xd7, 0xba, 0x9b, 0x26, 0x46, 0x43, 0x4e, 0x7a, 0x88, 0x1e, 0x3c, 0x6f, 0xc7, 0x7c, 0xf3,
+	0xbb, 0xa1, 0x59, 0xd3, 0x99, 0xfc, 0x29, 0xd9, 0x5d, 0x57, 0x62, 0xf3, 0xa7, 0x32, 0x2a, 0x3e,
+	0x06, 0xc2, 0x63, 0x06, 0x11, 0xfe, 0x02, 0xe9, 0x3e, 0x70, 0x46, 0xed, 0x48, 0x54, 0x75, 0xb9,
+	0x79, 0xed, 0x88, 0xaa, 0xce, 0x89, 0xfa, 0x53, 0x29, 0xb7, 0x72, 0x2e, 0x73, 0xc1, 0x19, 0xb1,
+	0xb3, 0x73, 0x30, 0x36, 0x9a, 0x8b, 0x97, 0x52, 0x6e, 0xe5, 0x1c, 0xbe, 0x8d, 0x0a, 0xdc, 0x8b,
+	0x44, 0xf5, 0x96, 0x9b, 0x97, 0x87, 0xe2, 0xeb, 0x1b, 0x56, 0xa6, 0xc7, 0x6b, 0xa8, 0xa4, 0xde,
+	0xae, 0x90, 0x89, 0x7a, 0x2d, 0x37, 0xaf, 0x0f, 0x83, 0xbf, 0xce, 0x01, 0x6b, 0x9f, 0xcd, 0x42,
+	0x60, 0xf0, 0xda, 0x0b, 0xdd, 0x48, 0xd4, 0xee, 0x08, 0x21, 0x58, 0x52, 0x6e, 0xe5, 0x5c, 0xb6,
+	0x16, 0xce, 0x48, 0x10, 0x09, 0x27, 0x93, 0xa3, 0xad, 0xe5, 0x65, 0x0e, 0x58, 0xfb, 0x6c, 0xf5,
+	0x17, 0x0d, 0xe9, 0x2a, 0xc7, 0x59, 0x89, 0x41, 0x40, 0xb6, 0x3c, 0x70, 0xc4, 0xee, 0x8c, 0x5e,
+	0x62, 0x8a, 0xc2, 0x15, 0xa4, 0x13, 0xc7, 0x61, 0x10, 0x45, 0xea, 0x6d, 0xca, 0x87, 0xf8, 0x5b,
+	0x74, 0xa6, 0xed, 0xc5, 0x51, 0x67, 0x93, 0x06, 0x1c, 0xd8, 0x0e, 0xf1, 0x44, 0xf6, 0xc7, 0x5b,
+	0x77, 0xd2, 0xc4, 0x68, 0xca, 0x19, 0x0e, 0xda, 0x8f, 0x78, 0x52, 0xe5, 0x3f, 0xd3, 0x9a, 0x12,
+	0xea, 0x27, 0x4a, 0x2c, 0xa2, 0x50, 0xdb, 0xfc, 0x1f, 0x8e, 0xe2, 0xaf, 0x31, 0x54, 0x78, 0xb9,
+	0xbe, 0x71, 0xf2, 0x08, 0x9e, 0xa1, 0x92, 0x0d, 0x8c, 0x6f, 0xb6, 0xa9, 0x07, 0xea, 0x71, 0x6b,
+	0xa6, 0x89, 0x51, 0x57, 0x05, 0x9d, 0x9b, 0x7a, 0x8f, 0xd2, 0x51, 0x97, 0x7e, 0xa6, 0x7c, 0x4c,
+	0x3d, 0xc0, 0xeb, 0xa8, 0xb8, 0x0d, 0x7b, 0xd2, 0x9f, 0xec, 0x2a, 0xfa, 0x1e, 0xbd, 0xdc, 0x32,
+	0xcc, 0x9d, 0xbe, 0x0d, 0x7b, 0xc2, 0xdb, 0x13, 0xa4, 0xdb, 0x44, 0x3a, 0x93, 0xcf, 0x5e, 0x5f,
+	0xbb, 0xa1, 0x0c, 0xc3, 0x7c, 0x4d, 0xda, 0x44, 0xb8, 0x5a, 0x41, 0x48, 0xb6, 0x33, 0xe2, 0x11,
+	0x9d, 0xf8, 0xb0, 0xb1, 0x1b, 0x98, 0xad, 0x6b, 0x37, 0xae, 0x99, 0x56, 0x1f, 0x56, 0x5d, 0x47,
+	0xa5, 0x5e, 0x9d, 0x9e, 0x38, 0xf9, 0xd5, 0xaf, 0x90, 0xae, 0xca, 0xf5, 0xe4, 0xbe, 0xb6, 0x50,
+	0xa9, 0x57, 0xb5, 0x27, 0x3f, 0x16, 0xff, 0x47, 0x13, 0x3c, 0xec, 0x52, 0x5b, 0x1d, 0x6b, 0x39,
+	0x30, 0xff, 0xd4, 0x50, 0x51, 0x35, 0xd6, 0x11, 0x5e, 0x42, 0x3a, 0xb1, 0xed, 0x30, 0x56, 0x8d,
+	0x75, 0xb9, 0x39, 0x7b, 0xc4, 0xad, 0xa2, 0x08, 0x2b, 0x97, 0x67, 0xa4, 0xcb, 0x00, 0x38, 0x30,
+	0x75, 0x2f, 0x0f, 0x25, 0x95, 0x3c, 0x23, 0x45, 0x77, 0xa8, 0x3a, 0xd6, 0x11, 0x48, 0x25, 0xc7,
+	0xcb, 0xa8, 0xc8, 0xc0, 0x0e, 0x99, 0x03, 0xf9, 0x85, 0x3c, 0x0c, 0xed, 0xe9, 0xcd, 0xb7, 0x63,
+	0x68, 0xea, 0x60, 0xcb, 0xf9, 0x65, 0x5f, 0x63, 0x24, 0x17, 0x32, 0x3f, 0xa4, 0xe7, 0x3c, 0xc0,
+	0xf7, 0xf5, 0x48, 0x0f, 0xd1, 0x84, 0x58, 0xe2, 0x90, 0x57, 0xe2, 0xf0, 0xf7, 0x80, 0x25, 0x39,
+	0xfc, 0x39, 0x2a, 0xb6, 0xd5, 0xb5, 0xad, 0x9e, 0x08, 0x63, 0xc8, 0xed, 0x6e, 0xf5, 0x80, 0x0c,
+	0x8e, 0xd4, 0x7e, 0xaa, 0xa7, 0xc1, 0x38, 0x3e, 0x2b, 0x91, 0xd5, 0x03, 0x96, 0x0b, 0x7f, 0xb7,
+	0xb4, 0x1b, 0x6b, 0x68, 0xfa, 0x83, 0xb6, 0x1a, 0x4f, 0xa3, 0xf2, 0xab, 0x20, 0xea, 0x82, 0x4d,
+	0xdb, 0x14, 0x9c, 0x99, 0x53, 0xb8, 0x8c, 0xf4, 0xe7, 0x61, 0xc4, 0x5d, 0x06, 0x33, 0x1a, 0x2e,
+	0xa1, 0x89, 0xa7, 0x7b, 0x1b, 0x2f, 0xd6, 0x67, 0xc6, 0xb2, 0xdf, 0x37, 0x5e, 0xac, 0x53, 0x0e,
+	0xb7, 0x66, 0x0a, 0xcd, 0xb7, 0x5a, 0x9e, 0xe4, 0xfc, 0xd3, 0x6d, 0x05, 0x15, 0xd6, 0x80, 0xe3,
+	0xf3, 0x87, 0x5a, 0x8f, 0x47, 0xd9, 0xe1, 0xad, 0x5e, 0x39, 0x62, 0xa5, 0x07, 0x77, 0x6a, 0x05,
+	0x15, 0x36, 0x80, 0xe3, 0x91, 0xc4, 0xd5, 0x23, 0xa6, 0x6a, 0xd9, 0xbf, 0xbe, 0x9f, 0xd5, 0x7e,
+	0x7b, 0x3f, 0xab, 0xbd, 0x7b, 0x3f, 0xab, 0xbd, 0xf9, 0x63, 0xf6, 0x14, 0x1a, 0xfc, 0x25, 0xfc,
+	0x5c, 0xfb, 0x66, 0xc9, 0xa5, 0xbc, 0x13, 0x6f, 0xd5, 0xed, 0xd0, 0x6f, 0xec, 0xfa, 0xde, 0x36,
+	0x0d, 0xdc, 0x86, 0x4f, 0x6d, 0x16, 0xde, 0x8c, 0x38, 0x61, 0x1c, 0xd8, 0xcd, 0x6d, 0xca, 0x1b,
+	0x03, 0xbe, 0xb4, 0xb7, 0x26, 0xc5, 0xe8, 0xd6, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x29, 0x43,
+	0xe5, 0xbb, 0x87, 0x0f, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -995,8 +1054,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ConfigServiceClient interface {
-	Get(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*ServiceConfiguration, error)
-	Set(ctx context.Context, in *ServiceConfiguration, opts ...grpc.CallOption) (*empty.Empty, error)
+	Get(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Configuration, error)
+	Set(ctx context.Context, in *Configuration, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type configServiceClient struct {
@@ -1007,8 +1066,8 @@ func NewConfigServiceClient(cc *grpc.ClientConn) ConfigServiceClient {
 	return &configServiceClient{cc}
 }
 
-func (c *configServiceClient) Get(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*ServiceConfiguration, error) {
-	out := new(ServiceConfiguration)
+func (c *configServiceClient) Get(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Configuration, error) {
+	out := new(Configuration)
 	err := c.cc.Invoke(ctx, "/mkit.shared.config.v1.ConfigService/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -1016,7 +1075,7 @@ func (c *configServiceClient) Get(ctx context.Context, in *empty.Empty, opts ...
 	return out, nil
 }
 
-func (c *configServiceClient) Set(ctx context.Context, in *ServiceConfiguration, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *configServiceClient) Set(ctx context.Context, in *Configuration, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
 	err := c.cc.Invoke(ctx, "/mkit.shared.config.v1.ConfigService/Set", in, out, opts...)
 	if err != nil {
@@ -1027,18 +1086,18 @@ func (c *configServiceClient) Set(ctx context.Context, in *ServiceConfiguration,
 
 // ConfigServiceServer is the server API for ConfigService service.
 type ConfigServiceServer interface {
-	Get(context.Context, *empty.Empty) (*ServiceConfiguration, error)
-	Set(context.Context, *ServiceConfiguration) (*empty.Empty, error)
+	Get(context.Context, *empty.Empty) (*Configuration, error)
+	Set(context.Context, *Configuration) (*empty.Empty, error)
 }
 
 // UnimplementedConfigServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedConfigServiceServer struct {
 }
 
-func (*UnimplementedConfigServiceServer) Get(ctx context.Context, req *empty.Empty) (*ServiceConfiguration, error) {
+func (*UnimplementedConfigServiceServer) Get(ctx context.Context, req *empty.Empty) (*Configuration, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (*UnimplementedConfigServiceServer) Set(ctx context.Context, req *ServiceConfiguration) (*empty.Empty, error) {
+func (*UnimplementedConfigServiceServer) Set(ctx context.Context, req *Configuration) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Set not implemented")
 }
 
@@ -1065,7 +1124,7 @@ func _ConfigService_Get_Handler(srv interface{}, ctx context.Context, dec func(i
 }
 
 func _ConfigService_Set_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ServiceConfiguration)
+	in := new(Configuration)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -1077,7 +1136,7 @@ func _ConfigService_Set_Handler(srv interface{}, ctx context.Context, dec func(i
 		FullMethod: "/mkit.shared.config.v1.ConfigService/Set",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConfigServiceServer).Set(ctx, req.(*ServiceConfiguration))
+		return srv.(ConfigServiceServer).Set(ctx, req.(*Configuration))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1351,9 +1410,9 @@ func (m *Features) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if m.TransLogs != nil {
+	if m.Translogs != nil {
 		{
-			size, err := m.TransLogs.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Translogs.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1363,9 +1422,9 @@ func (m *Features) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x32
 	}
-	if m.ReqLogs != nil {
+	if m.Reqlogs != nil {
 		{
-			size, err := m.ReqLogs.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.Reqlogs.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1626,7 +1685,7 @@ func (m *Features_Validator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *Features_ReqLogs) Marshal() (dAtA []byte, err error) {
+func (m *Features_Reqlogs) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1636,12 +1695,12 @@ func (m *Features_ReqLogs) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Features_ReqLogs) MarshalTo(dAtA []byte) (int, error) {
+func (m *Features_Reqlogs) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Features_ReqLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Features_Reqlogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1663,7 +1722,7 @@ func (m *Features_ReqLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *Features_TransLogs) Marshal() (dAtA []byte, err error) {
+func (m *Features_Translogs) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1673,12 +1732,12 @@ func (m *Features_TransLogs) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Features_TransLogs) MarshalTo(dAtA []byte) (int, error) {
+func (m *Features_Translogs) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Features_TransLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Features_Translogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1707,7 +1766,7 @@ func (m *Features_TransLogs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ServiceConfiguration) Marshal() (dAtA []byte, err error) {
+func (m *Services) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1717,12 +1776,12 @@ func (m *ServiceConfiguration) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ServiceConfiguration) MarshalTo(dAtA []byte) (int, error) {
+func (m *Services) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ServiceConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Services) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1731,31 +1790,92 @@ func (m *ServiceConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.XXX_unrecognized)
 		copy(dAtA[i:], m.XXX_unrecognized)
 	}
-	if len(m.Services) > 0 {
-		for k := range m.Services {
-			v := m.Services[k]
-			baseI := i
-			if v != nil {
-				{
-					size, err := v.MarshalToSizedBuffer(dAtA[:i])
-					if err != nil {
-						return 0, err
-					}
-					i -= size
-					i = encodeVarintConfig(dAtA, i, uint64(size))
-				}
-				i--
-				dAtA[i] = 0x12
+	if m.Recorder != nil {
+		{
+			size, err := m.Recorder.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintConfig(dAtA, i, uint64(len(k)))
-			i--
-			dAtA[i] = 0xa
-			i = encodeVarintConfig(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x32
+			i -= size
+			i = encodeVarintConfig(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Emailer != nil {
+		{
+			size, err := m.Emailer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintConfig(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Greeter != nil {
+		{
+			size, err := m.Greeter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintConfig(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Account != nil {
+		{
+			size, err := m.Account.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintConfig(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Configuration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Configuration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Configuration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Services != nil {
+		{
+			size, err := m.Services.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintConfig(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
 	}
 	if m.Features != nil {
 		{
@@ -1792,20 +1912,6 @@ func (m *ServiceConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x1a
-	}
-	if len(m.Version) > 0 {
-		i -= len(m.Version)
-		copy(dAtA[i:], m.Version)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.Version)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ServiceName) > 0 {
-		i -= len(m.ServiceName)
-		copy(dAtA[i:], m.ServiceName)
-		i = encodeVarintConfig(dAtA, i, uint64(len(m.ServiceName)))
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -1954,12 +2060,12 @@ func (m *Features) Size() (n int) {
 		l = m.Validator.Size()
 		n += 1 + l + sovConfig(uint64(l))
 	}
-	if m.ReqLogs != nil {
-		l = m.ReqLogs.Size()
+	if m.Reqlogs != nil {
+		l = m.Reqlogs.Size()
 		n += 1 + l + sovConfig(uint64(l))
 	}
-	if m.TransLogs != nil {
-		l = m.TransLogs.Size()
+	if m.Translogs != nil {
+		l = m.Translogs.Size()
 		n += 1 + l + sovConfig(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
@@ -2058,7 +2164,7 @@ func (m *Features_Validator) Size() (n int) {
 	return n
 }
 
-func (m *Features_ReqLogs) Size() (n int) {
+func (m *Features_Reqlogs) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2073,7 +2179,7 @@ func (m *Features_ReqLogs) Size() (n int) {
 	return n
 }
 
-func (m *Features_TransLogs) Size() (n int) {
+func (m *Features_Translogs) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2092,20 +2198,40 @@ func (m *Features_TransLogs) Size() (n int) {
 	return n
 }
 
-func (m *ServiceConfiguration) Size() (n int) {
+func (m *Services) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.ServiceName)
-	if l > 0 {
+	if m.Account != nil {
+		l = m.Account.Size()
 		n += 1 + l + sovConfig(uint64(l))
 	}
-	l = len(m.Version)
-	if l > 0 {
+	if m.Greeter != nil {
+		l = m.Greeter.Size()
 		n += 1 + l + sovConfig(uint64(l))
 	}
+	if m.Emailer != nil {
+		l = m.Emailer.Size()
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	if m.Recorder != nil {
+		l = m.Recorder.Size()
+		n += 1 + l + sovConfig(uint64(l))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
+func (m *Configuration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	if m.Database != nil {
 		l = m.Database.Size()
 		n += 1 + l + sovConfig(uint64(l))
@@ -2118,18 +2244,9 @@ func (m *ServiceConfiguration) Size() (n int) {
 		l = m.Features.Size()
 		n += 1 + l + sovConfig(uint64(l))
 	}
-	if len(m.Services) > 0 {
-		for k, v := range m.Services {
-			_ = k
-			_ = v
-			l = 0
-			if v != nil {
-				l = v.Size()
-				l += 1 + sovConfig(uint64(l))
-			}
-			mapEntrySize := 1 + len(k) + sovConfig(uint64(len(k))) + l
-			n += mapEntrySize + 1 + sovConfig(uint64(mapEntrySize))
-		}
+	if m.Services != nil {
+		l = m.Services.Size()
+		n += 1 + l + sovConfig(uint64(l))
 	}
 	if m.XXX_unrecognized != nil {
 		n += len(m.XXX_unrecognized)
@@ -3042,7 +3159,7 @@ func (m *Features) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ReqLogs", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Reqlogs", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3069,16 +3186,16 @@ func (m *Features) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ReqLogs == nil {
-				m.ReqLogs = &Features_ReqLogs{}
+			if m.Reqlogs == nil {
+				m.Reqlogs = &Features_Reqlogs{}
 			}
-			if err := m.ReqLogs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Reqlogs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TransLogs", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Translogs", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3105,10 +3222,10 @@ func (m *Features) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.TransLogs == nil {
-				m.TransLogs = &Features_TransLogs{}
+			if m.Translogs == nil {
+				m.Translogs = &Features_Translogs{}
 			}
-			if err := m.TransLogs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Translogs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3663,7 +3780,7 @@ func (m *Features_Validator) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *Features_ReqLogs) Unmarshal(dAtA []byte) error {
+func (m *Features_Reqlogs) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3686,10 +3803,10 @@ func (m *Features_ReqLogs) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ReqLogs: wiretype end group for non-group")
+			return fmt.Errorf("proto: Reqlogs: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ReqLogs: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Reqlogs: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3737,7 +3854,7 @@ func (m *Features_ReqLogs) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *Features_TransLogs) Unmarshal(dAtA []byte) error {
+func (m *Features_Translogs) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3760,10 +3877,10 @@ func (m *Features_TransLogs) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: TransLogs: wiretype end group for non-group")
+			return fmt.Errorf("proto: Translogs: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TransLogs: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Translogs: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3843,7 +3960,7 @@ func (m *Features_TransLogs) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ServiceConfiguration) Unmarshal(dAtA []byte) error {
+func (m *Services) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3866,17 +3983,17 @@ func (m *ServiceConfiguration) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceConfiguration: wiretype end group for non-group")
+			return fmt.Errorf("proto: Services: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Services: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceName", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Account", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowConfig
@@ -3886,29 +4003,33 @@ func (m *ServiceConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthConfig
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceName = string(dAtA[iNdEx:postIndex])
+			if m.Account == nil {
+				m.Account = &Service{}
+			}
+			if err := m.Account.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Greeter", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowConfig
@@ -3918,24 +4039,154 @@ func (m *ServiceConfiguration) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthConfig
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthConfig
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Version = string(dAtA[iNdEx:postIndex])
+			if m.Greeter == nil {
+				m.Greeter = &Service{}
+			}
+			if err := m.Greeter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Emailer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Emailer == nil {
+				m.Emailer = &Service{}
+			}
+			if err := m.Emailer.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Recorder", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowConfig
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthConfig
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Recorder == nil {
+				m.Recorder = &Service{}
+			}
+			if err := m.Recorder.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipConfig(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthConfig
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Configuration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowConfig
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Configuration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Configuration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Database", wireType)
@@ -4074,104 +4325,11 @@ func (m *ServiceConfiguration) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Services == nil {
-				m.Services = make(map[string]*Service)
+				m.Services = &Services{}
 			}
-			var mapkey string
-			var mapvalue *Service
-			for iNdEx < postIndex {
-				entryPreIndex := iNdEx
-				var wire uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowConfig
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					wire |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				fieldNum := int32(wire >> 3)
-				if fieldNum == 1 {
-					var stringLenmapkey uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowConfig
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthConfig
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthConfig
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
-				} else if fieldNum == 2 {
-					var mapmsglen int
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowConfig
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						mapmsglen |= int(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					if mapmsglen < 0 {
-						return ErrInvalidLengthConfig
-					}
-					postmsgIndex := iNdEx + mapmsglen
-					if postmsgIndex < 0 {
-						return ErrInvalidLengthConfig
-					}
-					if postmsgIndex > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapvalue = &Service{}
-					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
-						return err
-					}
-					iNdEx = postmsgIndex
-				} else {
-					iNdEx = entryPreIndex
-					skippy, err := skipConfig(dAtA[iNdEx:])
-					if err != nil {
-						return err
-					}
-					if skippy < 0 {
-						return ErrInvalidLengthConfig
-					}
-					if (iNdEx + skippy) > postIndex {
-						return io.ErrUnexpectedEOF
-					}
-					iNdEx += skippy
-				}
+			if err := m.Services.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
 			}
-			m.Services[mapkey] = mapvalue
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
