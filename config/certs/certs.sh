@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd config/base/secrets/certs
+pushd config/certs
 
 set -e
 
