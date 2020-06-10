@@ -23,7 +23,7 @@ Run the service
 ```bash
 make run-greeter
 # or
-go run service/greeter/main.go service/greeter/plugin.go --configDir deploy/bases/service/greeter/config
+go run service/greeter/main.go service/greeter/plugin.go
 ```
 
 Build a docker image
@@ -36,7 +36,7 @@ make docker TARGET=greeter TYPE=service VERSION=v0.1.1
 
 ```bash
 # start the server on fixed port
-make run-greeter ARGS="--server_address=localhost:8080 --broker_address=localhost:10001"
+make run-greeter ARGS="--server_address=:8080 --broker_address=:10001"
 
 # test with grpc cli
 grpcurl -plaintext -proto service/greeter/proto/greeter/greeter.proto list

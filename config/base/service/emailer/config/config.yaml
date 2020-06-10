@@ -3,20 +3,20 @@ email:
   password: yourGmailAppPassword
   email_server: smtp.gmail.com
   port: 587
-  from: xmlking@gmail.com
+  from: from@gmail.com
 
 services:
   account:
-    endpoint: mkit.service.account
+    endpoint: mkit.service.account:8080
     version: v0.1.0
   greeter:
-    endpoint: mkit.service.greeter
+    endpoint: mkit.service.greeter:8080
     version: v0.1.0
   emailer:
-    endpoint: mkit.service.emailer
+    endpoint: mkit.service.emailer:8080
     version: v0.1.0
   recorder:
-    endpoint: mkit.service.recorder
+    endpoint: mkit.service.recorder:8080
     version: v0.1.0
 
 features:
@@ -28,10 +28,10 @@ features:
     address: jaeger:6831
     flush_interval: 5000000000
     enabled: false
-  mtls:
-    cert_file: config/certs/micro.crt
-    key_file: config/certs/micro.key
-    ca_file: config/certs/ca.crt
+  tls:
+    cert_file: /config/certs/micro.crt
+    key_file: /config/certs/micro.key
+    ca_file: /config/certs/ca.crt
     servername: "*"
     enabled: false
   validator:

@@ -31,8 +31,9 @@ Run the service
 
 ```bash
 make run-account
+make run-account ARGS="--server_address=:8080"
 # or
-go run service/account/main.go service/account/plugin.go --configDir deploy/bases/service/account/config
+go run service/account/main.go service/account/plugin.go
 ```
 
 Build a docker image

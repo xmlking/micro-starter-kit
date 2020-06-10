@@ -2,11 +2,9 @@ package main
 
 import (
     "net"
-    "net/http"
 
     "github.com/micro/go-micro/v2"
     "github.com/rs/zerolog/log"
-    "github.com/soheilhy/cmux"
 
     sgrpc "github.com/micro/go-micro/v2/server/grpc"
 
@@ -18,10 +16,6 @@ import (
     "github.com/xmlking/micro-starter-kit/shared/util/tls"
     logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
     transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
-
-    "google.golang.org/grpc"
-    "google.golang.org/grpc/health"
-    "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 const (
@@ -33,32 +27,19 @@ var (
 )
 
 func main() {
-    lis, err := net.Listen("tcp", ":0")
+    // lis, err := net.Listen("tcp", ":0")
+    lis, err := net.Listen("unix", "/tmp/greeter.sock") //  you can also use Unix Domain Sockets (UDS) as address
     if err != nil {
         log.Fatal().Msgf("failed to listen: %v", err)
     }
+    println(lis.Addr().String())
 
-    hsrv := health.NewServer()
-    hsrv.SetServingStatus("", grpc_health_v1.HealthCheckResponse_SERVING)
-    gs := grpc.NewServer()
-    grpc_health_v1.RegisterHealthServer(gs, hsrv)
-
-    m := cmux.New(lis)
-    grpcL := m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
-    httpL := m.Match(cmux.HTTP1Fast())
-
-    httpS := &http.Server{
-        Handler: handler.NewHttpHandler(),
-    }
-
-    go httpS.Serve(httpL)
-
-	// New Service
-	service := micro.NewService(
-		micro.Name(serviceName),
-		micro.Version(config.Version),
-        micro.Server(sgrpc.NewServer(sgrpc.Listener(grpcL))),
-	)
+    // New Service
+    service := micro.NewService(
+        micro.Name(serviceName),
+        micro.Version(config.Version),
+        micro.Server(sgrpc.NewServer(sgrpc.Listener(lis))),
+    )
 
     // Initialize service
     service.Init(

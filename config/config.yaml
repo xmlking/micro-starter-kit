@@ -40,9 +40,9 @@ features:
     flush_interval: 5000000000
     enabled: false
   tls:
-    cert_file: config/base/secrets/certs/upstream-localhost-cert.pem
-    key_file: config/base/secrets/certs/upstream-localhost-key.pem
-    ca_file: config/base/secrets/certs/upstream-cert.pem
+    cert_file: /config/base/secrets/certs/upstream-localhost-cert.pem
+    key_file: /config/base/secrets/certs/upstream-localhost-key.pem
+    ca_file: /config/base/secrets/certs/upstream-cert.pem
     servername: "*"
     enabled: false
   validator:

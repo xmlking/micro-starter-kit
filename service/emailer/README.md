@@ -27,7 +27,7 @@ Run the service
 ```bash
 make run-emailer
 # or
-go run service/emailer/main.go service/emailer/plugin.go --configDir deploy/bases/service/emailer/config
+go run service/emailer/main.go service/emailer/plugin.go
 ```
 
 Build a docker image

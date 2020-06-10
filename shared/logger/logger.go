@@ -159,7 +159,7 @@ func (l *defaultLogger) String() string {
 func NewLogger(opts ...Option) Logger {
     // Set default options
     options := Options{
-        Level:   zerolog.InfoLevel,
+        Level:   zerolog.NoLevel,
         Format:  PRETTY,
         Out:     os.Stderr,
         Context: context.Background(),

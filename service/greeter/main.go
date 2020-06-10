@@ -1,12 +1,8 @@
 package main
 
 import (
-    "net"
-
     "github.com/micro/go-micro/v2"
     "github.com/rs/zerolog/log"
-
-    sgrpc "github.com/micro/go-micro/v2/server/grpc"
 
     "github.com/xmlking/micro-starter-kit/service/greeter/handler"
     greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
@@ -27,18 +23,10 @@ var (
 )
 
 func main() {
-    // lis, err := net.Listen("tcp", ":0")
-    lis, err := net.Listen("unix", "/tmp/greeter.sock") //  you can also use Unix Domain Sockets (UDS) as address
-    if err != nil {
-        log.Fatal().Msgf("failed to listen: %v", err)
-    }
-    println(lis.Addr().String())
-
     // New Service
     service := micro.NewService(
         micro.Name(serviceName),
         micro.Version(config.Version),
-        micro.Server(sgrpc.NewServer(sgrpc.Listener(lis))),
     )
 
     // Initialize service
@@ -65,16 +53,12 @@ func main() {
     }
     // Wrappers are invoked in the order as they added
     if cfg.Features.Reqlogs.Enabled {
-        options = append(options,
-            micro.WrapHandler(logWrapper.NewHandlerWrapper()),
-        )
+        options = append(options, micro.WrapHandler(logWrapper.NewHandlerWrapper()))
     }
     if cfg.Features.Translogs.Enabled {
         topic := cfg.Features.Translogs.Topic
         publisher := micro.NewEvent(topic, service.Client())
-        options = append(options,
-            micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)),
-        )
+        options = append(options, micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)))
     }
 
     // Initialize Features
