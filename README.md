@@ -154,15 +154,14 @@ kubectl delete -f build/deploy.yaml
 
 ### Project Docs
 
-1. [prerequisites](docs/prerequisites.md)
-2. [scaffolding](docs/scaffolding.md)
-3. [makefile](docs/makefile.md)
-4. [testing](docs/testing.md)
-5. [docker](docs/docker.md)
-6. [gitops](docs/gitops.md)
-7. [releasing](docs/releasing.md)
-8. [Protobuf Style Guide](https://buf.build/docs/style-guide)
-9. [Google Protobuf Style Guide](https://github.com/uber-go/guide/blob/master/style.md)
+1. [prerequisites](docs/introduction/prerequisites.md)
+2. [scaffolding](docs/introduction/scaffolding.md)
+3. [makefile](docs/introduction/makefile.md)
+4. [testing](docs/testing/testing.md)
+5. [docker](docs/devops/docker.md)
+6. [gitops](docs/advanced/gitops.md)
+7. [Protobuf Style Guide](https://buf.build/docs/style-guide)
+8. [Google Protobuf Style Guide](https://github.com/uber-go/guide/blob/master/style.md)
 
 ### External Docs
 
