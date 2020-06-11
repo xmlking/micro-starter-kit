@@ -64,7 +64,7 @@ func getUserList2(limit uint32) {
 
     // New Service
     service := micro.NewService(
-        micro.Name("mkit.client.account"),
+        micro.Name(constants.ACCOUNT_CLIENT),
         micro.Version(config.Version),
         micro.WrapClient(logWrapper.NewClientWrapper()), // Showcase ClientWrapper usage
     )

@@ -27,7 +27,7 @@ func NewTransactionSubscriber(repo repository.TransactionRepository) *Transactio
 // Handle is a method to record transaction event, Method can be of any name
 func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB.TransactionEvent) (err error) {
     md, _ := metadata.FromContext(ctx)
-    tranId := md[constants.TransID]
+    tranId := md[constants.TraceIDKey]
 
     if len(tranId) == 0 {
         log.Error().Msg("TransactionSubscriber: missing  TranID")
@@ -39,6 +39,8 @@ func (s *TransactionSubscriber) Handle(ctx context.Context, event *transactionPB
     case constants.EMAILER_SERVICE:
         err = s.repo.Write(ctx, fmt.Sprintf("%s#%s", tranId, from), event)
     case constants.GREETER_SERVICE:
+        err = s.repo.Write(ctx, fmt.Sprintf("%s#%s", tranId, from), event)
+    case constants.ACCOUNT_CLIENT:
         err = s.repo.Write(ctx, fmt.Sprintf("%s#%s", tranId, from), event)
     default:
         log.Error().Msgf("TransactionSubscriber: unknown  from: %s", from)
