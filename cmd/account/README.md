@@ -19,4 +19,5 @@ Check services are **UP** with `micro list services` command
 2. Run Account CLI
     ```bash
     go run cmd/account/main.go
+    go run cmd/account/main.go -username=crazy -email=a@b.com -limit=7
     ```

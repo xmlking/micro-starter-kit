@@ -2,6 +2,7 @@ package main
 
 import (
     "context"
+    "flag"
 
     "github.com/micro/go-micro/v2"
     "github.com/micro/go-micro/v2/client"
@@ -29,23 +30,29 @@ func main() {
     //log.Debug().Uint64("FlushInterval", cfg.Features.Tracing.FlushInterval).Send()
     //log.Debug().Msgf("cfg is %v", cfg)
 
+    username := flag.String("username", "sumo", "username of user to be create")
+    email := flag.String("email", "sumo@demo.com", "email of user to be create")
+    limit := flag.Uint64("limit", 10, "Limit number of results")
+
+    log.Debug().Str("username", *username).Str("email", *email).Uint64("limit", *limit).Msg("Flags Using:")
+
     userService := userPB.NewUserService(constants.ACCOUNT_SERVICE, client.DefaultClient)
 
-    if  _, err := userService.Create(context.TODO(), &userPB.CreateRequest{
-        Username:  &wrappers.StringValue{Value: "sumo"},
+    if _, err := userService.Create(context.TODO(), &userPB.CreateRequest{
+        Username:  &wrappers.StringValue{Value: *username},
         FirstName: &wrappers.StringValue{Value: "sumo"},
         LastName:  &wrappers.StringValue{Value: "demo"},
-        Email:     &wrappers.StringValue{Value: "sumo@demo.com"},
-    });  err != nil {
+        Email:     &wrappers.StringValue{Value: *email},
+    }); err != nil {
         log.Fatal().Err(err).Msg("Unable to create User")
     }
 
-    getUserList(userService)
-    getUserList2()
+    getUserList(userService, uint32(*limit))
+    getUserList2(uint32(*limit))
 }
 
-func getUserList(us userPB.UserService) {
-    if  rsp, err := us.List(context.Background(), &userPB.ListRequest{Limit: &wrappers.UInt32Value{Value : 10}});  err != nil {
+func getUserList(us userPB.UserService, limit uint32) {
+    if rsp, err := us.List(context.Background(), &userPB.ListRequest{Limit: &wrappers.UInt32Value{Value: limit}}); err != nil {
         log.Fatal().Err(err).Msg("Unable to List Users")
     } else {
         log.Info().Interface("listRsp", rsp).Send()
@@ -53,17 +60,21 @@ func getUserList(us userPB.UserService) {
 }
 
 // Just to showcase usage of generic micro client
-func getUserList2() {
+func getUserList2(limit uint32) {
+
+    // New Service
     service := micro.NewService(
         micro.Name("mkit.client.account"),
         micro.Version(config.Version),
+        micro.WrapClient(logWrapper.NewClientWrapper()), // Showcase ClientWrapper usage
     )
-    service.Init(micro.WrapClient(logWrapper.NewClientWrapper())) // Showcase ClientWrapper
 
     cl := service.Client()
 
     // Create new request to service mkit.service.account, method UserService.List
-    listReq := cl.NewRequest(constants.ACCOUNT_SERVICE, "UserService.List", &userPB.ListRequest{Limit: &wrappers.UInt32Value{Value : 10}})
+    listReq := cl.NewRequest(constants.ACCOUNT_SERVICE, "UserService.List", &userPB.ListRequest{
+        Limit: &wrappers.UInt32Value{Value: limit},
+    })
     listRsp := &userPB.ListResponse{}
 
     // Create context with metadata - (Optional) Just for demonstration
@@ -72,9 +83,9 @@ func getUserList2() {
         "X-From-Id": "script",
     })
 
-    if err :=  cl.Call(ctx, listReq, listRsp); err != nil {
+    if err := cl.Call(ctx, listReq, listRsp); err != nil {
         log.Fatal().Err(err).Msg("Unable to List Users")
     } else {
-        log.Info().Interface("listRsp",listRsp).Send()
+        log.Info().Interface("listRsp", listRsp).Send()
     }
 }
