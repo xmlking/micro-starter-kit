@@ -10,10 +10,12 @@ import (
     "github.com/rs/zerolog"
     "github.com/rs/zerolog/log"
     "github.com/rs/zerolog/pkgerrors"
+    "google.golang.org/grpc/grpclog"
 
     mLogger "github.com/micro/go-micro/v2/logger" // TODO: remove
 
     "github.com/xmlking/micro-starter-kit/shared/logger/gcp"
+    zeroToGrpcAdopter "github.com/xmlking/micro-starter-kit/shared/logger/grpc"
     zeroToMicroAdopter "github.com/xmlking/micro-starter-kit/shared/logger/micro"
 )
 
@@ -139,6 +141,10 @@ func (l *defaultLogger) Init(opts ...Option) error {
 
     // Also set it as micro's Default logger
     mLogger.DefaultLogger = zeroToMicroAdopter.Convert(logr)
+
+    // Also set it as grpclog's Default logger
+    gLogger := logr.With().Str("module", "grpc").Logger()
+    grpclog.SetLoggerV2(zeroToGrpcAdopter.New(gLogger))
 
     logr.Info().
         Str("LogLevel", l.opts.Level.String()).
