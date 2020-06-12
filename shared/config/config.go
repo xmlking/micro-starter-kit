@@ -3,11 +3,14 @@ package config
 import (
     "crypto/tls"
     "fmt"
+    "net"
+    "net/url"
     "os"
     "runtime"
     "strings"
     "sync"
 
+    "github.com/pkg/errors"
     "github.com/rs/zerolog/log"
     "github.com/xmlking/configor"
 
@@ -87,4 +90,32 @@ func CreateServerCerts() (tlsConfig *tls.Config, err error) {
     defer configLock.RUnlock()
     tlsConf := cfg.Features.Tls
     return uTLS.GetTLSConfig(tlsConf.CertFile, tlsConf.KeyFile, tlsConf.CaFile, tlsConf.Servername)
+}
+
+func GetListener(endpoint string) (lis net.Listener, err error) {
+    configLock.RLock()
+    defer configLock.RUnlock()
+
+    u, err := url.Parse(endpoint)
+    if err != nil {
+        return nil, err
+    }
+
+    switch u.Scheme {
+    case "unix":
+        return net.Listen("unix", u.Path)
+    case "tcp", "dns", "kubernetes":
+        tlsConf := cfg.Features.Tls
+        if tlsConf.Enabled {
+            if tlsConfig, err := uTLS.GetTLSConfig(tlsConf.CertFile, tlsConf.KeyFile, tlsConf.CaFile, tlsConf.Servername); err != nil {
+                return nil, err
+            } else {
+                return tls.Listen("tcp", fmt.Sprintf("0:%s", u.Port()), tlsConfig)
+            }
+        } else {
+            return net.Listen("tcp", fmt.Sprintf("0:%s", u.Port()))
+        }
+    default:
+        return nil, errors.New(fmt.Sprintf("unknown scheme: %s in endpoint: %s", u.Scheme, endpoint))
+    }
 }

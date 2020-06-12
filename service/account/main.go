@@ -2,9 +2,9 @@ package main
 
 import (
     "github.com/micro/go-micro/v2"
+    sgrpc "github.com/micro/go-micro/v2/server/grpc"
     "github.com/rs/zerolog/log"
 
-    // "github.com/micro/go-micro/v2/service/grpc"
     "github.com/xmlking/micro-starter-kit/service/account/handler"
     profilePB "github.com/xmlking/micro-starter-kit/service/account/proto/profile"
     userPB "github.com/xmlking/micro-starter-kit/service/account/proto/user"
@@ -19,43 +19,35 @@ import (
     validatorWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/validator"
 )
 
-const (
-    serviceName = constants.ACCOUNT_SERVICE
-)
-
-var (
-    cfg = config.GetConfig()
-)
-
 func main() {
+    serviceName := constants.ACCOUNT_SERVICE
+    cfg := config.GetConfig()
+
+    lis, err := config.GetListener(cfg.Services.Account.Endpoint)
+    if err != nil {
+        log.Fatal().Msgf("failed to create listener: %v", err)
+    }
+    println(lis.Addr())
+
     // New Service
     service := micro.NewService(
+        micro.Server(sgrpc.NewServer(sgrpc.Listener(lis))), // KEEP-IT-FIRST
         micro.Name(serviceName),
         micro.Version(config.Version),
     )
 
-    // Initialize service
-    service.Init(
-        micro.BeforeStart(func() (err error) {
-            return
-        }),
-        micro.BeforeStop(func() (err error) {
-            return
-        }),
-    )
-
     // Initialize Features
     var options []micro.Option
+
     if cfg.Features.Tls.Enabled {
         if tlsConf, err := config.CreateServerCerts(); err != nil {
             log.Error().Err(err).Msg("unable to load certs")
         } else {
             log.Info().Msg("TLS Enabled")
-            options = append(options,
-                tls.WithTLS(tlsConf),
-            )
+            options = append(options, tls.WithTLS(tlsConf))
         }
     }
+
     // Wrappers are invoked in the order as they added
     if cfg.Features.Reqlogs.Enabled {
         options = append(options,
@@ -63,23 +55,29 @@ func main() {
             micro.WrapClient(logWrapper.NewClientWrapper()),
         )
     }
-    if cfg.Features.Validator.Enabled {
-        options = append(options,
-            micro.WrapHandler(validatorWrapper.NewHandlerWrapper()),
-        )
-    }
     if cfg.Features.Translogs.Enabled {
         topic := cfg.Features.Translogs.Topic
         publisher := micro.NewEvent(topic, service.Client())
-        options = append(options,
-            micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)),
-        )
+        options = append(options, micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)))
+    }
+    if cfg.Features.Validator.Enabled {
+        options = append(options, micro.WrapHandler(validatorWrapper.NewHandlerWrapper()))
     }
 
-    // Initialize Features
-    service.Init(
-        options...,
+    // Adding some optional lifecycle actions
+    options = append(options,
+        micro.BeforeStart(func() (err error) {
+            log.Debug().Msg("called BeforeStart")
+            return
+        }),
+        micro.BeforeStop(func() (err error) {
+            log.Debug().Msg("called BeforeStop")
+            return
+        }),
     )
+
+    // Initialize service
+    service.Init(options...)
 
     // Initialize DI Container
     ctn, err := registry.NewContainer(cfg)
@@ -104,6 +102,7 @@ func main() {
     profilePB.RegisterProfileServiceHandler(service.Server(), profileHandler)
 
     println(config.GetBuildInfo())
+
     // Run service
     if err := service.Run(); err != nil {
         log.Fatal().Err(err).Msg("")

@@ -5,6 +5,6 @@ email:
 
 services:
   account:
-    endpoint: mkit.service.account:8080
+    endpoint: tcp://account:8080
     version: v0.1.0
     deadline: 8888

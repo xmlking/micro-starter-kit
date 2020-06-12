@@ -33,6 +33,7 @@ func main() {
     username := flag.String("username", "sumo", "username of user to be create")
     email := flag.String("email", "sumo@demo.com", "email of user to be create")
     limit := flag.Uint64("limit", 10, "Limit number of results")
+    flag.Parse()
 
     log.Debug().Str("username", *username).Str("email", *email).Uint64("limit", *limit).Msg("Flags Using:")
 

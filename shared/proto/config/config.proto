@@ -18,7 +18,7 @@ service ConfigService {
 }
 
 message Service {
-    string endpoint = 1 [json_name = "endpoint", (gogoproto.moretags) = "valid:\"dialstring\""];
+    string endpoint = 1 [(gogoproto.moretags) = "yaml:\"endpoint\" required:\"true\""];
     string version = 2 [(gogoproto.moretags) = "yaml:\"version\" default:\"v0.1.0\""];
     uint32 deadline = 3 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"10\""];
 }
@@ -39,7 +39,7 @@ enum DatabaseDialect {
 }
 
 message DatabaseConfiguration {
-    DatabaseDialect dialect = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"2\""];
+    DatabaseDialect dialect = 1 [(gogoproto.moretags) = "yaml:\",omitempty\" valid:\"in(Postgre|MySQL|SQLite3)\" default:\"2\""];
     string host = 2 [(gogoproto.moretags) = "yaml:\",omitempty\" valid:\"host\""];
     uint32 port = 3 [(gogoproto.moretags) = "yaml:\",omitempty\" default:\"5432\" valid:\"port\""];
     string username = 4 [(gogoproto.moretags) = "valid:\"alphanum,required\""];

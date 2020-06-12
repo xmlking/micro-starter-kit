@@ -22,9 +22,10 @@ require (
 	github.com/rs/zerolog v1.19.0
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
+	github.com/soheilhy/cmux v0.1.4
 	github.com/stretchr/testify v1.6.1
 	github.com/thoas/go-funk v0.6.0
 	github.com/xmlking/configor v0.0.0-20200609225939-ed6133420e9d
-	google.golang.org/genproto v0.0.0-20200608115520-7c474a2e3482
+	google.golang.org/genproto v0.0.0-20200611194920-44ba362f84c1
 	google.golang.org/grpc v1.27.0
 )

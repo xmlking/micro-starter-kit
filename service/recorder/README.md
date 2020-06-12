@@ -3,7 +3,9 @@
 Recorder service saves `TransactionEvents` to configured go-micro `store`.
 Transactions are published by other micro services i.e., `account`, `emailer`, `greeter`
 
-## Start
+## Usage
+
+Run the service
 
 > (optional) set broker to googlepubsub
 
@@ -17,7 +19,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=<path_to.json>
 make run-recorder
 ```
 
-## Test
+Test the service
 
 ```bash
 micro call mkit.service.recorder Transaction.Read  '{"key": "0edc8bb2-33e0-4766-bc13-e62a346465be#accountsrv"}'
