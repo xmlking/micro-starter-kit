@@ -22,6 +22,7 @@ Run the service
 
 ```bash
 make run-greeter
+make run-greeter ARGS="--server_address=:8081"
 # or
 go run service/greeter/main.go service/greeter/plugin.go
 ```

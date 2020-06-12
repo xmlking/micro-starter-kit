@@ -2,7 +2,6 @@ package main
 
 import (
     "github.com/micro/go-micro/v2"
-    sgrpc "github.com/micro/go-micro/v2/server/grpc"
     "github.com/rs/zerolog/log"
 
     "github.com/xmlking/micro-starter-kit/service/account/handler"
@@ -23,15 +22,8 @@ func main() {
     serviceName := constants.ACCOUNT_SERVICE
     cfg := config.GetConfig()
 
-    lis, err := config.GetListener(cfg.Services.Account.Endpoint)
-    if err != nil {
-        log.Fatal().Msgf("failed to create listener: %v", err)
-    }
-    println(lis.Addr())
-
     // New Service
     service := micro.NewService(
-        micro.Server(sgrpc.NewServer(sgrpc.Listener(lis))), // KEEP-IT-FIRST
         micro.Name(serviceName),
         micro.Version(config.Version),
     )
@@ -105,6 +97,6 @@ func main() {
 
     // Run service
     if err := service.Run(); err != nil {
-        log.Fatal().Err(err).Msg("")
+        log.Fatal().Err(err).Send()
     }
 }

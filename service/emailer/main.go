@@ -2,8 +2,6 @@ package main
 
 import (
     "github.com/micro/go-micro/v2"
-    sgrpc "github.com/micro/go-micro/v2/server/grpc"
-
     "github.com/rs/zerolog/log"
 
     "github.com/xmlking/micro-starter-kit/shared/constants"
@@ -20,14 +18,8 @@ func main() {
     serviceName := constants.EMAILER_SERVICE
     cfg := config.GetConfig()
 
-    lis, err := config.GetListener(cfg.Services.Emailer.Endpoint)
-    if err != nil {
-        log.Fatal().Msgf("failed to create listener: %v", err)
-    }
-
     // New Service
     service := micro.NewService(
-        micro.Server(sgrpc.NewServer(sgrpc.Listener(lis))), // KEEP-IT-FIRST
         micro.Name(serviceName),
         micro.Version(config.Version),
     )

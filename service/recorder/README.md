@@ -17,6 +17,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=<path_to.json>
 
 ```bash
 make run-recorder
+make run-recorder ARGS="--server_address=:8083"
 ```
 
 Test the service
