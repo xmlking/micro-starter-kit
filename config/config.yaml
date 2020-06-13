@@ -19,17 +19,17 @@ email:
 
 services:
   account:
-    endpoint: tcp://account:8080
+    endpoint: dns:///account.test:8080
     version: v0.1.0
   greeter:
-    endpoint: tcp://greeter:8081
+    endpoint: dns:///greeter.test:8081
 #    endpoint: unix:///tmp/greeter.sock
     version: v0.1.0
   emailer:
-    endpoint: tcp://emailer:8082
+    endpoint: dns:///emailer.test:8082
     version: v0.1.0
   recorder:
-    endpoint: tcp://recorder:8083
+    endpoint: dns:///recorder.test:8083
     version: v0.1.0
 
 features:

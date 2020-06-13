@@ -5,6 +5,6 @@ email:
 
 services:
   account:
-    endpoint: tcp://account:8080
+    endpoint: dns:///account.test:8080
     version: v0.1.0
     deadline: 8888

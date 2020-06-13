@@ -12,16 +12,16 @@ database:
 
 services:
   account:
-    endpoint: mkit.service.account:8080
+    endpoint: dns:///account:8080
     version: v0.1.0
   greeter:
-    endpoint: mkit.service.greeter:8080
+    endpoint: dns:///greeter:8080
     version: v0.1.0
   emailer:
-    endpoint: mkit.service.emailer:8080
+    endpoint: dns:///emailer:8080
     version: v0.1.0
   recorder:
-    endpoint: mkit.service.recorder:8080
+    endpoint: dns:///recorder:8080
     version: v0.1.0
 
 features:

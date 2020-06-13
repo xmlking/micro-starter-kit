@@ -107,6 +107,25 @@ proto proto-%:
 	fi
 	@rsync -a github.com/xmlking/micro-starter-kit/service/account/proto/ service/account/proto && rm -Rf github.com
 
+proto2 proto2-%:
+	@if [ -z $(TARGET) ]; then \
+		for d in $(TYPES); do \
+			for f in $$d/**/proto/**/*.proto; do \
+				protoc --proto_path=.:${GOPATH}/src \
+				--go_out=paths=source_relative:. \
+				--validate_out=lang=go,paths=source_relative:. $$f; \
+				echo ✓ compiled: $$f; \
+			done \
+		done \
+	else \
+		for f in ${TYPE}/${TARGET}/proto/**/*.proto; do \
+			protoc --proto_path=.:${GOPATH}/src \
+			--go_out=plugins=grpc,paths=source_relative:. \
+			--validate_out=lang=go,paths=source_relative:. $$f; \
+			echo ✓ compiled: $$f; \
+		done \
+	fi
+
 proto_shared:
 	@for f in ./shared/proto/**/*.proto; do \
 		protoc --proto_path=.:${GOPATH}/src \
