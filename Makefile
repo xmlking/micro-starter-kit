@@ -107,25 +107,6 @@ proto proto-%:
 	fi
 	@rsync -a github.com/xmlking/micro-starter-kit/service/account/proto/ service/account/proto && rm -Rf github.com
 
-proto2 proto2-%:
-	@if [ -z $(TARGET) ]; then \
-		for d in $(TYPES); do \
-			for f in $$d/**/proto/**/*.proto; do \
-				protoc --proto_path=.:${GOPATH}/src \
-				--go_out=paths=source_relative:. \
-				--validate_out=lang=go,paths=source_relative:. $$f; \
-				echo ✓ compiled: $$f; \
-			done \
-		done \
-	else \
-		for f in ${TYPE}/${TARGET}/proto/**/*.proto; do \
-			protoc --proto_path=.:${GOPATH}/src \
-			--go_out=plugins=grpc,paths=source_relative:. \
-			--validate_out=lang=go,paths=source_relative:. $$f; \
-			echo ✓ compiled: $$f; \
-		done \
-	fi
-
 proto_shared:
 	@for f in ./shared/proto/**/*.proto; do \
 		protoc --proto_path=.:${GOPATH}/src \
@@ -308,13 +289,13 @@ docker_push:
 		docker push $$image; \
 	done;
 
-kustomize: OVERLAY 	:= e2e
+kustomize: OVERLAY 	:= local
 kustomize: NS 			:= default
 kustomize:
-	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
-	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.yaml
+	# @kustomize build --load_restrictor none config/envs/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
+	@kustomize build --load_restrictor none config/envs/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.yaml
 
 build/kustomize: check_dirty
-	@kustomize build deploy/overlays/e2e/ 			 | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.e2e.yaml
-	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.production.yaml
-	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|mynamespace|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.production.mynamespace.yaml
+	@kustomize build --load_restrictor none config/envs/local  		| sed -e "s|\$$(NS)|default|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.local.yaml
+	@kustomize build --load_restrictor none config/envs/production/ | sed -e "s|\$$(NS)|default|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.production.yaml
+	@kustomize build --load_restrictor none config/envs/production/ | sed -e "s|\$$(NS)|mynamespace|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.production.mynamespace.yaml

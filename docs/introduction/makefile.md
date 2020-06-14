@@ -122,6 +122,8 @@ make release VERSION=v0.1.1 GITHUB_TOKEN=123...
 
 ### docker
 
+Optionally set `export DOCKER_BUILDKIT=1` to use `moby`
+
 ```bash
 make docker-account VERSION=v0.1.1
 make docker-account-service VERSION=v0.1.1
