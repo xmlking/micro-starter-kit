@@ -7,7 +7,7 @@ jobs:
     name: "Deploy to KinD and E2E"
     runs-on: ubuntu-latest
     steps:
-      - name: Download deploy.e2e.yaml from Release
+      - name: Download kubernetes.local.yaml from Release
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           DOWNLOAD_URL: ${{ github.event.release.assets[0].browser_download_url }}
@@ -21,7 +21,7 @@ jobs:
         uses: engineerd/setup-kind@v0.1.0
         # with:
         #   config: .github/kubernetes/kind.yaml
-      - name: "Deploy deploy.e2e.yaml to KinD"
+      - name: "Deploy kubernetes.local.yaml to KinD"
         id: local-path
         run: |
           export KUBECONFIG="$(kind get kubeconfig-path)"
@@ -32,7 +32,7 @@ jobs:
           echo "cluster-info ..."
           kubectl cluster-info
           echo "installing e2e overlay..."
-          kubectl apply -f deploy.e2e.yaml
+          kubectl apply -f kubernetes.local.yaml
           echo "waiting for pods to be ready ..."
           kubectl wait --for=condition=Ready pods --all --timeout=5m
           kubectl get pods

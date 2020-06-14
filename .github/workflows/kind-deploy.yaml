@@ -8,14 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.deployment.environment == 'e2e'
     steps:
-      - name: Download deploy.e2e.yaml from Release
+      - name: Download kubernetes.local.yaml from Release
         env:
           RELEASE_URL: ${{ github.event.repository.releases_url }}
         run: |
           echo "Downloading $RELEASE_URL"
           # curl -O -L $RELEASE_URL
           # FIXME Workaround
-          curl -s https://api.github.com/repos/xmlking/micro-starter-kit/releases/latest | grep browser_download_url | grep deploy.e2e.yaml | cut -d '"' -f 4 | wget -qi -
+          curl -s https://api.github.com/repos/xmlking/micro-starter-kit/releases/latest | grep browser_download_url | grep kubernetes.local.yaml | cut -d '"' -f 4 | wget -qi -
       - name: "deployment pending"
         uses: "deliverybot/deployment-status@master"
         with:
@@ -32,7 +32,7 @@ jobs:
         uses: engineerd/setup-kind@v0.1.0
         # with:
         #   config: .github/kubernetes/kind.yaml
-      - name: "Deploy deploy.e2e.yaml to KinD"
+      - name: "Deploy kubernetes.local.yaml to KinD"
         id: local-path
         run: |
           export KUBECONFIG="$(kind get kubeconfig-path)"
@@ -43,7 +43,7 @@ jobs:
           echo "cluster-info ..."
           kubectl cluster-info
           echo "installing e2e overlay..."
-          kubectl apply -f deploy.e2e.yaml
+          kubectl apply -f kubernetes.local.yaml
           echo "waiting for pods to be ready ..."
           kubectl wait --for=condition=Ready pods --all --timeout=5m
           kubectl get pods

@@ -46,8 +46,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/deploy.e2e.yaml
-          asset_name: deploy.e2e.yaml
+          asset_path: ./build/kubernetes.local.yaml
+          asset_name: kubernetes.local.yaml
           asset_content_type: text/vnd.yaml
   docker:
     name: Build and Publish docker images
