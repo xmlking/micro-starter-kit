@@ -5,7 +5,7 @@ services:
     image: envoyproxy/envoy:latest
     command: /usr/local/bin/envoy -c etc/envoy/envoy.yaml
     volumes:
-      - "./deploy/bases/envoy/envoy.yaml:/etc/envoy/envoy.yaml"
+      - "./config/base/envoy/envoy.yaml:/etc/envoy/envoy.yaml"
     expose:
       - "9090"
       - "9901"

@@ -142,12 +142,12 @@ docker rmi $(docker images -f "dangling=true" -q)
 
 # make kustomize OVERLAY=e2e NS=default VERSION=v0.1.0-440-g6c7fb7a
 make kustomize
-kubectl apply -f build/deploy.yaml
+kubectl apply -f build/kubernetes.yaml
 
 POD_NAME=$(kubectl get pods  -lapp.kubernetes.io/name=account-srv -o jsonpath='{.items[0].metadata.name}')
 kubectl logs -f -c srv $POD_NAME
 
-kubectl delete -f build/deploy.yaml
+kubectl delete -f build/kubernetes.yaml
 ```
 
 ## Reference

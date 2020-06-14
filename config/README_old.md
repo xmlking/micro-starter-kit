@@ -136,9 +136,9 @@ deploy
 │       ├── service-headless.yaml
 │       ├── service.yaml
 │       └── statefulset.yaml
-├── deploy.e2e.yaml
-├── deploy.production.yaml
-├── deploy.yaml
+├── kubernetes.local.yaml
+├── kubernetes.production.yaml
+├── kubernetes.yaml
 └── overlays <-- environments
     ├── e2e
     │   ├── kustomization.yaml
@@ -212,8 +212,8 @@ kustomize build config/envs/production --output ./build/kubernetes/production
 # make kustomize NS=default OVERLAY=production VERSION=v0.1.3
 # make kustomize NS=default OVERLAY=e2e VERSION=v0.1.3
 make kustomize
-kubeval --strict --ignore-missing-schemas build/deploy.yaml
-kubectl apply -f build/deploy.yaml
+kubeval --strict --ignore-missing-schemas build/kubernetes.yaml
+kubectl apply -f build/kubernetes.yaml
 kubectl get all -l app.kubernetes.io/managed-by=kustomize
 open http://localhost:8500/ui/#/dc1/services
 
@@ -225,7 +225,7 @@ kubectl exec -it $POD_NAME -- busybox sh
 
 kubectl get svc
 
-kubectl delete -f build/deploy.yaml
+kubectl delete -f build/kubernetes.yaml
 ```
 
 ## kustomize-sopssecret-plugin

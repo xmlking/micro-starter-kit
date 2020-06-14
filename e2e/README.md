@@ -9,18 +9,18 @@ True **e2e** tests are Black-box tests that invoke network endpoint.
 
 ```bash
 # start
-kubectl apply -f build/deploy.e2e.yaml
+kubectl apply -f build/kubernetes.local.yaml
 # stop
-kubectl delete -f build/deploy.e2e.yaml
+kubectl delete -f build/kubernetes.local.yaml
 ```
 
 > (Or) start production like e2e test cluster locally
 
 ```bash
 # start
-kubectl apply -f build/deploy.production.yaml
+kubectl apply -f build/kubernetes.production.yaml
 # stop
-kubectl delete -f  build/deploy.production.yaml
+kubectl delete -f  build/kubernetes.production.yaml
 ```
 
 ## E2E Test via REST Gateway

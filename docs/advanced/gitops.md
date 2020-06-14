@@ -25,7 +25,7 @@
 - build docker images
 - sign images
 - push images to GCR
-- generate build/deploy.yaml for k8s with Helm or Kustomize
+- generate build/kubernetes.yaml for k8s with Helm or Kustomize
 - generate release on GitHub
 
 ## Deployment Pipeline
