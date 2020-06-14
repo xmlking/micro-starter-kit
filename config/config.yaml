@@ -4,7 +4,6 @@ database:
   port: 9999
   username: sumo
   password: demo
-#  database: "file:foobar?mode=memory&cache=shared"
   database: "file::memory:?cache=shared"
   max_open_conns: 1
   max_idle_conns: 1
