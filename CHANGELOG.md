@@ -9,10 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+<a name="v0.3.7"></a>
+## [v0.3.7] - 2020-06-14
+### Docs
+- **deploy:** fix docs
+
+
 <a name="v0.3.6"></a>
 ## [v0.3.6] - 2020-06-14
 ### Chore
 - **deps:** update envoyproxy/envoy-alpine docker tag to v1.14.2
+
+### Ci
+- **changelog:** updated changelog for new release
 
 
 <a name="v0.3.5"></a>
@@ -511,7 +520,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added steps when behind VPN
 
 
-[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.6...HEAD
+[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.7...HEAD
+[v0.3.7]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.6...v0.3.7
 [v0.3.6]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.5...v0.3.6
 [v0.3.5]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.4...v0.3.5
 [v0.3.4]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.3...v0.3.4
