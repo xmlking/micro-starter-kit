@@ -50,11 +50,11 @@ Microservices starter kit for **Golang**, aims to be developer friendly.
 
 ### Prerequisite
 
-Refer [prerequisites](docs/prerequisites.md) docs
+Refer [prerequisites](docs/introduction/prerequisites.md) docs
 
 ### Initial Setup
 
-Also Refer [scaffolding](docs/scaffolding.md) docs
+Also Refer [scaffolding](docs/introduction/scaffolding.md) docs
 
 > clone the repo
 
@@ -118,21 +118,21 @@ go run cmd/demo/main.go
 
 ### Test
 
-Refer [testing](docs/testing.md) docs
+Refer [testing](docs/testing/testing.md) docs
 
 ## GitOps
 
 ### Make
 
-Refer [makefile](docs/makefile.md) docs
+Refer [makefile](docs/introduction/makefile.md) docs
 
 ### Docker
 
-Refer [docker](docs/docker.md) docs
+Refer [docker](docs/devops/docker.md) docs
 
 ### Release
 
-Refer [releasing](docs/releasing.md) docs
+Refer [releasing](docs/concepts/releasing.md) docs
 
 ### Deploy
 
