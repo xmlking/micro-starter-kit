@@ -2,6 +2,8 @@ package main
 
 import (
     "github.com/micro/go-micro/v2"
+    "github.com/micro/go-micro/v2/client"
+    "github.com/micro/go-micro/v2/server"
     "github.com/rs/zerolog/log"
 
     "github.com/xmlking/micro-starter-kit/service/account/handler"
@@ -12,52 +14,44 @@ import (
     greeterPB "github.com/xmlking/micro-starter-kit/service/greeter/proto/greeter"
     "github.com/xmlking/micro-starter-kit/shared/config"
     "github.com/xmlking/micro-starter-kit/shared/constants"
-    "github.com/xmlking/micro-starter-kit/shared/util/tls"
+    myMicro "github.com/xmlking/micro-starter-kit/shared/util/micro"
     logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
     transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
     validatorWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/validator"
 )
 
 func main() {
-    serviceName := constants.ACCOUNT_SERVICE
     cfg := config.GetConfig()
 
-    // New Service
-    service := micro.NewService(
-        micro.Name(serviceName),
-        micro.Version(config.Version),
-    )
-
     // Initialize Features
-    var options []micro.Option
-
-    if cfg.Features.Tls.Enabled {
-        if tlsConf, err := config.CreateServerCerts(); err != nil {
-            log.Error().Err(err).Msg("unable to load certs")
-        } else {
-            log.Info().Msg("TLS Enabled")
-            options = append(options, tls.WithTLS(tlsConf))
-        }
-    }
+    var clientWrappers []client.Wrapper
+    var handlerWrappers []server.HandlerWrapper
+    var subscriberWrappers []server.SubscriberWrapper
 
     // Wrappers are invoked in the order as they added
     if cfg.Features.Reqlogs.Enabled {
-        options = append(options,
-            micro.WrapHandler(logWrapper.NewHandlerWrapper()),
-            micro.WrapClient(logWrapper.NewClientWrapper()),
-        )
+        clientWrappers = append(clientWrappers, logWrapper.NewClientWrapper())
+        handlerWrappers = append(handlerWrappers, logWrapper.NewHandlerWrapper())
+        subscriberWrappers = append(subscriberWrappers, logWrapper.NewSubscriberWrapper())
     }
-    if cfg.Features.Translogs.Enabled {
-        topic := cfg.Features.Translogs.Topic
-        publisher := micro.NewEvent(topic, service.Client())
-        options = append(options, micro.WrapHandler(transWrapper.NewHandlerWrapper(publisher)))
-    }
+    //if cfg.Features.Translogs.Enabled {
+    //    topic := cfg.Features.Translogs.Topic
+    //    publisher := micro.NewEvent(topic, client.DefaultClient) // service.Client())
+    //    handlerWrappers = append(handlerWrappers, transWrapper.NewHandlerWrapper(publisher))
+    //    subscriberWrappers = append(subscriberWrappers, transWrapper.NewSubscriberWrapper(publisher))
+    //}
     if cfg.Features.Validator.Enabled {
-        options = append(options, micro.WrapHandler(validatorWrapper.NewHandlerWrapper()))
+        handlerWrappers = append(handlerWrappers, validatorWrapper.NewHandlerWrapper())
+        subscriberWrappers = append(subscriberWrappers, validatorWrapper.NewSubscriberWrapper())
     }
 
-    // Adding some optional lifecycle actions
-    options = append(options,
+    service := micro.NewService(
+        micro.Name(constants.ACCOUNT_SERVICE),
+        micro.Version(config.Version),
+        myMicro.WithTLS(),
+        // Wrappers are applied in reverse order so the last is executed first.
+        micro.WrapClient(clientWrappers...),
+        // Adding some optional lifecycle actions
         micro.BeforeStart(func() (err error) {
             log.Debug().Msg("called BeforeStart")
             return
@@ -68,8 +62,17 @@ func main() {
         }),
     )
 
-    // Initialize service
-    service.Init(options...)
+    if cfg.Features.Translogs.Enabled {
+        topic := cfg.Features.Translogs.Topic
+        publisher := micro.NewEvent(topic, service.Client())
+        handlerWrappers = append(handlerWrappers, transWrapper.NewHandlerWrapper(publisher))
+        subscriberWrappers = append(subscriberWrappers, transWrapper.NewSubscriberWrapper(publisher))
+    }
+
+    service.Init(
+        micro.WrapHandler(handlerWrappers...),
+        micro.WrapSubscriber(subscriberWrappers...),
+    )
 
     // Initialize DI Container
     ctn, err := registry.NewContainer(cfg)
@@ -77,8 +80,6 @@ func main() {
     if err != nil {
         log.Fatal().Msgf("failed to build container: %v", err)
     }
-
-    log.Debug().Msgf("Client type: grpc or regular? %T\n", service.Client()) // FIXME: expected *grpc.grpcClient but got *micro.clientWrapper
 
     // Publisher publish to "mkit.service.emailer"
     publisher := micro.NewEvent(constants.EMAILER_SERVICE, service.Client())

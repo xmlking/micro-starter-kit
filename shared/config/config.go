@@ -70,9 +70,6 @@ func init() {
 /**
   Helper Functions
 */
-func IsProduction() bool {
-    return Configor.GetEnvironment() == "production"
-}
 
 func GetBuildInfo() string {
     return fmt.Sprintf(versionMsg, Version, BuildDate, runtime.Version(), runtime.Compiler, runtime.GOOS, runtime.GOARCH,
@@ -90,6 +87,16 @@ func CreateServerCerts() (tlsConfig *tls.Config, err error) {
     defer configLock.RUnlock()
     tlsConf := cfg.Features.Tls
     return uTLS.GetTLSConfig(tlsConf.CertFile, tlsConf.KeyFile, tlsConf.CaFile, tlsConf.Servername)
+}
+
+func IsProduction() bool {
+    return Configor.GetEnvironment() == "production"
+}
+
+func IsSecure() bool {
+    configLock.RLock()
+    defer configLock.RUnlock()
+    return cfg.Features.Tls.Enabled
 }
 
 func GetListener(endpoint string) (lis net.Listener, err error) {
