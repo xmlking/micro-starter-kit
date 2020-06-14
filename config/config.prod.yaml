@@ -1,3 +1,13 @@
+services:
+  account:
+    endpoint: dns:///account:8080
+  greeter:
+    endpoint: dns:///greeter:8080
+  emailer:
+    endpoint: dns:///emailer:8080
+  recorder:
+    endpoint: dns:///recorder:8080
+
 features:
   tls:
     cert_file: /config/certs/upstream-cert.pem

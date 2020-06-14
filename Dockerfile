@@ -54,7 +54,7 @@ ARG VERSION=0.0.1
 ARG TYPE=service
 ARG TARGET=account
 COPY --from=builder /app /app
-COPY --from=builder src/config/base/service/${TARGET}/config /config
+COPY --from=builder src/config /config
 
 # Declare the port on which the webserver will be exposed.
 # As we're going to run the executable as an unprivileged user, we can't bind

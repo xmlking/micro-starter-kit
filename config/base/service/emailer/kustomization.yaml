@@ -13,9 +13,6 @@ resources:
   - service.yaml
 
 configMapGenerator:
-  - name: config
-    files:
-      - config/config.yaml
   - name: env-vars
     literals:
       - MICRO_SERVER_NAME=mkit.service.emailer
