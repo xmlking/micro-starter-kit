@@ -1,0 +1,12 @@
+database:
+  dialect: 1 # unspecified = 0, postgres = 1, mysq2 = 2, sqlite3 =3
+  host: postgres
+  port: 5432
+  username: postgres
+  password: postgres321
+  database: postgres
+  max_open_conns: 20
+  max_idle_conns: 5
+  conn_max_lifetime: 1h
+  logging: true
+

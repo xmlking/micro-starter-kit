@@ -160,12 +160,12 @@ endif
 			for _target in $${type}/*/; do \
 				temp=$${_target%%/}; target=$${temp#*/}; \
 				echo "\tPackaging config for $${target}-$${type}"; \
-				${GOPATH}/bin/pkger -o $${type}/$${target} -include /config; \
+				${GOPATH}/bin/pkger -o $${type}/$${target} -include /config/config.yaml -include /config/config.prod.yaml -include /config/certs; \
 			done \
 		done \
 	else \
 		echo "Packaging config for ${TARGET}-${TYPE}..."; \
-		${GOPATH}/bin/pkger -o ${TYPE}/${TARGET} -include /config ; \
+		${GOPATH}/bin/pkger -o ${TYPE}/${TARGET} -include /config/config.yaml -include /config/config.prod.yaml -include /config/certs ; \
 	fi
 
 build build-%: pkger-%
@@ -289,13 +289,13 @@ docker_push:
 		docker push $$image; \
 	done;
 
-kustomize: OVERLAY 	:= e2e
+kustomize: OVERLAY 	:= local
 kustomize: NS 			:= default
 kustomize:
-	# @kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
-	@kustomize build deploy/overlays/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.yaml
+	# @kustomize build --load_restrictor none config/envs/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" | kubectl apply -f -
+	@kustomize build --load_restrictor none config/envs/${OVERLAY}/ | sed -e "s|\$$(NS)|${NS}|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.yaml
 
 build/kustomize: check_dirty
-	@kustomize build deploy/overlays/e2e/ 			 | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.e2e.yaml
-	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|default|g" -e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.production.yaml
-	@kustomize build deploy/overlays/production/ | sed -e "s|\$$(NS)|mynamespace|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/deploy.production.mynamespace.yaml
+	@kustomize build --load_restrictor none config/envs/local  		| sed -e "s|\$$(NS)|default|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.local.yaml
+	@kustomize build --load_restrictor none config/envs/production/ | sed -e "s|\$$(NS)|default|g" 		-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.production.yaml
+	@kustomize build --load_restrictor none config/envs/production/ | sed -e "s|\$$(NS)|mynamespace|g" 	-e "s|\$$(IMAGE_VERSION)|${VERSION}|g" > build/kubernetes.production.mynamespace.yaml

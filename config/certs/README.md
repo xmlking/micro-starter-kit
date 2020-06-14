@@ -29,7 +29,7 @@ execute them in command line.
 
 ```bash
 # at project root, run:
-./config/base/secrets/certs/certs.sh
+./config/certs/certs.sh
 ```
 
 ## Reference

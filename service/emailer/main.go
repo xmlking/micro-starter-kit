@@ -2,69 +2,72 @@ package main
 
 import (
     "github.com/micro/go-micro/v2"
-
+    "github.com/micro/go-micro/v2/client"
+    "github.com/micro/go-micro/v2/server"
     "github.com/rs/zerolog/log"
 
     "github.com/xmlking/micro-starter-kit/shared/constants"
 
     "github.com/xmlking/micro-starter-kit/service/emailer/registry"
     "github.com/xmlking/micro-starter-kit/shared/config"
-    "github.com/xmlking/micro-starter-kit/shared/util/tls"
+    myMicro "github.com/xmlking/micro-starter-kit/shared/util/micro"
     logWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/log"
     transWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/transaction"
-    // "github.com/xmlking/micro-starter-kit/service/emailer/subscriber"
-)
-
-const (
-    serviceName = constants.EMAILER_SERVICE
-)
-
-var (
-    cfg = config.GetConfig()
+    validatorWrapper "github.com/xmlking/micro-starter-kit/shared/wrapper/validator"
 )
 
 func main() {
-    // New Service
-    service := micro.NewService(
-        micro.Name(serviceName),
-        micro.Version(config.Version),
-    )
+    cfg := config.GetConfig()
 
-    // Initialize service
-    service.Init(
+    // Initialize Features
+    var clientWrappers []client.Wrapper
+    var handlerWrappers []server.HandlerWrapper
+    var subscriberWrappers []server.SubscriberWrapper
+
+    // Wrappers are invoked in the order as they added
+    if cfg.Features.Reqlogs.Enabled {
+        clientWrappers = append(clientWrappers, logWrapper.NewClientWrapper())
+        handlerWrappers = append(handlerWrappers, logWrapper.NewHandlerWrapper())
+        subscriberWrappers = append(subscriberWrappers, logWrapper.NewSubscriberWrapper())
+    }
+    //if cfg.Features.Translogs.Enabled {
+    //    topic := cfg.Features.Translogs.Topic
+    //    publisher := micro.NewEvent(topic, client.DefaultClient) // service.Client())
+    //    handlerWrappers = append(handlerWrappers, transWrapper.NewHandlerWrapper(publisher))
+    //    subscriberWrappers = append(subscriberWrappers, transWrapper.NewSubscriberWrapper(publisher))
+    //}
+    if cfg.Features.Validator.Enabled {
+        handlerWrappers = append(handlerWrappers, validatorWrapper.NewHandlerWrapper())
+        subscriberWrappers = append(subscriberWrappers, validatorWrapper.NewSubscriberWrapper())
+    }
+
+    service := micro.NewService(
+        micro.Name(constants.EMAILER_SERVICE),
+        micro.Version(config.Version),
+        myMicro.WithTLS(),
+        // Wrappers are applied in reverse order so the last is executed first.
+        micro.WrapClient(clientWrappers...),
+        // Adding some optional lifecycle actions
         micro.BeforeStart(func() (err error) {
+            log.Debug().Msg("called BeforeStart")
             return
         }),
         micro.BeforeStop(func() (err error) {
+            log.Debug().Msg("called BeforeStop")
             return
         }),
     )
 
-    // Initialize Features
-    var options []micro.Option
-    if cfg.Features.Tls.Enabled {
-        if tlsConf, err := config.CreateServerCerts(); err != nil {
-            log.Error().Err(err).Msg("unable to load certs")
-        } else {
-            log.Info().Msg("TLS Enabled")
-            options = append(options,
-                tls.WithTLS(tlsConf),
-            )
-        }
-    }
-    // Wrappers are invoked in the order as they added
-    if cfg.Features.Reqlogs.Enabled {
-        options = append(options, micro.WrapSubscriber(logWrapper.NewSubscriberWrapper()))
-    }
     if cfg.Features.Translogs.Enabled {
         topic := cfg.Features.Translogs.Topic
         publisher := micro.NewEvent(topic, service.Client())
-        options = append(options, micro.WrapSubscriber(transWrapper.NewSubscriberWrapper(publisher)))
+        handlerWrappers = append(handlerWrappers, transWrapper.NewHandlerWrapper(publisher))
+        subscriberWrappers = append(subscriberWrappers, transWrapper.NewSubscriberWrapper(publisher))
     }
 
-    // Initialize Features
     service.Init(
-        options...,
+        micro.WrapHandler(handlerWrappers...),
+        micro.WrapSubscriber(subscriberWrappers...),
     )
 
     // Initialize DI Container
@@ -84,11 +87,10 @@ func main() {
     // register subscriber with queue, each message is delivered to a unique subscriber
     // micro.RegisterSubscriber("mkit.service.emailer-2", service.Server(), subscriber.Handler, server.SubscriberQueue("queue.pubsub"))
 
-    // PrintBuildInfo
     println(config.GetBuildInfo())
 
     // Run service
     if err := service.Run(); err != nil {
-        log.Fatal().Err(err).Msg("")
+        log.Fatal().Err(err).Send()
     }
 }

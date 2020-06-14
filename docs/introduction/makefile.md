@@ -94,6 +94,9 @@ make gomod_lint
 make pkger TARGET=greeter
 make pkger-greeter
 make pkger
+# other pkger commands
+pkger list -include /config/config.yaml -include /config/config.prod.yaml -include /config/certs
+pkger info github.com/xmlking/micro-starter-kit
 ```
 
 ### build
@@ -118,6 +121,8 @@ make release VERSION=v0.1.1 GITHUB_TOKEN=123...
 ```
 
 ### docker
+
+Optionally set `export DOCKER_BUILDKIT=1` to use `moby`
 
 ```bash
 make docker-account VERSION=v0.1.1

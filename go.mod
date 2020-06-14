@@ -13,19 +13,18 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.2
-	github.com/google/uuid v1.1.1
 	github.com/infobloxopen/atlas-app-toolkit v0.21.1
 	github.com/infobloxopen/protoc-gen-gorm v0.20.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/markbates/pkger v0.17.0
-	github.com/micro/go-micro/v2 v2.8.0
+	github.com/micro/go-micro/v2 v2.9.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.19.0
 	github.com/sarulabs/di/v2 v2.4.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.6.1
 	github.com/thoas/go-funk v0.6.0
-	github.com/xmlking/configor v0.0.0-20200609225939-ed6133420e9d
-	google.golang.org/genproto v0.0.0-20200608115520-7c474a2e3482
-	google.golang.org/grpc v1.27.0
+	github.com/xmlking/configor v0.1.0
+	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
+	google.golang.org/grpc v1.26.0
 )

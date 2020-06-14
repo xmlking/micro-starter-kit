@@ -26,6 +26,7 @@ Run the service
 
 ```bash
 make run-emailer
+make run-emailer ARGS="--server_address=:8082"
 # or
 go run service/emailer/main.go service/emailer/plugin.go
 ```

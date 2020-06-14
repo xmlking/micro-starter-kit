@@ -1,55 +1,10 @@
 database:
-  dialect: 3 # unspecified = 0, postgres = 1, mysq2 = 1, sqlite3 =2
-  host: 0.0.0.0
-  port: 9999
-  username: sumo
-  password: demo
-  database: "file:foobar?mode=memory&cache=shared"
-  max_open_conns: 1
-  max_idle_conns: 1
   conn_max_lifetime: 2h
-  logging: true
 email:
-  username: yourGmailUsername
-  password: yourGmailAppPassword
-  email_server: smtp.gmail.com
-  port: 587
   from: from-test@gmail.com
 
 services:
   account:
-    endpoint: mkit.service.account:8080
+    endpoint: dns:///account.test:8080
     version: v0.1.0
     deadline: 8888
-  greeter:
-    endpoint: mkit.service.greeter:8080
-    version: v0.1.0
-  emailer:
-    endpoint: mkit.service.emailer:8080
-    version: v0.1.0
-  recorder:
-    endpoint: mkit.service.recorder:8080
-    version: v0.1.0
-
-features:
-  metrics:
-    address: prometheus:8125
-    flush_interval: 1000000000
-    enabled: false
-  tracing:
-    address: jaeger:6831
-    flush_interval: 5000000000
-    enabled: false
-  tls:
-    cert_file: /config/base/secrets/certs/upstream-localhost-cert.pem
-    key_file: /config/base/secrets/certs/upstream-localhost-key.pem
-    ca_file: /config/base/secrets/certs/upstream-cert.pem
-    servername: "*"
-    enabled: false
-  validator:
-    enabled: true
-  reqlogs:
-    enabled: true
-  translogs:
-    topic: mkit.service.recorder
-    enabled: true

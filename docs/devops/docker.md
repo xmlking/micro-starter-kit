@@ -94,3 +94,18 @@ kubectl run --rm mygateway --image=micro/micro:latest \
 --restart=Never -it \
 --command ./micro api
 ```
+
+## Cleanup
+
+[Removing Docker Containers and Images](https://dbaontap.com/2017/04/16/removing-docker-containers-images/)
+
+```bash
+docker images
+# Remove Docker Containers
+docker rmi <image id>
+# Stop & Remove All Docker Containers
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q) 
+make docker_clean
+```
+ 

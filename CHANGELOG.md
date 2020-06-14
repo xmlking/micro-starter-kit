@@ -9,6 +9,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+<a name="v0.3.4"></a>
+## [v0.3.4] - 2020-06-14
+### Docs
+- **docker:** updated docker docs
+
+### Feat
+- **grpclog:** adding zerolog to grpclog adoptor
+
+### Refactor
+- **config:** support dns based load balancing
+- **config:** support dns based load balancing
+- **core:** order go-micro bootstraping
+
+### Revert
+- **listener:** going back to go-micro managed listener
+
+
+<a name="v0.3.3"></a>
+## [v0.3.3] - 2020-06-11
+### Feat
+- **client:** updated cmd/account CLI client
+- **micro:** testing cmux with greeter project
+
+### Fix
+- **cmd:** using flags with Account Client CLI
+- **transation:** updated transation logger to use built-in Micro-Trace-Id
+
+### Refactor
+- **config:** mived certs to config/certs location
+- **config:** mived certs to config/certs location
+- **config:** mived certs to config/certs location
+
+
 <a name="v0.3.2"></a>
 ## [v0.3.2] - 2020-06-09
 ### Build
@@ -36,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **refactor:** micro.Publisher -> micro.Event
 
 ### Ci
+- **changelog:** updated changelog
 - **gitflow:** upgrading golang to 1.14
 - **gomod_lint:** adding gomod_lint task
 
@@ -459,7 +493,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - added steps when behind VPN
 
 
-[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.4...HEAD
+[v0.3.4]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.3...v0.3.4
+[v0.3.3]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.2...v0.3.3
 [v0.3.2]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://github.com/xmlking/micro-starter-kit/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/xmlking/micro-starter-kit/compare/v0.2.9...v0.3.0

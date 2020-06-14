@@ -3,13 +3,16 @@ package config
 import (
     "crypto/tls"
     "fmt"
+    "net"
     "os"
     "runtime"
     "strings"
     "sync"
 
+    "github.com/pkg/errors"
     "github.com/rs/zerolog/log"
     "github.com/xmlking/configor"
+    "google.golang.org/grpc/resolver"
 
     configPB "github.com/xmlking/micro-starter-kit/shared/proto/config"
     uTLS "github.com/xmlking/micro-starter-kit/shared/util/tls"
@@ -67,9 +70,6 @@ func init() {
 /**
   Helper Functions
 */
-func IsProduction() bool {
-    return Configor.GetEnvironment() == "production"
-}
 
 func GetBuildInfo() string {
     return fmt.Sprintf(versionMsg, Version, BuildDate, runtime.Version(), runtime.Compiler, runtime.GOOS, runtime.GOARCH,
@@ -87,4 +87,77 @@ func CreateServerCerts() (tlsConfig *tls.Config, err error) {
     defer configLock.RUnlock()
     tlsConf := cfg.Features.Tls
     return uTLS.GetTLSConfig(tlsConf.CertFile, tlsConf.KeyFile, tlsConf.CaFile, tlsConf.Servername)
+}
+
+func IsProduction() bool {
+    return Configor.GetEnvironment() == "production"
+}
+
+func IsSecure() bool {
+    configLock.RLock()
+    defer configLock.RUnlock()
+    return cfg.Features.Tls.Enabled
+}
+
+func GetListener(endpoint string) (lis net.Listener, err error) {
+    configLock.RLock()
+    defer configLock.RUnlock()
+
+    target := ParseTarget(endpoint)
+
+    switch target.Scheme {
+    case "unix":
+        return net.Listen("unix", target.Endpoint)
+    case "tcp", "dns", "kubernetes":
+        var port string
+        if _, port, err = net.SplitHostPort(target.Endpoint); err == nil {
+            if port == "" {
+                port = "0"
+            }
+        } else {
+            return nil, errors.New(fmt.Sprintf("unable to parse host and port from endpoint: %s", endpoint))
+        }
+
+        tlsConf := cfg.Features.Tls
+        if tlsConf.Enabled {
+            if tlsConfig, err := uTLS.GetTLSConfig(tlsConf.CertFile, tlsConf.KeyFile, tlsConf.CaFile, tlsConf.Servername); err != nil {
+                return nil, err
+            } else {
+                return tls.Listen("tcp", fmt.Sprintf("0:%s", port), tlsConfig)
+            }
+        } else {
+            return net.Listen("tcp", fmt.Sprintf("0:%s", port))
+        }
+    default:
+        return nil, errors.New(fmt.Sprintf("unknown scheme: %s in endpoint: %s", target.Scheme, endpoint))
+    }
+}
+
+//*** Copied from https://github.com/grpc/grpc-go/blob/master/internal/grpcutil/target.go ***/
+// split2 returns the values from strings.SplitN(s, sep, 2).
+// If sep is not found, it returns ("", "", false) instead.
+func split2(s, sep string) (string, string, bool) {
+    spl := strings.SplitN(s, sep, 2)
+    if len(spl) < 2 {
+        return "", "", false
+    }
+    return spl[0], spl[1], true
+}
+
+// ParseTarget splits target into a resolver.Target struct containing scheme,
+// authority and endpoint.
+//
+// If target is not a valid scheme://authority/endpoint, it returns {Endpoint:
+// target}.
+func ParseTarget(target string) (ret resolver.Target) {
+    var ok bool
+    ret.Scheme, ret.Endpoint, ok = split2(target, "://")
+    if !ok {
+        return resolver.Target{Endpoint: target}
+    }
+    ret.Authority, ret.Endpoint, ok = split2(ret.Endpoint, "/")
+    if !ok {
+        return resolver.Target{Endpoint: target}
+    }
+    return ret
 }

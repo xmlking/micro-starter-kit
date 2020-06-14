@@ -1,5 +1,5 @@
 database:
-  dialect: 1 # unspecified = 0, postgres = 1, mysq2 = 1, sqlite3 =2
+  dialect: 3 # unspecified = 0, postgres = 1, mysq2 = 2, sqlite3 =3
   host: 0.0.0.0
   port: 9999
   username: sumo
@@ -12,16 +12,16 @@ database:
 
 services:
   account:
-    endpoint: mkit.service.account:8080
+    endpoint: dns:///account:8080
     version: v0.1.0
   greeter:
-    endpoint: mkit.service.greeter:8080
+    endpoint: dns:///greeter:8080
     version: v0.1.0
   emailer:
-    endpoint: mkit.service.emailer:8080
+    endpoint: dns:///emailer:8080
     version: v0.1.0
   recorder:
-    endpoint: mkit.service.recorder:8080
+    endpoint: dns:///recorder:8080
     version: v0.1.0
 
 features:
@@ -34,9 +34,9 @@ features:
     flush_interval: 5000000000
     enabled: false
   tls:
-    cert_file: /config/certs/micro.crt
-    key_file: /config/certs/micro.key
-    ca_file: /config/certs/ca.crt
+    cert_file: /config/certs/upstream-localhost-cert.pem
+    key_file: /config/certs/upstream-localhost-key.pem
+    ca_file: /config/certs/upstream-ca-cert.pem
     servername: "*"
     enabled: false
   validator:

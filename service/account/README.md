@@ -41,3 +41,13 @@ Build a docker image
 ```bash
 make docker TARGET=account TYPE=service VERSION=v0.1.1
 ```
+
+Test the service
+
+```bash
+micro call  mkit.service.account UserService.Create \
+'{"username": "sumo", "firstName": "sumo", "lastName": "demo", "email": "sumo@demo.com"}'
+micro call mkit.service.account UserService.Create \
+'{"username": "sumo1", "firstName": "sumo1", "lastName": "demo1", "email": "sumo1@demo.com"}'
+micro call mkit.service.account UserService.List '{}'
+```
