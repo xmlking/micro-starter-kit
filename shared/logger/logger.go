@@ -147,7 +147,7 @@ func (l *defaultLogger) Init(opts ...Option) error {
     grpclog.SetLoggerV2(zeroToGrpcAdopter.New(gLogger))
 
     logr.Info().
-        Str("LogLevel", l.opts.Level.String()).
+        Str("LogLevel", logr.GetLevel().String()).
         Str("LogFormat", string(l.opts.Format)).
         Msg("Logger set to Zerolog with:")
 
