@@ -35,7 +35,7 @@ func ExampleGetConfig() {
 	// fmt.Println(config.GetConfig().Services["account"].Deadline)
 
 	// Output:
-	// username:"yourGmailUsername" password:"yourGmailAppPassword" email_server:"smtp.gmail.com" port:587 from:"xmlking-test@gmail.com"
+	// username:"yourGmailUsername" password:"yourGmailAppPassword" email_server:"smtp.gmail.com" port:587 from:"from-test@gmail.com"
 }
 
 func ExampleGetConfig_check_defaults() {
@@ -44,7 +44,7 @@ func ExampleGetConfig_check_defaults() {
 	fmt.Println(config.GetConfig().Services.Account.Deadline)
 
 	// Output:
-	// mkit.service.account:8080
+	// dns:///account.test:8080
 	// v0.1.0
 	// 8888
 }
