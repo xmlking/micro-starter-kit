@@ -131,10 +131,10 @@ gomod_lint:
 lint lint-%:
 	@if [ -z $(TARGET) ]; then \
 		echo "Linting all go"; \
-		${GOPATH}/bin/golangci-lint run ./... --deadline=5m; \
+		${GOPATH}/bin/golangci-lint run ./... --deadline=5m --config=.github/linters/.golangci.yml; \
 	else \
 		echo "Linting go in ${TARGET}-${TYPE}..."; \
-		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... ; \
+		${GOPATH}/bin/golangci-lint run ./${TYPE}/${TARGET}/... --config=.github/linters/.golangci.yml; \
 	fi
 
 # @clang-format -i $(shell find . -type f -name '*.proto')

@@ -5,8 +5,8 @@ on:
     #   - "v*.*.*"
     paths-ignore: ["*.md", "docs", "deploy", "config", ".github", "scripts"]
 jobs:
-  lint-test:
-    name: Lint and Test
+  test:
+    name: Test
     runs-on: ubuntu-latest
     if: |
       contains(github.event.commits[0].message, '[skip ci]') == false &&
@@ -17,12 +17,6 @@ jobs:
         with:
           go-version: 1.14
         id: go
-      - name: Setup Tools
-        env:
-          GO111MODULE: off
-        run: |
-          go get github.com/golangci/golangci-lint/cmd/golangci-lint
-          GO111MODULE=on go get github.com/bufbuild/buf/cmd/buf
       - name: Check out Code
         uses: actions/checkout@v1
       - name: Cache go modules
@@ -36,12 +30,6 @@ jobs:
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: go mod download
-      - name: Lint
-        run: |
-          make lint
-          # export PATH=$PATH:$(go env GOPATH)/bin
-          # golangci-lint run
-          # buf check lint
       - name: Unit Test
         run: make test-unit
       - name: Coverage Test

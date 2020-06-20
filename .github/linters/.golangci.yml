@@ -5,7 +5,7 @@
 run:
   # which dirs to skip: they won't be analyzed;
   skip-dirs:
-    - service/account/proto
+    - mkit
   skip-files:
     - lib/bad.go
 

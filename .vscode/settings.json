@@ -78,7 +78,8 @@
   "go.useLanguageServer": true,
   "go.lintTool": "golangci-lint",
   "go.lintFlags": [
-    "--fast"
+    "--fast",
+    "--config=.github/linters/.golangci.yml"
   ],
   // Proto
   "clang-format.style": "google",

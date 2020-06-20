@@ -8,6 +8,7 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: grpc-port
+      appProtocol: grpc
       port: 8080
       protocol: TCP
       targetPort: grpc-port
