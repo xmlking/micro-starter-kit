@@ -71,7 +71,7 @@ images:
     newTag: v1.14.2
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
-    newTag: v2.0.0
+    newTag: v2.9.3
   - name: xmlking/account-service
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/account-service
     newTag: $(IMAGE_VERSION)
