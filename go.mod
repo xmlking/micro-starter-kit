@@ -17,7 +17,7 @@ require (
 	github.com/infobloxopen/protoc-gen-gorm v0.20.0
 	github.com/jinzhu/gorm v1.9.13
 	github.com/markbates/pkger v0.17.0
-	github.com/micro/go-micro/v2 v2.9.0
+	github.com/micro/go-micro/v2 v2.9.1
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.19.0
 	github.com/sarulabs/di/v2 v2.4.0
