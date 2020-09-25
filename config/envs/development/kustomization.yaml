@@ -68,7 +68,7 @@ images:
     newTag: 11.5-alpine
   - name: envoyproxy/envoy-alpine
     newName: docker.io/envoyproxy/envoy-alpine
-    newTag: v1.14.2
+    newTag: v1.15.0
   - name: micro/micro
     newName: docker.pkg.github.com/xmlking/micro-starter-kit/micro
     newTag: v2.0.0
