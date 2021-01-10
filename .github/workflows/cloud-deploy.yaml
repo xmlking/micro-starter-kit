@@ -9,7 +9,7 @@ jobs:
     if: github.event.deployment.environment == 'production'
     steps:
       - name: Check out Code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: "Deployment pending"
         uses: "deliverybot/deployment-status@master"
         with:

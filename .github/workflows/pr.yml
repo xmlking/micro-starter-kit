@@ -16,7 +16,7 @@ jobs:
           go-version: 1.14
         id: go
       - name: Check out Code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Cache go modules
         id: cache
         uses: actions/cache@preview
