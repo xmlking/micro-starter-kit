@@ -13,7 +13,7 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.2
-	github.com/infobloxopen/atlas-app-toolkit v0.21.1
+	github.com/infobloxopen/atlas-app-toolkit v0.23.0
 	github.com/infobloxopen/protoc-gen-gorm v0.20.0
 	github.com/jinzhu/gorm v1.9.13
 	github.com/markbates/pkger v0.17.0
