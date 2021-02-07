@@ -10,7 +10,7 @@ replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.4.1 // indirect
-	github.com/envoyproxy/protoc-gen-validate v0.1.0
+	github.com/envoyproxy/protoc-gen-validate v0.4.1
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.2
 	github.com/infobloxopen/atlas-app-toolkit v0.21.1
@@ -25,6 +25,6 @@ require (
 	github.com/stretchr/testify v1.6.1
 	github.com/thoas/go-funk v0.6.0
 	github.com/xmlking/configor v0.1.0
-	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
-	google.golang.org/grpc v1.26.0
+	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013
+	google.golang.org/grpc v1.27.0
 )
