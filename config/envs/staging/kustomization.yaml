@@ -59,7 +59,7 @@ images:
     newName: xmlking/etcd-operator
     newTag: v0.10.1
   - name: postgres
-    newTag: 11.5-alpine
+    newTag: 11.11-alpine
   - name: envoyproxy/envoy-alpine
     newName: docker.io/envoyproxy/envoy-alpine
     newTag: v1.15.0
