@@ -6,10 +6,10 @@ This is the Account service
 ```mermaid
 graph LR;
     subgraph µServices
-    A(Account µS)--gRPC-->G(Greeter µS) & E(Emailer µS);
+    A(fa:fa-user Account µS)--gRPC-->G(Greeter µS) & E(Emailer µS);
     A & G & E -.-> L[Logger]
     end
-    A ==lockup==> SR[[Service Registry]];
+    A ==lockup==> SR[[fa:fa-database Service Registry]];
     style SR fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
