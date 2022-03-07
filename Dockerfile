@@ -38,7 +38,7 @@ RUN go build -a \
 FROM scratch AS final
 
 # copy 1 MiB busybox executable
-COPY --from=busybox:1.32.0 /bin/busybox /bin/busybox
+COPY --from=busybox:1.35.0 /bin/busybox /bin/busybox
 
 # copy dumb-ini from micro
 COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
