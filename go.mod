@@ -4,7 +4,7 @@ go 1.14
 
 // for local development, you can repoint go-micro to local development go-micro workspace
 // replace github.com/micro/go-micro/v2 => /Users/schintha/Developer/Work/go/3rd-party/go-micro
-replace google.golang.org/grpc => google.golang.org/grpc v1.26.0
+replace google.golang.org/grpc => google.golang.org/grpc v1.47.0
 
 // replace github.com/xmlking/configor => /Users/schintha/Developer/Work/go/configor
 
@@ -26,5 +26,5 @@ require (
 	github.com/thoas/go-funk v0.6.0
 	github.com/xmlking/configor v0.1.0
 	google.golang.org/genproto v0.0.0-20191216164720-4f79533eabd1
-	google.golang.org/grpc v1.26.0
+	google.golang.org/grpc v1.47.0
 )
